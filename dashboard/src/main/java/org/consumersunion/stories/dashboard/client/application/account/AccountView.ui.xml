@@ -1,0 +1,279 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:u="urn:import:org.consumersunion.stories.dashboard.client.application.account.ui"
+             xmlns:du="urn:import:org.consumersunion.stories.dashboard.client.application.ui"
+             xmlns:c="urn:import:org.consumersunion.stories.dashboard.client.application.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+    <ui:with field="commonResource" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+
+    <ui:style>
+        .mainContentOverride {
+            padding: 24px 20px;
+            width: 975px;
+        }
+
+        .mainAccount {
+            float: left;
+            width: 650px;
+            margin-right: 35px;
+        }
+
+        .personInfoWrapper {
+            width: 290px;
+            float: left;
+        }
+
+        .separator {
+            border-bottom: 1px solid #bbbbbb;
+            border-top: 1px solid #bbbbbb;
+            padding: 2px;
+            margin: 15px 0 0;
+        }
+
+        .veryBigTitle {
+            cursor: pointer;
+            font-size: 28px;
+            float: none !important;
+        }
+
+        .mediumTitle {
+            font-size: 24px;
+            color: #3f3427;
+            cursor: pointer;
+        }
+
+        .overrideTitle {
+            font-size: 24px;
+            float: none !important;
+            padding-bottom: 30px;
+        }
+
+        .storyButton {
+            display: inline-block;
+            margin-left: 5px;
+            cursor: pointer;
+            color: #0059B2;
+        }
+
+        .buttonLabel {
+            cursor: pointer;
+            color: #0059b2;
+            font-size: 18px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 5px;
+            font-family: 'Droid Sans', sans-serif;
+        }
+
+        .panelContent {
+            padding: 10px 0;
+        }
+
+        .buttonContainer {
+            padding-top: 30px;
+        }
+
+        .localizationWrapper {
+            width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .languagesLabel {
+            color: #666666;
+            font-size: 15px;
+            font-family: 'Droid Sans', sans-serif;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .organizationLanguage {
+            padding-top: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-top: 1px solid #bbbbbb;
+        }
+
+        .userNameWrapper {
+            margin-bottom: 10px;
+            margin-top: 5px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #bbbbbb;
+        }
+
+        .pickerWrapper {
+            margin: 10px 0;
+        }
+
+        .updateButton {
+            margin-left: 0;
+        }
+
+        .filterWrapper {
+            margin-top: 15px;
+        }
+
+        .bigSearchField {
+            width: 300px;
+        }
+
+        .countWrapper {
+            margin-top: 14px;
+        }
+
+        .totalCount {
+            margin-top: 8px;
+            font-family: 'Droid Sans', sans-serif;
+            color: #3f3427;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .mapWrapper {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+            width: 100%;
+            height: 376px;
+        }
+
+        .userName {
+            float: left;
+            line-height: 30px;
+        }
+
+        .viewStories {
+            float: right;
+            line-height: 28px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:HTMLPanel>
+            <g:HTMLPanel styleName="{resource.generalStyleCss.mainContent} {style.mainContentOverride}">
+                <div class="{style.mainAccount}">
+                    <div>
+                        <div class="{style.userName}">
+                            <g:InlineLabel ui:field="login"
+                                           styleName="{resource.generalStyleCss.bigTitle} {style.veryBigTitle} simptip-position-top"/>
+                            <g:TextBox ui:field="editableLogin" visible="false"/>
+                        </div>
+
+                        <div ui:field="storyButtonDiv" class="{style.viewStories}">
+                            <g:Label ui:field="storyButton" styleName="{style.storyButton} icon-2x"/>
+                            <g:Label ui:field="storiesLabel" styleName="{style.buttonLabel}"/>
+                        </div>
+
+                        <div class="{resource.generalStyleCss.clearBoth}"/>
+                        <g:ValuePicker ui:field="displaySelector" addStyleNames="{style.pickerWrapper}"/>
+                    </div>
+
+                    <g:HTMLPanel ui:field="separator" styleName="{style.separator}"/>
+
+                    <g:DeckPanel ui:field="panelSwitcher">
+                        <g:HTMLPanel styleName="{style.panelContent}">
+                            <g:Label text="Update password" addStyleNames="{style.overrideTitle}"
+                                     styleName="{resource.generalStyleCss.bigTitle}"/>
+
+                            <div style="padding-left: 20px">
+                                <u:PasswordEditor ui:field="passwordEditor"/>
+
+                                <div class="{style.buttonContainer}">
+                                    <g:Button ui:field="updatePassword" text="Update"
+                                              styleName="{resource.buttonStyleCss.button}"
+                                              addStyleNames="{resource.buttonStyleCss.small} {style.updateButton}"/>
+                                </div>
+                            </div>
+                        </g:HTMLPanel>
+
+                        <g:HTMLPanel>
+                            <div class="{style.filterWrapper}">
+                                <div class="{resource.generalStyleCss.floatLeft}">
+                                    <div class="{resource.generalStyleCss.searchBoxWrapper}">
+                                        <g:TextBox ui:field="search" styleName="{resource.generalStyleCss.searchField}"
+                                                   addStyleNames="{style.bigSearchField}"/>
+                                        <g:Button ui:field="clearSearch"
+                                                  styleName="{resource.generalStyleCss.clearSearch}"/>
+                                    </div>
+                                </div>
+
+                                <div class="{resource.generalStyleCss.floatRight}">
+                                    <c:ClickableDropDown ui:field="sortDropDown"/>
+                                </div>
+
+                                <div class="{resource.generalStyleCss.clearBoth}"/>
+
+                                <div class="{style.countWrapper}">
+                                    <g:HTML ui:field="totalCount" addStyleNames="{style.totalCount}" text="..."/>
+                                    <du:MapToggler ui:field="mapToggler"
+                                                   addStyleNames="{resource.generalStyleCss.floatRight}"/>
+                                    <div class="{resource.generalStyleCss.clearBoth}"/>
+                                </div>
+                            </div>
+
+                            <div class="{style.separator}"/>
+
+                            <g:SimplePanel ui:field="mapContainer" visible="false" styleName="{style.mapWrapper}"/>
+                            <g:SimplePanel ui:field="listStories"/>
+                        </g:HTMLPanel>
+
+                        <g:HTMLPanel styleName="{style.panelContent}">
+                            <g:Label text="Localization Settings" addStyleNames="{style.overrideTitle}"
+                                     styleName="{resource.generalStyleCss.bigTitle}"/>
+
+                            <div style="padding-left: 20px">
+                                <p>
+                                    Which languages are you proficient in? Mark your preferred language
+                                    with a gold star.
+                                </p>
+
+                                <u:LocalizationEditor ui:field="localizationEditor"
+                                                      addStyleNames="{style.localizationWrapper}"/>
+
+                                <div>
+                                    <g:SimpleCheckBox ui:field="languageFilter"/>
+                                    <g:InlineLabel text="Only show me content in these languages by default"/>
+                                </div>
+
+                                <div class="{style.buttonContainer}">
+                                    <g:Button ui:field="updateLocalization" text="Update"
+                                              styleName="{resource.buttonStyleCss.button}"
+                                              addStyleNames="{resource.buttonStyleCss.small}"/>
+                                </div>
+                            </div>
+                        </g:HTMLPanel>
+                    </g:DeckPanel>
+                </div>
+
+                <div class="{style.personInfoWrapper}">
+                    <div class="{style.userNameWrapper}">
+                        <g:InlineLabel ui:field="name" addStyleNames="simptip-position-top"
+                                       styleName="{style.mediumTitle}"/>
+                        <g:TextBox ui:field="editableName" visible="false"/>
+
+                        <g:InlineLabel ui:field="lastName" addStyleNames="simptip-position-top"
+                                       styleName="{style.mediumTitle}"/>
+                        <g:TextBox ui:field="editableLastName" visible="false"/>
+                        <div class="{resource.generalStyleCss.clearBoth}"/>
+                    </div>
+
+                    <g:SimplePanel ui:field="personProfilePanel"/>
+
+                    <div class="{style.organizationLanguage}">
+                        <g:Label text="Languages" styleName="{style.languagesLabel}"/>
+                        <u:LocalizationEditor ui:field="organizationlocalizationEditor"/>
+                    </div>
+
+                    <g:SimplePanel ui:field="noteManagerPanel"/>
+                </div>
+
+                <div class="{resource.generalStyleCss.clearBoth}"/>
+            </g:HTMLPanel>
+        </g:HTMLPanel>
+    </g:HTMLPanel>
+</ui:UiBinder> 

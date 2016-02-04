@@ -1,0 +1,115 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:u="urn:import:org.consumersunion.stories.dashboard.client.application.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+    <ui:with field="commonResource" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+
+    <ui:style>
+        .mainContentOverride {
+            padding: 24px 20px;
+            width: 975px;
+        }
+
+        .attachedStoriesWrapper {
+            float: left;
+            width: 650px;
+            margin-right: 35px;
+        }
+
+        .personInfoWrapper {
+            width: 290px;
+            float: left;
+        }
+
+        .separator {
+            border-bottom: 1px solid #bbbbbb;
+            border-top: 1px solid #bbbbbb;
+            padding: 2px;
+            margin: 15px 0 0;
+        }
+
+        .veryBigTitle {
+            font-size: 28px;
+            float: none !important;
+        }
+
+        .personProfileWrapper {
+            padding-bottom: 36px;
+            border-bottom: 1px solid #cccccc;
+            margin-bottom: 10px;
+        }
+
+        .filterWrapper {
+            margin-top: 15px;
+        }
+
+        .bigSearchField {
+            width: 300px;
+        }
+
+        .countWrapper {
+            margin-top: 14px;
+        }
+
+        .totalCount {
+            margin-top: 8px;
+            font-family: 'Droid Sans', sans-serif;
+            color: #3f3427;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <div class="{resource.generalStyleCss.mainContent} {style.mainContentOverride}">
+            <div class="{style.attachedStoriesWrapper}">
+                <div>
+                    <g:InlineLabel ui:field="name" addStyleNames="{commonResource.generalStyleCss.withTooltip}"
+                                   styleName="{resource.generalStyleCss.bigTitle} {style.veryBigTitle}"/>
+                    <g:TextBox ui:field="editableName" visible="false"/>
+
+                    <g:InlineLabel ui:field="lastName" addStyleNames="{commonResource.generalStyleCss.withTooltip}"
+                                   styleName="{resource.generalStyleCss.bigTitle} {style.veryBigTitle}"/>
+                    <g:TextBox ui:field="editableLastName" visible="false"/>
+                </div>
+
+                <div class="{style.separator}"/>
+
+                <div class="{style.filterWrapper}">
+                    <div class="{resource.generalStyleCss.floatLeft}">
+                        <div class="{resource.generalStyleCss.searchBoxWrapper}">
+                            <g:TextBox ui:field="search" styleName="{resource.generalStyleCss.searchField}"
+                                       addStyleNames="{style.bigSearchField}"/>
+                            <g:Button ui:field="clearSearch"
+                                      styleName="{resource.generalStyleCss.clearSearch}"/>
+                        </div>
+                    </div>
+
+                    <div class="{resource.generalStyleCss.floatRight}">
+                        <u:ClickableDropDown ui:field="sortDropDown"/>
+                    </div>
+
+                    <div class="{resource.generalStyleCss.clearBoth}"/>
+
+                    <div class="{style.countWrapper}">
+                        <g:HTML ui:field="totalCount" addStyleNames="{style.totalCount}" text="..."/>
+                    </div>
+                </div>
+
+                <div class="{style.separator}"/>
+
+                <g:SimplePanel ui:field="otherStoriesPanel"/>
+            </div>
+
+            <div class="{style.personInfoWrapper}">
+                <g:SimplePanel ui:field="personProfilePanel" styleName="{style.personProfileWrapper}"/>
+                <g:SimplePanel ui:field="attachmentsPanel"/>
+                <g:SimplePanel ui:field="notesManagerPanel"/>
+            </div>
+
+            <div class="{resource.generalStyleCss.clearBoth}"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

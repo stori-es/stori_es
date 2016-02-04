@@ -1,0 +1,36 @@
+.cellListWidget {
+    padding: 5px;
+}
+
+.cellListEvenItem {
+    background-color: #EDEDED;
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #c8c8c8;
+}
+
+.cellListOddItem {
+    background-color: #EDEDED;
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #c8c8c8;
+}
+
+.cellListSelectedItem {
+    background-color: #EDEDED;
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #c8c8c8;
+}
+
+.cellListEvenItem:last-child {
+    margin-bottom: 0;
+}
+
+.cellListOddItem:last-child {
+    margin-bottom: 0;
+}
+
+.cellListSelectedItem:last-child {
+    margin-bottom: 0;
+}

@@ -1,0 +1,16 @@
+/**
+ * Clean extension for administration module: stories.jsp, error.jsp, signin.jsp, createaccount.jsp
+*/
+
+body, table td, select, button {
+    font-family: Arial Unicode MS, Arial, sans-serif;
+    font-size: small;
+}
+
+.exportButtons div span:first-child {
+    margin-right: 4px;
+}
+
+.deleteIcon {
+    margin-right: 1px;
+}

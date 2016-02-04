@@ -1,0 +1,60 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:with field="res" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+    <ui:style gss="true">
+        .name {
+            background-color: #f5f5f5;
+            line-height: 20px;
+            color: #000;
+
+            display: inline-block;
+            margin-right: 8px;
+            padding: 2px 4px 2px 26px;
+            border: 1px solid #d4d4d4;
+            max-width: 100%;
+            box-sizing: border-box;
+
+            position: relative;
+
+            border-radius: 4px;
+
+        }
+
+        .name[data-tooltip]:hover {
+            cursor: pointer;
+            border-color: #0059b2;
+            color: #0059b2;
+        }
+
+        .icon {
+            position: absolute;
+            left: 4px;
+            top: 50%;
+
+            margin-top: -12px;
+        }
+
+        .remove {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+
+            margin-top: -4px;
+        }
+
+        .textContent {
+            display: inline-block;
+            vertical-align: middle;
+            word-wrap: break-word;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+    </ui:style>
+
+    <g:HTMLPanel ui:field="main" styleName="simptip-position-top simptip-movable {style.name}">
+        <i ui:field="icon" class="{res.cards.cardIconSmall} {style.icon}"/>
+        <span ui:field="container" class="{style.textContent}"/>
+        <i ui:field="remove"
+           class="simptip-position-top simptip-movable {res.generalStyleCss.delete} {res.generalStyleCss.tagRemove} {style.remove}"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

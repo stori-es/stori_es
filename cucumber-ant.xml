@@ -1,0 +1,120 @@
+<project name="java-helloworld" basedir="." default="runcukes">
+	<!--
+	    stop tomcat
+		build.xml -> clean
+		build.xml -> javac.tests
+		build.xml -> gwt-storiesDashboard
+		refresh 'stories'
+		start tomcat
+		cucumber-ant.xml -> runcukes
+	-->
+    <!-- This file copied from: https://github.com/cucumber/cucumber-jvm/blob/master/examples/java-helloworld/build.xml
+	 Specific version https://github.com/cucumber/cucumber-jvm/blob/22bf5370672deefe7984a7b655512abe7f26d103/examples/java-helloworld/build.xml
+	 
+	 Not always on point, but the best runthrough I've found:
+	 http://zsoltfabok.com/blog/2012/01/cucumber-jvm-di/
+	 
+	 Good breakdown of full implications of cucumber-jvm and the thick stack:
+	 https://blog.codecentric.de/en/2013/08/cucumber-setup-basics/
+	 -->
+    <property name="repo" value="https://oss.sonatype.org/content/repositories/releases"/>
+
+    <!-- To figure out compatible combinations of versions, you should examine dependencies in the Maven POM files -->
+    <property name="cucumber-jvm.version" value="1.1.5"/>
+    <property name="cucumber-jvm-deps.version" value="1.0.3"/>
+    <property name="gherkin.version" value="2.12.1"/>
+    <property name="cucumber-html.version" value="0.2.3"/>
+    <property name="jchronic.version" value="0.2.6"/>
+    <property name="junit.version" value="4.11"/>
+    <property name="jars" value=".test-lib"/>
+
+    <target name="download">
+        <mkdir dir="${jars}"/>
+        <get src="${repo}/info/cukes/cucumber-core/${cucumber-jvm.version}/cucumber-core-${cucumber-jvm.version}.jar"
+             dest="${jars}/cucumber-core-${cucumber-jvm.version}.jar"/>
+        <get src="${repo}/info/cukes/cucumber-java/${cucumber-jvm.version}/cucumber-java-${cucumber-jvm.version}.jar"
+             dest="${jars}/cucumber-java-${cucumber-jvm.version}.jar"/>
+    	<get src="${repo}/info/cukes/cucumber-guice/${cucumber-jvm.version}/cucumber-guice-${cucumber-jvm.version}.jar"
+    	     dest="${jars}/cucumber-guice-${cucumber-jvm.version}.jar"/>
+        <get src="${repo}/info/cukes/cucumber-html/${cucumber-html.version}/cucumber-html-${cucumber-html.version}.jar"
+             dest="${jars}/cucumber-html-${cucumber-html.version}.jar"/>
+        <get src="${repo}/info/cukes/cucumber-junit/${cucumber-jvm.version}/cucumber-junit-${cucumber-jvm.version}.jar"
+             dest="${jars}/cucumber-junit-${cucumber-jvm.version}.jar"/>
+        <get src="${repo}/info/cukes/cucumber-jvm-deps/${cucumber-jvm-deps.version}/cucumber-jvm-deps-${cucumber-jvm-deps.version}.jar"
+             dest="${jars}/cucumber-jvm-deps-${cucumber-jvm-deps.version}.jar"/>
+        <get src="${repo}/info/cukes/gherkin/${gherkin.version}/gherkin-${gherkin.version}.jar"
+             dest="${jars}/gherkin-${gherkin.version}.jar"/>
+        <get src="${repo}/com/rubiconproject/oss/jchronic/${jchronic.version}/jchronic-${jchronic.version}.jar"
+             dest="${jars}/jchronic-${jchronic.version}.jar"/>
+        <get src="${repo}/junit/junit/${junit.version}/junit-${junit.version}.jar"
+             dest="${jars}/junit-${junit.version}.jar"/>
+    </target>
+
+    <target name="classpath">
+        <path id="classpath">
+            <!-- fileset dir="${jars}" -->
+        	<fileset dir="site/WEB-INF/lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        	<fileset dir="test/lib">
+                <include name="**/*.jar"/>
+            </fileset>
+            <!-- pathelement location="site/WEB-INF/classes"/ -->
+            <pathelement location="test/classes"/>
+        	<pathelement location="test/META-INF"/><!-- to find cucumber-guice.properties -->
+        </path>
+    </target>
+
+    <!-- target name="compile" depends="classpath">
+        <mkdir dir="target/classes"/>
+        <javac srcdir="src/main/java" destdir="target/classes" classpathref="classpath" includeantruntime="false"/>
+    </target>
+
+    <target name="compile-test" depends="compile,classpath">
+        <mkdir dir="target/test-classes"/>
+        <javac srcdir="src/test/java" destdir="target/test-classes" classpathref="classpath" includeantruntime="false"/>
+    </target -->
+
+    <target name="runcukes" depends="classpath"><!-- depends="compile-test" -->
+        <mkdir dir="target/cucumber-junit-report"/>
+        <!-- java classname="cucumber.api.cli.Main" fork="true" failonerror="false" resultproperty="cucumber.exitstatus" -->
+    	<java classname="cucumber.cli.Main" fork="true" failonerror="false" resultproperty="cucumber.exitstatus">
+            <classpath refid="classpath"/>
+            <arg value="--format"/>
+            <arg value="junit:target/cucumber-junit-report.xml"/>
+            <arg value="--format"/>
+            <arg value="pretty"/>
+            <arg value="--format"/>
+            <arg value="html:target/cucumber-html-report"/>
+            <arg value="--glue"/>
+        	<arg value="org.consumersunion.stories.cucumber.steps"/>
+    		<arg value="test/META-INF/" />
+        	<!-- arg value="test/META-INF/Load.feature" / -->
+        	<!-- arg value="cucumber.examples.java.helloworld"/ -->
+            <!-- arg value="src/test/resources"/ -->
+        </java>
+
+        <!-- junitreport todir="target/cucumber-junit-report">
+            <fileset dir="target">
+                <include name="cucumber-junit-report.xml"/>
+            </fileset>
+            <report format="frames" todir="target/cucumber-junit-report"/>
+        </junitreport -->
+
+        <fail message="Cucumber failed">
+            <condition>
+                <not>
+                    <equals arg1="${cucumber.exitstatus}" arg2="0"/>
+                </not>
+            </condition>
+        </fail>
+    </target>
+
+    <target name="clean">
+        <delete dir="target"/>
+    </target>
+
+    <target name="clobber" depends="clean">
+        <delete dir="${jars}"/>
+    </target>
+</project>

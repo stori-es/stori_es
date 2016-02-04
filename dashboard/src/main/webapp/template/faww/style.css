@@ -1,0 +1,275 @@
+html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+body P, body LI, body OL, body UL, body TABLE, body TR, body TH, body TD, body .Explicit {
+    font-size: inherit;
+    font: 14px/14px "Open Sans";
+    line-height: 18px;
+}
+
+body {
+    background-image: none;
+    text-align: center;
+}
+
+p {
+    margin: 0em 0;
+}
+
+#container {
+    width: 100%;
+    margin: 0 auto;
+    text-align: left;
+    position: relative;
+}
+
+/* Header */
+#header {
+    height: 90px;
+    position: relative;
+    z-index: 100;
+    width: 100%;
+    margin: auto;
+    background-color: #000000;
+}
+
+.headercontainer {
+    width: 1000px;
+    margin: auto;
+    background: black;
+}
+
+.logo {
+    height: 81px;
+    margin: 10px;
+    margin-left: 5px;
+    float: left;
+
+}
+
+.logopic {
+    height: 66px;
+}
+
+/* End Header */
+
+.breadcrumbs {
+    display: none;
+}
+
+.main {
+    margin: 10px 0;
+    text-align: left;
+    padding: 0px 0px 0px;
+    width: 1000px;
+    position: relative;
+    margin: 40px auto;
+    float: none;
+}
+
+div.addthis_toolbox {
+    float: right;
+    width: 180px;
+    position: absolute;
+    right: 0;
+    top: 10px;
+}
+
+h3 {
+    font-size: 12px;
+    color: #666;
+    text-transform: none;
+    margin: .2em 0;
+}
+
+div.payment-field-container span.internal-payment {
+    border-radius: 0;
+}
+
+div.payment-field-container span.external-payment span.payment-type-option {
+    border-radius: 0;
+}
+
+span.label-text {
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.ObjTitle {
+    margin-left: 40px;
+}
+
+label.wrapable {
+    margin-left: 5px;
+}
+
+body.page #footer, body.single #footer {
+
+    background-color: black;
+}
+
+#footer {
+    background-color: black;
+    height: 150px;
+    color: #ffffff;
+    width: 100%;
+
+}
+
+#footer p {
+    font: 14px/18px "Open Sans";
+
+}
+
+#footer_container {
+    width: 1100px;
+    margin: auto;
+}
+
+.footer_content_column {
+    float: left;
+}
+
+.footer_content_column p {
+    text-align: right;
+    padding-left: 30px;
+    padding-top: 10px;
+
+}
+
+.footer_content_nav {
+    padding-top: 15px;
+    width: 600px;
+    float: left;
+    text-align: center;
+    display: block;
+    font: 14px/18px "Open Sans";
+}
+
+.footer_content_nav a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0 5px;
+}
+
+.footer_content_nav span {
+    color: #86c248;
+    font-weight: bold;
+}
+
+.footer_content_nav p {
+    text-align: center;
+    margin-top: 2.5em;
+
+}
+
+.mobile_nav {
+    display: none;
+}
+
+div.responsive textarea, div.responsive input, div.responsive select, div.responsive option {
+    vertical-align: bottom;
+}
+
+/* End Button */
+
+@media screen and (max-width: 736px) {
+
+    #header {
+        width: 100%;
+    }
+
+    .main {
+        width: 100%;
+    }
+
+    .breadcrumbs {
+        width: 100%;
+    }
+
+    .convio {
+        margin-top: 35px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .req {
+        display: none;
+    }
+
+    .headercontainer {
+        width: 100%;
+    }
+
+    #body-sidebar {
+        width: 100%;
+    }
+
+    #body-sidebar {
+        float: none;
+    }
+
+    #body-nosidebar {
+
+    }
+
+    .secondary {
+        width: 90%;
+        float: none;
+        margin: auto;
+        margin-top: 20px;
+        border: 0;
+    }
+
+    #amount-tip {
+        display: none;
+    }
+
+    #footer {
+        height: 400px;
+        width: 100%;
+    }
+
+    #footer_container {
+        width: 100%;
+    }
+
+    .footer_content_column {
+        text-align: center;
+        width: 100%;
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-bottom: 20px;
+    }
+
+    .footer_content_column p {
+        text-align: center;
+        padding-left: 0px;
+    }
+
+    .footer_content_nav {
+        display: none;
+    }
+
+    .mobile_nav {
+        display: block;
+        text-align: center;
+        float: none;
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .mobile_nav a {
+        color: #ffffff;
+        text-decoration: none;
+        padding: 0 5px;
+        line-height: 2.5;
+    }
+
+    .mobile_nav span {
+        color: #86c248;
+    }
+}

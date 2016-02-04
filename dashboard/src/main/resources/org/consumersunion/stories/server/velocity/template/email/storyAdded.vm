@@ -1,0 +1,40 @@
+There is a new addition to the Collection "${collection.title}"
+
+Story detail :
+${protocolAndHost}/stories.jsp#story;id=${storySummary.storyId};owner=${storySummary.story.owner};
+
+Collection detail :
+${protocolAndHost}/stories.jsp#collection;id=${collection.id}
+
+#if(${storySummary.title})
+Title: ${storySummary.title}
+#else
+Title: Untitled
+#end
+#if (${storySummary.authorGivenName})
+Author: ${storySummary.authorGivenName}
+#end
+#if (${storySummary.address})
+#if (${storySummary.address.city})
+#set($address = ${storySummary.address.city})
+#end
+#if (${storySummary.address.state})
+#if ($address)
+#set($address = $address + ", " + ${storySummary.address.state})
+#else
+#set($address = ${storySummary.address.state})
+#end
+#end
+#if ($address)
+Location: $address
+#end
+#end
+Story Content:
+${fullText}
+
+
+--
+You are receiving this email because you opted-in to receive notifications for additions to a stori.es Collection. Unsubscribe here:
+${protocolAndHost}/storiesunsubscription?collection=${collection.id}&profile=${subscriptionSummary.profileSummary.profile.id}
+
+#cuContact

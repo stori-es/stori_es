@@ -1,0 +1,412 @@
+.custom .headline_area {
+    padding-bottom: 5px;
+    border-bottom: 1px solid #5C3F6E;
+}
+
+#access li li a {
+    background: 696969;
+}
+
+#archive_info {
+    display: none;
+}
+
+#archive_intro {
+    display: none;
+}
+
+.teaser h2 {
+    background: #F2F2F2;
+    padding: .3em;
+    border: 1px solid #BDBDBD;
+    font-size: 16px;
+}
+
+.custom .sidebar h3 {
+    font-size: 18px;
+    line-height: 17px;
+    color: #5C3F6E;
+    text-transform: uppercase;
+    font-weight: normal;
+    border-top: 1px solid #6E6E6E;
+    border-bottom: 1px solid #6E6E6E;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    letter-spacing: 1px;
+}
+
+.custom .teaser {
+    border-top: 0px solid #BBBBBB;
+    margin-top: 0em;
+    margin-bottom: 0em;
+}
+
+.custom .teaser {
+    padding-bottom: 10px;
+    padding-top: 0px;
+}
+
+.custom .teaser {
+    width: 100%;
+    margin-top: 1em;
+    text-align: left;
+}
+
+.custom .teasers_box {
+    padding-top: 0;
+    border-top: 0;
+}
+
+.teaser .teaser_date {
+    margin-right: .3em;
+    border-right: 1px solid #848484;
+    padding-right: 7px;
+}
+
+/* Style the First (or Only) Post */
+.custom .post.top {
+    margin-bottom: 1em;
+    margin-top: 1em;
+    border-bottom: 1px solid #A4A4A4;
+    padding-bottom: 0px;
+}
+
+.custom #content {
+    background: #ffffff url('contentbg2.png') repeat-x scroll 50% 0;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+.custom #header_links {
+    display: block;
+    margin-left: 920px;
+    margin-top: -195px;
+    background: transparent;
+    float: left;
+    opacity: 0.9;
+}
+
+.custom #header_links a:hover {
+    opacity: 0.8;
+}
+
+/*RECENT POSTS BACKGROUND Sidebar Widget*/
+
+.custom li#text-3.widget {
+    border-top: 0px solid #ffffff !important;
+    border-right: 0px solid #ffffff !important;
+    border-left: 0px solid #ffffff !important;
+    border-bottom: 0px solid #ffffff !important;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    background: #ffffff url('contentbg2.png') repeat-x scroll 50% 0;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+/*RECENT POSTS BACKGROUND Sidebar Widget*/
+
+.custom li#slideshow-3.widget {
+    border-top: 0px solid #ffffff !important;
+    border-right: 0px solid #ffffff !important;
+    border-left: 0px solid #ffffff !important;
+    border-bottom: 0px solid #ffffff !important;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    background: #ffffff url('contentbg2.png') repeat-x scroll 50% 0;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+/*RECENT POSTS BACKGROUND Sidebar Widget*/
+
+.custom li#text-5.widget {
+    border-top: 0px solid #ffffff !important;
+    border-right: 0px solid #ffffff !important;
+    border-left: 0px solid #ffffff !important;
+    border-bottom: 0px solid #ffffff !important;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    background: #ffffff url('contentbg2.png') repeat-x scroll 50% 0;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+/* WIDGET FOOTER */
+
+.custom #widgetfooter .footer_space {
+    width: 1.80%;
+    float: left;
+    height: 1px;
+}
+
+.custom #widgetfooter div.col {
+    float: left;
+    width: 31%;
+    margin-right: 10px;
+
+}
+
+.custom #widgetfooter {
+    text-align: left;
+    float: left;
+    width: 100%;
+    padding-top: 0em;
+    padding-bottom: 0.2em;
+    font-size: 12px;
+    color: #848484;
+}
+
+}
+
+.custom #widgetfooter .widget {
+    padding-top: 10px;
+    color: #111111;
+
+}
+
+.custom #widgetfooter .widget li {
+    list-style-image: none;
+    margin-left: 0px;
+    text-align: center;
+    border-bottom: 1px solid #BDBDBD;
+    padding: .3em;
+}
+
+.custom #widgetfooter h3 {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 10px;
+    color: #111111;
+}
+
+.custom #widgetfooter a:hover {
+    color: #da6226;
+    opacity: 0.8;
+}
+
+.custom #widgetfooter {
+    border-top: 0px solid #2f3618;
+    background: #ffffff;
+}
+
+.custom .prev_next {
+    background: #F2F2F2;
+    background-position: bottom;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    margin-left: 20px;
+    margin-right: 10px;
+    font-size: 7pt;
+    border-left: 1px solid #BDBDBD;
+    border-top: 1px solid #BDBDBD;
+    border-bottom: 1px solid #BDBDBD;
+    border-right: 1px solid #BDBDBD;
+}
+
+.custom .headline_area h1 {
+    color: #424242;
+}
+
+.custom ul.menu li li a:hover {
+    display: block;
+}
+
+.custom .ul.menu {
+    background: #transparent;
+    display: block;
+}
+
+.custom .ul.menu li a {
+    background: #FFFFFF;
+    display: block;
+}
+
+.custom ul.menu li a {
+    background: #FFFFFF;
+    display: block;
+}
+
+.custom ul.menu li a:hover {
+    background: #FFFFFF;
+    display: block;
+    top: 2px;
+}
+
+-moz-border-radius:
+
+10
+px
+
+;
+-webkit-border-radius:
+
+10
+px
+    /*---:[ Nav Menu Styling ]:---*/
+.custom .menu {
+    float: left;
+    position: relative;
+    top: -33px;
+    width: 960px;
+    margin-bottom: -3em;
+    background: transparent;
+    display: block;
+}
+
+body.custom {
+    background: #84448E url('tnbg1.png') 50% 0 repeat-x scroll;
+}
+
+.custom #container {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    padding: 0em;
+    background: #D8D8D8;
+    border: 1.2em solid #ffffff;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+.custom #content h3 {
+    font-size: 19px;
+    line-height: 21px;
+    color: #5C3F6E;
+    text-transform: uppercase;
+    font-weight: normal;
+    border-top: 1px solid #6E6E6E;
+    border-bottom: 1px solid #6E6E6E;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.custom #header {
+    border-bottom: none;
+    padding: 0em;
+}
+
+.custom #feature_box {
+    background: transparent;
+    padding: 0em;
+    margin-top: 2em;
+    margin-left: 0px;
+    margin-right: 0px;
+    font-size: 12px;
+    border-bottom: 0px dotted #A4A4A4;
+    margin-bottom: -2em;
+}
+
+/* Style the First (or Only) Post */
+.custom .post.top {
+    margin-top: 1em;
+    border-bottom: 1px solid #A4A4A4;
+    padding-bottom: 0px;
+}
+
+.teaser .teaser_date {
+    margin-right: .3em;
+    border-right: 1px solid #848484;
+    padding-right: 7px;
+}
+
+.custom a {
+    text-decoration: none;
+    outline: none;
+}
+
+/* Sidebar Underline Styling */
+.custom li.widget ul li {
+    border-bottom: 1px solid #BDBDBD;
+    margin: 0;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+}
+
+/* Author Comment Background Color*/
+.custom dl#comment_list .bypostauthor {
+    background: #ffffff;
+}
+
+.custom #commentform #submit {
+    padding: 5px 15px;
+    background: #E6E6E6;
+    border: none;
+    font-weight: normal;
+    color: #384550;
+}
+
+.custom #footer a, .custom #footer a:visited {
+
+    text-decoration: none;
+    border-bottom: none;
+}
+
+/*Link Color*/
+
+.custom a {
+    text-decoration outline: none;
+}
+
+.custom #content a:hover {
+    color: #da6226;
+}
+
+.custom #content a {
+    text-decoration: none;
+    outline: none;
+}
+
+.custom .sidebar a:hover {
+    color: #da6226;
+    opacity: 0.8;
+}
+
+.custom .sidebar a {
+    text-decoration: none;
+    outline: none;
+}
+
+.page-nav {
+    font-size: 1.15em;
+    font-weight: normal;
+    margin: 0em 2em;
+    padding: 0;
+    overflow: visible;
+}
+
+.page-nav-intro {
+    float: left;
+    padding: .3em .5em;
+    margin: 0 1em 1em 0;
+    background: #61416F;
+    border: .0em solid #ccc;
+    color: #ffffff;
+}
+
+.page-number {
+    float: left;
+    padding: .3em .5em;
+    margin: 0 .2em;
+    background: #ffffff;
+    border: .1em solid #ccc;
+}
+
+.current-page-number {
+    float: left;
+    padding: .3em .5em;
+    margin: 0 .2em;
+    background: #efefef;
+    border: .1em solid #ccc;
+}
+
+.elipses {
+    float: left;
+    padding: .4em .8em;
+    color: #424242;
+}

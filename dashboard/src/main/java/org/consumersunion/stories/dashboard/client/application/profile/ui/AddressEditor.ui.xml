@@ -1,0 +1,33 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .buttonWrapper {
+            margin-top: 5px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:DeckPanel ui:field="editorPanel">
+            <g:FlowPanel styleName="{resource.generalStyleCss.contactLineWrapper}">
+                <g:Label ui:field="label" styleName="{resource.generalStyleCss.contactInfolabel}"/>
+                <g:Label ui:field="value" styleName="{resource.generalStyleCss.contactInfoValue}"/>
+                <g:Label ui:field="edit" styleName="icon-edit"
+                         addStyleNames="{resource.generalStyleCss.contactAction}"/>
+                <g:Label ui:field="delete" styleName="icon-trash"
+                         addStyleNames="{resource.generalStyleCss.contactAction}"/>
+                <g:Label styleName="{resource.generalStyleCss.clearBoth}"/>
+            </g:FlowPanel>
+
+            <g:HTMLPanel>
+                <g:HTMLPanel ui:field="editPanel"/>
+
+                <div class="{style.buttonWrapper}">
+                    <g:Button ui:field="submit" text="Done"/>
+                </div>
+            </g:HTMLPanel>
+        </g:DeckPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>

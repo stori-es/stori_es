@@ -1,0 +1,14 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <g:HTMLPanel styleName="{resource.generalStyleCss.mainContent}">
+        <g:SimplePanel ui:field="storyCard"/>
+        <g:SimplePanel ui:field="navBar"/>
+        <g:SimplePanel ui:field="newContent"/>
+        <g:SimplePanel ui:field="documents"/>
+
+        <div class="{resource.generalStyleCss.clearBoth}"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

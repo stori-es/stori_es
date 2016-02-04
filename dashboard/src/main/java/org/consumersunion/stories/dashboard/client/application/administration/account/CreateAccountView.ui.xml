@@ -1,0 +1,15 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:form="urn:import:org.consumersunion.stories.common.client.ui.form">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <g:HTMLPanel>
+        <g:HTMLPanel styleName="{resource.generalStyleCss.mainWrapper}">
+            <g:Label ui:field="createAccountLbl"/>
+            <form:Form ui:field="form"/>
+            <g:Button ui:field="buttonSave"/>
+        </g:HTMLPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>

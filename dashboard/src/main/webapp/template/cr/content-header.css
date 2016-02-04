@@ -1,0 +1,405 @@
+/* sub tabs -- the one below page title */
+
+.sub-tabs {
+    background: none #f8f8f8;
+    border: 1px solid #c2c2c2;
+    float: left;
+    font-size: 14px;
+    height: 31px;
+    position: relative;
+    width: 938px;
+    margin: 0 0 30px 0;
+}
+
+.sub-tabs ul {
+    background: none;
+    float: left;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    display: block;
+}
+
+.sub-tabs ul li {
+    border-right: 1px solid #c2c2c2;
+    border-left: 1px solid #fff;
+    float: left;
+    list-style: none outside none;
+    padding: 7px 17px 4px;
+    height: 20px;
+    line-height: 14px;
+}
+
+.sub-tabs ul li.on {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-bottom-color: #FFFFFF;
+    margin: 0;
+    padding-bottom: 5px;
+    position: relative;
+}
+
+.sub-tabs ul li.off {
+    background: none repeat scroll 0 0 #F8F8F8;
+    border-bottom-color: #FFFFFF;
+    margin: 0;
+    padding-bottom: 5px;
+    position: relative;
+    font-weight: bold;
+    color: #8D8D8D
+}
+
+.sub-tabs ul li a:link,
+.sub-tabs ul li a:visited,
+.sub-tabs ul li a:hover,
+.sub-tabs ul li a:active {
+    border-left: 1px solid #fff;
+    color: #000;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.sub-tabs ul li a:hover {
+    color: #000;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.sub-tabs ul li.on a:hover {
+    text-decoration: none;
+}
+
+/* end of sub tabs */
+
+/* page title */
+
+.overview-title {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 20px 0 15px;
+}
+
+/* overwrite headerfooter */
+
+#t-header #body-wrap {
+    height: 120px;
+}
+
+/* subhead */
+
+.print_icon {
+    float: right;
+}
+
+#subhead_container {
+    font-size: 12px;
+    line-height: 14px;
+}
+
+#subhead_container p {
+    margin-bottom: 20px;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+#subhead_container .beta {
+    color: #999;
+    font-weight: bold;
+}
+
+* html #subhead_container {
+    width: 750px !important;
+}
+
+#subhead_container .subhead_bug {
+    clear: both;
+    padding: 0;
+}
+
+* html #subhead_container .subhead_bug {
+    position: relative;
+    top: 3px;
+    padding: 20px 0px 19px 0px;
+}
+
+#subhead_container .subhead_bug h1 {
+    font: bold 16px Arial, Helvetica, sans-serif;
+    color: #000000;
+    font-size: 24px;
+}
+
+#subhead_container .subhead_bug h1 img {
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+#subhead_container .subhead_bug .heading img {
+    vertical-align: middle;
+}
+
+* html #subhead_container .subhead_bug .heading {
+    margin-top: 25px;
+}
+
+* + html #subhead_container .subhead_bug .heading {
+    margin-top: 27px;
+}
+
+#subhead_container .ratingsKey {
+    position: relative;
+    top: -1px;
+    float: right;
+    height: 30px;
+    margin-bottom: 1px;
+    margin-top: 20px;
+}
+
+* html #subhead_container .subhead_bug .ratingsKey {
+    top: -2px;
+}
+
+* + html #subhead_container .subhead_bug .ratingsKey {
+    top: -1px;
+}
+
+#subhead_container #printTool {
+    float: left;
+    clear: both;
+    margin: 12px 0 0 0;
+    padding: 0;
+    font: normal 11px Arial, Helvetica, sans-serif;
+    color: #176FCC;
+    height: 20px;
+    min-height: 5px;
+    width: 100%;
+}
+
+* html #subhead_container #printTool {
+    width: 100% !important;
+}
+
+#subhead_container #printTool .box {
+    float: right;
+}
+
+#subhead_container #printTool a {
+    display: block;
+    float: left;
+    height: 13px;
+    font: normal 11px/16px Arial, Helvetica, sans-serif;
+}
+
+#subhead_container #printTool a:link {
+    color: #176FCC;
+    text-decoration: none;
+}
+
+#subhead_container #printTool a:visited {
+    color: #176FCC;
+    text-decoration: none;
+}
+
+#subhead_container #printTool a:hover {
+    color: #176FCC;
+    text-decoration: underline;
+}
+
+#subhead_container #printTool a:active {
+    color: #176FCC;
+    text-decoration: underline;
+}
+
+#subhead_container #printTool img {
+    margin: 0 2px 0 11px;
+    border: none;
+}
+
+#subhead_container #printTool a.image:link {
+    text-decoration: none;
+    border: none;
+}
+
+#subhead_container #printTool a.image:visited {
+    text-decoration: none;
+    border: none;
+}
+
+#subhead_container #printTool a.image:hover {
+    text-decoration: none;
+    border: none;
+}
+
+#subhead_container #printTool a.image:active {
+    text-decoration: none;
+    border: none;
+}
+
+/*  FOR REDESIGNEDTABS - BASED ON  CONTENT-HEADER TOP SUB-TABS*/
+
+#model-sub-tabs.sub-tabs {
+    background: none repeat scroll 0 0 #F8F8F8;
+    border: 1px solid #C2C2C1;
+    float: left;
+    font-size: 12px;
+    color: red;
+    height: 28px;
+    margin: 20px 0 0;
+    position: relative;
+    width: 720px;
+    font-size: 12px;
+}
+
+#model-sub-tabs.sub-tabs ul {
+    background: none repeat scroll 0 0 transparent;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+}
+
+#model-sub-tabs.sub-tabs ul li {
+    height: 15px;
+    line-height: 10px;
+    padding: 8px 6px 5px;
+    position: relative;
+}
+
+#model-sub-tabs.sub-tabs ul li .on {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-bottom-color: #FFFFFF;
+    margin: 0;
+    padding-bottom: 6px;
+}
+
+#model-sub-tabs.sub-tabs ul li .off {
+    background: none repeat scroll 0 0 #F8F8F8;
+    margin: 0;
+    padding-bottom: 6px;
+}
+
+#model-sub-tabs.sub-tabs ul li a:link,
+#model-sub-tabs.sub-tabs ul li a:visited,
+#model-sub-tabs.sub-tabs ul li a:hover,
+#model-sub-tabs.sub-tabs ul li a:active {
+    border-left: 1px solid #FFFFFF;
+    color: #000000;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.pay-indicator {
+    margin: 15px 0 0;
+    float: right;
+}
+
+ul {
+    line-height: 18px;
+    list-style: disc outside none;
+    margin-left: 20px;
+    padding: 10px 0;
+}
+
+#model-sub-tabs.sub-tabs ul {
+    background: none repeat scroll 0 0 transparent;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+}
+
+#model-sub-tabs.sub-tabs ul li {
+    border-left: 1px solid #FFFFFF;
+    border-right: 1px solid #C2C2C2;
+    float: left;
+    line-height: 14px;
+    list-style: none outside none;
+    /*padding: 7px 17px 4px;*/
+}
+
+#model-sub-tabs.sub-tabs ul li.on {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-bottom-color: #FFFFFF;
+    margin: 0;
+    padding-bottom: 6px;
+    position: relative;
+}
+
+#model-sub-tabs.sub-tabs ul li.off {
+    background: none repeat scroll 0 0 #F8F8F8;
+    border-bottom-color: #FFFFFF;
+    margin: 0;
+    padding-bottom: 5px;
+    position: relative;
+}
+
+#model-sub-tabs.sub-tabs ul li a:link,
+#model-sub-tabs.sub-tabs ul li a:visited,
+#model-sub-tabs.sub-tabs ul li a:hover,
+#model-sub-tabs.sub-tabs ul li a:active {
+    border-left: 1px solid #FFFFFF;
+    color: #000000;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* secondary-navigation for videos and prices & cost tabs */
+#content .secondary-navigation {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #C2C2C2;
+    border-top: 0 none;
+    clear: none;
+    float: left;
+    height: 28px;
+    margin: -20px 0 20px;
+    padding: 5px 5px 0;
+    width: 710px;
+}
+
+* html #content .secondary-navigation {
+    margin-top: 0;
+}
+
+* + html #content .secondary-navigation {
+    margin-top: 0;
+}
+
+#content .secondary-navigation .navigation-item {
+    float: left;
+    font: normal 11px/14px Arial, Helvetica, sans-serif;
+    display: block;
+    margin-top: 4px;
+    padding: 0 10px;
+    width: auto;
+}
+
+#content .secondary-navigation .navigation-item-on {
+    color: #000; /* #091C30; */
+    clear: none;
+    float: left;
+    font: bold 11px/14px Arial, Helvetica, sans-serif;
+    margin-top: 4px;
+    padding: 0 10px;
+    text-align: left;
+    width: auto;
+}
+
+#content .secondary-navigation .navigation-item a:link {
+    color: #176fcc;
+    text-decoration: none;
+}
+
+#content .secondary-navigation .navigation-item a:visited {
+    color: #176fcc;
+    text-decoration: none;
+}
+
+#content .secondary-navigation .navigation-item a:hover {
+    color: #176fcc;
+    text-decoration: underline;
+}
+
+#content .secondary-navigation .navigation-item a:active {
+    color: #176fcc;
+    text-decoration: none;
+}

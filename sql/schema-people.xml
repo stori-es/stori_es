@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ This is the Solr schema file for SYS Stories. In operation, it is
+ copied to ~/solr/stories/conf/schema.xml where '~' is the base
+ installation directory for the Solr runtime for the particular
+ environment.
+
+ Most of our fields are both indexed and stored because the client
+ spec requires it. The file, as it comes from the Solr distro,
+ contains a lot of hints and examples which we don't make use of and
+ which have been removed. The version of this file in use just prior
+ to the major trim has been preserved as 'schema-stock-notes.xml' for
+ later reference.
+
+ == Sort Order ==
+
+ The optional sortMissingLast and sortMissingFirst attributes are
+ supported on "string","boolean", int, float, long, date, double,
+ including the "Trie" variants.
+
+ If sortMissingLast="true", then documents without the field come last
+ regardless of sort order (asc or desc). sortMissingFirst="true"
+ causes documents without the filed to come first. If neither is
+ specified, then documents without the sorted field are first in
+ ascending sorts and last in descending sorts.
+
+ == Numeric Range ==
+
+ The 'precisionStep' attribute can be set on numeric and date types to
+ non-zero to increase the speed of range queries at the cost of some
+ extra bits of index space.
+
+-->
+
+<schema name="people" version="1.5">
+  <types>
+    <!-- The StrField type is not analyzed, but indexed/stored
+    verbatim. It is useful for IDs and other atomic fields. -->
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
+    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+    <!-- The format for this date field is of the form 1995-12-31T23:59:59Z, and
+         is a more restricted form of the canonical representation of dateTime
+         http://www.w3.org/TR/xmlschema-2/#dateTime    
+         The trailing "Z" designates UTC time and is mandatory.
+         Optional fractional seconds are allowed: 1995-12-31T23:59:59.999Z
+         All other components are mandatory.
+      -->
+    <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
+
+
+    <!-- A general text field that has reasonable, generic
+         cross-language defaults: it tokenizes with StandardTokenizer,
+         removes stop words from case-insensitive "stopwords.txt"
+         (empty by default), and down cases.  At query time only, it
+         also applies synonyms. -->
+    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- Sort fields levae the original string intact, without
+	 tokenization. We use them with 'copyField' directives to
+	 generate fields for search and sorting. -->
+    <fieldType name="sort_field" class="solr.TextField" sortMissingLast="true" omitNorms="true">
+      <analyzer>
+        <!-- KeywordTokenizer does no actual tokenizing; the entire
+             input string is preserved as a single token. -->
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory" />
+        <filter class="solr.TrimFilterFactory" />
+      </analyzer>
+    </fieldType>
+ </types>
+
+
+ <fields>
+   <field name="_version_" type="long" indexed="true" stored="true"/>
+   <field name="id" type="string" indexed="true" stored="true" required="true" omitNorms="true"/>
+   <field name="givenName" type="text_general" indexed="true" stored="true" required="false" omitNorms="true"/>
+   <field name="surname" type="text_general" indexed="true" stored="true" required="false" omitNorms="true"/>
+   <field name="fullName" type="text_general" indexed="true" stored="true" required="false" omitNorms="true"/>
+   <field name="handle" type="text_general" indexed="true" stored="true" required="false"/>
+   <field name="primaryEmail" type="text_general" indexed="true" stored="true" required="false"/>
+   <field name="emails" type="text_general" indexed="true" stored="true" required="false" multiValued="true"/>
+   <field name="emailFormat" type="string" indexed="true" stored="true" required="false" />
+   <field name="primaryCity" type="text_general" indexed="true" stored="true" required="false" />
+   <field name="primaryState" type="text_general" indexed="true" stored="true" required="false" />
+   <field name="primaryPostalCode" type="string" indexed="true" stored="true" required="false" />
+   <field name="primaryAddress1" type="text_general" indexed="true" stored="true" required="false" />
+   <field name="primaryAddressIdx" type="int" indexed="false" stored="true" required="false" />
+   <field name="primaryPhone" type="string" indexed="true" stored="true" required="false" />
+   <field name="phones" type="string" indexed="true" stored="true" required="false" multiValued="true" />
+   <field name="updateOptIn" type="boolean" indexed="true" stored="true" required="false"/>
+   <field name="collections" type="int" indexed="true" stored="true" required="false" multiValued="true"/>
+   <field name="questionnaires" type="int" indexed="true" stored="true" required="false" multiValued="true"/>
+   <field name="firstStoryDate" type="date" indexed="true" stored="true" required="false"/>
+   <field name="lastStoryDate" type="date" indexed="true" stored="true" required="false"/>
+   <field name="storyCount" type="int" indexed="true" stored="true" required="true"/>
+   <dynamicField name="firstStoryDateByCollection_*" type="date" indexed="true" stored="true" required="false"/>
+   <dynamicField name="lastStoryDateByCollection_*" type="date" indexed="true" stored="true" required="false"/>
+   <dynamicField name="storyCountByCollection_*" type="int" indexed="true" stored="true" required="false"/>
+
+   <field name="readAuths" type="int" indexed="true" stored="true" required="false" multiValued="true"/>
+
+   <field name="surname_sort" type="sort_field" indexed="true" stored="false" required="false" sortMissingLast="true" />
+   <field name="givenName_sort" type="sort_field" indexed="true" stored="false" required="false" sortMissingLast="true" />
+   <field name="fullName_sort" type="sort_field" indexed="true" stored="false" required="false" sortMissingLast="true" />
+   <field name="primaryCity_sort" type="sort_field" indexed="true" stored="false" required="false" sortMissingLast="true" />
+   <field name="primaryState_sort" type="sort_field" indexed="true" stored="false" required="false" sortMissingLast="true" />
+ </fields>
+
+ <!-- Field to use to determine and enforce document uniqueness. 
+      Unless this field is marked with required="false", it will be a required field
+   -->
+ <uniqueKey>id</uniqueKey>
+
+  <!-- copyField commands copy one field to another at the time a document
+        is added to the index.  It's used either to index the same field differently,
+        or to add multiple fields to the same field for easier/faster searching.  -->
+
+  <copyField source="surname" dest="surname_sort"/>
+  <copyField source="givenName" dest="givenName_sort"/>
+  <copyField source="fullName" dest="fullName_sort"/>
+  <copyField source="primaryCity" dest="primaryCity_sort"/>
+  <copyField source="primaryState" dest="primaryState_sort"/>
+</schema>

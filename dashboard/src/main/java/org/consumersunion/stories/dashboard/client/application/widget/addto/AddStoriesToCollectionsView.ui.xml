@@ -1,0 +1,76 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:u="urn:import:org.consumersunion.stories.dashboard.client.application.ui">
+
+    <ui:with field="res" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style gss="true">
+        .wrapper {
+            display: inline-block;
+            background-color: #fff;
+
+            min-height: 28px;
+            width: calc(100% - 495px);
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+
+            margin-right: 48px;
+            margin-bottom: 4px;
+            margin-top: -2px;
+
+            vertical-align: middle;
+
+            box-shadow: 0 0 0 1px #ebebeb;
+        }
+
+        .wrapper,
+        .wrapper * {
+            outline: none;
+        }
+
+        .wrapper input {
+            width: 99%;
+            box-sizing: border-box;
+        }
+
+        .buttons {
+            display: inline-block;
+        }
+
+        .buttons > span:first-child {
+            margin-right: 20px;
+        }
+
+        .max100 {
+            max-width: 100%;
+        }
+    </ui:style>
+
+    <g:HTMLPanel ui:field="assignPanel">
+        <div class="{res.generalStyleCss.arrowUp}"/>
+        <div class="{res.generalStyleCss.assignWrapper}">
+            <g:Label text="Add" stylePrimaryName="{res.generalStyleCss.assignText}"/>
+            <div class="{res.generalStyleCss.floatLeft}">
+                <u:ClickableDropDown ui:field="selectDropDown"/>
+            </div>
+            <g:Label text="stories to" stylePrimaryName="{res.generalStyleCss.assignText}"/>
+            <g:FocusPanel ui:field="collectionsListWrapper" styleName="{style.wrapper}">
+                <g:HTMLPanel>
+                    <g:FlowPanel ui:field="collectionsList" styleName="{res.generalStyleCss.floatLeft} {style.max100}"/>
+                    <g:SuggestBox ui:field="itemBox" styleName="{res.generalStyleCss.hiddenTextBox}"/>
+                    <div class="{res.generalStyleCss.clearBoth}"/>
+                </g:HTMLPanel>
+            </g:FocusPanel>
+            <div class="{style.buttons}">
+                <span>
+                    <g:Button ui:field="goAssign" text="Done" addStyleNames="{res.generalStyleCss.font14}"/>
+                </span>
+                <span>
+                    <span ui:field="cancel" class="{res.generalStyleCss.link}">Cancel</span>
+                </span>
+            </div>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

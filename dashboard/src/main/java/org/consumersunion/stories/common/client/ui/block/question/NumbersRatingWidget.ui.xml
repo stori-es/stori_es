@@ -1,0 +1,47 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:w="urn:import:org.consumersunion.stories.common.client.widget">
+    <ui:with field="res" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+    <ui:style gss="true">
+        .main {
+            line-height: 30px;
+
+            display: inline-block;
+            margin-top: 27px;
+        }
+
+        .main > span,
+        .main span {
+            display: inline-block;
+
+            position: relative;
+        }
+
+        .main label {
+            text-align: center;
+
+            display: block;
+            width: 87%;
+
+            position: absolute;
+            left: 0;
+            top: -23px;
+
+            box-sizing: border-box;
+        }
+
+        .main input {
+            margin: 0 15px;
+        }
+
+        .main > div {
+            display: inline-block;
+        }
+    </ui:style>
+
+    <g:HTMLPanel styleName="{style.main}">
+        <g:InlineLabel ui:field="startLabel" styleName="{res.generalStyleCss.disabled}"/>
+        <w:RadioButtonGroup ui:field="options"/>
+        <g:InlineLabel ui:field="endLabel" styleName="{res.generalStyleCss.disabled}"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

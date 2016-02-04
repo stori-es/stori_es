@@ -1,0 +1,55 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+    <ui:with field="labels" type="org.consumersunion.stories.common.shared.i18n.CommonI18nLabels"/>
+    <ui:with field="common" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+    <ui:with field="resources" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <g:HTMLPanel styleName="{resources.blockConfigurators.main}">
+        <div class="{resources.blockConfigurators.fullRow}">
+            <g:Label text="Question *"/>
+            <span>
+                <g:TextBox ui:field="text"/>
+            </span>
+        </div>
+        <g:Label ui:field="textError" styleName="{common.generalStyleCss.errorLabel}"/>
+        <div class="{resources.blockConfigurators.fullRow}">
+            <g:Label text="Help Text"/>
+            <span>
+                <g:TextBox ui:field="helpText"/>
+            </span>
+        </div>
+        <div ui:field="formatContainer" class="{resources.blockConfigurators.shortRow}">
+            <g:Label text="Format *"/>
+            <span>
+                <g:ValueListBox ui:field="format"/>
+            </span>
+        </div>
+        <div class="{resources.blockConfigurators.shortRow}">
+            <g:Label text="Required"/>
+            <div>
+                <g:SimpleCheckBox ui:field="required"/>
+            </div>
+        </div>
+        <div ui:field="advancedPanel" class="{resources.blockConfigurators.advanced}">
+            <div ui:field="advancedToggle"
+                 class="{resources.generalStyleCss.font14} {resources.generalStyleCss.blue} simptip-position-top simptip-movable"
+                 data-tooltip="{labels.clickToOpen}">
+                <span class="icon-caret-right"/>
+                <span class="{resources.generalStyleCss.link}">Advanced</span>
+            </div>
+            <div ui:field="advancedPanelContent">
+                <div class="{resources.blockConfigurators.shortRow} {resources.blockConfigurators.advancedLength}">
+                    <g:Label text="Min Length"/>
+                    <g:IntegerBox ui:field="minLength" addStyleNames="gwt-TextBox"/>
+                    <g:Label text="Max Length"/>
+                    <g:IntegerBox ui:field="maxLength" addStyleNames="gwt-TextBox"/>
+                </div>
+            </div>
+        </div>
+        <div class="{resources.blockConfigurators.buttonContainer}">
+            <g:Button ui:field="done" text="Done"/>
+            <g:Anchor ui:field="cancel" text="Cancel"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

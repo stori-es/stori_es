@@ -1,0 +1,71 @@
+.interactiveMain > * {
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.interactiveMain > h3 {
+    margin-top: 14px;
+    line-height: 6px;
+}
+
+.interactiveMainBlock > * {
+    display: block;
+}
+
+.interactiveMain > div:last-child {
+    display: block;
+    box-sizing: border-box;
+}
+
+.progress {
+    width: 0;
+    height: 5px;
+    background-color: #338597;
+    margin-left: -40px;
+    overflow: hidden;
+}
+
+.button:disabled {
+    cursor: default;
+}
+
+.button {
+    background-color: #338597;
+    color: #fff;
+
+    border: none;
+    padding: 7px 18px;
+    margin-top: 10px;
+@mixin borderradius(3 px, 3 px, 3 px, 3 px);
+
+    cursor: pointer;
+}
+
+.closeButton {
+    display: block;
+    width: 146px;
+}
+
+.confirmButton {
+    display: block;
+    margin-top: 18px;
+}
+
+.link {
+    color: #0059b2;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.emailBox {
+    display: inline-block;
+    background-color: #fff;
+    color: #8E8E8E;
+
+    padding: 0 10px;
+    margin-left: 12px;
+    width: 40%;
+@mixin borderradius(3 px, 3 px, 3 px, 3 px);
+
+    box-sizing: border-box;
+}

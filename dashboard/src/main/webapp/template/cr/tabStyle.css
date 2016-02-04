@@ -1,0 +1,337 @@
+/* tab styles */
+
+#breadcrumb_tabs_container {
+    /* container to abs position tabs in header */
+    height: 25px;
+    width: 918px;
+    border-left: 1px solid #dfe8f1;
+    border-right: 1px solid #dfe8f1;
+    background: url(../images/cro_catheader_bread.gif) repeat-x;
+}
+
+.breadcrumb_tabs {
+    display: block;
+    position: relative; /* needed to make .breadcrumb_tabs ul (next style down) position absolutely to it*/
+    top: 1px;
+    height: 25px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.breadcrumb_tabs ul {
+    display: block;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 24px;
+    margin: 0;
+    padding: 0;
+    background: url(../images/tab_general_bkg.gif) no-repeat 20px 0px; /* THIS IS NOW ONE LONG IMAGE (1000px, 2k) SO WE CAN OFF-SET IT AND SHOW THE BACKGROUND GRADIENT THROUGH THE LEFT SPACER */
+}
+
+.breadcrumb_tabs ul li {
+    float: left;
+    height: 17px;
+    list-style: none;
+    font: bold 12px Arial, Helvetica, sans-serif;
+    margin: 3px 0 0 0px;
+    padding: 3px 24px 0 24px;
+    clear: none;
+    border-right: 1px solid #c3d2e0;
+    border-left: 1px solid #edf3fa;
+
+}
+
+.breadcrumb_tabs ul li.left_spacer {
+    /* this acts as the left spacer for the nav, and it's left border */
+    width: 20px;
+    height: 18px;
+    padding: 2px 0 0 0;
+    margin-top: 3px;
+    border-left: none;
+    border-right: 1px solid #c3d2e0;
+    border-bottom: 1px solid #c3d2e0;
+}
+
+.breadcrumb_tabs ul li.on {
+    position: relative; /*needs to be positioned relative for onRightCap to be positioned absolutely */
+    height: 24px;
+    margin: 0px 0 0 -5px; /* top margin pushes on tab down to cover baseline on div -- left margin (negative) pushes the tab left over the left tab's right border */
+    /* AND in the case that the first tab is the on tab, needs to be over enough so the top-transparent show gif doesn't show some of that border -- which is the right border of the spacer li */
+    padding: 0 4px 0 0; /* this right padding works to oppose the negative margin below */
+    background: url(../images/tab_bg_center.gif) repeat-x 0px 0px; /* was background: url(tab_bg_right.jpg) no-repeat top right;*/
+    border: none;
+}
+
+.breadcrumb_tabs ul li.on .text .onRightCap {
+    /*this is the cap on the right of the on tab -- overwrites afterOnTab border*/
+    display: block; /* HOLDS THE ON TAB RIGHT CAP */
+    position: absolute;
+    top: 0px;
+    left: 100%;
+    width: 7px;
+    height: 24px;
+    background: url(../images/tab_bg_right.gif) no-repeat top right;
+}
+
+.breadcrumb_tabs ul li.on .text {
+    background: url(../images/tab_bg_left.gif) no-repeat 0px 0px;
+    margin: 0 0 0 0;
+    padding: 2px 17px 0 29px; /* updated left padding to compensate for onRightCap*/
+    line-height: 22px; /* using line-height instead of height to be nice to ie6 */
+    /*height: 18px;*/
+    /* THIS IS WHAT WAS CAUSING WRAPPING ON IE6!!! */
+}
+
+.breadcrumb_tabs ul li a:link {
+    color: #091c30;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.breadcrumb_tabs ul li a:visited {
+    color: #091c30;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.breadcrumb_tabs ul li a:hover {
+    color: #091c30;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.breadcrumb_tabs ul li a:active {
+    color: #091c30;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.breadcrumb_tabs ul li.on a:link {
+    color: #091c30;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.breadcrumb_tabs ul li.on a:visited {
+    color: #091c30;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.breadcrumb_tabs ul li.on a:hover {
+    color: #091c30;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.breadcrumb_tabs ul li.on a:active {
+    color: #091c30;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* SubTab styles */
+
+#subtabs_container {
+    height: 19px;
+    width: 745px;
+    background-color: #f1f4f9;
+    border-right: 1px solid #c3d2e0;
+    /*border-left: 1px solid #c3d2e0;*/
+    border-top: 1px solid #c3d2e0;
+    background: url(../images/tab_sec_general_bkg.gif) repeat-x 0px 0px;
+}
+
+* html #subtabs_container {
+    height: 19px;
+    overflow: hidden;
+}
+
+#subtabs_container .behindRatingsLinkBox {
+    float: right;
+    margin: 2px 12px 0 0;
+    height: 12px;
+    border-bottom: 1px none #176cff;
+}
+
+* html #subtabs_container .behindRatingsLinkBox {
+    margin: 2px 6px 0 0;
+}
+
+#subtabs_container .behindRatingsLinkBox a {
+    font: normal 10px Arial, Helvetica, sans-serif;
+    color: #176fcc;
+    text-decoration: none;
+}
+
+#subtabs_container .behindRatingsLinkBox a:hover {
+    font: normal 10px Arial, Helvetica, sans-serif;
+    color: #176fcc;
+    text-decoration: underline;
+}
+
+#subtabs_container .subtabs {
+    display: block;
+    position: relative; /* needed to make .subtabs ul (next style down) position absolutely to it*/
+    top: -5px;
+    height: 24px;
+    padding: 0;
+    overflow: hidden;
+}
+
+#subtabs_container .subtabs ul {
+    display: block;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+#subtabs_container .subtabs ul li {
+    float: left;
+    height: 17px;
+    list-style: none;
+    font: bold 12px Arial, Helvetica, sans-serif;
+    margin: 5px 0 0 0px;
+    padding: 1px 18px 0 18px;
+    clear: none;
+    border-right: 1px solid #c3d2e0;
+    border-left: 1px solid #fff;
+
+}
+
+#subtabs_container .subtabs ul li .text {
+    margin-top: 1px;
+}
+
+#subtabs_container .subtabs ul li.tabset_end {
+    /* this is for the righmost dividing line after the tabs themselves (has left border)*/
+    border-right: none; /* inherits all other traits from .subtabs ul li above */
+}
+
+#subtabs_container .subtabs ul li.left_spacer {
+    /* this acts as the left spacer for the nav, and it's left border */
+    position: relative;
+    width: 13px;
+    height: 16px;
+    padding: 2px 0 0 0;
+    margin-top: 5px;
+    border-left: 1px solid #c3d2e0;
+    border-right: none;
+}
+
+* html #subtabs_container .subtabs ul li.left_spacer {
+    width: 12px;
+}
+
+/* because ie6 doesn't seem to like odd numbers here */
+
+#subtabs_container .subtabs ul li.left_spacer .left_spacerRightCap {
+    /* overlays the left border of the first tab */
+    display: block;
+    position: absolute;
+    left: 100%;
+    top: 0px;
+    width: 1px;
+    height: 18px;
+    border-left: none;
+    border-right: none;
+    background: url(../images/tab_sec_general_bkg.gif) repeat-x 0px 0px;
+    z-index: 995;
+}
+
+#subtabs_container .subtabs ul li.on {
+    position: relative; /*needs to be positioned relative for onRightCap to be positioned absolutely */
+    height: 22px;
+    margin: 2px 6px 0 -2px; /* top margin pushes on tab down to cover baseline on div -- left margin (negative) pushes the tab left over the left tab's right border */
+    /* AND in the case that the first tab is the on tab, needs to be over enough so the top-transparent show gif doesn't show some of that border -- which is the right border of the spacer li */
+    padding: 0 4px 0 0; /* this right padding works to oppose the negative margin below */
+    background: url(../images/tab_sec_center.gif) repeat-x 0px 0px; /* was background: url(tab_bg_right.jpg) no-repeat top right;*/
+    border: none;
+    z-index: 996;
+}
+
+* html #subtabs_container .subtabs ul li.on {
+    margin-right: 1px;
+}
+
+#subtabs_container .subtabs ul li.on .text .onRightCap {
+    /*this is the cap on the right of the on tab -- overwrites afterOnTab border*/
+    display: block; /* HOLDS THE ON TAB RIGHT CAP */
+    position: absolute;
+    top: 0px;
+    left: 100%;
+    width: 7px;
+    height: 22px;
+    background: url(../images/tab_sec_right.gif) no-repeat top right;
+}
+
+#subtabs_container .subtabs ul li.on .text {
+    background: url(../images/tab_sec_left.gif) no-repeat 0px 0px;
+    margin: 0 0 0 0;
+    padding: 2px 11px 0 23px; /* updated left padding to compensate for onRightCap*/
+    line-height: 20px; /* using line-height instead of height to be nice to ie6 */
+    /*height: 18px;*/
+    /* THIS IS WHAT WAS CAUSING WRAPPING ON IE6!!! */
+}
+
+* html #subtabs_container .subtabs ul li.on .text {
+    padding: 1px 11px 0 23px;
+}
+
+* + html #subtabs_container .subtabs ul li.on .text {
+    padding: 1px 11px 0 23px;
+}
+
+#subtabs_container .subtabs ul li a:link {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#subtabs_container .subtabs ul li a:visited {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#subtabs_container .subtabs ul li a:hover {
+    color: #176fcc;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+#subtabs_container .subtabs ul li a:active {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#subtabs_container .subtabs ul li.on a:link {
+    color: #091c30;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#subtabs_container .subtabs ul li.on a:visited {
+    color: #091c30;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#subtabs_container .subtabs ul li.on a:hover {
+    color: #091c30;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#subtabs_container .subtabs ul li.on a:active {
+    color: #091c30;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+

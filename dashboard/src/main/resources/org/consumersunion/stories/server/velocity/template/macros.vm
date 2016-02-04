@@ -1,0 +1,3 @@
+#macro(cuContact)
+    #include("cuContact.vm")
+#end

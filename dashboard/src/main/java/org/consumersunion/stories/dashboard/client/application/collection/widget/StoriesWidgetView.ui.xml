@@ -1,0 +1,56 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:du="urn:import:org.consumersunion.stories.dashboard.client.application.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .mapWrapper {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+            width: 100%;
+            height: 376px;
+        }
+
+        .plusIcon {
+            position: absolute;
+            bottom: 3px;
+            left: 10px;
+        }
+
+        .toggler {
+            position: absolute;
+            bottom: 7px;
+            right: 10px;
+        }
+
+        .leftSideWrapper {
+            float: left;
+            width: 100%;
+        }
+
+        .relative {
+            position: relative;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <div class="{style.relative}">
+            <g:SimplePanel ui:field="search"/>
+
+            <g:SimplePanel styleName="{resource.generalStyleCss.blue} {style.plusIcon}" ui:field="addTo"/>
+            <du:MapToggler addStyleNames="{style.toggler}" ui:field="mapToggler"/>
+        </div>
+
+        <g:SimplePanel ui:field="addToPanel"/>
+
+        <g:HTMLPanel addStyleNames="{style.leftSideWrapper}">
+            <g:SimplePanel ui:field="mapContainer" visible="false" styleName="{style.mapWrapper}"/>
+        </g:HTMLPanel>
+
+        <g:HTMLPanel ui:field="storiesWrapper" addStyleNames="{style.leftSideWrapper}">
+            <g:SimplePanel ui:field="storiesContentPanel"/>
+        </g:HTMLPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>

@@ -1,0 +1,46 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .authorAndCity {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .authorAndCity a {
+            text-decoration: none;
+        }
+
+        .cardSummary {
+            font-size: 14px;
+            -ms-word-break: break-all;
+            word-break: break-all;
+            /* Non standard for webkit */
+            word-break: break-word;
+
+            -webkit-hyphens: auto;
+            -moz-hyphens: auto;
+            -ms-hyphens: auto;
+            hyphens: auto;
+
+            width: literal('calc(100% - 15px)');
+            margin-top: 10px;
+        }
+
+        a.cardSummary {
+            display: inline-block;
+            width: auto;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <div ui:field="authorAndCity" class="{style.authorAndCity}">
+            <span ui:field="authorPrefix"/>
+            <g:InlineHyperlink ui:field="author" styleName="{resource.generalStyleCss.blue}"/>
+            <span ui:field="city"/>
+        </div>
+        <div class="{style.cardSummary}" ui:field="summary"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

@@ -1,0 +1,90 @@
+.cellListWidget {
+}
+
+.cellListEvenItem {
+    display: inline-block;
+    min-width: 80px;
+    color: #3f3427;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Droid Sans', sans-serif;
+    padding: 3px 3px;
+    border: 1px solid #aaaaaa;
+    background: literal("-moz-linear-gradient(top,  #fcfcfc,  #bfbfbf)") repeat scroll 0 0 transparent;
+    background: literal("-webkit-gradient(linear, left top, left bottom, from(#fcfcfc), to(#bfbfbf))");
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#fcfcfc', EndColorStr='#bfbfbf')";
+}
+
+.cellListOddItem {
+    display: inline-block;
+    min-width: 80px;
+    color: #3f3427;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    padding: 3px 3px;
+    border: 1px solid #aaaaaa;
+    background: literal("-moz-linear-gradient(top,  #fcfcfc,  #bfbfbf)") repeat scroll 0 0 transparent;
+    background: literal("-webkit-gradient(linear, left top, left bottom, from(#fcfcfc), to(#bfbfbf))");
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#fcfcfc', EndColorStr='#bfbfbf')";
+}
+
+.cellListSelectedItem {
+    display: inline-block;
+    min-width: 80px;
+    color: #3f3427;
+    cursor: pointer;
+    text-align: center;
+    background: none;
+    font-weight: bold;
+    font-family: 'Droid Sans', sans-serif;
+    background: none;
+    background-color: #ffffff;
+    padding: 3px 3px;
+}
+
+.cellListOddItem:first-child {
+    border: 1px solid #aaaaaa;
+    border-right: none;
+    -moz-border-radius-topleft: 8px;
+    -moz-border-radius-bottomleft: 8px;
+    -webkit-border-top-left-radius: 8px;
+    -webkit-border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.cellListEvenItem:first-child {
+    border: 1px solid #aaaaaa;
+    border-right: none;
+    -moz-border-radius-topleft: 8px;
+    -moz-border-radius-bottomleft: 8px;
+    -webkit-border-top-left-radius: 8px;
+    -webkit-border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.cellListOddItem:last-child {
+    border: 1px solid #aaaaaa;
+    border-left: none;
+    -moz-border-radius-topright: 8px;
+    -moz-border-radius-bottomright: 8px;
+    -webkit-border-top-right-radius: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.cellListEvenItem:last-child {
+    border: 1px solid #aaaaaa;
+    border-left: none;
+    -moz-border-radius-topright: 8px;
+    -moz-border-radius-bottomright: 8px;
+    -webkit-border-top-right-radius: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+

@@ -1,0 +1,756 @@
+@import url(//fonts.googleapis.com/css?family=Droid+Sans);
+
+@external cu-checkPanel, cu-collectionSubmit, stories-document-title, stories-radio, gwt-RadioButton, stories-checkBox, btn, active;
+@external stories-textArea, stories-content, item, item-selected;
+@external 'gwt-*', 'datePicker*', popupContent, 'suggest*', 'dateBox*';
+@external attachedCollections;
+@external pulse;
+@external 'message-*', 'icon-*';
+
+body span, body div, body button, body input, body textarea {
+    font-family: 'Droid Sans', sans-serif;
+}
+
+body a {
+    color: #0059b2;
+}
+
+.attachedCollections {
+    text-decoration: none;
+}
+
+.w100 {
+    width: 100%;
+}
+
+.buttonSmall {
+    width: 135px;
+    padding: 10px;
+}
+
+.buttonMedium {
+    width: 170px;
+    padding: 15px;
+}
+
+.buttonLarge {
+    width: 250px;
+    padding: 18px;
+}
+
+.centerMargin {
+    margin: 0 auto;
+    display: block;
+}
+
+.floatLeft {
+    float: left;
+}
+
+.floatRight {
+    float: right;
+}
+
+input[type=text].hiddenTextBox {
+    height: 100%;
+    background-color: white;
+    outline-color: -moz-use-text-color;
+    outline-style: none;
+    padding: 0 4px;
+    margin: 0;
+}
+
+input[type=text].disabled {
+    background-color: #E4E4E4;
+}
+
+.disabled {
+    cursor: default;
+    color: #888;
+}
+
+.gwt-TextArea {
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-top: 1px solid #666;
+    font-size: 100%;
+}
+
+.gwt-TextArea-readonly {
+    color: #888;
+}
+
+.gwt-PopupPanel {
+    border: 3px solid #e7e7e7;
+    padding: 3px;
+    background: white;
+}
+
+.gwt-DecoratedPopupPanel .popupContent {
+}
+
+.gwt-PopupPanelGlass {
+    background-color: #000;
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+}
+
+.gwt-TextBox {
+    padding: 5px 4px;
+    border: 1px solid #ccc;
+    border-top: 1px solid #999;
+    font-size: small;
+}
+
+.gwt-TextBox-readonly {
+    color: #888;
+}
+
+.gwt-PasswordTextBox {
+    padding: 5px 4px;
+    border: 1px solid #ccc;
+    border-top: 1px solid #999;
+    font-size: 100%;
+}
+
+.gwt-PasswordTextBox-readonly {
+    color: #888;
+}
+
+.stories-textArea .gwt-TextArea {
+    min-height: 100px;
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.fieldErrorMessage {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.cu-checkPanel span {
+    display: block;
+}
+
+.stories-document-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.withTooltip {
+    float: right;
+    position: relative;
+    text-decoration: none;
+    cursor: pointer;
+    font-style: normal !important;
+    font-weight: normal !important;
+    overflow: visible;
+}
+
+.withTooltip:after {
+    content: attr(data-tooltip);
+    font-size: 10px;
+    position: absolute;
+    bottom: 130%;
+    left: 20%;
+    background: #000;
+    padding: 3px 10px;
+    color: white;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    z-index: 120;
+    font-style: normal !important;
+    font-weight: normal !important;
+}
+
+.withTooltip:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 8px solid #000;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    opacity: 0;
+    left: 30%;
+    bottom: 90%;
+    font-size: 10px;
+    font-style: normal !important;
+    font-weight: normal !important;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.withTooltip:hover:after {
+    bottom: 100%;
+}
+
+.withTooltip:hover:before {
+    bottom: 70%;
+}
+
+.withTooltip:hover:after, .withTooltip:hover:before {
+    opacity: 1;
+}
+
+.helpBubble {
+    gwt-sprite: "questionMark";
+    width: 28px;
+    height: 16px;
+    display: inline-block;
+    overflow: inherit;
+    background-position-x: 12px;
+}
+
+.helpBubble.withTooltip {
+    float: none;
+}
+
+.helpBubble::before,
+.helpBubble::after {
+    left: 49% !important;
+}
+
+.stories-radio .gwt-RadioButton {
+    display: block;
+}
+
+.stories-checkBox .gwt-CheckBox {
+    display: block;
+}
+
+.errorLabel {
+    color: red;
+}
+
+.maxZIndex {
+    z-index: 100000;
+}
+
+.stories-content > div {
+    margin: 10px 0;
+}
+
+.stories-content ul {
+    list-style: disc outside none;
+    display: list-item;
+    margin-left: 1em;
+}
+
+.stories-content ul li {
+    margin: 5px 0;
+}
+
+.clearBoth {
+    clear: both;
+}
+
+.cu-collectionSubmit > button {
+    padding: 5px 7px;
+    text-decoration: none;
+    cursor: pointer;
+    cursor: hand;
+    font-size: small;
+    border: 1px solid #bbb;
+    border-bottom: 1px solid #a0a0a0;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+}
+
+.cu-collectionSubmit > button:active {
+    border: 1px inset #ccc;
+}
+
+.cu-collectionSubmit > button:hover {
+    border-color: #939393;
+}
+
+.cu-collectionSubmit > button[disabled] {
+    cursor: default;
+    color: #888;
+}
+
+.cu-collectionSubmit > button[disabled]:hover {
+    border: 1px outset #ccc;
+}
+
+.gwt-SuggestBox {
+    padding: 5px 4px;
+    border: 1px solid #ccc;
+    border-top: 1px solid #999;
+    font-size: 100%;
+}
+
+.gwt-SuggestBoxPopup {
+}
+
+.gwt-SuggestBoxPopup .item {
+    padding: 2px 6px;
+    color: #000;
+    cursor: default;
+    font-size: 110%;
+}
+
+.gwt-SuggestBoxPopup .item-selected {
+    background: #D5E2FF;
+}
+
+.gwt-SuggestBoxPopup {
+    background: white;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupTopCenter {
+    border-top: 1px solid #bbb;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupBottomCenter {
+    border-bottom: 1px solid #bbb;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupTopCenterInner,
+.gwt-SuggestBoxPopup .suggestPopupBottomCenterInner {
+    height: 1px;
+    line-height: 1px;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupMiddleLeft {
+    border-left: 1px solid #bbb;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupMiddleRight {
+    border-right: 1px solid #bbb;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupMiddleLeftInner,
+.gwt-SuggestBoxPopup .suggestPopupMiddleRightInner {
+    width: 1px;
+    line-height: 1px;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupTopLeftInner {
+    width: 0;
+    height: 0;
+    zoom: 1;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupTopRightInner {
+    width: 0;
+    height: 0;
+    zoom: 1;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupBottomLeftInner {
+    width: 0;
+    height: 0;
+    zoom: 1;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupBottomRightInner {
+    width: 0;
+    height: 0;
+    zoom: 1;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupTopLeft {
+    border-left: 1px solid #bbb;
+    border-top: 1px solid #bbb;
+    -webkit-border-top-left-radius: 4px;
+    -moz-border-radius-topleft: 4px;
+    border-top-left-radius: 4px;
+
+    width: 5px;
+    height: 5px;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupTopRight {
+    border-right: 1px solid #bbb;
+    border-top: 1px solid #bbb;
+    -webkit-border-top-right-radius: 4px;
+    -moz-border-radius-topright: 4px;
+    border-top-right-radius: 4px;
+
+    width: 5px;
+    height: 5px;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupBottomLeft {
+    border-left: 1px solid #bbb;
+    border-bottom: 1px solid #bbb;
+    -webkit-border-bottom-left-radius: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    border-top-bottom-radius: 4px;
+
+    width: 5px;
+    height: 5px;
+}
+
+.gwt-SuggestBoxPopup .suggestPopupBottomRight {
+    border-right: 1px solid #bbb;
+    border-bottom: 1px solid #bbb;
+    -webkit-border-bottom-right-radius: 4px;
+    -moz-border-radius-bottomright: 4px;
+    border-bottom-right-radius: 4px;
+
+    width: 5px;
+    height: 5px;
+}
+
+* html .gwt-SuggestBoxPopup .suggestPopupTopLeftInner {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+* html .gwt-SuggestBoxPopup .suggestPopupTopRightInner {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+* html .gwt-SuggestBoxPopup .suggestPopupBottomLeftInner {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+* html .gwt-SuggestBoxPopup .suggestPopupBottomRightInner {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.gwt-DatePicker {
+    border: 1px solid #ccc;
+    border-top: 1px solid #999;
+    cursor: default;
+}
+
+.gwt-DatePicker td,
+.datePickerMonthSelector td:focus {
+    outline: none;
+}
+
+.datePickerDays {
+    width: 100%;
+    background: white;
+}
+
+.datePickerDay,
+.datePickerWeekdayLabel,
+.datePickerWeekendLabel {
+    font-size: 85%;
+    text-align: center;
+    padding: 4px;
+    outline: none;
+    font-weight: bold;
+    color: #333;
+    border-right: 1px solid #EDEDED;
+    border-bottom: 1px solid #EDEDED;
+}
+
+.datePickerWeekdayLabel,
+.datePickerWeekendLabel {
+    background: #fff;
+    padding: 0px 4px 2px;
+    cursor: default;
+    color: #666;
+    font-size: 70%;
+    font-weight: normal;
+}
+
+.datePickerDay {
+    padding: 4px 7px;
+    cursor: hand;
+    cursor: pointer;
+}
+
+.datePickerDayIsWeekend {
+    background: #f7f7f7;
+}
+
+.datePickerDayIsFiller {
+    color: #999;
+    font-weight: normal;
+}
+
+.datePickerDayIsValue {
+    background: #d7dfe8;
+}
+
+.datePickerDayIsDisabled {
+    color: #AAAAAA;
+    font-style: italic;
+}
+
+.datePickerDayIsHighlighted {
+    background: #F0E68C;
+}
+
+.datePickerDayIsValueAndHighlighted {
+    background: #d7dfe8;
+}
+
+.datePickerDayIsToday {
+    padding: 3px;
+    color: #fff;
+    background: url(images/hborder.png) repeat-x 0px -2607px;
+}
+
+.datePickerMonthSelector {
+    width: 100%;
+    padding: 1px 0 5px 0;
+    background: #fff;
+}
+
+td.datePickerMonth {
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    font-size: 100%;
+    font-weight: bold;
+    color: #333;
+}
+
+.datePickerPreviousButton,
+.datePickerNextButton {
+    font-size: 120%;
+    line-height: 1em;
+    color: #3a6aad;
+    cursor: hand;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 0px 4px;
+    outline: none;
+}
+
+.gwt-DateBox {
+    padding: 5px 4px;
+    border: 1px solid #ccc;
+    border-top: 1px solid #999;
+    font-size: 100%;
+}
+
+.gwt-DateBox input {
+    width: 8em;
+}
+
+.dateBoxFormatError {
+    background: #ffcccc;
+}
+
+.dateBoxPopup {
+}
+
+.uploadBtn {
+    width: 150px;
+    height: 30px;
+    border: 1px solid blue;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #777777;
+}
+
+.pulse {
+    animation-name: pulse;
+    -webkit-animation-name: pulse;
+    animation-duration: 1.0s;
+    -webkit-animation-duration: 1.0s;
+    animation-iteration-count: 1;
+    -webkit-animation-iteration-count: 1;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        color: #FFF334;
+    }
+    50% {
+        transform: scale(1.1);
+        color: #FFB200;
+    }
+    100% {
+        transform: scale(1);
+        color: #FFF334;
+    }
+}
+
+@-webkit-keyframes pulse {
+    0% {
+        -webkit-transform: scale(1);
+        color: #FFF334;
+    }
+    50% {
+        -webkit-transform: scale(1.1);
+        color: #FFB200;
+    }
+    100% {
+        -webkit-transform: scale(1);
+        color: #FFF334;
+    }
+}
+
+.message-interactive .icon-info-sign {
+    color: #338597;
+    vertical-align: top;
+    margin-top: 8px;
+}
+
+.message-warning .icon-exclamation-sign,
+.message-error .icon-exclamation-sign {
+    color: #990000;
+}
+
+.message-info .icon-ok-sign,
+.message-success .icon-ok-sign {
+    color: #009933;
+}
+
+#messages {
+    @mixin transition_effect(all, .3s, ease-in-out);
+}
+
+#messages.messagesMinimized {
+    min-height: 30px;
+    height: 30px !important;
+}
+
+.messagesDragger {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 5px;
+    width: 100%;
+
+    cursor: ns-resize;
+}
+
+.messagesMinimized .messagesDragger {
+    pointer-events: none;
+}
+
+.messagesContainer {
+    background: rgba(242, 242, 242, 0.9);
+    height: calc(100% - 30px);
+
+    overflow: auto;
+}
+
+.messageIconTooltip,
+.messageRemove {
+    cursor: pointer;
+}
+
+.messageRemove:hover {
+    color: #F31A1A;
+}
+
+span.messageIconTooltip::before {
+    left: 43%;
+}
+
+span.messageIconTooltip::after {
+    left: -215%;
+}
+
+span.messageRemove::before {
+    right: 75%;
+}
+
+span.messageRemove::after {
+    right: 76%;
+    bottom: 69%;
+}
+
+#messages.noTransitions {
+    @mixin transition(none, 0s);
+}
+
+.messagesContainer .messageRemove {
+    vertical-align: top;
+    display: inline-block;
+}
+
+.messageMain {
+    min-height: 32px;
+    line-height: 32px;
+    border-bottom: 1px solid #CCC;
+    width: 100%;
+    overflow: hidden;
+    @mixin transition_delay(margin-left, .6s, ease-in-out, .1s);
+}
+
+.messageMain i {
+    font-size: 18px;
+}
+
+.messageMain > * {
+    display: inline-block;
+    font-size: 14px;
+    color: #333333;
+    vertical-align: middle;
+}
+
+.messageMain > i,
+.messageMain > span {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.messagesPanel {
+    height: 100%;
+}
+
+.messagesPanel > .messageMain .messageRemove {
+    display: none;
+}
+
+.messagesPanel > .messageMain.message-info,
+.messagesPanel > .messageMain.message-success {
+    background-color: rgba(0, 153, 51, 0.8);
+}
+
+.messagesPanel > .messageMain.message-warning,
+.messagesPanel > .messageMain.message-error {
+    background-color: rgba(153, 0, 0, 0.8);
+}
+
+.messagesPanel > .messageMain.message-interactive {
+    background-color: rgba(51, 133, 151, 0.8);
+}
+
+.messagesPanel > .messageMain > * {
+    color: #FFF;
+}
+
+.messagesPanel > .messageMain {
+    cursor: pointer;
+}
+
+.progressDone.progressDone {
+    background-color: #989898;
+}
+
+.error {
+    color: #fff;
+    background-color: #EC4831;
+
+    width: 100%;
+    padding: 2px 5px;
+    margin: 10px 0;
+
+    box-sizing: border-box;
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}

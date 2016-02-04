@@ -1,0 +1,246 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:p='urn:import:org.consumersunion.stories.common.client.ui.form'
+             xmlns:q='urn:import:org.consumersunion.stories.common.client.ui.form.controls'
+        >
+
+    <ui:with field="i18n" type="org.consumersunion.stories.common.shared.i18n.CommonI18nLabels"/>
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+    <ui:with field="commonResource" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+
+    <ui:style>
+        .mainContentOverride {
+            padding: 24px 20px;
+            width: 975px;
+        }
+
+        .storyDetailWrapper {
+            float: left;
+            width: 640px;
+            margin-right: 35px;
+        }
+
+        .separator {
+            border-bottom: 1px solid #bbbbbb;
+            border-top: 1px solid #bbbbbb;
+            padding: 2px;
+            margin-bottom: 10px;
+            float: left;
+            width: 100%;
+        }
+
+        .panelContent {
+            padding: 10px 0px;
+        }
+
+        .moreInfoWrapper {
+            width: 290px;
+            float: left;
+        }
+
+        .siderWrapper {
+            margin-bottom: 30px;
+        }
+
+        .buttonWrapper {
+            margin-top: 20px;
+        }
+
+        .createdLabel {
+            color: #333333;
+            font-size: 16px;
+            font-family: 'Droid Sans', sans-serif;
+        }
+
+        .createdValue {
+            color: #333333;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .modifiedValue {
+            font-family: 'Droid Sans', sans-serif;
+            color: #878787;
+            font-size: 13px;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .attachmentPanelWrapper {
+            float: left;
+            margin-bottom: 10px;
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .permissionEditor {
+            float: left;
+            width: 100%;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .richTextWrapper {
+            width: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid #343434;
+        }
+
+        .textContainer {
+            position: relative;
+            background-color: #ffffff;
+            border: 1px solid #bbbbbb;
+
+            -webkit-border-radius: 6px;
+            -moz-border-radius: 6px;
+            border-radius: 6px;
+        }
+
+        .textContainer:hover {
+            background-color: #dfdede;
+        }
+
+        .permissionsViewArea {
+            min-width: 610px;
+            min-height: 250px;
+            resize: none;
+            margin-bottom: 0;
+            margin-right: 24px;
+            border: none;
+            color: rgb(105, 105, 105);
+            cursor: text;
+            border-right: 1px solid #bbbbbb;
+            background-color: white;
+
+            -webkit-border-radius: 6px 0px 0px 6px;
+            -moz-border-radius: 6px 0px 0px 6px;
+            border-radius: 6px 0px 0px 6px;
+        }
+
+        .helpTextZone {
+            font-style: italic;
+            color: rgb(105, 105, 105);
+            margin-bottom: 10px;
+            margin-top: 5px;
+        }
+
+        .helpButton {
+            margin-top: 1px;
+            margin-left: 15px;
+            color: #0059B2;
+            font-size: 16px;
+            font-family: 'Droid Sans', sans-serif;
+            cursor: pointer;
+        }
+
+        @external icon-caret-down;
+        .icon-caret-down.helpButton {
+            margin-left: 12px;
+        }
+
+        .helpButton:before {
+            font-family: FontAwesome;
+            padding-right: 5px;
+            text-decoration: none;
+        }
+
+        .helpButton:hover {
+            text-decoration: underline;
+        }
+
+        .editButton {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            font-size: 18px;
+            color: #0059B2;
+        }
+
+        .selector {
+            float: left;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .permissionsHeader {
+            margin-bottom: 5px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <div class="{resource.generalStyleCss.mainContent} {style.mainContentOverride}">
+            <div class="{style.storyDetailWrapper}">
+                <g:HTMLPanel>
+                    <g:Label ui:field="title"
+                             styleName="{resource.generalStyleCss.organizationTitle} simptip-position-top"/>
+                    <g:TextBox ui:field="editableTitle" visible="false"/>
+
+                    <div class="{style.selector}">
+                        <g:ValuePicker ui:field="displaySelector"/>
+                    </div>
+                </g:HTMLPanel>
+
+                <div class="{style.separator}"/>
+
+                <g:DeckPanel ui:field="panelSwitcher">
+                    <g:HTMLPanel styleName="{style.panelContent}">
+                        <div class="{style.permissionsHeader}">
+                            <g:InlineLabel text="Permissions" styleName="{resource.generalStyleCss.smallTitle}"/>
+                            <g:InlineLabel ui:field="helpButton" text=" Help" styleName="{style.helpButton} icon-1x"/>
+                        </div>
+
+                        <g:HTMLPanel ui:field="editModePanel">
+                            <div>
+                                <g:Label ui:field="permissionHelp" addStyleNames="{style.helpTextZone}"/>
+                                <div ui:field="viewContainer" class="{style.textContainer} simptip-position-top">
+                                    <g:HTML ui:field="textEditableZone" addStyleNames="{style.permissionsViewArea}"/>
+                                    <g:Label ui:field="editIcon" styleName="{style.editButton} icon-pencil icon-1x"/>
+                                </div>
+                            </div>
+                            <div class="{style.permissionEditor}">
+                                <p:RichTextToolbar ui:field="toolbar"/>
+                                <q:RichTextEditor ui:field="permissionText" styleName="{style.richTextWrapper}"/>
+                            </div>
+                            <div class="{style.buttonWrapper}">
+                                <g:Button ui:field="submitButton" text="Done"
+                                          styleName="{resource.buttonStyleCss.button}"
+                                          addStyleNames="{resource.generalStyleCss.floatRight}"/>
+                            </div>
+                        </g:HTMLPanel>
+                    </g:HTMLPanel>
+
+                    <g:HTMLPanel styleName="{style.panelContent}">
+                        <div class="{resource.generalStyleCss.floatLeft}">
+                            <g:SimplePanel ui:field="graphPanel"/>
+                        </div>
+                    </g:HTMLPanel>
+                </g:DeckPanel>
+            </div>
+
+            <g:HTMLPanel styleName="{style.moreInfoWrapper}">
+                <g:HTMLPanel styleName="{style.siderWrapper}">
+                    <div class="{resource.generalStyleCss.floatLeft}">
+                        <g:InlineLabel styleName="{style.createdLabel}" text="Created"/>
+                        <g:InlineLabel styleName="{style.createdValue}" ui:field="creationDate"/>
+                        <g:Label styleName="{style.modifiedValue}" ui:field="updateDate"/>
+                    </div>
+                    <div class="dateTimeWrapper">
+                        <div ui:field="dateTooltip" class="floatTimeWrapper tooltip">
+                            <div class="icon-time"/>
+                        </div>
+                    </div>
+                    <div class="{style.attachmentPanelWrapper}">
+                        <g:SimplePanel ui:field="attachmentsPanel"/>
+                    </div>
+
+                    <div class="{resource.generalStyleCss.clearBoth}"/>
+                </g:HTMLPanel>
+
+                <g:SimplePanel ui:field="notesPanel"/>
+            </g:HTMLPanel>
+
+            <div class="{resource.generalStyleCss.clearBoth}"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

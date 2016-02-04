@@ -1,0 +1,17 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:cell='urn:import:com.google.gwt.user.cellview.client'>
+
+    <ui:style>
+        .wrapper {
+            border: 1px solid #545454;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel styleName="{style.wrapper}">
+        <cell:CellList ui:field="languagesList"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

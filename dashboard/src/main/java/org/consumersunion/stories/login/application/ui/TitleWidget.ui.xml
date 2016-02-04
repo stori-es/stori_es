@@ -1,0 +1,13 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder">
+    <ui:with field="res" type="org.consumersunion.stories.login.resource.LoginResources"/>
+    <ui:with field="commonRes" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+
+    <div class="{res.loginStyle.panelTitle}">
+        <h2 ui:field="title"/>
+        <div ui:field="help"/>
+        <div class="{commonRes.generalStyleCss.error}" ui:field="errorWrapper">
+            <i class="icon-exclamation-sign"/>
+            <span ui:field="errorText"/>
+        </div>
+    </div>
+</ui:UiBinder>

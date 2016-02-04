@@ -1,0 +1,43 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:p='urn:import:org.consumersunion.stories.common.client.ui.form'
+             xmlns:q='urn:import:org.consumersunion.stories.common.client.ui.form.controls'
+             xmlns:subeditor="urn:import:org.consumersunion.stories.dashboard.client.application.ui.block.configurator.subeditor">
+
+    <ui:with field="common" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+    <ui:with field="resources" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .richTextWrapper {
+            width: 100%;
+            background-color: #FFF;
+            border: 1px solid #E4E4E4;
+        }
+
+        .spacing {
+            margin-top: 13px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:Label ui:field="textError" styleName="{common.generalStyleCss.errorLabel}"/>
+        <div>
+            <p:RichTextToolbar ui:field="toolbar"/>
+            <q:RichTextEditor ui:field="text" styleName="{style.richTextWrapper}"/>
+        </div>
+        <hr class="{style.spacing}"></hr>
+        <div class="{style.spacing}">
+            <div>
+                <g:CheckBox ui:field="imageCheckbox" text="Image"
+                            styleName="{resources.generalStyleCss.onOff} {resources.generalStyleCss.imageToggle}"/>
+            </div>
+            <subeditor:TextImageEditor ui:field="image" addStyleNames="{style.spacing}"/>
+        </div>
+
+        <div class="{resources.blockConfigurators.buttonContainer}">
+            <g:Button ui:field="done" text="Done"/>
+            <g:Anchor ui:field="cancel" text="Cancel"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>
+

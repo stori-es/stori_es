@@ -1,0 +1,18 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .content {
+            color: #3d7a3d;
+            font-size: 18px;
+            font-weight: bold;
+            font-style: italic;
+        }
+    </ui:style>
+
+    <g:HTMLPanel ui:field="main" styleName="{style.content}">
+        Please confirm your request to delete this content.
+    </g:HTMLPanel>
+</ui:UiBinder>

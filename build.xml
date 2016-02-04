@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="stories" default="build" basedir="."
+         xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+    <import file="./ant-common.xml"/>
+    <import file="./ant-test.xml"/>
+
+    <!-- Arguments to gwtc and devmode targets -->
+    <property name="gwt.args" value=""/>
+    <property file="./aws-settings.prop" />
+
+    <target name="javadoc" description="Generates Javadoc for source.">
+        <javadoc destdir="doc">
+          <fileset dir=".">
+          	<include name="dashboard/src/main/java/**/*.java" />
+            <include name="shared/src/main/java/**/*.java" />
+          	<include name="worker/src/main/java/**/*.java" />
+          </fileset>
+        </javadoc>
+    </target>
+
+    <target name="gwtc-storiesDashboard" depends="javac-dashboard"
+            description="GWT compile StoriesDashboard to JavaScript">
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="antlib.classpath"/>
+        <available file="conf/devmode.properties" property="devmode.present"/>
+        <if>
+            <equals arg1="${devmode.present}" arg2="true"/>
+            <then>
+                <echo message="Running on DevMode"/>
+                <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+                    <classpath>
+                        <path refid="dashboard.gwt"/>
+                        <path refid="compile.classpath"/>
+                    </classpath>
+                    <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+                    <jvmarg value="-Xmx1G"/>
+                    <arg line="-strict"/>
+                    <arg line="-war"/>
+                    <arg value="dashboard/target/war"/>
+                    <!-- arg line="-style DETAILED"/>
+                    <arg line="-logLevel DEBUG"/ -->
+                    <arg line="${gwt.args}"/>
+                    <arg value="org.consumersunion.stories.dashboard.StoriesMVP"/>
+                </java>
+            </then>
+            <else>
+                <echo message="Running on PrdMode"/>
+                <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+                    <classpath>
+                        <path refid="dashboard.gwt"/>
+                        <path refid="compile.classpath"/>
+                    </classpath>
+                    <jvmarg value="-Xmx1G"/>
+                    <arg line="-war"/>
+                    <arg value="dashboard/target/war"/>
+                    <!-- arg line="-style DETAILED"/>
+                    <arg line="-logLevel DEBUG"/ -->
+                    <arg line="${gwt.args}"/>
+                    <arg value="org.consumersunion.stories.dashboard.StoriesMVP"/>
+                </java>
+            </else>
+        </if>
+    </target>
+
+    <target name="gwtc-survey" depends="javac-dashboard" description="GWT compile StoriesDashboard to JavaScript">
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="antlib.classpath"/>
+        <available file="conf/devmode.properties" property="devmode.present"/>
+        <if>
+            <equals arg1="${devmode.present}" arg2="true"/>
+            <then>
+                <echo message="Running on DevMode"/>
+                <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+                    <classpath>
+                        <path refid="dashboard.gwt"/>
+                        <path refid="compile.classpath"/>
+                    </classpath>
+                    <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+                    <jvmarg value="-Xmx1G"/>
+                    <arg line="-war"/>
+                    <arg value="dashboard/target/war"/>
+                    <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+                    <arg line="${gwt.args}"/>
+                    <!-- <arg line="-style PRETTY"/> -->
+                    <arg value="org.consumersunion.stories.survey.SurveyMVP"/>
+                </java>
+            </then>
+            <else>
+                <echo message="Running on PrdMode"/>
+                <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+                    <classpath>
+                        <path refid="dashboard.gwt"/>
+                        <path refid="compile.classpath"/>
+                    </classpath>
+                    <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+                    <jvmarg value="-Xmx1G"/>
+                    <arg line="-war"/>
+                    <arg value="dashboard/target/war"/>
+                    <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+                    <arg line="${gwt.args}"/>
+                    <!-- <arg line="-style PRETTY"/> -->
+                    <arg value="org.consumersunion.stories.survey.SurveyMVP"/>
+                </java>
+            </else>
+        </if>
+    </target>
+
+    <target name="gwtc-login" depends="javac-dashboard" description="GWT compile Login to JavaScript">
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="antlib.classpath"/>
+        <available file="conf/devmode.properties" property="devmode.present"/>
+        <if>
+            <equals arg1="${devmode.present}" arg2="true"/>
+            <then>
+                <echo message="Running on DevMode"/>
+                <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+                    <classpath>
+                        <path refid="dashboard.gwt"/>
+                        <path refid="compile.classpath"/>
+                    </classpath>
+                    <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+                    <jvmarg value="-Xmx1G"/>
+                    <arg line="-draftCompile"/>
+                    <arg line="-war"/>
+                    <arg value="dashboard/target/war"/>
+                    <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+                    <!--	<arg line="-style PRETTY"/> -->
+                    <arg line="${gwt.args}"/>
+                    <arg value="org.consumersunion.stories.login.login"/>
+                </java>
+            </then>
+            <else>
+                <echo message="Running on PrdMode"/>
+                <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+                    <classpath>
+                        <path refid="dashboard.gwt"/>
+                        <path refid="compile.classpath"/>
+                    </classpath>
+                    <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+                    <jvmarg value="-Xmx1G"/>
+                    <arg line="-war"/>
+                    <arg value="dashboard/target/war"/>
+                    <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+                    <arg line="${gwt.args}"/>
+                    <!-- <arg line="-style PRETTY"/> -->
+                    <arg value="org.consumersunion.stories.login.login"/>
+                </java>
+            </else>
+        </if>
+    </target>
+
+    <target name="gwtc-questionnaire" depends="javac-dashboard" description="GWT compile survey to JavaScript">
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="antlib.classpath"/>
+        <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+            <classpath>
+                <path refid="dashboard.gwt"/>
+                <path refid="compile.classpath"/>
+            </classpath>
+            <jvmarg value="-Xmx1G"/>
+            <jvmarg value="-XX:MaxPermSize=256M"/>
+            <arg line="-war"/>
+            <arg value="dashboard/target/war"/>
+            <arg line="${gwt.args}"/>
+            <arg value="org.consumersunion.stories.questionnaire.QuestionnaireMVP"/>
+        </java>
+    </target>
+
+    <target name="devmode" depends="javac-dashboard" description="Run development mode">
+        <package-war module="dashboard"/>
+        <java failonerror="true" fork="true" classname="com.google.gwt.dev.DevMode">
+            <classpath>
+                <pathelement location="lib/jasper-compiler-5.0.30.jar"/>
+                <path refid="dashboard.gwt"/>
+                <path refid="compile.classpath"/>
+            </classpath>
+            <jvmarg value="-Xms512m"/>
+            <jvmarg value="-Xmx1280m"/>
+            <jvmarg value="-XX:MaxPermSize=320M"/>
+            <jvmarg value="-XX:+UseParallelGC"/>
+            <jvmarg value="-DNO_EMAIL=TRUE"/>
+            <jvmarg value="-DskipDbUpdate=true"/>
+            <!-- Speed up startup BUT does mean DB needs to be up to date -->
+            <jvmarg value="-DPARAM2=devel"/>
+            <jvmarg value="-Daws.accessKeyId=${AWS_TEST_ACCESS_KEY}"/>
+            <jvmarg value="-Daws.secretKey=${AWS_TEST_SECRET_KEY}"/>
+            <jvmarg value="-Daws.connectionPoolCount=24"/>
+            <arg value="-startupUrl"/>
+            <arg value="stories.jsp"/>
+            <arg line="-war"/>
+            <arg value="dashboard/target/war"/>
+            <arg line="${gwt.args}"/>
+            <arg value="org.consumersunion.stories.dashboard.StoriesMVP"/>
+            <arg value="org.consumersunion.stories.login.login"/>
+            <arg value="org.consumersunion.stories.questionnaire.QuestionnaireMVP"/>
+            <arg value="org.consumersunion.stories.survey.SurveyMVP"/>
+        </java>
+    </target>
+
+    <target name="build" depends="clean, gwtc, javac-worker" description="Build this project"/>
+
+    <target name="war" depends="clean, createWars" description="Create a war file"/>
+
+    <target name="testDbDrop" description="Test clean_data_base.sql">
+        <exec dir="tool" executable="sh" os="Linux" failonerror="true" resultproperty="return.code">
+            <arg line="verify_drop_tables_script.sh"/>
+        </exec>
+        <condition property="token.found">
+            <not>
+                <equals arg1="${return.code}" arg2="0"/>
+            </not>
+        </condition>
+        <fail if="token.found"/>
+    </target>
+
+    <target name="dropAndLoadTestDB" description="Drops all tables and load test DB">
+        <exec dir="tool" executable="sh" os="Linux" failonerror="true" resultproperty="return.code">
+            <arg line="drop_db_tables.sh"/>
+        </exec>
+        <condition property="token.found">
+            <not>
+                <equals arg1="${return.code}" arg2="0"/>
+            </not>
+        </condition>
+        <fail if="token.found"/>
+    </target>
+
+    <target name="testUpdate"
+            description="Tests correctness of (database) updates in current branch against master branch">
+        <!-- first check that all changes are committed -->
+        <exec executable="tool/verify_all_committed.sh" os="Linux" failonerror="true" resultproperty="return.code"/>
+        <condition property="token.found">
+            <not>
+                <equals arg1="${return.code}" arg2="0"/>
+            </not>
+        </condition>
+        <fail if="token.found"/>
+        <!-- now mark the current branch -->
+        <exec executable="tool/note_current_branch.sh" os="Linux" failonerror="true" resultproperty="return.code"/>
+        <condition property="token.found">
+            <not>
+                <equals arg1="${return.code}" arg2="0"/>
+            </not>
+        </condition>
+        <fail if="token.found"/>
+        <!-- rebase to master branch DB and run update scripts-->
+        <exec executable="tool/update_db_from_master.sh" os="Linux" failonerror="true" resultproperty="return.code"/>
+        <condition property="token.found">
+            <not>
+                <equals arg1="${return.code}" arg2="0"/>
+            </not>
+        </condition>
+        <fail if="token.found"/>
+        <antcall target="test.dev">
+            <param name="skipDb" value="true"/>
+        </antcall>
+        <delete file=".targetBranch"/>
+        <!-- now that we've verified the update, let's update the db -->
+        <exec executable="tool/rebaseline_db.sh" os="Linux" failonerror="true" resultproperty="return.code"/>
+        <condition property="token.found">
+            <not>
+                <equals arg1="${return.code}" arg2="0"/>
+            </not>
+        </condition>
+    </target>
+
+    <target name="smoke-test-quick" depends="javac.tests-dashboard" description="Runs smoke tests.">
+        <antcall target="testFunctional.dev-immediate" inheritrefs="true" inheritall="true" />
+    </target>
+
+    <target name="smoke-test-full" depends="javac.tests-dashboard" description="Runs smoke tests.">
+        <antcall target="smoke-test-full-immediate" inheritrefs="true" inheritall="true"/>
+    </target>
+
+    <target name="runcukes" depends="javac.tests-dashboard" description="Runs acceptance tests.">
+        <antcall target="runcukes-immediate" inheritrefs="true" inheritall="true"/>
+    </target>
+
+    <target name="runcukes-convio" depends="javac.tests-dashboard" description="Runs convio acceptance tests.">
+        <antcall target="runcukes-convio-immediate" inheritrefs="true" inheritall="true"/>
+    </target>
+
+    <target name="gwtc" depends="gwtc-storiesDashboard, gwtc-questionnaire, gwtc-login, gwtc-survey"/>
+
+    <target name="javac-dashboard">
+        <mvn-init pom="dashboard/pom.xml"/>
+        <mvn-compile module="dashboard"/>
+        <package-war module="dashboard"/>
+    </target>
+
+    <target name="javac-worker">
+        <mvn-init pom="worker/pom.xml"/>
+        <mvn-compile module="worker"/>
+        <package-war module="worker"/>
+    </target>
+
+    <target name="clean" description="Cleans this project">
+        <delete dir="dashboard/target/" failonerror="false"/>
+        <delete dir="shared/target/" failonerror="false"/>
+        <delete dir="worker/target/" failonerror="false"/>
+        <delete dir="gwt-unitCache" failonerror="false"/>
+        <delete dir="reports" failonerror="false"/>
+        <delete dir="tmp" failonerror="false"/>
+    </target>
+
+    <target name="create-war-dashboard" depends="gwtc">
+        <create-war module="dashboard" output="stories.war"/>
+    </target>
+
+    <target name="create-war-worker" depends="javac-worker">
+        <create-war module="worker" output="worker.war"/>
+    </target>
+
+    <target name="createWars">
+        <sequential>
+            <antcall target="create-war-dashboard"/>
+            <antcall target="create-war-worker"/>
+        </sequential>
+    </target>
+
+    <target name="javac.tests-dashboard" depends="javac-dashboard" description="Compiles Dashboard test code">
+        <mvn-test-compile module="dashboard"/>
+    </target>
+
+    <target name="javac.tests-worker" depends="javac-worker" description="Compiles Worker test code">
+        <mvn-test-compile module="worker"/>
+    </target>
+</project>

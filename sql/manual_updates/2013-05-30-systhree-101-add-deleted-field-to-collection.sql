@@ -1,0 +1,2 @@
+ALTER TABLE collection
+ADD COLUMN deleted TINYINT(1) DEFAULT 0;

@@ -1,0 +1,24 @@
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0//EN"
+        "http://google-web-toolkit.googlecode.com/svn/releases/2.0/distro-source/core/src/gwt-module.dtd">
+<module>
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.google.gwt.query.Query'/>
+    <inherits name="com.gwtplatform.dispatch.rest.delegates.ResourceDelegate"/>
+    <inherits name="com.gwtplatform.mvp.Mvp"/>
+    <inherits name="org.fusesource.restygwt.RestyGWT"/>
+    <inherits name="com.google.common.base.Base"/>
+    <inherits name="com.google.common.collect.Collect"/>
+    <inherits name="gwtupload.GWTUpload"/>
+    <inherits name="com.arcbees.chosen.Chosen"/>
+    <inherits name='com.google.gwt.maps.Maps'/>
+    <inherits name="com.google.gwt.inject.Inject"/>
+
+    <set-configuration-property name="CssResource.legacy" value="true"/>
+    <set-configuration-property name="verifyNewerVersion" value="false"/>
+
+    <!-- Specify the paths for translatable code                    -->
+    <source path='client'/>
+    <source path='shared'/>
+
+    <super-source path="super"/>
+</module>

@@ -1,0 +1,82 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+    <ui:with field="i18n" type="org.consumersunion.stories.common.shared.i18n.CommonI18nLabels"/>
+
+    <ui:style>
+        .contactWrapper {
+            margin-bottom: 20px;
+            font-family: 'Droid Sans', sans-serif;
+            color: #444444;
+            font-size: 13px;
+        }
+
+        .contactWrapperNoMargin {
+            font-family: 'Droid Sans', sans-serif;
+            color: #444444;
+            font-size: 13px;
+        }
+
+        .contactLabel {
+            color: #666666;
+            font-size: 15px;
+            font-family: 'Droid Sans', sans-serif;
+        }
+
+        .contactTitleWrapper {
+            margin-bottom: 10px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:HTMLPanel ui:field="emailWrapper" styleName="{style.contactWrapper}">
+            <div class="{style.contactTitleWrapper}">
+                <g:Label ui:field="emailLbl" text="{i18n.email}" styleName="{style.contactLabel}"
+                         addStyleNames="{resource.generalStyleCss.floatLeft}"/>
+                <g:Button ui:field="addEmail" styleName="{resource.buttonStyleCss.addButton}"
+                          addStyleNames="{resource.generalStyleCss.floatRight}"/>
+                <div class="{resource.generalStyleCss.clearBoth}"/>
+            </div>
+
+            <g:HTMLPanel ui:field="emailsPanel"/>
+        </g:HTMLPanel>
+
+        <g:HTMLPanel ui:field="phoneWrapper" styleName="{style.contactWrapper}">
+            <div class="{style.contactTitleWrapper}">
+                <g:Label ui:field="phoneNumbersLbl" text="{i18n.phoneNumber}" styleName="{style.contactLabel}"
+                         addStyleNames="{resource.generalStyleCss.floatLeft}"/>
+                <g:Button ui:field="addPhone" styleName="{resource.buttonStyleCss.addButton}"
+                          addStyleNames="{resource.generalStyleCss.floatRight}"/>
+                <div class="{resource.generalStyleCss.clearBoth}"/>
+            </div>
+
+            <g:HTMLPanel ui:field="phoneNumbersPanel"/>
+        </g:HTMLPanel>
+
+        <g:HTMLPanel ui:field="addressWrapper" styleName="{style.contactWrapper}">
+            <div class="{style.contactTitleWrapper}">
+                <g:Label ui:field="addressesLbl" text="{i18n.addresses}" styleName="{style.contactLabel}"
+                         addStyleNames="{resource.generalStyleCss.floatLeft}"/>
+                <g:Button ui:field="addAddress" styleName="{resource.buttonStyleCss.addButton}"
+                          addStyleNames="{resource.generalStyleCss.floatRight}"/>
+                <div class="{resource.generalStyleCss.clearBoth}"/>
+            </div>
+
+            <g:HTMLPanel ui:field="addressesPanel"/>
+        </g:HTMLPanel>
+
+        <g:HTMLPanel ui:field="socialWrapper" styleName="{style.contactWrapperNoMargin}">
+            <div class="{style.contactTitleWrapper}">
+                <g:Label text="{i18n.social}" styleName="{style.contactLabel}"
+                         addStyleNames="{resource.generalStyleCss.floatLeft}"/>
+                <g:Button ui:field="addSocial" styleName="{resource.buttonStyleCss.addButton}"
+                          addStyleNames="{resource.generalStyleCss.floatRight}"/>
+                <div class="{resource.generalStyleCss.clearBoth}"/>
+            </div>
+
+            <g:HTMLPanel ui:field="socialPanel"/>
+        </g:HTMLPanel>
+    </g:HTMLPanel>
+</ui:UiBinder> 

@@ -1,0 +1,22 @@
+DROP TRIGGER root_profile;
+DELIMITER //
+CREATE TRIGGER `root_profile` AFTER INSERT ON organization FOR EACH ROW
+  BEGIN
+    INSERT INTO systemEntity (version, public, owner) VALUES (1, 0, 0);
+    INSERT INTO entity (id) VALUES (LAST_INSERT_ID());
+    INSERT INTO profile (id, surname, givenName, convioSyncStatus, user, organization)
+    VALUES (LAST_INSERT_ID(), 'root', 'root', NULL, 0, NEW.id);
+    INSERT INTO acl_sid (id, principal, sid)
+    VALUES (NEW.id, TRUE, NEW.id);
+  END//
+
+INSERT INTO acl_sid (id, principal, sid)
+  SELECT
+    oid,
+    1,
+    oid
+  FROM
+    (SELECT o.id AS oid
+     FROM organization o
+       LEFT JOIN acl_sid acls ON acls.id = o.id
+     WHERE acls.id IS NULL) T

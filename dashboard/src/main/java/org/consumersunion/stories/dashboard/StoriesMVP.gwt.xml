@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="storiesmvp">
+    <!-- Inherit the core Web Toolkit stuff.                        -->
+    <inherits name='com.google.gwt.inject.Inject'/>
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.google.gwt.user.cellview.CellView'/>
+    <inherits name='com.google.gwt.logging.Logging'/>
+    <inherits name='com.google.gwt.resources.Resources'/>
+    <inherits name='com.google.gwt.editor.Editor'/>
+    <inherits name='com.google.gwt.text.Text'/>
+    <inherits name="com.google.common.base.Base"/>
+    <inherits name="com.google.common.collect.Collect"/>
+
+    <!-- Other module inherits                                      -->
+    <inherits name="com.googlecode.gwt.charts.Charts"/>
+    <inherits name='com.google.gwt.query.Query'/>
+    <inherits name="org.consumersunion.stories.common.Common"/>
+    <inherits name='com.google.gwt.maps.Maps'/>
+    <inherits name='com.google.gwt.maps.utility.markerclustererplus.MarkerClustererPlus'/>
+    <inherits name='gwtquery.plugins.droppable.Droppable'/>
+    <inherits name='gwtquery.plugins.draggable.Draggable'/>
+    <inherits name="com.arcbees.gquery.tooltip.Tooltip"/>
+    <inherits name="com.gwtplatform.mvp.MvpWithEntryPoint"/>
+
+    <!-- Specify the paths for translatable code                    -->
+    <source path='client'/>
+    <source path='shared'/>
+
+    <add-linker name="xsiframe"/>
+
+    <extend-configuration-property name="gin.ginjector.modules"
+                                   value="org.consumersunion.stories.dashboard.client.gin.ClientModule"/>
+    <set-configuration-property name="gwtp.bootstrapper"
+                                value="org.consumersunion.stories.dashboard.client.gin.StoriesBootstrapper"/>
+
+    <!-- Logging Configuration -->
+    <set-property name="gwt.logging.enabled" value="TRUE"/>
+    <set-property name="gwt.logging.logLevel" value="SEVERE"/>
+    <set-property name="gwt.logging.consoleHandler" value="ENABLED"/>
+    <set-property name="gwt.logging.developmentModeHandler" value="ENABLED"/>
+    <set-property name="gwt.logging.hasWidgetsHandler" value="DISABLED"/>
+    <set-property name="gwt.logging.systemHandler" value="ENABLED"/>
+    <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED"/>
+
+    <set-property name="compiler.emulatedStack" value="true"/>
+    <set-configuration-property name="compiler.emulatedStack.recordLineNumbers" value="true"/>
+    <set-configuration-property name="compiler.emulatedStack.recordFileNames" value="true"/>
+</module>

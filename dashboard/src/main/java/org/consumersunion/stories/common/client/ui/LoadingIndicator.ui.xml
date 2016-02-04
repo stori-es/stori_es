@@ -1,0 +1,26 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+    <ui:with field="resource" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+
+    <ui:style>
+        .loadingWrapper {
+            width: 72px;
+            margin-right: auto;
+            margin-left: auto;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #aeaeae;
+        }
+
+        .image {
+            margin-left: 5px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel styleName="{style.loadingWrapper}">
+        <g:Image resource="{resource.loading}" styleName="{style.image}"/>
+        <div>Loading ...</div>
+    </g:HTMLPanel>
+</ui:UiBinder>

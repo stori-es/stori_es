@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:META-INF/applicationContext.xml</param-value>
+    </context-param>
+    <context-param>
+        <param-name>contextInitializerClasses</param-name>
+        <param-value>org.consumersunion.stories.server.util.ApplicationProfileInitializer</param-value>
+    </context-param>
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>gwtNoCacheFilter</filter-name>
+        <filter-class>org.consumersunion.stories.server.serverfilters.GwtNoCacheFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>gwtNoCacheFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>i18nFilter</filter-name>
+        <filter-class>net.lightoze.gwt.i18n.server.I18nFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>i18nFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <filter>
+        <filter-name>cors</filter-name>
+        <filter-class>org.consumersunion.stories.server.rest.cors.CrossOriginFilter</filter-class>
+        <init-param>
+            <param-name>allowedMethods</param-name>
+            <param-value>*</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowedHeaders</param-name>
+            <param-value>*</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>cors</filter-name>
+        <url-pattern>/surveymvp/*</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>
+            org.springframework.web.context.request.RequestContextListener
+        </listener-class>
+    </listener>
+    <servlet>
+        <servlet-name>Resteasy</servlet-name>
+        <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+    </servlet>
+
+    <listener>
+        <listener-class>net.lightoze.gwt.i18n.server.I18nInitializer</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>
+
+    <servlet-mapping>
+        <servlet-name>Resteasy</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>authorizationService</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.api.gwt_rpc.RpcAuthorizationServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>authorizationService</servlet-name>
+        <url-pattern>/service/authorization</url-pattern>
+        <url-pattern>/stories/service/authorization</url-pattern>
+        <url-pattern>/storiesmvp/service/authorization</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>userService</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.api.gwt_rpc.RpcUserServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>userService</servlet-name>
+        <url-pattern>/service/user</url-pattern>
+        <url-pattern>/login/service/user</url-pattern>
+        <url-pattern>/stories/service/user</url-pattern>
+        <url-pattern>/storiesmvp/service/user</url-pattern>
+        <url-pattern>/createaccount/service/user</url-pattern>
+        <url-pattern>/createorganization/service/user</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>profileService</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.api.gwt_rpc.RpcProfileServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>profileService</servlet-name>
+        <url-pattern>/service/profile</url-pattern>
+        <url-pattern>/stories/service/profile</url-pattern>
+        <url-pattern>/storiesmvp/service/profile</url-pattern>
+        <url-pattern>/createaccount/service/profile</url-pattern>
+        <url-pattern>/createorganization/service/profile</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>organizationService</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.api.gwt_rpc.RpcOrganizationServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>organizationService</servlet-name>
+        <url-pattern>/service/organization</url-pattern>
+        <url-pattern>/stories/service/organization</url-pattern>
+        <url-pattern>/storiesmvp/service/organization</url-pattern>
+        <url-pattern>/createaccount/service/organization</url-pattern>
+        <url-pattern>/createorganization/service/organization</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>rpcStoryService</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.api.gwt_rpc.RpcStoryServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>rpcStoryService</servlet-name>
+        <url-pattern>/stories/service/story</url-pattern>
+        <url-pattern>/storiesmvp/service/story</url-pattern>
+        <url-pattern>/questionnaire/service/story</url-pattern>
+        <url-pattern>/questionnairemvp/service/story</url-pattern>
+        <url-pattern>/surveymvp/service/story</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>entityService</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.api.gwt_rpc.RpcEntityServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>entityService</servlet-name>
+        <url-pattern>/service/entity</url-pattern>
+        <url-pattern>/stories/service/entity</url-pattern>
+        <url-pattern>/storiesmvp/service/entity</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>documentService</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.api.gwt_rpc.RpcDocumentServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>documentService</servlet-name>
+        <url-pattern>/service/document</url-pattern>
+        <url-pattern>/stories/service/document</url-pattern>
+        <url-pattern>/storiesmvp/service/document</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>questionnaireServlet</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.servlet.QuestionnaireServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>questionnaireServlet</servlet-name>
+        <url-pattern>/share/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>collectionServlet</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.servlet.QuestionnaireServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>collectionServlet</servlet-name>
+        <url-pattern>/collections/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>verifyContactServlet</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.servlet.VerifyContactServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>verifyContactServlet</servlet-name>
+        <url-pattern>/verify-contact/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>resetPasswordServlet</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.servlet.ResetPasswordServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>resetPasswordServlet</servlet-name>
+        <url-pattern>/reset-password/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>confirmEmailServlet</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.servlet.ConfirmEmailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>confirmEmailServlet</servlet-name>
+        <url-pattern>/confirm-email/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>forgotPasswordServlet</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.servlet.ForgotPasswordServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>forgotPasswordServlet</servlet-name>
+        <url-pattern>/forgot-password/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>unsubscribeServlet</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.servlet.UnsubscribeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>unsubscribeServlet</servlet-name>
+        <url-pattern>/storiesunsubscription</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>collectionService</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.api.gwt_rpc.RpcCollectionServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>collectionService</servlet-name>
+        <url-pattern>/service/collection</url-pattern>
+        <url-pattern>/stories/service/collection</url-pattern>
+        <url-pattern>/storiesmvp/service/collection</url-pattern>
+        <url-pattern>/questionnaire/service/collection</url-pattern>
+        <url-pattern>/questionnairemvp/service/collection</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>questionnaireService</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.api.gwt_rpc.RpcQuestionnaireServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>questionnaireService</servlet-name>
+        <url-pattern>/service/questionnaire</url-pattern>
+        <url-pattern>/stories/service/questionnaire</url-pattern>
+        <url-pattern>/storiesmvp/service/questionnaire</url-pattern>
+        <url-pattern>/questionnaire/service/questionnaire</url-pattern>
+        <url-pattern>/questionnairemvp/service/questionnaire</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>metricsService</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.api.gwt_rpc.RpcMetricsServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>metricsService</servlet-name>
+        <url-pattern>/service/metrics</url-pattern>
+        <url-pattern>/stories/service/metrics</url-pattern>
+        <url-pattern>/storiesmvp/service/metrics</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>themeService</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.api.gwt_rpc.RpcThemeServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>themeService</servlet-name>
+        <url-pattern>/service/theme</url-pattern>
+        <url-pattern>/stories/service/theme</url-pattern>
+        <url-pattern>/storiesmvp/service/theme</url-pattern>
+        <url-pattern>/createorganization/service/theme</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>resourceCheckerService</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.api.gwt_rpc.RpcResourceCheckerServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>resourceCheckerService</servlet-name>
+        <url-pattern>/service/resource</url-pattern>
+        <url-pattern>/stories/service/resource</url-pattern>
+        <url-pattern>/storiesmvp/service/resource</url-pattern>
+        <url-pattern>/questionnairemvp/service/resource</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>geoCoding</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.servlet.GeoCodeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>geoCoding</servlet-name>
+        <url-pattern>/cugeocoding</url-pattern>
+    </servlet-mapping>
+
+    <context-param>
+        <!-- max size of the upload request -->
+        <param-name>maxSize</param-name>
+        <!-- 4 MB -->
+        <param-value>4194304</param-value>
+    </context-param>
+
+    <context-param>
+        <!-- max size of any uploaded file -->
+        <param-name>maxFileSize</param-name>
+        <!-- 4 MB -->
+        <param-value>4194304</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>imageUpload</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.servlet.ImageUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>imageUpload</servlet-name>
+        <url-pattern>*.gupld</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>reindex</servlet-name>
+        <servlet-class>org.consumersunion.stories.server.servlet.IndexServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reindex</servlet-name>
+        <url-pattern>/reindex</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <!-- This value should be coordinated with the 'TIMEOUT' + 'COUNTDOWN' constant in ApplicationPresenter. -->
+        <session-timeout>60</session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>stories.jsp</welcome-file>
+    </welcome-file-list>
+
+    <servlet>
+        <servlet-name>storiesJsp</servlet-name>
+        <jsp-file>/stories.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>storiesJsp</servlet-name>
+        <url-pattern>/org/*</url-pattern>
+        <url-pattern>/storyteller/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet id="jsp">
+        <servlet-name>jsp</servlet-name>
+        <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+        <init-param>
+            <param-name>compilerTargetVM</param-name>
+            <param-value>1.6</param-value>
+        </init-param>
+        <init-param>
+            <param-name>compilerSourceVM</param-name>
+            <param-value>1.6</param-value>
+        </init-param>
+    </servlet>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404page.jsp</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>org.springframework.web.HttpSessionRequiredException</exception-type>
+        <location>/signin.jsp</location>
+    </error-page>
+</web-app>

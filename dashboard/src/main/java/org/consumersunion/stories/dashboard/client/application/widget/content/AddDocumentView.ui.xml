@@ -1,0 +1,58 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:s="urn:import:org.consumersunion.stories.dashboard.client.application.widget.card">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .toolIcon {
+            font-size: 24px;
+            vertical-align: middle;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .toolIcon + span {
+            text-align: center;
+        }
+
+        .toolIcon + span + span {
+            text-align: right;
+        }
+
+        .toolbar {
+            margin-bottom: 10px;
+        }
+
+        .toolbarIcons span {
+            width: 30%;
+            display: inline-block;
+        }
+
+        .cardTitle {
+            margin-bottom: 10px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel ui:field="main" styleName="{resource.cards.main} {resource.generalStyleCss.grayBackground}">
+        <div class="{resource.cards.rightColumn}"> <!-- Right Column-->
+            <div class="{resource.generalStyleCss.font14} {style.toolbar}">
+                <span ui:field="editToolbar" class="{style.toolbarIcons}">
+                    <span ui:field="createActive" class="{style.toolIcon}">
+                        <span class="{resource.generalStyleCss.yellow} icon-plus-sign-alt"/>
+                    </span>
+                    <span>
+                        <g:Button ui:field="create" text="Create" addStyleNames="{resource.generalStyleCss.font14}"/>
+                    </span>
+                    <span ui:field="cancel" class="{resource.generalStyleCss.link}">Cancel</span>
+                </span>
+            </div>
+        </div>
+        <div class="{resource.cards.leftColumn}"> <!-- Left Column-->
+            <s:CardTitleWidget ui:field="cardTitle" styleName="{style.cardTitle}"/>
+            <s:CardContentEditWidget ui:field="contentEdit"/>
+            <s:CardLocaleEditWidget ui:field="editLocale"/>
+        </div>
+        <div class="{resource.generalStyleCss.clearBoth}"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

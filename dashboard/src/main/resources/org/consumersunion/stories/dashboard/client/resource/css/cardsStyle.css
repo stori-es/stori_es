@@ -1,0 +1,250 @@
+@external icon-*;
+
+.rightColumn {
+    width: 27%;
+    float: right;
+    box-sizing: border-box;
+}
+
+.leftColumn {
+    width: 70%;
+    float: left;
+    box-sizing: border-box;
+    border-right: 1px solid #878787;
+}
+
+.collections {
+    width: 101%;
+    border-top: 1px solid #878787;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.main {
+    padding: 25px 10px;
+}
+
+.main + .main {
+    border-top: 1px solid #C0C0C0;
+}
+
+.main a {
+    text-decoration: none;
+}
+
+.cardIcon {
+    font-size: 28px;
+    padding: 2px 4px 4px 4px;
+    border: 2px solid;
+    margin-right: 10px;
+    margin-bottom: 0;
+    float: left;
+}
+
+.cardIconSmall {
+    font-size: 18px;
+    border: none;
+    margin-right: 2px;
+    margin-bottom: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    float: left;
+}
+
+.cardIconSmall.icon-file-text-alt,
+.cardIcon.icon-file-text-alt {
+    padding: 4px 9px;
+    color: #F8B200;
+    border-color: #F8B200;
+}
+
+.iconDetail.icon-file-text-alt {
+    color: #fff;
+    border-color: transparent;
+    background-color: #ffb200;
+}
+
+.cardIconSmall.icon-link,
+.cardIcon.icon-link {
+    padding: 6px 6px 2px 6px;
+    color: #0059b2;
+    border-color: #0059b2;
+}
+
+.cardIconSmall.icon-list-ol,
+.cardIcon.icon-list-ol {
+    padding: 4px 6px 4px 4px;
+    color: #4610a9;
+    border-color: #4610a9;
+}
+
+.iconDetail.icon-list-ol {
+    color: #fff;
+    border-color: transparent;
+    background-color: #4610a9;
+}
+
+.cardIconSmall.icon-edit,
+.cardIcon.icon-edit {
+    padding: 6px 4px 2px 6px;
+    color: #17b0f3;
+    border-color: #17b0f3;
+}
+
+.cardIconSmall.icon-list-alt,
+.cardIcon.icon-list-alt {
+    padding: 4px 6px 2px 6px;
+    color: #4f0fa8;
+    border-color: #4f0fa8;
+}
+
+.cardIconSmall.icon-list-alt {
+    font-size: 17px;
+}
+
+.iconDetail.icon-list-alt {
+    color: #fff;
+    border-color: #4f0fa8;
+    background-color: #4f0fa8;
+}
+
+.cardIconSmall.icon-folder-close,
+.cardIcon.icon-folder-close {
+    padding: 4px 6px 2px 6px;
+    color: #f8b200;
+    border-color: #f8b200;
+}
+
+.iconDetail.icon-folder-close {
+    color: #fff;
+    border-color: #f8b200;
+    background-color: #f8b200;
+}
+
+.iconDetail.icon-comment-alt {
+    color: #fff;
+    border-color: #ba352e;
+    background-color: #ba352e;
+}
+
+.iconCard.icon-comment-alt {
+    color: #ba352e;
+    border-color: #ba352e;
+}
+
+.cardType {
+    font-size: 14px;
+    font-style: italic;
+    color: #444;
+    margin-bottom: 2px;
+}
+
+.editPanel {
+    margin-top: 15px;
+}
+
+.editPanel > div {
+    vertical-align: middle;
+}
+
+.editPanel.editTitle {
+    font-size: 18px;
+    font-weight: bold;
+    font-style: normal;
+    margin: 0;
+    line-height: 39px;
+}
+
+.cardTitleMain .actionActive + span {
+    color: #000;
+}
+
+[data-tooltip].cardTitleMain {
+    cursor: pointer;
+}
+
+.cardTitleMain {
+    cursor: default;
+}
+
+.cardTitleMain span {
+    color: #0059b2;
+    font-weight: bold;
+    font-size: 18px;
+    display: inline;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+.cardTitleMain a:hover {
+    color: #0059b2;
+}
+
+.titleWrapper {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 8px;
+
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+
+.toolbarIcon {
+    font-size: 24px;
+    cursor: pointer;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.toolbarIcon:before {
+    left: 23%;
+}
+
+.toolbarIcon:after {
+    left: 5%;
+}
+
+.toolbarButtons {
+    float: right;
+    display: inline-block;
+}
+
+.toolbarButtons .toolbarIcon {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.toolbarButtons .toolbarIcon + .toolbarIcon {
+    margin-left: 50px;
+}
+
+.activeToolbar {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.activeToolbar > * {
+    display: table-cell;
+}
+
+.activeToolbar .toolbarIcon {
+    cursor: default;
+}
+
+.activeToolbar .toolbarIcon .icon-save {
+    cursor: pointer;
+}
+
+.activeToolbar.smallToolbar .toolbarIcon {
+    width: 19%;
+}
+
+.activeToolbar.smallToolbar {
+    table-layout: auto;
+}

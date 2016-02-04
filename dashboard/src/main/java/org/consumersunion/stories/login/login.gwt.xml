@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='login'>
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.google.gwt.query.Query'/>
+    <inherits name="org.consumersunion.stories.common.Common"/>
+    <inherits name="com.gwtplatform.mvp.MvpWithEntryPoint"/>
+    <inherits name="org.consumersunion.stories.i18n.i18n"/>
+
+    <extend-configuration-property name="gin.ginjector.modules"
+                                   value="org.consumersunion.stories.login.gin.ClientModule"/>
+    <set-configuration-property name="gwtp.bootstrapper"
+                                value="org.consumersunion.stories.login.gin.LoginBootstrapper"/>
+
+    <source path=''/>
+
+    <add-linker name="xsiframe"/>
+</module>

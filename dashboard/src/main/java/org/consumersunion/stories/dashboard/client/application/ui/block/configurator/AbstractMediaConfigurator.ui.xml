@@ -1,0 +1,32 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+    <ui:with field="common" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+    <ui:with field="resources" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <g:HTMLPanel styleName="{resources.blockConfigurators.main}">
+        <div class="{resources.blockConfigurators.fullRow}">
+            <g:Label text="URL *"/>
+            <span>
+                <g:TextBox ui:field="url"/>
+            </span>
+        </div>
+        <g:Label ui:field="urlError" styleName="{common.generalStyleCss.errorLabel}"/>
+        <div class="{resources.blockConfigurators.fullRow}">
+            <g:Label text="Title"/>
+            <span>
+                <g:TextBox ui:field="title"/>
+            </span>
+        </div>
+        <div class="{resources.blockConfigurators.fullRow}">
+            <g:Label styleName="{resources.generalStyleCss.vAlignTop}" text="Caption"/>
+            <span>
+                <g:TextArea ui:field="description"/>
+            </span>
+        </div>
+        <div class="{resources.blockConfigurators.buttonContainer}">
+            <g:Button ui:field="done" text="Done"/>
+            <g:Anchor ui:field="cancel" text="Cancel"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

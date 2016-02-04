@@ -1,0 +1,22 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:q='urn:import:org.consumersunion.stories.common.client.ui.questionnaire'>
+
+    <ui:style>
+        .serverResponseLabelError {
+            margin-top: 15px;
+            color: red;
+            font-weight: bold;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:Label ui:field="title" styleName="cu-collectionSurveyTitle"/>
+
+        <q:QuestionnaireRenderer ui:field="questionnaireRenderer"/>
+
+        <g:Label ui:field="error" text="Please fill all required fields"
+                 styleName="{style.serverResponseLabelError}"
+                 visible="false"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

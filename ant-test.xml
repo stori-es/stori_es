@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    THESE TARGETS ARE NOT INTENDED FOR DIRECT USE. This file breaks out testing logic from the main 'build.xml file.
+    Unless you're debugging the Ant scripts themselves, you very likely shoud ignore this file. Automated processes may
+    call these targets directly in order to optimize processes.
+-->
+<project name="stories-test" default="smoke-test-full-immediate" basedir=".">
+    <import file="./ant-common.xml"/>
+
+    <property file="./aws-settings.prop" />
+
+    <target name="test.dev" depends="testFunctional.dev-immediate, testI18nEs.dev-immediate"/>
+
+    <!-- Runs the non-i18n unit tests. -->
+    <!-- internal target -->
+    <target name="testFunctional.dev-immediate" depends="loadTestDb">
+        <mkdir dir="reports/htmlunit.dev"/>
+        <junit fork="yes" printsummary="yes" haltonfailure="no">
+            <jvmarg line="-Xmx512m"/>
+            <sysproperty key="gwt.args" value="-logLevel WARN"/>
+            <sysproperty key="java.awt.headless" value="true"/>
+            <sysproperty key="org.consumersunion.testMode" value="true"/>
+            <sysproperty key="JDBC_CONNECTION_STRING" value="${JDBC_URL}"/>
+            <sysproperty key="org.consumersunion.constraintConnectionPool" value="true"/>
+            <!-- Used to distinguish amazon service URL / names -->
+            <sysproperty key="PARAM1" value="${PARAM1}"/>
+            <sysproperty key="PARAM2" value="${PARAM2}"/>
+            <sysproperty key="aws.accessKeyId" value="${AWS_TEST_ACCESS_KEY}"/>
+            <sysproperty key="aws.secretKey" value="${AWS_TEST_SECRET_KEY}"/>
+            <sysproperty key="SMTP_FROM" value="${SMTP_FROM}"/>
+            <classpath>
+                <pathelement location="dashboard/target/classes"/>
+                <pathelement location="dashboard/target/test-classes"/>
+                <path refid="dashboard.gwt.tests"/>
+                <path refid="test.classpath"/>
+            </classpath>
+            <batchtest todir="reports/htmlunit.dev">
+                <fileset dir="dashboard/src/test/java">
+                    <include name="**/*Test.java"/>
+                    <include name="**/*TestSuite.java"/>
+                    <!-- exclude all the GWT test cases; they are run in suites in order to improve efficiency -->
+                    <exclude name="**/ui/widget/**/*.java"/>
+                    <exclude name="**/service/client/**/*.java"/>
+                    <!-- exclude the i18n tests; these are run seperately for each locale -->
+                    <exclude name="**/I18n*Test.java"/>
+                    <exclude name="**/server/api/*Test.java"/>
+                </fileset>
+            </batchtest>
+            <formatter type="plain"/>
+            <formatter type="xml"/>
+        </junit>
+    </target>
+
+    <!-- internal target -->
+    <target name="testI18nEs.dev-immediate">
+        <mkdir dir="reports/htmlunit.dev"/>
+        <junit fork="yes" printsummary="yes" haltonfailure="no">
+            <jvmarg line="-Xmx384m"/>
+            <sysproperty key="gwt.args" value="-logLevel WARN"/>
+            <sysproperty key="java.awt.headless" value="true"/>
+            <sysproperty key="org.consumersunion.testMode" value="true"/>
+            <sysproperty key="JDBC_CONNECTION_STRING" value="${JDBC_URL}"/>
+            <sysproperty key="org.consumersunion.constraintConnectionPool" value="true"/>
+            <!-- Used to distinguish amazon service URL / names -->
+            <sysproperty key="PARAM1" value="${PARAM1}"/>
+            <sysproperty key="PARAM2" value="${PARAM2}"/>
+            <sysproperty key="aws.accessKeyId" value="${AWS_TEST_ACCESS_KEY}"/>
+            <sysproperty key="aws.secretKey" value="${AWS_TEST_SECRET_KEY}"/>
+            <sysproperty key="SMTP_FROM" value="${SMTP_FROM}"/>
+            <classpath>
+                <pathelement location="src"/>
+                <pathelement location="src/META-INF"/>
+                <pathelement location="conf"/>
+                <pathelement location="test"/>
+                <path refid="test.classpath"/>
+                <pathelement location="lib/junit-4.10.jar"/>
+            </classpath>
+            <batchtest todir="reports/htmlunit.dev">
+                <fileset dir="test">
+                    <include name="**/I18n*Test.java"/>
+                </fileset>
+            </batchtest>
+            <formatter type="plain"/>
+            <formatter type="xml"/>
+        </junit>
+    </target>
+
+    <!-- Runs the unit tests in production mode. Notice this does not separate the i18n and non-i18n tests as the dev
+         mode tests do. This has an external dependency on javac.tests from the build.xml which it expects to have
+         already been run. -->
+    <!-- internal target -->
+    <target name="test.prod-immediate" depends="loadTestDb">
+        <mkdir dir="reports/htmlunit.prod"/>
+        <junit fork="yes" printsummary="yes" haltonfailure="no">
+            <jvmarg line="-Xmx384m"/>
+            <sysproperty key="gwt.args" value="-logLevel WARN"/>
+            <sysproperty key="java.awt.headless" value="true"/>
+            <sysproperty key="org.consumersunion.testMode" value="true"/>
+            <sysproperty key="JDBC_CONNECTION_STRING" value="${JDBC_URL}"/>
+            <sysproperty key="org.consumersunion.constraintConnectionPool" value="true"/>
+            <!-- Used to distinguish amazon service URL / names -->
+            <sysproperty key="PARAM1" value="${PARAM1}"/>
+            <sysproperty key="PARAM2" value="${PARAM2}"/>
+            <sysproperty key="aws.accessKeyId" value="${AWS_TEST_ACCESS_KEY}"/>
+            <sysproperty key="aws.secretKey" value="${AWS_TEST_SECRET_KEY}"/>
+            <sysproperty key="SMTP_FROM" value="${SMTP_FROM}"/>
+            <classpath>
+                <pathelement location="src"/>
+                <pathelement location="src/META-INF"/>
+                <pathelement location="conf"/>
+                <pathelement location="test"/>
+                <path refid="test.classpath"/>
+                <pathelement location="lib/junit-4.10.jar"/>
+            </classpath>
+            <batchtest todir="reports/htmlunit.prod">
+                <fileset dir="test">
+                    <include name="**/*Test.java"/>
+                    <include name="**/*TestSuite.java"/>
+                    <!-- exclude all the GWT test cases; they are run in suites in order to improve efficiency -->
+                    <exclude name="**/ui/widget/**/*.java"/>
+                    <exclude name="**/service/client/**/*.java"/>
+                    <exclude name="**/server/api/*Test.java"/>
+                </fileset>
+            </batchtest>
+            <formatter type="plain"/>
+            <formatter type="xml"/>
+        </junit>
+    </target>
+
+    <!-- internal target -->
+    <target name="smoke-test-full-immediate">
+        <antcall target="testFunctional.dev-immediate" inheritrefs="true"/>
+        <antcall target="testI18nEs.dev-immediate" inheritrefs="true"/>
+        <antcall target="test.prod-immediate" inheritrefs="true"/>
+        <!-- This includes both i18n and non-i18n tests. -->
+    </target>
+
+    <path id="cukes.classpath">
+        <path refid="compile.classpath"/>
+        <pathelement location="dashboard/target/classes"/>
+        <pathelement location="dashboard/target/test-classes"/>
+    </path>
+
+    <!-- Runs the general, non-convio cucumber tests. There is an external dependency on javac.tests, defined in
+         build.xml which we expect to have been run before invoking this target. -->
+    <!-- internal target -->
+    <target name="runcukes-immediate" depends="loadTestDb">
+        <mkdir dir="reports/cucumber"/>
+        <java classname="cucumber.cli.Main" fork="true" failonerror="false" resultproperty="cucumber.exitstatus">
+            <classpath refid="cukes.classpath"/>
+            <sysproperty key="JDBC_CONNECTION_STRING" value="${JDBC_URL}"/>
+            <sysproperty key="skipDbUpdate" value="true"/>
+            <!-- No need for the client side VM to mess with the DB -->
+            <jvmarg value="-DCUKE_URL_BASE=${CUKE_URL_BASE}"/>
+            <jvmarg value="-DWEBDRVIER_DRIVER_CHROME=test-utils/chromedriver"/>
+            <arg value="--tags"/>
+            <arg value="~@broken"/>
+            <arg value="--format"/>
+            <arg value="junit:reports/cucumber/cucumber-junit-report.xml"/>
+            <arg value="--format"/>
+            <arg value="pretty"/>
+            <arg value="--format"/>
+            <arg value="html:treports/cucumber/cucumber-html-report"/>
+            <arg value="--glue"/>
+            <arg value="org.consumersunion.stories.cucumber.steps"/>
+            <arg value="dashboard/src/test/resources/org/consumersunion/stories/cucumber/features/console/"/>
+        </java>
+
+        <fail message="Cucumber failed">
+            <condition>
+                <not>
+                    <equals arg1="${cucumber.exitstatus}" arg2="0"/>
+                </not>
+            </condition>
+        </fail>
+    </target>
+
+    <!-- Runs the convio specific acceptance tests. This has an external dependency on javac.tests in build.xml which
+         we expect to have been invoked before this target is invoked. -->
+    <!-- internal target -->
+    <target name="runcukes-convio-immediate">
+        <mkdir dir="target/cucumber-junit-report"/>
+        <!-- java classname="cucumber.api.cli.Main" fork="true" failonerror="false" resultproperty="cucumber.exitstatus" -->
+        <java classname="cucumber.cli.Main" fork="true" failonerror="false" resultproperty="cucumber.exitstatus">
+            <classpath refid="cukes.classpath"/>
+            <sysproperty key="CUKE_URL_BASE" value="${CUKE_URL_BASE}"/>
+            <sysproperty key="JDBC_CONNECTION_STRING" value="${JDBC_URL}"/>
+            <arg value="--format"/>
+            <arg value="junit:target/cucumber-junit-report.xml"/>
+            <arg value="--format"/>
+            <arg value="pretty"/>
+            <arg value="--format"/>
+            <arg value="html:target/cucumber-html-report"/>
+            <arg value="--glue"/>
+            <arg value="org.consumersunion.stories.cucumber.steps"/>
+            <arg value="dashboard/src/test/resources/org/consumersunion/stories/cucumber/features/convio"/>
+        </java>
+
+        <fail message="Cucumber failed">
+            <condition>
+                <not>
+                    <equals arg1="${cucumber.exitstatus}" arg2="0"/>
+                </not>
+            </condition>
+        </fail>
+    </target>
+
+    <!-- Sets up the initial test database. This target depends on javac defined in the build.xml having been run
+         prior to invoking this target. -->
+    <!-- internal target -->
+    <target name="condition-debug">
+        <echo message="${aws.environment}"/>
+        <echo message="${env.aws.environment}"/>
+    	<echoproperties regex="aws.*" />
+    	<echoproperties regex="env.*" />
+    </target>
+    <target name="loadTestDb" depends="-test-index-local,-test-index-verify, condition-debug" unless="skipDb"/>
+    <target name="-test-index-local" depends="-test-sql" unless="env.aws.environment">
+        <exec executable="tool/reindex.sh" os="Linux" failonerror="true" resultproperty="return.code"/>
+    </target>
+    <target name="-test-index-verify" depends="-test-sql" if="env.aws.environment">
+        <exec executable="tool/reindex.sh" os="Linux" failonerror="true" resultproperty="return.code">
+            <arg value="verify"/>
+        </exec>
+    </target>
+    <target name="-test-sql" depends="javac.tests-dashboard">
+        <echo message="JDBC_URL: ${JDBC_URL}"/>
+        <java failonerror="true" fork="true" classname="org.consumersunion.stories.server.persistence.ScriptRunner">
+            <sysproperty key="JDBC_CONNECTION_STRING" value="${JDBC_URL}"/>
+            <classpath>
+                <path refid="runtime.classpath"/>
+                <pathelement location="dashboard/target/classes"/>
+            </classpath>
+            <jvmarg value="-Xmx512m"/>
+            <arg value="sql/stories.sql"/>
+        </java>
+        <java failonerror="true" fork="true" classname="org.consumersunion.stories.server.persistence.ScriptRunner">
+            <sysproperty key="JDBC_CONNECTION_STRING" value="${JDBC_URL}"/>
+            <classpath>
+                <path refid="runtime.classpath"/>
+                <pathelement location="dashboard/target/classes"/>
+            </classpath>
+            <jvmarg value="-Xmx512m"/>
+            <arg value="sql/create_triggers.sql"/>
+        </java>
+        <java failonerror="true" fork="true" classname="org.consumersunion.stories.server.persistence.ScriptRunner">
+            <sysproperty key="JDBC_CONNECTION_STRING" value="${JDBC_URL}"/>
+            <classpath>
+                <path refid="runtime.classpath"/>
+                <pathelement location="dashboard/target/classes"/>
+            </classpath>
+            <jvmarg value="-Xmx512M"/>
+            <arg value="sql/testdata.sql"/>
+        </java>
+    </target>
+    <target name="java-index">
+        <echo message="JDBC_URL: ${JDBC_URL}"/>
+        <java failonerror="true" fork="true" classname="MainIndexer">
+            <sysproperty key="JDBC_CONNECTION_STRING" value="${JDBC_URL}"/>
+            <classpath>
+                <path refid="runtime.classpath"/>
+                <pathelement location="dashboard/target/classes"/>
+            </classpath>
+            <jvmarg value="-Xmx512m"/>
+        </java>
+    </target>
+
+    <target name="test-worker">
+        <mkdir dir="reports/worker"/>
+        <junit fork="yes" printsummary="yes" haltonfailure="no">
+            <jvmarg line="-Xmx512m"/>
+            <sysproperty key="java.awt.headless" value="true"/>
+            <sysproperty key="org.consumersunion.testMode" value="true"/>
+            <sysproperty key="JDBC_CONNECTION_STRING" value="${JDBC_URL}"/>
+            <sysproperty key="org.consumersunion.constraintConnectionPool" value="true"/>
+            <!-- Used to distinguish amazon service URL / names -->
+            <sysproperty key="PARAM1" value="${PARAM1}"/>
+            <sysproperty key="PARAM2" value="${PARAM2}"/>
+            <sysproperty key="aws.accessKeyId" value="${AWS_TEST_ACCESS_KEY}"/>
+            <sysproperty key="aws.secretKey" value="${AWS_TEST_SECRET_KEY}"/>
+            <sysproperty key="SMTP_FROM" value="${SMTP_FROM}"/>
+            <classpath>
+                <pathelement location="worker/target/classes"/>
+                <pathelement location="worker/target/test-classes"/>
+                <path refid="test.classpath"/>
+            </classpath>
+            <batchtest todir="reports/worker">
+                <fileset dir="worker/src/test/java">
+                    <include name="**/*Test.java"/>
+                    <include name="**/*TestSuite.java"/>
+                </fileset>
+            </batchtest>
+            <formatter type="plain"/>
+            <formatter type="xml"/>
+        </junit>
+    </target>
+</project>

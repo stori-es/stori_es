@@ -1,0 +1,76 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:u="urn:import:org.consumersunion.stories.dashboard.client.application.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .main {
+            background-color: #e7f3f8;
+            padding: 14px 10px 0 10px;
+        }
+
+        .title {
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .titleIcon {
+            color: #3aa1ce;
+            font-size: 24px;
+            border: #3aa1ce solid 2px;
+            padding: 2px 5px;
+        }
+
+        .help {
+            font-size: 16px;
+            color: #0059b2;
+            margin-left: 10px;
+            display: none;
+        }
+
+        .searchField {
+            width: literal('calc(100% - 60px)');
+            padding-right: 22px;
+        }
+
+        .searchWrapper {
+            position: relative;
+            width: 50%;
+        }
+
+        .numberShown {
+            width: 100%;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 14px;
+            font-weight: bold;
+            height: 16px;
+        }
+
+        .header {
+            margin-bottom: 10px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel styleName="{style.main}">
+        <div class="{style.header}">
+            <span class="{style.titleIcon} icon-filter"/>
+            <h3 class="{style.title}">Search</h3>
+            <span class="{style.help} icon-caret-right">&nbsp;Help</span>
+        </div>
+        <div class="{resource.generalStyleCss.searchBoxWrapper}">
+            <div class="{style.searchWrapper} {resource.generalStyleCss.floatLeft}">
+                <g:TextBox ui:field="search" styleName="{resource.generalStyleCss.searchField}"
+                           addStyleNames="{style.searchField}"/>
+                <g:Button ui:field="clearSearch" styleName="{resource.generalStyleCss.clearSearch}"/>
+            </div>
+            <div class="{resource.generalStyleCss.floatRight}">
+                <u:ClickableDropDown ui:field="sortDropDown"/>
+            </div>
+            <div class="{resource.generalStyleCss.clearBoth}"/>
+            <div class="{style.numberShown}" ui:field="numberShown"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

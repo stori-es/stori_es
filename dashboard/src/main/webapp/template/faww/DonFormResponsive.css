@@ -1,0 +1,1297 @@
+/* ********************************** */
+/* Generic Element                    */
+/* ********************************** */
+
+div.responsive div.form-content {
+	/*William: Was- margin-top: 8px; */
+    /*William: Was- margin-bottom: 8px; */
+    margin-right: 0;
+}
+
+div.responsive div.form-error {
+  padding: 10px;
+}
+
+/* Page level errors */
+div.responsive div.ErrorMessage.page-error {
+    width: auto;
+    margin-bottom: 10px;
+}
+
+/* Page level error text */
+div.responsive div.ErrorMessage.page-error>span.field-error-text {
+    width: 798px;
+}
+
+/* sets the label and form input element on its own line */
+div.form-row div.form-content>select,
+div.form-row div.form-content>input[type="text"],
+div.form-row div.form-content input.ui-autocomplete-input,
+div.form-row div.form-content>textarea,
+div.form-row div.form-content>button {
+    margin-top: 3px;
+    display: block;
+}
+
+/* keep checkbox on the same line as its label */
+div.form-row.form-checkbox div.form-content>input {
+    display: inline;
+}
+
+/* prevent the error background to not expand the whole screen */ 
+div.form-row div.form-content {
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+}
+
+/* give components spacing between themselves */
+div.form-row {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+div.responsive select.multi-select {
+  width: 160px;
+  padding: 10px;
+}
+
+/* form labels for checkboxes by default should be on its own line */
+span.check-box-form-label-text {
+    display: block;
+}
+
+/* don't display the bullets for lists */
+div.form-content ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+div.don-level-total-row {
+    border: 5px solid #DAD4D0;
+    background-color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+div.don-level-total-row span.donation-level-total-label {
+    float: left;
+}
+
+div.don-level-total-row span.donation-level-total-amount {
+    float: right;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+div.button-container {
+    border-top: 1px solid #ccc;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+div.responsive button.step-button {
+   max-width: 150px;
+} 
+
+/* ********************************** */
+/* Page container                     */
+/* ********************************** */
+
+div.donation-form-container.responsive {
+    padding: 25px;
+	background: #F8F8F8;
+	-moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+    border: 1px solid #eaeaea;
+}
+
+/* ********************************** */
+/* Section Header                     */
+/* ********************************** */
+.section-header-container {
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+    margin: 0;
+}
+
+.section-header-container {
+    margin-top: 20px;
+}
+
+/* ********************************** */
+/* Designated Giving                  */
+/* ********************************** */
+#level_designated_row div.form-content {
+    display: block;
+}
+
+div.contact-amount-container {
+    margin: 10px 0;
+}
+
+div.contact-amount-container input,
+div.contact-amount-container textarea {
+    display: block;
+}
+
+div.contact-name-container,
+div.amount-input-container {
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+}
+
+div.contact-amount-container label {
+    padding-left: 5px;
+}
+
+div.contact-amount-labels label,
+div.contact-amount-controls input {
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+}
+
+div.contact-amount-labels label {
+    padding: 5px;
+}
+
+div.contact-amount-labels label.contact-label,
+div.contact-amount-controls input.contact-input-text {
+    width: 300px;
+}
+
+div.contact-amount-labels label.amount-label,
+div.contact-amount-controls input.amount-input-text {
+    width: 300px;
+}
+
+div.contact-info-container {
+    margin-top: 20px;
+}
+
+div.contact-info-container textarea {
+    display: block;
+}
+
+div.designated-giving-input-row {
+    border: 5px solid #DAD4D0;
+    background-color: #DAD4D0;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+div.flexible-designated-giving-container div.section-header {
+  color: #555;
+}
+
+div.designated-giving-input-row label.designated-giving-amount-label {
+  font-size: .8em;
+  color: #555;
+  display: block;
+}
+
+/* Left side of designee selection container */
+div.designated-giving-input-row div.designated-giving-selection-container {
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  width: 412px;
+  padding-top: 20px;
+  vertical-align: bottom;
+}
+
+/* Right side of designee selection container */
+div.designated-giving-input-row div.designated-giving-amount-container {
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  max-width: 365px;
+}
+
+div.designated-giving-input-row div.designated-giving-amount-container.dual-selector {
+  padding-bottom: 20px;
+}
+
+div.designated-giving-input-row div.designated-giving-selection-container select {
+  width: 240px;
+}
+
+/* *************************************** */
+/* Billing Information Fields              */
+/* *************************************** */
+#employer_street_row input,
+#billing_addr_street1_row input,
+#billing_addr_street2_row input,
+#billing_addr_street3_row input,
+#billing_addr_country_row input.ui-autocomplete-input,
+#donor_addr_street1_row input,
+#donor_addr_street2_row input,
+#donor_addr_street3_row input,
+#donor_addr_country_row input.ui-autocomplete-input,
+#shipping_addr_street1_row input,
+#shipping_addr_street2_row input,
+#shipping_addr_street3_row input,
+#shipping_addr_country_row input.ui-autocomplete-input,
+#tribute_notify_recip_street1_row input,
+#tribute_notify_recip_street2_row input,
+#tribute_notify_recip_street3_row input,
+#tribute_notify_recip_country_row input.ui-autocomplete-input,
+#tribute_signature_row input,
+#tribute_message_closing_row input,
+div.employer-address-container input#employer_street {
+    width: 400px;
+}
+
+#billing_addr_postcode_row input {
+    display: inline;
+}
+
+/* ********************************** */
+/* Transaction Summary                */
+/* ********************************** */
+div.form-row.form-summary div.form-content {
+    display: block;
+}
+
+div.transaction-summary-entry span.entry-value {
+    word-wrap: break-word;
+}
+
+div.transaction-summary-entry span.entry-label,
+div.transaction-summary-entry span.entry-value {
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+    width: 49%;
+}
+
+div.transaction-summary-entry {
+	background-color: #e9e9e9;
+    border-top: 1px solid #ddd;
+    padding: 10px 15px;
+}
+
+h5.summary-section-header {
+    margin: 15px 0 0 0;
+    padding: 18px 15px;
+    background-color: #e9e9e9;
+    width: auto;
+    
+    /* border */
+    -moz-border-radius-topleft: 5px;
+    -webkit-border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -webkit-border-top-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+
+/* ********************************** */
+/* Payment Type                       */
+/* ********************************** */
+div.payment-field-container ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+div.payment-field-container div.direct-debit-dialog-message ul {
+  list-style-type: disc;
+}
+div.payment-field-container div.direct-debit-dialog-message li {
+  margin-left: 15px;
+  padding: 5px;
+}
+
+div.payment-field-container div.payment-type-selections a {
+    text-decoration: none;
+}
+
+div.payment-field-container div.payment-type-selections span {
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+    vertical-align: bottom;
+}
+
+div.payment-field-container span.payment-type-option:hover {
+    cursor: pointer;
+}
+
+div.payment-field-container span.payment-type-option {
+    padding: 10px 20px;
+    border: 2px solid #e4e2dd;
+    color: #3596d4;
+    
+    background-color: #efefef;
+    background: -moz-linear-gradient(top, #ffffff 0%, #efefef 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#efefef));
+    background: -webkit-linear-gradient(top, #ffffff 0%, #efefef 100%);
+    background: -o-linear-gradient(top, #ffffff 0%,#efefef 100%);
+    background: -ms-linear-gradient(top, #ffffff 0%,#efefef 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#efefef',GradientType=0 );
+    background: linear-gradient(top, #ffffff 0%,#efefef 100%);
+}
+
+div.payment-field-container span.payment-type-option.selected {
+    
+    background-color: #fdf2e0;
+    background: -moz-linear-gradient(top, #ffffff 0%, #f2c357 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#f2c357));
+    background: -webkit-linear-gradient(top, #ffffff 0%, #f2c357 100%);
+    background: -o-linear-gradient(top, #ffffff 0%,#f2c357 100%);
+    background: -ms-linear-gradient(top, #ffffff 0%,#f2c357 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f2c357',GradientType=0 );
+    background: linear-gradient(top, #ffffff 0%,#f2c357 100%);
+}
+
+div.payment-field-container span.payment-type-option.selected a:link {
+    color: #000000;
+}
+
+div.payment-field-container span.internal-payment span.payment-type-option {
+    border: none;
+}
+
+div.payment-field-container span.internal-payment span.payment-type-option+span.payment-type-option {
+    margin-left: -1px;
+}
+
+div.payment-field-container span.internal-payment {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border: 2px solid #e4e2dd;
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+    background-color: #e4e2dd;
+    margin-right: 10px;
+}
+
+div.payment-field-container span.external-payment span.payment-type-option {
+    margin-right: 10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 6px 5px 0;
+}
+
+div.payment-field-container span.payment-type-option input {
+    display: none;
+}
+
+
+/* CSS for the CC fields section */
+div.payment-field-container li.tender-row {
+    display: inline;
+}
+
+div.payment-field-container #responsive_payment_typecc_number_row input {
+    width: 195px;
+}
+
+div.payment-field-container #responsive_payment_typecc_cvv_row input {
+    width: 80px;
+}
+
+div.payment-field-container #responsive_payment_typecc_type_row legend {
+    display: none;
+}
+
+div.ach-sort-code-input-container input {
+  display: inline;
+  vertical-align: middle;
+}
+
+/* ********************************************************** */
+/* Progress Bar                                               */
+/* ********************************************************** */
+div.progress-bar-step-container {
+  padding-right: 18px;
+  margin-bottom: 5px;
+}
+  
+div.progress-bar-step-container,
+div.progress-bar-step-number-container,
+div.progress-bar-step-text-container 
+{
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  font-weight: bold;
+}
+
+div.progress-bar-step-text-container {
+    max-width: 80px;
+    vertical-align: text-top;
+    font-size: 12px;
+    margin-top: -9px;
+    padding-left: 5px;
+}
+
+div.progress-bar-step-container a {
+  text-decoration: none;
+}
+
+div.progress-bar-step-number-container {
+  width:30px;
+  height:30px;
+  border-radius:15px;
+  -moz-border-radius:15px;
+  -webkit-border-radius:15px;
+  font-size:16px;
+  color: #f0efeb;
+  line-height:30px;
+  text-decoration:none;
+  text-align:center;
+  background:#cfccc5;
+}
+
+div.progress-bar-step-text-container {
+  color: #cfccc5;
+}
+
+div.progress-bar-step-current div.progress-bar-step-text-container
+{
+  color:#716e69;
+}
+
+div.progress-bar-step-current div.progress-bar-step-number-container {
+  background: #dea70f;
+}
+
+div.donation-level-expanded-label {
+  margin-left: 10px;
+}
+
+div.donation-level-input-container,
+div.generic-repeat-label-checkbox-container {
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  vertical-align: middle;
+  /*William: Was- padding: 10px 0; */
+}
+
+div.donation-level-container {
+  border: 2px solid transparent;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+div.donation-level-container.selected {
+  border-color: #f1ac09;
+}
+
+div.donation-level-amount-container,
+div.donation-level-label-container
+{
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  max-width: 780px;
+  vertical-align: text-top;
+}
+
+
+span.donation-level-total-amount {
+  font-weight: bold;
+}
+
+div.donation-level-amount-container+div.donation-level-label-container {
+  display: block;
+  margin-top: 5px;
+  margin-left: 24px;  
+}
+
+
+div.form-input-label-block,
+div.donation-level-expanded-label {
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  vertical-align: text-top;
+  max-width: 770px;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+div.donation-level-general-ask,
+div.html-caption-container {
+  max-width: 770px;
+  overflow: hidden;
+}
+
+label+div.donation-level-expanded-label,
+div.donation-level-user-entered+div.donation-level-expanded-label {
+  display: block;  
+  margin-left: 34px;
+}
+
+div.form-input-choose-block,
+div.donation-level-label-input-container {
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  vertical-align: top;
+}
+
+div.donation-level-user-entered {
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  margin-top: 10px;
+}
+
+
+label+div.donation-level-user-entered {
+  margin-left: 24px;
+  display: block;
+}
+
+
+/* Forever Donation */
+div#level_foreverduration_row,
+div#level_foreverDirectDebitDayOfMonth_row,
+div.form-row.indented {
+  margin-left: 14px;
+}
+
+select#level_foreverduration,
+select#level_foreverDirectDebitDayOfMonth {
+  margin-left: 24px;
+  margin-top: 10px;
+}
+
+/* Gift Aid Match */
+div.gift-aid-match-container,
+span.gift-aid-match-label.currency-label {
+  font-weight: bold;
+}
+
+span.gift-aid-match-label {
+  font-weight: normal;
+  font-style: italic;
+  padding-left: 5px;
+}
+
+div.indented.gift-aid-ineligible-reason {
+  margin-left: 36px;
+}
+
+/* Gift aid selector */ 
+div.gift-aid-description div.description-text,
+div.direct-debit-description div.description-text {
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  max-width: 600px;
+}
+
+div.gift-aid-description div.description-image,
+div.direct-debit-description div.description-image {
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  vertical-align: text-bottom;
+}
+
+div.responsive div.form-checkbox label, label.custom-element-checkbox-label {
+	display: inline-block;
+	zoom: 1;
+    *display: inline;
+	max-width: 800px;
+}
+
+/* ********************************************************** */
+/* eCards                                                     */
+/* ********************************************************** */
+
+div.responsive div.layout-choice-thumbnail-container {
+	margin: 5px;
+	float: left;
+}
+
+div.responsive div.layout-choice-thumbnail-container label {
+	display: block;
+}
+
+div.responsive div.layout-choice-thumbnail-container input {
+	display: block;
+	width: 13px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.responsive div#ecard_send_date_row select {
+	display: inline;
+}
+
+/* *************** */
+/* Custom Elements */
+/* *************** */
+.custom-field-container select {
+	max-width: 400px;
+}
+
+/* ********************************************************** */
+/* Installment Selector                                       */
+/* ********************************************************** */
+div.responsive span.calculated-value-container {
+	font-weight: bold;
+}
+
+/* ********************************************************** */
+/* TR Designated Addon                                        */
+/* ********************************************************** */
+div.responsive div#addon_designated_Row {
+	border: 2px solid #DAD4D0;
+    padding: 10px 20px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+/* ********************************** */
+/* Captcha                            */
+/* ********************************** */
+div.form-captcha div.form-input {
+    background-color: #e9e9e9;
+    padding: 10px;
+}
+
+div.form-captcha div.captcha-image-container {
+    margin: 0 0 5px 3px;
+}
+
+div.form-captcha a.change-captcha-link {
+    text-decoration: none;
+}
+
+/* ********************************************************** */
+/* Premium Selector                                           */
+/* ********************************************************** */
+div.responsive div.premium-selector-radio-container,
+div.responsive div.premium-selector-select-option-container {
+	border: 1px solid #DAD4D0;
+	background-color: white;
+	padding: 10px 20px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+div.responsive div.premium-selector-radio-option-row,
+div.responsive div.premium-selector-option-row {
+	padding-top: 20px;
+	padding-bottom: 20px;	
+}
+
+div.responsive div.premium-selector-radio-option-row.premium-separator {
+	border-top-style: solid;
+	border-top-color: #DAD4D0;
+	border-top-width: 1px;
+}
+
+div.responsive div.premium-selector-radio-option-row {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+
+div.responsive div.premium-selector-radio-option-description-img-and-text label {
+	font-weight: bold;
+	display: block;
+}
+
+div.responsive div.premium-selector-config-option-container label {
+	font-weight: bold;
+}
+
+div.responsive span.premium-selector-radio-option-short-description {
+	word-wrap: break-word;
+}
+
+div.responsive div.premium-selector-radio-option-description-img-and-text img,
+div.responsive div.premium-selector-option-description-img-and-text img {
+	float: left;
+  	margin-right: 5px;
+  	margin-bottom: 5px;
+}
+
+div.responsive div.premium-selector-radio-option-description {
+	display: inline-block;
+	zoom: 1;
+    *display: inline;
+	max-width: 750px;
+	vertical-align: text-top; 
+}
+
+div.responsive div.premium-selector-list-container select {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+/* Matching Gift */
+div.responsive div.matching-gift-container button.step-button {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+/* ********************************************************** */
+/* Media Query Overrides                                      */
+/* ********************************************************** */
+
+/*      Tablet Layout: 768px.
+        Gutters: 24px.
+        Outer margins: 28px.
+        Inherits styles from: Default Layout.
+        Displays blue border in debug mode.
+-----------------------------------------------------------------
+cols    1     2      3      4      5      6      7      8
+px      68    160    252    344    436    528    620    712    */
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+	
+	.mobile div.progress-bar-step-text-container {
+        max-width: 60px;
+    }
+    
+	.mobile .custom-field-container select {
+        max-width: 400px;
+    }
+    
+    /* Page level errors */
+    .mobile div.responsive div.ErrorMessage.page-error {
+        width: auto;
+    }
+
+    /* Page level error text */
+    .mobile div.responsive div.ErrorMessage.page-error>span.field-error-text {
+        width: 615px;
+    }
+    
+  /* Donation Levels element */
+  .mobile div.form-input-label-block,
+  .mobile div.donation-level-label-container
+  {
+    max-width: 600px;
+  }
+
+  .mobile div.indented div.form-input-label-block {
+    max-width: 588px;
+  }
+  
+  .mobile div.donation-level-expanded-label,
+  .mobile div.donation-level-general-ask,
+  .moblie div.html-caption-container {
+    max-width: 590px;
+  }
+
+  div.gift-aid-description div.description-text {
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+    max-width: 400px;
+  }
+  
+  .mobile div.responsive div.form-checkbox label, label.custom-element-checkbox-label {
+	max-width: 600px;
+  }
+  
+  /* Left side of designee selection container */
+  .mobile div.designated-giving-input-row div.designated-giving-selection-container {
+    width: 300px;
+  }
+  
+  /* Right side of designee selection container */
+  .mobile div.designated-giving-input-row div.designated-giving-amount-container {
+    max-width: 350px;
+    vertical-align: top;
+  }
+  
+  /* Premium Selector Description */
+  .mobile div.responsive div.premium-selector-radio-option-description {
+	max-width: 570px;
+  }
+}
+
+/*      Mobile Layout: 320px.
+        Gutters: 24px.
+        Outer margins: 34px.
+        Inherits styles from: Default Layout.
+        Displays red border in debug mode.
+---------------------------------------------
+cols    1     2      3
+px      68    160    252    */
+
+@media only screen and (max-width: 767px) {
+	
+	/* give components spacing between themselves */
+	.mobile div.responsive div.form-row {
+		margin-top: 15px;
+	    margin-bottom: 15px;
+	}
+	.mobile div.responsive div.form-content {
+		margin-top: 15px;
+	    margin-bottom: 15px;
+	}
+	
+	.mobile div.responsive div.form-error div.form-content {
+	   padding-left: 0;
+	   padding-right: 0;
+	}
+	
+	.mobile div.responsive textarea {
+        max-width: 186px;
+    }
+    
+    /* Page level errors */
+    .mobile div.responsive div.ErrorMessage.page-error {
+        width: auto;
+    }
+
+    /* Page level error text */
+    .mobile div.responsive div.ErrorMessage.page-error>span.field-error-text {
+        width: 185px;
+    }
+    
+    .mobile div.responsive div.ErrorMessage.page-error>span.field-error-indicator {
+        vertical-align: baseline;
+    }
+    
+    /* ********************************** */
+    /* Page container                     */
+    /* ********************************** */
+    .mobile div.donation-form-container.responsive {
+        padding: 10px;
+    }
+    
+    /* *************************************** */
+    /* Buttons                                 */
+    /* *************************************** */
+    .mobile div.button-container {
+      text-align: center;
+    }
+    
+    .mobile div.button-sub-container {
+      width: 220px;
+      display: inline-block;
+      zoom: 1;
+      *display: inline;
+    }
+    
+    .mobile div.responsive button.step-button {
+      width: 220px;
+      max-width: 220px;
+      float: none;
+    } 
+
+    /* *************************************** */
+    /* Billing Information Fields              */
+    /* *************************************** */
+
+    .mobile #billing_addr_street1_row input,
+	.mobile #billing_addr_street2_row input,
+	.mobile #billing_addr_street3_row input,
+	.mobile #billing_addr_country_row input.ui-autocomplete-input,
+	.mobile #donor_addr_street1_row input,
+	.mobile #donor_addr_street2_row input,
+	.mobile #donor_addr_street3_row input,
+	.mobile #donor_addr_country_row input.ui-autocomplete-input,
+	.mobile #shipping_addr_street1_row input,
+	.mobile #shipping_addr_street2_row input,
+	.mobile #shipping_addr_street3_row input,
+	.mobile #shipping_addr_country_row input.ui-autocomplete-input,
+	.mobile #tribute_notify_recip_street1_row input,
+	.mobile #tribute_notify_recip_street2_row input,
+	.mobile #tribute_notify_recip_street3_row input,
+	.mobile #tribute_notify_recip_country_row input.ui-autocomplete-input,
+	.mobile #tribute_signature_row input,
+	.mobile #tribute_message_closing_row input,
+	.mobile div.employer-address-container input#employer_street {
+        width: 185px;
+    }
+    
+    .mobile #billing_addr_country_row select,
+    .mobile #billing_addr_state_row select,
+    .mobile #donor_addr_state_row select,
+    .mobile #donor_addr_country_row select,
+    .mobile #donor_occupation_row select,
+    .mobile #shipping_addr_country_row select,
+    .mobile #shipping_addr_state_row select,
+    .mobile #tribute_notify_recip_state_row select,
+    .mobile #tribute_notify_recip_country_row select,
+    .mobile .custom-field-container select,
+    .mobile div.employer-address-container select {
+        max-width: 185px;
+    }
+    
+    .mobile #billing_info_name div.form-row {
+        display: block;
+    }
+    
+    .mobile #billing_addr_postcode_matchingAddresses {
+        width: 100%;
+    }
+    
+    /* ********************************** */
+    /* Payment Type                       */
+    /* ********************************** */
+    .mobile div.payment-field-container span.internal-payment {
+        background-color: transparent;
+        border: none;
+    }
+    
+    .mobile div.payment-field-container span.internal-payment span.payment-type-option {
+        border: 2px solid #e4e2dd;
+    }
+    
+    .mobile div.payment-field-container div.payment-type-selections {
+        width: 240px;
+    }
+    
+    .mobile div.payment-field-container div.payment-type-selections span {
+        display: block;
+        width: auto;
+        text-align: center;
+    }
+    
+    .mobile div.payment-field-container span.payment-type-option {
+        margin-bottom: 10px;
+    }
+    
+    .mobile div.payment-field-container span.internal-payment span.payment-type-option:first-child {
+        margin-right: 0;
+    }
+    
+    /* ********************************** */
+    /* Transaction Summary                */
+    /* ********************************** */
+    .mobile div.transaction-summary-entry span.entry-label,
+    .mobile div.transaction-summary-entry span.entry-value {
+        display: block;
+        width: auto;
+    }
+    
+    /* ********************************** */
+    /* Progress Bar                       */
+    /* ********************************** */
+
+	.mobile div.progress-bar-step-text-container {
+        display: none;
+    }
+
+    .mobile div.form-input-label-block {
+      max-width: 176px;
+    }
+    
+    .mobile div.indented div.form-input-label-block {
+      max-width: 156px;
+    }
+
+    /* Donation Levels element */
+    .mobile div.donation-level-expanded-label,
+    .mobile div.donation-level-amount-container+div.donation-level-expanded-label,
+    .mobile div.donation-level-label-container+div.donation-level-expanded-label,
+    .mobile div.donation-level-user-entered+div.donation-level-expanded-label {
+      display: none;
+    }
+    
+    .mobile div.donation-level-general-ask {
+      display: none;
+    }
+
+    .mobile div.donation-level-label-container {
+      max-width: 140px;
+    }
+    
+    .mobile div.gift-aid-description div.description-text {
+      display: block;
+    }
+    
+    .mobile div.gift-aid-description div.description-image {
+      display: block;
+    }
+
+	.mobile div.responsive div.form-checkbox label, label.custom-element-checkbox-label {
+		max-width: 180px;
+	}
+	
+	.mobile div.html-caption-container {
+		width: 220px;
+	}
+  
+    /* eCard */
+    .mobile div#preview_button_row button {
+        margin-left: 2px;
+        margin-right: 2px;
+    }
+
+	/* Add space between radio buttons for ease of clicking */
+	.mobile div.radio-button-container {
+		margin-top: 12px;
+		margin-bottom: 12px;
+	}
+	
+    /* Left side of designee selection container */
+    .mobile div.designated-giving-input-row div.designated-giving-selection-container {
+        display: block;
+        width: auto;
+        padding-top: 0;
+    }
+  
+    /* Right side of designee selection container */
+    .mobile div.designated-giving-input-row div.designated-giving-amount-container {
+        display: block;
+        width: auto;
+    }
+    
+    .mobile div.designated-giving-input-row div.designated-giving-amount-container.dual-selector {
+        padding-bottom: 0px;
+    }
+  
+    .mobile div.designated-giving-input-row div.designated-giving-selection-container select {
+        width: 240px;
+    }
+    
+    .mobile div.designated-giving-input-row div.designated-giving-selection-container select {
+        width: 195px;
+        margin-bottom: 22px;
+    }
+    .mobile div.form-error  div.designated-giving-input-row div.designated-giving-selection-container select {
+        width: 180px;
+    }
+    .mobile div.designated-giving-input-row div.designated-giving-amount-container input {
+        width: 179px;
+    }
+    .mobile div.form-error div.designated-giving-input-row div.designated-giving-amount-container input {
+        width: 164px;
+    }
+    
+    .mobile div.designated-giving-input-row label.designated-giving-amount-label {
+        margin-left: 0px;
+    }
+    
+    .mobile div.form-designee div.designated-option label,
+    .mobile div.form-designee div.unrestricted-option label {
+        display: inline-block;
+        zoom: 1;
+        *display: inline;
+        width: 180px;
+    }
+    
+    .mobile div.form-designee div.designated-option select {
+        display: block;
+        margin-left: 25px;
+    }
+    
+    .mobile div.form-designee div.unrestricted-option,
+    .mobile div.form-designee div.designated-option {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    
+
+  /* Matching Gift */
+  div.responsive div.matching-gift-container button.step-button {
+    margin-left: 2px;
+    margin-right: 0px;
+    width: 206px;
+    max-width: 206px;
+    display: block;    
+  }
+
+  /* Premium Selector Description */
+  .mobile div.responsive div.premium-selector-radio-option-description {
+	max-width: 140px;
+  }
+  
+  .mobile div.responsive a.premium-selector-more-info-link {
+  	display: none;
+  }
+  
+  .mobile div.responsive img.premium-selector-option-image {
+  	max-width: 42px;
+  	height: auto;
+  }
+  
+  
+  .mobile div.responsive div.premium-selector-list-container select {
+  	max-width: 200px;
+  	font-size: .825em;
+  }
+  
+
+}
+
+/*      Wide Mobile Layout: 480px.
+        Gutters: 24px.
+        Outer margins: 22px.
+        Inherits styles from: Default Layout, Mobile Layout.
+        Displays yellow border in debug mode.
+------------------------------------------------------------
+cols    1     2      3      4      5
+px      68    160    252    344    436    */
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+    .mobile div.responsive div.form-error div.form-content {
+       padding-left: 10px;
+       padding-right: 10px;
+    }
+    
+    /* Page level errors */
+    .mobile div.responsive div.ErrorMessage.page-error {
+        width: auto;
+    }
+
+    /* Page level error text */
+    .mobile div.responsive div.ErrorMessage.page-error>span.field-error-text {
+        width: 368px;
+    }
+    
+    .mobile div.responsive div.ErrorMessage.page-error>span.field-error-indicator {
+        vertical-align: top;
+    }
+    
+    /* *************************************** */
+    /* Buttons                                 */
+    /* *************************************** */
+
+  .mobile div.button-container {
+    text-align: center;
+  }
+  
+  .mobile div.button-sub-container {
+    width: 250px;
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+  }
+  
+  .mobile div.responsive button.step-button {
+    width: 250px;
+    max-width: 250px;
+  } 
+
+    .mobile div.form-input-label-block {
+      max-width: 344px;
+    }
+    
+    .mobile div.indented div.form-input-label-block {
+      max-width: 340px;
+    }
+	
+    /* *************************************** */
+    /* Billing Information Fields              */
+    /* *************************************** */
+    .mobile #billing_addr_street1_row input,
+	.mobile #billing_addr_street2_row input,
+	.mobile #billing_addr_street3_row input,
+	.mobile #billing_addr_country_row input.ui-autocomplete-input,
+	.mobile #donor_addr_street1_row input,
+	.mobile #donor_addr_street2_row input,
+	.mobile #donor_addr_street3_row input,
+	.mobile #donor_addr_country_row input.ui-autocomplete-input,
+	.mobile #shipping_addr_street1_row input,
+	.mobile #shipping_addr_street2_row input,
+	.mobile #shipping_addr_street3_row input,
+	.mobile #shipping_addr_country_row input.ui-autocomplete-input,
+	.mobile #tribute_notify_recip_street1_row input,
+	.mobile #tribute_notify_recip_street2_row input,
+	.mobile #tribute_notify_recip_street3_row input,
+	.mobile #tribute_notify_recip_country_row input.ui-autocomplete-input,
+	.mobile #tribute_signature_row input,
+	.mobile #tribute_message_closing_row input,
+	.mobile div.employer-address-container input#employer_street {
+        width: 300px;
+    }
+    
+    .mobile #billing_addr_country_row select,
+    .mobile #billing_addr_state_row select,
+    .mobile #donor_addr_state_row select,
+    .mobile #donor_addr_country_row select,
+    .mobile #donor_occupation_row select,
+    .mobile #shipping_addr_country_row select,
+    .mobile #shipping_addr_state_row select,
+    .mobile #tribute_notify_recip_state_row select,
+    .mobile #tribute_notify_recip_country_row select,
+    .mobile div.employer-address-container select {
+        max-width: none;
+    }
+    
+	.mobile .custom-field-container select {
+	    max-width: 300px;
+	}
+
+    /* ********************************** */
+    /* Transaction Summary                */
+    /* ********************************** */
+    .mobile div.transaction-summary-entry span.entry-label,
+    .mobile div.transaction-summary-entry span.entry-value {
+        display: inline-block;
+        zoom: 1;
+        *display: inline;
+        width: 49%;
+    }
+    
+    /* ********************************** */
+    /* Payment Type                       */
+    /* ********************************** */
+    
+    .mobile div.payment-field-container #responsive_payment_typepay_typeradio_row {
+        text-align: center;
+    }
+    
+    /* Donation Levels element */
+    .mobile div.donation-level-label-container
+    {
+      max-width: 320px;
+    }
+    
+  .mobile div.responsive div.form-checkbox label, label.custom-element-checkbox-label {
+	max-width: 360px;
+  }
+  
+  .mobile div.html-caption-container {
+  	width: 360px;
+  }
+  
+  .mobile div.designated-giving-input-row div.designated-giving-selection-container select {
+    width: 240px;
+  }
+  
+  .mobile div.form-designee div.designated-option label,
+  .mobile div.form-designee div.unrestricted-option label {
+    width: 340px;
+  }
+
+  /* Premium Selector Description */
+  .mobile div.responsive div.premium-selector-radio-option-description {
+	max-width: 320px;
+  }
+  
+  .mobile div.responsive img.premium-selector-option-image {
+  	max-width: 60px;
+  	height: auto;
+  }
+  
+  .mobile div.responsive div.premium-selector-list-container select {
+  	max-width: 390px;
+  }
+  
+
+}

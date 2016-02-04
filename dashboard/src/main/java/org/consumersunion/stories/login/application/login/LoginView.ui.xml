@@ -1,0 +1,20 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:l="urn:import:org.consumersunion.stories.login.application.ui">
+
+    <ui:with field="res" type="org.consumersunion.stories.login.resource.LoginResources"/>
+    <ui:import field="org.consumersunion.stories.login.place.NameTokens.*"/>
+
+    <g:HTMLPanel styleName="{res.loginStyle.panelMain}">
+        <l:TitleWidget ui:field="title" title="Hi there!"/>
+
+        <p>
+            <a ui:field="needHelp" href="javascript:void(0);">Need help?</a>
+        </p>
+        <p ui:field="helpSection">
+            <a href="#{forgot}">Forgot password?</a>
+            <br/>
+            <a href="https://www.stori.es/support">Contact support</a>
+        </p>
+    </g:HTMLPanel>
+</ui:UiBinder>

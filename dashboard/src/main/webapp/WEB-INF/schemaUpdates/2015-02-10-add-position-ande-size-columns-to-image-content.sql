@@ -1,0 +1,3 @@
+ALTER TABLE imageContent
+ADD COLUMN position VARCHAR(25),
+ADD COLUMN size VARCHAR(25);

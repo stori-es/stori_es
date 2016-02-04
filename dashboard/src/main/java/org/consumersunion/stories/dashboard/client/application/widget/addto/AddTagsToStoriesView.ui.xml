@@ -1,0 +1,45 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:u="urn:import:org.consumersunion.stories.dashboard.client.application.ui"
+             xmlns:f="urn:import:org.consumersunion.stories.dashboard.client.application.ui.token">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .tags {
+            height: 24px;
+            width: 175px;
+        }
+
+        .panel {
+            min-height: 39px;
+            height: auto;
+        }
+
+        .panel div, .panel > span, .panel > button {
+            vertical-align: middle;
+            float: none;
+            margin-top: 0;
+        }
+
+        .panel > div, .panel > span {
+            display: inline-table;
+        }
+    </ui:style>
+
+    <g:HTMLPanel ui:field="assignPanel">
+        <div class="{resource.generalStyleCss.arrowUp}"/>
+        <div class="{resource.generalStyleCss.assignWrapper} {style.panel}">
+            <g:Label text="Add Tags" stylePrimaryName="{resource.generalStyleCss.assignText}"/>
+            <f:TokenInput ui:field="tags"
+                          styleName="{resource.generalStyleCss.floatLeft} {resource.generalStyleCss.textInput} {style.tags}"/>
+            <g:Label text="to" stylePrimaryName="{resource.generalStyleCss.assignText}"/>
+            <div class="{resource.generalStyleCss.floatLeft}">
+                <u:ClickableDropDown ui:field="selectDropDown"/>
+            </div>
+            <span class="{resource.generalStyleCss.assignText}">Stories</span>
+            <g:Button ui:field="goAssign" text="Go" stylePrimaryName="{resource.generalStyleCss.goButton}"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

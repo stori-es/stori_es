@@ -1,0 +1,128 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:u="urn:import:org.consumersunion.stories.dashboard.client.application.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .userSettings {
+            float: right;
+            margin-right: 20px;
+            margin-top: 10px;
+        }
+
+        .headerLink {
+            padding-top: 8px;
+        }
+
+        .logout {
+            text-decoration: none;
+            padding-top: 8px;
+            display: block;
+        }
+
+        .userSettings ul {
+            list-style: none;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .userSettings ul li {
+            float: left;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .menuBarWrapper {
+            padding-bottom: 9px;
+        }
+
+        .menuBar {
+            margin-left: 25px;
+            float: left;
+        }
+
+        .menuItem {
+            float: left;
+            margin-right: 25px;
+        }
+
+        .pipe {
+            border-left: 1px solid #767684;
+            padding-left: 25px;
+        }
+
+        .selectedMenuWrapper {
+            position: relative;
+            §
+        }
+
+        .help {
+            display: inline-block;
+            text-decoration: none;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:HTMLPanel styleName="{resource.generalStyleCss.headerWrapper}">
+            <!-- the top line header -->
+            <g:HTMLPanel>
+                <div class="{resource.generalStyleCss.actAsLink}" style="float: left; cursor">
+                    <g:Image ui:field="logo" resource="{resource.storiesLogo}"/>
+                </div>
+
+                <g:HTMLPanel styleName="{style.userSettings}">
+                    <ul>
+                        <li>
+                            <g:Label ui:field="username" addStyleNames="{style.headerLink}"
+                                     styleName="{resource.generalStyleCss.actAsLink}"/>
+                        </li>
+                        <li>
+                            <u:ClickableDropDown ui:field="profileDropDown"/>
+                        </li>
+                        <li>
+                            <g:Label ui:field="organizationLabel" addStyleNames="{style.headerLink}"
+                                     styleName="{resource.generalStyleCss.actAsLink}"/>
+                        </li>
+                        <li>
+                            <a class="{style.headerLink} {style.help}"
+                               href="https://docs.google.com/document/d/16pE0SXn-mPJ7s82YLeczZHdBtd5EcbcAYweKUB28eus/edit?usp=sharing"
+                               target="_blank">Help
+                            </a>
+                        </li>
+                        <li>
+                            <g:Anchor ui:field="logout" href="j_spring_security_logout" styleName="{style.logout}"/>
+                        </li>
+                    </ul>
+                </g:HTMLPanel>
+
+                <div style="clear: both"/>
+            </g:HTMLPanel>
+
+            <!-- the menu bar -->
+            <g:HTMLPanel styleName="{style.menuBarWrapper}">
+                <div class="{style.menuBar}">
+                    <div class="{style.menuItem} {resource.generalStyleCss.menuBarItem} {resource.generalStyleCss.actAsLink} simptip-position-top simptip-movable"
+                         ui:field="stories"
+                         data-tooltip="See what people have been experiencing">
+                    </div>
+                    <div class="{style.menuItem} {resource.generalStyleCss.menuBarItem} {resource.generalStyleCss.actAsLink} {style.pipe} simptip-position-top simptip-movable"
+                         ui:field="collections"
+                         data-tooltip="See groups of related stories and information on specific topics">
+                    </div>
+                    <div class="{style.menuItem} {style.pipe}">
+                        <u:NavigationDropDownHover ui:field="adminDropDown"/>
+                    </div>
+                </div>
+
+                <div class="{resource.generalStyleCss.clearBoth}"/>
+            </g:HTMLPanel>
+        </g:HTMLPanel>
+
+        <g:HTMLPanel styleName="{style.selectedMenuWrapper}">
+            <g:Label ui:field="selectedMenu" visible="false"
+                     styleName="{resource.generalStyleCss.selectedMenuItem}"/>
+        </g:HTMLPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>

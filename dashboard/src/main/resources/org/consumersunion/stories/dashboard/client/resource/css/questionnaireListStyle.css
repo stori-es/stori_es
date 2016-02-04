@@ -1,0 +1,30 @@
+@external questionnaire;
+@external questionnaireTitle;
+
+.cellListWidget {
+}
+
+.cellListEvenItem, .cellListOddItem {
+    margin-bottom: 4px;
+}
+
+.cellListSelectedItem, .cellListKeyboardSelectedItem {
+    background: none;
+}
+
+.questionnaire {
+    font-family: 'Droid Sans', sans-serif;
+    color: #878787;
+    font-size: 11px;
+}
+
+.questionnaireTitle {
+    font-family: inherit;
+    color: #0059b2;
+    font-size: 13px;
+    font-style: italic;
+    font-weight: bold;
+    display: inline-block;
+    vertical-align: middle;
+    width: literal('calc(100% - 17px)')
+}

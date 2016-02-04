@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <inherits name='com.google.gwt.user.User'/>
+
+    <extend-property name="locale" values="de"/>
+    <extend-property name="locale" values="es"/>
+
+    <source path=''/>
+</module>

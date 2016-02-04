@@ -1,0 +1,45 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:cell="urn:import:com.google.gwt.user.cellview.client">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+    <ui:with field="commonResource" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+
+    <ui:style>
+        .attachmentsLabel {
+            color: #666666;
+            font-size: 16px;
+            font-family: 'Droid Sans', sans-serif;
+            font-weight: bold;
+            margin-bottom: 15px;
+            float: left;
+            padding-top: 5px;
+        }
+
+        .attachmentsTitleWrapper {
+            margin-bottom: 10px;
+        }
+
+        .addButton {
+            float: right;
+            margin-left: 5px;
+            cursor: pointer;
+            color: #0059B2;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <div class="{style.attachmentsTitleWrapper}">
+            <g:Label text="Attachments" styleName="{style.attachmentsLabel}"
+                     addStyleNames="{resource.generalStyleCss.floatLeft}"/>
+            <div ui:field="addAttachmentWrapper" class="{commonResource.generalStyleCss.withTooltip}">
+                <g:Label ui:field="addAttachment"
+                         styleName="icon-plus-sign-alt {style.addButton} icon-2x"/>
+            </div>
+            <div class="{resource.generalStyleCss.clearBoth}"/>
+        </div>
+
+        <cell:CellList ui:field="attachementsList"/>
+        <div class="{resource.generalStyleCss.clearBoth}"></div>
+    </g:HTMLPanel>
+</ui:UiBinder>

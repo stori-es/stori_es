@@ -1,0 +1,22 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style>
+        .wrapper {
+            width: 500px;
+            height: 500px;
+            overflow: auto;
+        }
+    </ui:style>
+
+    <g:HTMLPanel styleName="stories-documentContent">
+        <h3>
+            <g:Label ui:field="documentTitle"/>
+        </h3>
+        <div class="{style.wrapper}">
+            <object ui:field="pdfContainer" type="application/pdf" width="500px" height="500px">
+                It appears you don't have a PDF plugin for this browser. No problem! You can download the PDF file here:
+                <a ui:field="pdfLink" target="_blank">Document</a>
+            </object>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

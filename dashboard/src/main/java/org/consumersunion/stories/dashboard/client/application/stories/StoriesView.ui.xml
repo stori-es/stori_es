@@ -1,0 +1,70 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:u="urn:import:org.consumersunion.stories.dashboard.client.application.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .filterWrapper {
+            margin-top: 15px;;
+        }
+
+        .bigSearchField {
+            width: 200px;
+        }
+
+        .separator {
+            border-top: 1px solid #bbbbbb;
+        }
+
+        .totalCount {
+            text-align: right;
+            font-family: 'Droid Sans', sans-serif;
+            color: #3f3427;
+            font-size: 14px;
+            font-weight: bold;
+            float: right;
+            padding-top: 5px;
+        }
+
+        .dropdown {
+            margin-top: 3px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:HTMLPanel>
+            <g:HTMLPanel styleName="{resource.generalStyleCss.mainContent}">
+                <div>
+                    <g:HTML ui:field="totalCount" addStyleNames="{style.totalCount}" text="..."/>
+                    <div class="{resource.generalStyleCss.clearBoth}"/>
+                </div>
+
+                <div class="{style.filterWrapper}">
+                    <g:SimplePanel ui:field="addTo" styleName="{resource.generalStyleCss.floatLeft}"/>
+
+                    <div class="{resource.generalStyleCss.floatLeft}">
+                        <u:ClickableDropDown ui:field="sortDropDown" addStyleNames="{style.dropdown}"/>
+                    </div>
+
+                    <div class="{resource.generalStyleCss.floatRight}">
+                        <div class="{resource.generalStyleCss.searchBoxWrapper}">
+                            <g:TextBox ui:field="search" styleName="{resource.generalStyleCss.searchField}"
+                                       addStyleNames="{style.bigSearchField}"/>
+                            <g:Button ui:field="clearSearch" styleName="{resource.generalStyleCss.clearSearch}"/>
+                        </div>
+                    </div>
+
+                    <div class="{resource.generalStyleCss.clearBoth}"/>
+                </div>
+
+                <g:SimplePanel ui:field="addToPanel" styleName="{resource.generalStyleCss.storiesAddToPanel}"/>
+
+                <g:HTMLPanel ui:field="viewSwitcher" styleName="{style.separator}"/>
+
+                <g:SimplePanel ui:field="storiesList"/>
+            </g:HTMLPanel>
+        </g:HTMLPanel>
+    </g:HTMLPanel>
+</ui:UiBinder> 

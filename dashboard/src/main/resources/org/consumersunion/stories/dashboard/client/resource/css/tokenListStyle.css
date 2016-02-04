@@ -1,0 +1,40 @@
+@external removeToken;
+
+.cellListWidget {
+}
+
+.cellListEvenItem, .cellListOddItem, .cellListSelectedItem {
+    font-size: 13px;
+    padding: 3px;
+    vertical-align: top;
+    cursor: default;
+    border: 1px solid #D9D9D9;
+    background-color: whiteSmoke;
+    white-space: nowrap;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-right: 3px;
+    margin-bottom: 3px;
+}
+
+@sprite .removeToken {
+    display: block;
+    gwt-image: "removeToken";
+    margin-left: 4px;
+    float: left;
+    margin-top: 3px;
+    cursor: pointer;
+}
+
+@sprite .removeToken:hover {
+    display: block;
+    gwt-image: "removeTokenHover";
+    margin-left: 4px;
+    float: left;
+    margin-top: 3px;
+    cursor: pointer;
+}
+
+

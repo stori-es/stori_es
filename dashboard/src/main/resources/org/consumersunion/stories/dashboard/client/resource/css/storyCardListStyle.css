@@ -1,0 +1,205 @@
+@external storyInfo, storySummary, storyWithCheckbox, storyCheckbox, otherInfo, person, dateCreated, dateUpdated, storyTag, tagLabel, tagToken, dateWrapper;
+@external attachedCollection, attachedCollectionWithDelete, timeWrapper, dateTimeWrapper, floatTimeWrapper;
+
+.cellListWidget {
+}
+
+.cellListEvenItem, .cellListOddItem, .cellListSelectedItem {
+    background-color: #fff;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #bbbbbb;
+    padding-bottom: 8px;
+    padding-right: 200px;
+}
+
+.storyInfo {
+    float: left;
+    border-right: 1px solid #dddddd;
+    width: 90%;
+    font-family: 'Droid Sans', sans-serif;
+    padding-right: 25px;
+}
+
+.storyInfo h3 {
+    color: #3f3427;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.storyInfo h3 a {
+    color: #3f3427 !important;
+    font-weight: bold !important;
+    font-size: 17px !important;
+}
+
+.storyInfo h3:hover {
+    color: #0059b2;
+}
+
+.storyInfo h3 a:hover {
+    color: #0059b2 !important;
+}
+
+.storyInfo .storyWithCheckbox {
+    margin-left: 30px;
+}
+
+.storyInfo span.person {
+    color: #878787;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.storyInfo span.person:hover {
+    color: #0059b2;
+}
+
+.storyInfo span.person + span {
+    color: #878787;
+    font-size: 12px;
+}
+
+.storyInfo .storySummary {
+    color: #31313f;
+    font-size: 13px;
+    -ms-word-break: break-all;
+    word-break: break-all;
+
+    /* Non standard for webkit */
+    word-break: break-word;
+
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+
+.storyCheckbox {
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 5px;
+    float: left;
+    margin-left: -25px;
+    margin-top: 2px;
+}
+
+.dateWrapper {
+    border-bottom: 1px solid #cccccc;
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.otherInfo {
+    float: right;
+    width: 185px;
+    margin-right: -185px;
+    padding-left: 15px;
+}
+
+.dateCreated {
+    font-family: 'Droid Sans', sans-serif;
+    color: #666666;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dateUpdated {
+    font-family: 'Droid Sans', sans-serif;
+    color: #666666;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.storyTag {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #0059b2 !important;
+}
+
+.tagLabel {
+    color: #878787;
+    font-weight: bold;
+}
+
+.tagToken {
+    text-decoration: underline;
+    color: #0059b2;
+}
+
+.attachedCollection {
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    color: #666666;
+    padding-top: 8px;
+}
+
+.attachedCollection ul {
+    list-style: none;
+}
+
+@sprite .attachedCollection ul li:first-child {
+    gwt-image: "collectionIcon";
+    background-position: right center;
+    width: 100%;
+    height: 100%;
+}
+
+.attachedCollection ul li {
+    color: #0059b2;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: italic;
+}
+
+.attachedCollectionWithDelete {
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    color: #666666;
+    padding-top: 8px;
+}
+
+.attachedCollectionWithDelete ul {
+    list-style: none;
+}
+
+.attachedCollectionWithDelete ul li {
+    color: #0059b2;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: italic;
+}
+
+.timeWrapper {
+    position: absolute;
+    top: 9px;
+    right: 0;
+    color: #bbb;
+    width: 13px;
+    height: 13px;
+}
+
+.floatTimeWrapper {
+    position: relative;
+    top: 15px;
+    right: 0;
+    color: rgb(187, 187, 187);
+    width: 13px;
+    height: 13px;
+    float: right;
+}
+
+.dateTimeWrapper {
+    cursor: pointer;
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.dateWrapper:hover .timeWrapper > div {
+    color: RGB(248, 178, 0);
+}
+
+.dateTimeWrapper:hover .floatTimeWrapper > div {
+    color: RGB(248, 178, 0);
+}

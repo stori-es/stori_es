@@ -1,0 +1,47 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style type="org.consumersunion.stories.common.client.ui.block.content.TextImageContent.Style">
+        .imageContainer {
+            padding: 15px
+        }
+
+        .imageContainer img {
+            width: 100%;
+        }
+
+        .small {
+            width: 25%;
+        }
+
+        .medium {
+            width: 50%;
+        }
+
+        .large {
+            width: 70%;
+        }
+
+        .left {
+            float: left;
+        }
+
+        .right {
+            float: right;
+        }
+
+        .clearfix:after {
+            content: " ";
+            display: block;
+            height: 0;
+            clear: both;
+        }
+    </ui:style>
+
+    <g:HTMLPanel styleName="stories-content {style.clearfix}">
+        <div ui:field="imageContainer">
+            <g:Image ui:field="img"/>
+            <p ui:field="caption"></p>
+        </div>
+        <p ui:field="textContent"></p>
+    </g:HTMLPanel>
+</ui:UiBinder>

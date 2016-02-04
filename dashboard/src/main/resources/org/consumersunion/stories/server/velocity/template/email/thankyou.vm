@@ -1,0 +1,15 @@
+Thank you for sharing your story with ${organization.name}. This message confirms that we've received your story.
+#if ($contact.status == "UNVERIFIED")
+
+If you would like to verify your email address with ${organization.name}, click on the following link. This lets us know you've received this message : ${verificationLink}
+#end
+
+Thank you for taking the time to share your story!
+${organization.name} and the stori.es team
+
+
+--
+You are receiving this email because you shared your story with ${organization.name} via Consumers Union's stori.es platform.
+This is a one-time message so there's no need to unsubscribe.
+
+#cuContact

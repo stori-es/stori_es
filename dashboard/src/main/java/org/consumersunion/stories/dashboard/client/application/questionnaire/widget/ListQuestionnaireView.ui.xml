@@ -1,0 +1,16 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:cell="urn:import:com.google.gwt.user.cellview.client"
+             xmlns:u="urn:import:org.consumersunion.stories.common.client.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <g:HTMLPanel>
+        <cell:CellList ui:field="questionnaireList"/>
+
+        <div>
+            <u:TextPager ui:field="pager" styleName="{resource.generalStyleCss.floatRight}"/>
+            <div class="{resource.generalStyleCss.clearBoth}"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

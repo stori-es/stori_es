@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <inherits name='org.consumersunion.stories.dashboard.StoriesMVP'/>
+
+    <servlet path='/service/authorization'
+             class="org.consumersunion.stories.server.api.gwt_rpc.RpcAuthorizationServiceImpl"/>
+    <servlet path='/service/profile' class="org.consumersunion.stories.server.api.gwt_rpc.RpcProfileServiceImpl"/>
+    <servlet path='/service/user' class="org.consumersunion.stories.server.api.gwt_rpc.RpcUserServiceImpl"/>
+    <servlet path='/service/collection' class="org.consumersunion.stories.server.api.gwt_rpc.RpcCollectionServiceImpl"/>
+    <servlet path='/service/organization'
+             class="org.consumersunion.stories.server.api.gwt_rpc.RpcOrganizationServiceImpl"/>
+    <servlet path='/service/entity' class="org.consumersunion.stories.server.api.gwt_rpc.RpcEntityServiceImpl"/>
+    <servlet path='/service/questionnaire'
+             class="org.consumersunion.stories.server.api.gwt_rpc.RpcQuestionnaireServiceImpl"/>
+
+    <source path='service/client'/>
+    <source path='common/client'/>
+    <source path='common/shared'/>
+    <source path='dashboard/client'/>
+    <source path='dashboard/shared'/>
+</module>

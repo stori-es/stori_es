@@ -1,0 +1,51 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style field="style"
+              type="org.consumersunion.stories.dashboard.client.application.ui.block.configurator.fileupload.ImageDropZone.Style">
+        .root {
+            text-align: center;
+            padding: 10px;
+            border: 1px dashed #ffb200;
+            background-color: #fff;
+
+            font-size: 13px;
+        }
+
+        .root > p {
+            line-height: 15px;
+        }
+
+        .root button.uploadBtn {
+            color: #0259B2;
+            cursor: pointer;
+            border: 1px solid #000;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            padding: 7px 14px;
+            margin-bottom: 8px;
+        }
+
+        .root p.dragPrompt {
+            color: #ffb200;
+            font-weight: bold;
+        }
+
+        .root p.instructions {
+            color: #d4d4d4;
+        }
+
+        .root.error {
+            border-color: #E30000;
+        }
+
+        .root.error p.instructions {
+            color: #E30000;
+        }
+    </ui:style>
+    <ui:with field="messages" type="org.consumersunion.stories.common.client.i18n.CommonI18nMessages"/>
+    <g:HTMLPanel ui:field="root" styleName="{style.root}">
+        <g:Button ui:field="btn" styleName="{style.uploadBtn}">Choose an image to upload</g:Button>
+        <p class="{style.dragPrompt}">Or, drag image here...</p>
+        <p ui:field="instructions" class="{style.instructions}"></p>
+    </g:HTMLPanel>
+</ui:UiBinder>

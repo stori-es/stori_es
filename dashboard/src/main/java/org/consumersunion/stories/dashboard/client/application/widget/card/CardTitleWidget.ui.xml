@@ -1,0 +1,14 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <g:HTMLPanel ui:field="cardInfo"
+                 styleName="{resource.generalStyleCss.w100} {resource.cards.cardTitleMain} simptip-movable simptip-position-top">
+        <div ui:field="icon"
+             class="{resource.cards.cardIcon}"/>
+        <div ui:field="cardType" class="{resource.cards.cardType} {resource.cards.editTitle}"/>
+        <span ui:field="title"/>
+        <div class="{resource.generalStyleCss.clearBoth}"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

@@ -1,0 +1,74 @@
+@external storyInfo, otherInfo, person, dateCreated, dateUpdated, attachedCollection;
+
+.cellListWidget {
+}
+
+.cellListEvenItem {
+    background-color: #fff;
+    margin-bottom: 30px;
+}
+
+.cellListOddItem {
+    background-color: #fff;
+    margin-bottom: 30px;
+}
+
+.cellListSelectedItem {
+    background: none;
+    background-color: #fff;
+    margin-bottom: 30px;
+}
+
+.storyInfo {
+    float: left;
+    width: 430px;
+    font-family: 'Droid Sans', sans-serif;
+    padding-right: 25px;
+}
+
+.storyInfo h3 {
+    color: #3f3427;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.storyInfo h3:hover {
+    color: #0059b2;
+}
+
+.storyInfo div {
+    color: #878787;
+    font-size: 12px;
+}
+
+.storyInfo div span.person {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.storyInfo div span.person:hover {
+    color: #0059b2;
+}
+
+.otherInfo {
+    float: right;
+    width: 180px;
+    padding-left: 15px;
+}
+
+.dateCreated {
+    font-family: 'Droid Sans', sans-serif;
+    color: #666666;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dateUpdated {
+    font-family: 'Droid Sans', sans-serif;
+    color: #666666;
+    font-size: 12px;
+    font-style: italic;
+}
+
+
+

@@ -1,0 +1,50 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style>
+        .wrapper {
+            margin-top: 10px;
+        }
+
+        .row {
+            margin-bottom: 5px;
+        }
+
+        .label {
+            display: inline-block;
+            width: 60px;
+        }
+
+        .textBox {
+            width: 120px;
+        }
+
+        .errorStyle {
+            color: red;
+            font-size: 11px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel styleName="{style.wrapper}">
+        <g:HTMLPanel ui:field="linksContainer"/>
+
+        <g:HTMLPanel ui:field="formContainer" styleName="{style.wrapper}">
+            <div style="float: left; width: 200px">
+                <div class="{style.row}">
+                    <g:Label styleName="{style.label}" text="Title:"/>
+                    <g:TextBox styleName="{style.textBox}" ui:field="title"/>
+                </div>
+                <div class="{style.row}">
+                    <g:Label styleName="{style.label}" text="URL:*"/>
+                    <g:TextBox styleName="{style.textBox}" ui:field="url"/>
+                    <g:Label styleName="{style.errorStyle}" ui:field="errorMessage" visible="false"/>
+                </div>
+            </div>
+
+            <div style="float: left; margin-left: 10px; padding-top: 8px">
+                <g:Button ui:field="addLink" text="+"/>
+            </div>
+
+            <div style="clear: both;"/>
+        </g:HTMLPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>

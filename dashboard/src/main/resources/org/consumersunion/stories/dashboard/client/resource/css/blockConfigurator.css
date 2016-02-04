@@ -1,0 +1,126 @@
+@external .icon*, .gwt*;
+
+.main {
+    line-height: 36px;
+}
+
+.fullRow,
+.shortRow {
+    display: table;
+    width: 100%;
+}
+
+.fullRow > div:first-child,
+.shortRow > div:first-child,
+.shortRow.advancedLength > div {
+    display: table-cell;
+    width: 105px;
+    line-height: 15px;
+}
+
+.fullRow > span,
+.shortRow > span,
+.fullRow > span + div {
+    display: table-cell;
+    padding: 0 0 0 5px
+}
+
+.shortRow > div {
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+    margin-left: 5px;
+}
+
+.fullRow > span textarea {
+    resize: vertical;
+    height: 150px;
+}
+
+.fullRow > span input[type="text"],
+.fullRow > span textarea {
+    box-sizing: border-box;
+    width: literal('calc(100% + 2px)');
+}
+
+.shortRow > span > input[type="text"],
+.shortRow > span select {
+    box-sizing: border-box;
+    width: literal('calc(50% - 50px)');
+}
+
+.shortRow .gwt-RadioButton {
+    display: inline-block;
+    width: 140px;
+}
+
+.shortRow > span select {
+    height: 75%;
+    vertical-align: text-top;
+}
+
+.buttonContainer {
+    margin-top: 15px;
+}
+
+.buttonContainer > button {
+    width: 80px;
+}
+
+.buttonContainer > button + a {
+    text-decoration: underline;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.optionsList {
+    line-height: initial;
+    vertical-align: text-top;
+}
+
+.optionsList div[aria-hidden=true] + .buttonContainer {
+    margin-top: 0;
+}
+
+.optionsList .buttonContainer > button {
+    width: 90px;
+}
+
+.advanced > div:first-child {
+    cursor: pointer;
+}
+
+.advanced .icon-caret-right {
+    font-size: 28px;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.advanced .icon-caret-right::before {
+    -webkit-transform: rotateZ(0deg);
+    -moz-transform: rotateZ(0deg);
+    -o-transform: rotateZ(0deg);
+    -ms-transform: rotateZ(0deg);
+    transform: rotateZ(0deg);
+}
+
+.advanced .icon-caret-right::before,
+.advancedOpen .icon-caret-right::before {
+    -webkit-transition: transform .3s;
+    -moz-transition: transform .3s;
+    -ms-transition: transform .3s;
+    -o-transition: transform .3s;
+    transition: transform .3s;
+}
+
+.advancedOpen .icon-caret-right::before {
+    -webkit-transform: rotateZ(90deg);
+    -moz-transform: rotateZ(90deg);
+    -o-transform: rotateZ(90deg);
+    -ms-transform: rotateZ(90deg);
+    transform: rotateZ(90deg);
+}
+
+.advancedLength {
+    margin-left: 25px;
+}

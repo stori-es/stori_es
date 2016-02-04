@@ -1,0 +1,41 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:style>
+        .title {
+            display: inline;
+            margin: 0;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .storySummary {
+            color: #000;
+            -ms-word-break: break-all;
+            word-break: break-all;
+            /* Non standard for webkit */
+            word-break: break-word;
+
+            -webkit-hyphens: auto;
+            -moz-hyphens: auto;
+            -ms-hyphens: auto;
+            hyphens: auto;
+
+            width: literal('calc(100% - 15px)');
+        }
+
+        .author {
+            color: #797979;
+        }
+
+        .main > div, .main > div * {
+            font-family: "Myriad Pro";
+            font-size: 14px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel styleName="{style.main}">
+        <div class="{style.title}" ui:field="title"/>
+        <div ui:field="author" class="{style.author}"/>
+        <div class="{style.storySummary}" ui:field="story"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

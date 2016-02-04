@@ -1,0 +1,55 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:with field="res" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+    <ui:style gss="true">
+        @external 'icon-*', active;
+        .main {
+            line-height: 30px;
+            margin-top: 12px;
+            display: inline-block;
+        }
+
+        .main .icon-stack [class*="icon-"],
+        .main .icon-stack [class^="icon-"] {
+            font-size: 30px;
+            text-align: inherit;
+        }
+
+        .main .icon-star {
+            color: #d8d7d8;
+        }
+
+        .main .icon-star-half,
+        .main .icon-star.active {
+            color: #fff334;
+        }
+
+        .main > span:first-child {
+            margin-right: 10px;
+        }
+
+        .main > span:last-child {
+            margin-left: 10px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel ui:field="main" styleName="{style.main}">
+        <g:InlineLabel ui:field="head" styleName="{res.generalStyleCss.disabled}"/>
+        <span class="icon-stack">
+            <i class="icon-star empty"></i>
+        </span>
+        <span class="icon-stack">
+            <i class="icon-star empty"></i>
+        </span>
+        <span class="icon-stack">
+            <i class="icon-star empty"></i>
+        </span>
+        <span class="icon-stack">
+            <i class="icon-star empty"></i>
+        </span>
+        <span class="icon-stack">
+            <i class="icon-star empty"></i>
+        </span>
+        <g:InlineLabel ui:field="tail" styleName="{res.generalStyleCss.disabled}"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

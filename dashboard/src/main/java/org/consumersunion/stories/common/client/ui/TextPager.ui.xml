@@ -1,0 +1,48 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style>
+        .pagerButton {
+            display: inline-block;
+            margin-right: 10px;
+            font-family: 'Droid Sans', sans-serif;
+            font-size: 17px;
+            color: RGB(0, 89, 178);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .pagerButton:hover {
+            text-decoration: underline;
+        }
+
+        .pagerButton[disabled] {
+            font-family: 'Droid Sans', sans-serif;
+            font-size: 17px;
+            color: RGB(192, 192, 192);
+            background: none;
+            border: none;
+            cursor: default;
+        }
+
+        .pagerButton[disabled]:hover {
+            text-decoration: none;
+        }
+
+        .pagerLabel {
+            display: inline-block;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 13px;
+            color: RGB(128, 128, 128);
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:Button ui:field="firstPage" text="&#171; First" styleName="{style.pagerButton}"/>
+        <g:Button ui:field="prevPage" text=" &#139; Prev" styleName="{style.pagerButton}"/>
+        <g:Label ui:field="label" styleName="{style.pagerLabel}"/>
+        <g:Button ui:field="nextPage" text="Next &#155;" styleName="{style.pagerButton}"/>
+        <g:Button ui:field="lastPage" text="Last &#187;" styleName="{style.pagerButton}"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

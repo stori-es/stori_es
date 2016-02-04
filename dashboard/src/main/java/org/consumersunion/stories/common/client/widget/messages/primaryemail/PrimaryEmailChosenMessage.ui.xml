@@ -1,0 +1,25 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+    <ui:with field="resources" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+
+    <ui:style gss="true">
+        .form {
+            margin-left: 45px;
+            margin-top: 16px;
+            margin-bottom: 16px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel styleName="{resources.messagesStyle.interactiveMain} {resources.messagesStyle.interactiveMainBlock}">
+        <h3>User information updated</h3>
+        <div class="{style.form}">
+            <span>Primary email address:</span>
+            <span ui:field="email" class="{resources.messagesStyle.emailBox}"/>
+            <button class="{resources.messagesStyle.button} {resources.messagesStyle.closeButton}"
+                    ui:field="close">Close
+            </button>
+        </div>
+        <div class="{resources.messagesStyle.progress}" ui:field="progress"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

@@ -1,0 +1,20 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:u="urn:import:org.consumersunion.stories.common.client.ui">
+
+    <ui:style>
+        .content {
+            padding: 20px;
+        }
+
+        .content img {
+            margin-left: 10px;
+        }
+    </ui:style>
+
+    <g:PopupPanel modal="true" autoHideEnabled="false" glassEnabled="true">
+        <g:HTMLPanel styleName="{style.content}">
+            <u:LoadingIndicator ui:field="loading"/>
+        </g:HTMLPanel>
+    </g:PopupPanel>
+</ui:UiBinder>

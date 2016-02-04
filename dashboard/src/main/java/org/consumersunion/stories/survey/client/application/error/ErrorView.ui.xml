@@ -1,0 +1,17 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+    <ui:with field="resources" type="org.consumersunion.stories.survey.client.resource.Resources"/>
+
+    <ui:style>
+        .main {
+            width: 100%;
+            text-align: center;
+        }
+    </ui:style>
+
+    <g:HTMLPanel styleName="{style.main}">
+        <h1>Ooops!</h1>
+        <g:HTML ui:field="alert" styleName="{resources.generalStyleCss.alert}" visible="false"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

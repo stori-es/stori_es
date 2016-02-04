@@ -1,0 +1,231 @@
+@external gwtQuery-draggable, icon*;
+
+.blockWrapper,
+.blockWrapperReadOnly,
+.blockWrapperEdit {
+    position: relative;
+    padding: 5px 35px;
+    width: literal('calc(100% - 70px)');
+}
+
+.blockWrapperEdit .dragBackground {
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
+.blockWrapperEdit .dragBackground:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.blockWrapper.blockWrapperEdit .editAction,
+.blockWrapperReadOnly .editAction {
+    display: none !important;
+}
+
+.editAction {
+    display: none;
+    position: absolute;
+    font-size: 23px;
+    left: 8px;
+    top: literal('calc(50% - 14px)');
+}
+
+.ordering > div {
+    font-size: 30px;
+    position: absolute;
+
+    left: 8px;
+}
+
+.ordering > div span {
+    display: block;
+}
+
+.ordering > div span.disabled i {
+    cursor: default;
+}
+
+.ordering > div i {
+    display: block;
+    cursor: pointer;
+    line-height: 17px;
+    overflow: hidden;
+}
+
+.ordering .icon-caret-up,
+.ordering .icon-caret-down {
+    margin-left: 1px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.ordering > div:first-child {
+    top: 8px;
+}
+
+.ordering > div:last-child {
+    bottom: 8px;
+}
+
+.disabled {
+    color: #999;
+    cursor: default;
+}
+
+.blockWrapper .ordering,
+.blockWrapperReadOnly .ordering,
+.blockWrapper:hover .blockToolbar,
+.blockToolbar,
+.blockHeader,
+.disabled::before,
+.disabled::after,
+.contentBlocksOnly .questionBlocks,
+.contentBlocksOnly .questionBank {
+    display: none;
+}
+
+.blockWrapperEdit .ordering,
+.blockWrapper.blockWrapperEdit .blockToolbar,
+.blockWrapper:hover .editAction {
+    display: block;
+}
+
+.metaBlock.blockWrapper:hover,
+.blockWrapperEdit.blockWrapper:hover {
+    cursor: default;
+}
+
+.metaBlock {
+    background-color: #ebebeb;
+}
+
+.blockWrapperEdit,
+.blockWrapper:hover {
+    cursor: pointer;
+    background-color: #ebebeb;
+}
+
+.metaBlock .blockHeader,
+.blockWrapperEdit .blockHeader {
+    display: block;
+    text-align: center;
+    line-height: 31px;
+    margin-bottom: 5px;
+}
+
+.metaDrawer {
+    height: 9px;
+    background-color: #c6d4df;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.metaDrawerIcon {
+    font-size: 21px;
+    color: #0059b2;
+    margin-top: -6px;
+    display: inline-block;
+}
+
+.blockQuestionType {
+    font-weight: bold;
+    color: #A1A1A1;
+    text-transform: uppercase;
+}
+
+@sprite .dragBackground {
+    gwt-image: 'dragBackground';
+    border: 1px solid #d9d8d8;
+}
+
+.metaBlock {
+    text-transform: uppercase;
+}
+
+.contentBlocksOnly .contentBlocks {
+    width: 100%;
+}
+
+.contentBlocks {
+    width: literal('calc(25% - 1px)');
+}
+
+.contentBlocks div {
+    line-height: 23px;
+}
+
+.questionBlocks {
+    width: literal('calc(25% - 1px)');
+    margin-left: 1px;
+}
+
+.questionBlocks div {
+    line-height: 32px;
+}
+
+.questionBlocks div:nth-child\(odd\) {
+    line-height: 33px;
+}
+
+.questionBank {
+    width: 50%;
+    margin-left: 1px;
+}
+
+.questionGroup.questionBank > .questionGroupContainer {
+    display: inline-block;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    width: 174px;
+    box-sizing: border-box;
+}
+
+.questionGroup.questionBank .questionGroupContainer > div {
+    width: 173px;
+    box-sizing: border-box;
+}
+
+.questionBank > .questionGroupContainer div {
+    line-height: 27px;
+}
+
+.questionGroup {
+    float: left;
+    box-sizing: border-box;
+    text-align: center;
+    height: 212px;
+}
+
+.questionGroupContainer > div {
+    font-size: 12px;
+    border-left: 1px solid #C6D4DF;
+    border-right: 1px solid #C6D4DF;
+    border-bottom: 1px solid #C6D4DF;
+    width: 164px;
+    margin: 0 auto;
+}
+
+.questionGroup > div:first-child {
+    font-size: 13px;
+    display: block;
+    border: none;
+    line-height: 41px;
+    background-color: #C6D4DF;
+    width: auto;
+}
+
+.questionGroupContainer > div:hover {
+    cursor: pointer;
+    background-color: #f8b200;
+}
+
+.questionGroupContainer > div.disabled:hover {
+    cursor: default;
+    background-color: inherit;
+}

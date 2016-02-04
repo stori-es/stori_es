@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:aop="http://www.springframework.org/schema/aop"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:task="http://www.springframework.org/schema/task"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+                        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+
+    <!-- Spring ACL -->
+    <beans:import resource="acl-context.xml"/>
+
+    <!-- Spring MVC FOR REST SERVICES-->
+    <beans:import resource="applicationContext-mvc.xml"/>
+
+    <!-- Scan for GWT services -->
+    <context:component-scan base-package="org.consumersunion.stories.server"/>
+
+    <!-- Application context Singleton Provider -->
+    <beans:bean class="org.consumersunion.stories.server.util.ApplicationContextProvider"/>
+
+    <!-- AOP -->
+    <aop:aspectj-autoproxy/>
+    <beans:bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+
+    <!-- Security -->
+    <!-- Container element for HTTP security configuration -->
+    <http auto-config="false" entry-point-ref="loginUrlAuthenticationEntryPoint">
+        <!-- Rest service servlet isn't filtered -->
+        <intercept-url pattern="/rest/*" access="ROLE_ANONYMOUS"/>
+
+        <!-- Sets up session management. Notice that we don't actually restrict access to anything here. This is
+             because in general, the questionnaires are publicly available and services enforce their own
+             requirements -->
+        <!-- sets up the page for authentication
+              login-page = login page of the app
+              default-target-url = redirect after login successful -->
+        <!--<form-login login-page="/signin.jsp" authentication-success-handler-ref="securityLoginSuccessHandler"
+                    authentication-failure-handler-ref="securityLoginFailureHandler" />-->
+
+        <!-- sets up the logout processing filter
+             logout-success-url = redirect when the user logs out
+             delete-cookies = session cookies which should be deleted when the user logs out
+              invalidate-session = HttpSession invalidation when the user logs out -->
+        <logout logout-success-url="/signin.jsp" delete-cookies="JSESSIONID,OPENSESSIONID" invalidate-session="true"/>
+
+        <custom-filter ref="authenticationFilter" position="FORM_LOGIN_FILTER"/>
+
+        <!-- session time out management
+             notice that we do not use the 'invalid-session-url' because that would force users with an invalid session
+             to the login even if they were accessing the '/share/' path (despiet the 'permitAll' above).
+              session-authentication-error-url = page which a user will be redirected if an exception is presented
+             session-fixation-protection = indicates whether an existing session should be invalidated when a user authenticates and a new session started -->
+        <!-- session-management invalid-session-url="/signin.jsp" -->
+        <session-management
+                session-authentication-error-url="/signin.jsp"
+                session-fixation-protection="none">
+            <!-- controls the concurrent session
+            max-sessions = The maximum number of sessions a single authenticated user can have open at the same time
+            error-if-maximum-exceeded = unauthorized error should be reported when a user attempts to login when they already have the maximum configured sessions open
+            expired-url = The page a user will be redirected to if they attempt to use a session which has been "expired" because they have logged in again -->
+            <!--<concurrency-control max-sessions="1"
+                error-if-maximum-exceeded="false" expired-url="/signin.jsp"/>-->
+        </session-management>
+    </http>
+
+    <beans:bean id="sas" class="org.springframework.security.core.session.SessionRegistryImpl"/>
+
+    <beans:bean id="loginUrlAuthenticationEntryPoint"
+                class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <beans:property name="loginFormUrl" value="/signin.jsp"/>
+    </beans:bean>
+
+    <beans:bean id="sessionAuthenticationStrategy"
+                class="org.consumersunion.stories.server.security.authentication.SessionAuthenticationStrategy">
+        <beans:constructor-arg ref="sas"/>
+    </beans:bean>
+
+    <!-- bean to authenticate with the data base the user that is trying to login in the app -->
+    <beans:bean id="customAuthenticationProvider"
+                class="org.consumersunion.stories.server.security.authentication.CustomAuthenticationProvider"/>
+
+    <beans:bean id="authenticationFilter"
+                class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+        <beans:property name="sessionAuthenticationStrategy" ref="sessionAuthenticationStrategy"/>
+        <beans:property name="filterProcessesUrl" value="/j_spring_security_check"/>
+        <beans:property name="authenticationFailureHandler" ref="securityLoginFailureHandler"/>
+        <beans:property name="authenticationSuccessHandler" ref="securityLoginSuccessHandler"/>
+    </beans:bean>
+
+    <beans:bean id="securityLoginSuccessHandler"
+                class="org.consumersunion.stories.server.security.authentication.SecurityLoginSuccessHandler">
+        <beans:property name="defaultTargetUrl" value="/stories.jsp"/>
+    </beans:bean>
+
+    <beans:bean id="securityLoginFailureHandler"
+                class="org.consumersunion.stories.server.security.authentication.SecurityLoginFailureHandler">
+        <beans:property name="defaultFailureUrl" value="/signin.jsp?error=true"/>
+    </beans:bean>
+
+    <!-- Registers the AuthenticationManager instance and allows its list of AuthenticationProviders to be defined
+	authentication-provider = bean that will be used as an authentication source.-->
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider ref="customAuthenticationProvider"/>
+    </authentication-manager>
+
+    <!-- analytics properties -->
+    <beans:bean id="analyticsProperties"
+                class="org.consumersunion.stories.server.helper.AnalyticsProperties" scope="singleton"
+                lazy-init="false"/>
+
+    <!-- DataBase Update -->
+    <beans:bean id="schemaUpdatesPatternResolver"
+                class="org.consumersunion.stories.server.persistence.SchemaUpdatesPatternResolver"
+                scope="singleton" lazy-init="false">
+        <beans:constructor-arg>
+            <beans:list>
+                <beans:value>file:deployPath/*.sql</beans:value>
+            </beans:list>
+        </beans:constructor-arg>
+    </beans:bean>
+</beans:beans>

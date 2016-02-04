@@ -1,0 +1,771 @@
+/** Add css rules here for your application. */
+
+* {
+    margin: 0;
+}
+
+/** Example rules used by the template application (remove for your app) */
+h1 {
+    font-size: 2em;
+    font-weight: bold;
+    color: #777777;
+    margin: 40px 0px 70px;
+    text-align: center;
+}
+
+.cu-error-text-field {
+    border: 3px solid #C33 !important;
+}
+
+.cu-success-availability-text-field {
+    border: 3px solid #090 !important;
+}
+
+.cu-float-left-style {
+    float: left;
+}
+
+.cu-italic-style {
+    font-style: italic;
+}
+
+.cu-bold-style {
+    font-weight: bold;
+}
+
+.cu-grey-style {
+    color: #606060;
+}
+
+.cu-underline-style {
+    text-decoration: underline;
+}
+
+.sendButton {
+    display: block;
+    font-size: 16pt;
+}
+
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+    width: 400px;
+}
+
+.dialogVPanel {
+    margin: 5px;
+}
+
+.serverResponseLabelError {
+    color: red;
+    font-weight: bold;
+}
+
+.cu-text-align-center {
+    text-align: center;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+    margin: 15px 6px 6px;
+}
+
+.cu-top-menu-bar {
+    margin-left: auto;
+}
+
+.cu-topMenuBar .cu-clickable, .cu-topMenuBar .cu-clicked, .edit-menu .cu-clickable, .edit-menu .cu-clicked {
+    margin: 0 10px;
+}
+
+.cu-top-menu-bar td {
+    padding-left: 8px;
+}
+
+/* This will eventually be handled dynamically
+*/
+.cu-collectionSurveyTitle {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+#body .cu-collectionSurveyTitle {
+    display: none;
+}
+
+.cu-clickable {
+    cursor: pointer;
+}
+
+.cu-clicked {
+    font-weight: bold;
+}
+
+.cu-inactiveClick {
+    color: #e0e0e0;
+    margin: 0 10px;
+}
+
+.cu-blocker {
+    width: 100%;
+    height: 100%;
+    backgroundColor: #D3D3D3;
+    opacity: 0.5;
+}
+
+.cu-selection .cu-clickable:hover {
+    background-color: #e0e0e0;
+}
+
+.triangle-style {
+    margin-top: 3px;
+    margin-left: 2px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid blue;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.option-menu-selected {
+    padding-bottom: 5px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid white;
+    cursor: pointer;
+    margin-left: 20px;
+    height: 0;
+    width: 0;
+    background-color: #999999;
+}
+
+.option-menu-noSelected {
+    cursor: pointer;
+    height: 0;
+    width: 0;
+    background-color: #999999;
+    padding-bottom: 15px;
+}
+
+.edit-menu {
+    direction: rtl;
+}
+
+.edit-menu-button {
+    margin: 0 5px 0 0;
+    padding: 2px 5px;
+    text-decoration: none;
+    cursor: pointer;
+    cursor: hand;
+    font-size: small;
+    background: url("../images/hborder.png") repeat-x 0px -2077px;
+    border: 1px solid #bbb;
+    border-bottom: 1px solid #a0a0a0;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    min-width: 80px;
+    text-align: center;
+    display: block;
+}
+
+.edit-menu-button:active {
+    border: 1px inset #ccc;
+}
+
+.edit-menu-button:hover {
+    border-color: #939393;
+}
+
+.edit-menu-button[disabled] {
+    cursor: default;
+    color: #888;
+}
+
+.edit-menu-button[disabled]:hover {
+    border: 1px outset #ccc;
+}
+
+.edit-questionnaire {
+    /* width: 100%;*/
+}
+
+.dataTable {
+    width: 100%;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.display-none {
+    display: none;
+}
+
+.clear {
+    clear: both;
+}
+
+.cu-applicationMessages {
+    filter: alfa(opacity=100);
+    font-weight: bold;
+    margin: 0 auto;
+    opacity: 1.0;
+    padding-top: 5px;
+}
+
+#appMessages {
+    filter: alfa(opacity=70);
+    height: 0px;
+    left: 0px;
+    opacity: 0.7;
+    position: fixed;
+    text-align: center;
+    top: 0px;
+    width: 50%;
+    left: 25%;
+    z-index: 130;
+    border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -khtml-border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -khtml-border-bottom-right-radius: 5px;
+}
+
+.success-colors {
+    background-color: #E7FFD6;
+    color: #69A150;
+    border-color: #8CD76B;
+}
+
+.error-colors {
+    background-color: #FFE7E7;
+    color: #AD5E5C;
+    border-color: #E77D7B;
+}
+
+.info-colors {
+    background-color: #E7F3FF;
+    color: #5C92D2;
+    border-color: #7BA6D6;
+}
+
+.warning-color {
+    background-color: #8CD76B;
+    color: #BFAE7A;
+    border-color: #FFD324;
+}
+
+.cu-questionDetail {
+    padding: 5px 5px 10px 5px;
+}
+
+.cu-questionDetail-RichInput {
+    background-color: #FFFFFF;
+}
+
+.cu-edit-questionnaire-row {
+    padding: 5px 5px 10px 5px;
+    width: 100%;
+}
+
+.cu-edit-questionnaire-row:hover {
+    background-color: #fff9dc;
+}
+
+.cu-edit-questionnaire-row-std {
+    padding: 5px 5px 10px 5px;
+}
+
+.cu-edit-questionnaire-row-std .duplicate {
+    display: none;
+    visibility: hidden;
+}
+
+.cu-edit-questionnaire-row-std:hover {
+    background-color: #fff9dc;
+}
+
+.edit-questionnaire, .edit-row {
+    background-color: #fff4c2;
+}
+
+.cu-questionDetail, .cu-questionDetail .form-inputBox, .cu-questionDetail .form-inputBox input {
+    width: 100%;
+}
+
+.cu-questionDetail input.gwt-TextBox {
+    padding: 0;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.form-subHeader {
+    font-style: italic;
+}
+
+.form-inputSet input, .form-inputSet select {
+    margin: 0 10px 0 5px;
+}
+
+.edit-questionnaire, .dataTable {
+    border-collapse: collapse;
+    border: 0px;
+}
+
+.edit-menu div {
+    float: left;
+}
+
+.edit-menu {
+    vertical-align: top;
+    float: left;
+}
+
+.gwt-RichTextToolbar {
+    padding: 0;
+    width: 100%;
+}
+
+.gcomp-GlassPanel {
+    background-color: #eee;
+    filter: alpha(opacity=75);
+    opacity: 0.75;
+    -moz-opacity: 0.75;
+    -khtml-opacity: 0.75;
+    z-index: 1006;
+    text-align: center;
+    padding-top: 20%;
+}
+
+.gcomp-GlassPanel .gwt-Label {
+    height: 80px;
+    background: #eee url(ajax-loader.gif) no-repeat center center;
+}
+
+/* the 'iframe' makes the selection more specific to override the GWT style, which is often loaded dynamically after
+ * our style and therefore cannot be overriden by the normal load precedence */
+iframe.hasRichTextToolbar {
+    width: 463px; /* 465 - 2 for border; 465 is the width of the toolbar */
+    height: 160px;
+    border: 1px black solid;
+}
+
+.cu-myCollection {
+    width: 100%;
+}
+
+.cu-slideBrowseItem {
+    width: 125px;
+    font-size: 1.5em;
+    word-wrap: normal;
+}
+
+.cu-slideBrowseItem a:hover {
+    color: inherit;
+    text-decoration: none;
+}
+
+.cu-slideBrowseItem a, .cu-slideBrowseItem a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+.carousel-component {
+    background-color: transparent;
+    color: inherit;
+}
+
+.baloonPanel {
+    padding: 5px;
+    border: solid;
+    border-width: 2px;
+    border-color: rgb(200, 210, 240);
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    opacity: 0.0;
+    background-color: rgb(220, 230, 254);
+    color: black;
+    z-index: 130;
+    background: -webkit-gradient(linear, left top, left bottom, from(rgb(225, 240, 254)), to(rgb(200, 220, 244)));
+    background: -moz-linear-gradient(top, rgb(244, 244, 254), rgb(230, 230, 245));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='rgb(225,240,254)', endColorstr='rgb(200,220,244)');
+}
+
+.cu-slideBrowser .cu-clickable {
+    margin-right: 10px;
+}
+
+.signout {
+    text-decoration: underline;
+    color: blue;
+}
+
+#signout-div input[type=submit] {
+    cursor: pointer;
+}
+
+.cu-cursor-as-link {
+    cursor: pointer;
+}
+
+/** Top menu Bar section
+   * Includes: search widget, action labels 
+ **/
+
+.cu-top-menu-bar .gwt-Label {
+    padding-top: 5px;
+    width: 100%;
+}
+
+.cu-search-bar {
+    right: 0;
+}
+
+.cu-search-bar .gwt-Label {
+    padding-top: 5px;
+    width: 100%;
+}
+
+.cu-search-box {
+    margin-right: 15px;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+}
+
+.cu-search-box-icon {
+    background-image: url("../images/magnifying_glass.gif");
+    background-repeat: no-repeat;
+    background-position: left;
+}
+
+.cu-top-menu-bar-select {
+    color: white;
+    margin-right: 7px;
+    margin-top: 10px;
+    width: auto;
+}
+
+cu-headerText {
+    font-size: 24px;
+    color: red;
+}
+
+/**
+ * Person Profile styles
+**/
+
+.cu-person-profile-main-panel {
+    background-color: #EEEEEE;
+    padding: 10px;
+}
+
+.cu-person-profile-main-panel-labels {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.cu-person-profile-contact-information-panel {
+    background-color: #FFFFFF;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-bottom: 7px;
+    min-width: 475px;
+}
+
+.cu-person-profile-main-label-empty {
+    margin-top: 10px;
+}
+
+.cu-person-profile-contact-info-label {
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.cu-person-profile-contact-name-label div {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.cu-person-profile-main-label-empty {
+    font-weight: bold;
+    font-size: 14px;
+    color: #9B9BA5;
+    min-width: 210px;
+}
+
+.cu-person-profile-main-label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #000000;
+}
+
+.cu-person-profile-secundary-label {
+    font-weight: bold;
+    margin-right: 10px;
+    width: 165px;
+    padding-left: 5px;
+}
+
+.cu-person-profile-secundary-data {
+    min-width: 205px;
+}
+
+.cu-person-profile-inline-left-editable-widget {
+    margin-right: 5px;
+}
+
+.underlineClickableCellTestStyle {
+    text-decoration: underline;
+}
+
+.noUnderlineClickableCellTestStyle {
+    text-decoration: none;
+}
+
+.edit-contact-label {
+    color: #545454;
+    cursor: pointer;
+    padding-left: 5px;
+}
+
+.delete-contact-label {
+    color: #545454;
+    cursor: pointer;
+    padding-left: 5px;
+}
+
+.cu-person-profile-edit-value {
+    height: 17px;
+    width: 160px;
+}
+
+.cu-person-profile-contact-information-panel .fieldErrorMessage {
+    width: 160px;
+    color: red;
+    padding-left: 5px;
+    font-size: 12px;
+}
+
+.cu-person-profile-edit-type {
+    height: 23px;
+    width: 65px;
+}
+
+.cu-person-form {
+    float: left;
+}
+
+.cu-person-button {
+    float: left;
+    margin-left: 10px;
+}
+
+/**
+ * Notes manager styles
+**/
+
+.cu-notes-manager-inside-user-profile {
+    height: 200px;
+}
+
+.cu-notes-manager-inside-user-stories {
+    height: 260px;
+}
+
+/**
+ * My Account, PasswordUpdate, Update Account 
+**/
+
+.cu-password-update-main-panel {
+    margin: 10px;
+}
+
+.cu-password-update-main-label {
+    margin-bottom: 10px;
+}
+
+.cu-password-update-button-panel {
+    margin-top: 10px;
+}
+
+.cu-organization-update-main-label {
+    margin-bottom: 10px;
+}
+
+.cu-organization-update-button-panel {
+    margin-top: 10px;
+}
+
+.button-style {
+    margin: 5px;
+    padding: 5px 7px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: small;
+    border: 1px solid #bbb;
+    border-bottom: 1px solid #a0a0a0;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+}
+
+.gwt-LabelTitle {
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    font-weight: bold;
+    color: black;
+}
+
+.gwt-RadioButton input {
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.gwt-RadioButton label {
+    vertical-align: middle;
+    padding-left: 5px;
+}
+
+.gwt-CheckBox input {
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.gwt-CheckBox label {
+    vertical-align: middle;
+    padding-left: 5px;
+}
+
+/**
+ * Collection detail 
+**/
+.cu-collection-detail-description {
+    min-width: 1070px;
+}
+
+.cu-collection-detail-container-panel {
+    margin: 15px;
+}
+
+/**
+ * Story Summary view
+ **/
+
+.cu-story-summary-view-title-label {
+    color: #2E2EED;
+    font-weight: bold;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.cu-story-summary-view-summary-text-label {
+    line-height: 20px;
+    margin: 10px 0;
+}
+
+.cu-story-summary-view-summary-submitter-label {
+}
+
+.cu-story-summary-view-main-container {
+    border-bottom: 1px solid #CFED62;
+    margin: 0 0 15px;
+    padding: 0 0 10px;
+    clear: both;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12.8px;
+}
+
+/**
+ * Permanent link global page/style
+**/
+
+#questionnaireWidget #questioinnaire-display table.stories-inputGroup,
+#questionnaireWidget #questioinnaire-display td.cu-questionnaireHeader div {
+    margin-bottom: 17px;
+}
+
+#questionnaireWidget div > table {
+    width: 100%;
+}
+
+.cu-collection-survey-thak-you-label {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+/**
+  * Note Manager
+ **/
+.cu-note-manager-display {
+    margin-bottom: 7px;
+    padding: 5px;
+}
+
+/**
+ * Edit questionnaire
+*/
+
+.cu-edit-questionnaire-add-standard-menu {
+    margin-left: 10px;
+}
+
+.cu-edit-questionnaire-add-menus {
+    margin: 15px 0;
+}
+
+.cu-edit-questionnaire-add-menus div {
+    padding-right: 10px;
+}
+
+.unselected-option {
+    color: gray;
+}
+
+/**
+ * Edit questionnaire
+ */
+
+.cu-edit-questionnaire-theme {
+    margin-left: 50px;
+    margin-top: 12px;
+}
+
+.cu-edit-questionnaire-theme-label {
+    margin-right: 7px;
+    font-weight: bold;
+}
+
+div.fieldErrorMessage {
+    color: red;
+    font-weight: bold;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+}
+
+option:disabled {
+    color: black;
+}
+
+.button-margin-left {
+    margin-left: 10px;
+}
+
+.gwt-TextBox-width {
+    width: 455px;
+}
+
+.gwt-TextBox-display-rows {
+    width: 20px;
+    margin: 5px;
+}

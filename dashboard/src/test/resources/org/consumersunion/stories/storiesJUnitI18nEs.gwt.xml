@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <!-- Inherit our applications main module.                      -->
+    <inherits name='org.consumersunion.stories.dashboard.StoriesMVP'/>
+    <inherits name="gwtquery.plugins.draggable.Draggable"/>
+    <inherits name="gwtquery.plugins.droppable.Droppable"/>
+    <inherits name="com.google.common.collect.Collect"/>
+
+    <set-property-fallback name="locale" value="es"/>
+
+    <!-- TODO: see RTTWO-205 -->
+    <servlet path='/service/authorization'
+             class="org.consumersunion.stories.server.api.gwt_rpc.RpcAuthorizationServiceImpl"/>
+    <servlet path='/service/profile' class="org.consumersunion.stories.server.api.gwt_rpc.RpcProfileServiceImpl"/>
+    <servlet path='/service/user' class="org.consumersunion.stories.server.api.gwt_rpc.RpcUserServiceImpl"/>
+    <servlet path='/service/collection' class="org.consumersunion.stories.server.api.gwt_rpc.RpcCollectionServiceImpl"/>
+    <servlet path='/service/organization'
+             class="org.consumersunion.stories.server.api.gwt_rpc.RpcOrganizationServiceImpl"/>
+    <servlet path='/service/entity' class="org.consumersunion.stories.server.api.gwt_rpc.RpcEntityServiceImpl"/>
+    <servlet path='/service/questionnaire'
+             class="org.consumersunion.stories.server.api.gwt_rpc.RpcQuestionnaireServiceImpl"/>
+
+    <source path='common/client'/>
+    <source path='common/shared'/>
+    <source path='dashboard/client'/>
+    <source path='dashboard/shared'/>
+</module>

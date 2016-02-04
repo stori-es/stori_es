@@ -1,0 +1,239 @@
+@charset "utf-8";
+/* CSS Document */
+
+#content {
+    background: url(../../mid-level/images/grant_article_bg.jpg) repeat-y 725px 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#content-footer {
+    clear: both;
+    float: left;
+    margin: 0 0 0 10px;
+    padding: 0 0 20px 0;
+    width: 694px;
+}
+
+.chart-navigation-container {
+    margin: 0 0 27px 0;
+    width: 694px;
+    float: left;
+    clear: both;
+}
+
+.chart-navigation-pricegrabber {
+    margin: 0;
+}
+
+.sub-tabbed-navigation {
+    width: 693px;
+    height: 20px;
+    background: #F1F4F9;
+    border-right: 1px solid #c3d2e0;
+    border-top: 1px solid #c3d2e0;
+    border-bottom: 1px solid #c3d2e0;
+    margin: 0;
+    padding: 0;
+}
+
+* html .sub-tabbed-navigation {
+    overflow: hidden;
+}
+
+* + html .sub-tabbed-navigation {
+    overflow: hidden;
+}
+
+.left-spacer {
+    width: 5px;
+    border: 1px solid #c3d2e0;
+    border-right: 0;
+    float: left;
+    background: #F1F4F9;
+    height: 20px;
+    position: relative;
+    top: -1px;
+}
+
+.sub-tabbed-navigation .navigation-item-on {
+    height: 19px;
+    margin: 0;
+    padding: 5px 5px 0 6px;
+    background: #fff url(../images/tab_sec_center.gif) repeat-x 0 -1px;
+    border-top: 1px solid #c3d2e0;
+    float: left;
+    font: bold 12px Arial, Helvetica, sans-serif;
+    border-bottom: none;
+    position: relative;
+    top: -3px;
+}
+
+.sub-tabbed-navigation .navigation-item {
+    border-top: 1px solid #c3d2e0;
+    border-bottom: 1px solid #c3d2e0;
+    float: left;
+    height: 17px;
+    font: bold 12px Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 3px 20px 0 20px;
+    background: #F1F4F9;
+    position: relative;
+    top: -1px;
+}
+
+.sub-tabbed-navigation .off {
+    color: #bbb;
+}
+
+.secondary-navigation-products .off {
+    color: #bbb;
+    font-weight: normal;
+}
+
+.separator-on-left {
+    float: left;
+    position: relative;
+    top: -3px;
+    width: 12px;
+}
+
+.separator-on-right {
+    float: left;
+    position: relative;
+    top: -3px;
+    width: 12px;
+}
+
+.sub-tabbed-navigation .separator {
+    border-top: 1px solid #c3d2e0;
+    border-left: 1px solid #c3d2e0;
+    border-bottom: 1px solid #c3d2e0;
+    height: 20px;
+    float: left;
+    width: 1px;
+    position: relative;
+    top: -1px;
+    background: #fff;
+}
+
+.sub-tabbed-navigation .separator-last {
+    border-left: 1px solid #c3d2e0;
+    margin-top: 2px;
+    height: 21px;
+    float: left;
+    width: 1px;
+}
+
+.sub-tabbed-navigation a:link {
+    text-decoration: none;
+    color: #176FCC;
+    padding-top: 3px;
+    font: bold 12px Arial, Helvetica, sans-serif;
+}
+
+.sub-tabbed-navigation a:visited {
+    text-decoration: none;
+    color: #176FCC;
+    padding-top: 3px;
+    font: bold 12px Arial, Helvetica, sans-serif;
+}
+
+.sub-tabbed-navigation a:hover {
+    text-decoration: underline;
+    color: #176FCC;
+    padding-top: 3px;
+    font: bold 12px Arial, Helvetica, sans-serif;
+}
+
+.sub-tabbed-navigation a:active {
+    text-decoration: underline;
+    color: #176FCC;
+    padding-top: 3px;
+    font: bold 12px Arial, Helvetica, sans-serif;
+}
+
+.sub-tabbed-navigation .number-of-sellers {
+    font: normal 11px Arial, Helvetica, sans-serif;
+    color: #666;
+}
+
+.sub-tabbed-navigation .pricegrabber-navigation-border {
+    border-bottom: 1px solid #62A744;
+}
+
+.pricegrabber-navigation-border {
+    border-bottom: 1px solid #62A744;
+}
+
+.sub-tabbed-navigation .pricegrabber-navigation-border-top {
+    border-top: 1px solid #62A744;
+}
+
+.chart-navigation-container .secondary-navigation-products {
+    background: url(../images/secondary_nav_sub_bkg.gif) repeat-x;
+    width: 687px;
+    height: 33px;
+    border-right: 1px solid #c3d2e0;
+    border-left: 1px solid #c3d2e0;
+    border-bottom: 1px solid #c3d2e0;
+    font: bold 11px Arial, Helvetica, sans-serif;
+    color: #091C30;
+    float: left;
+    clear: both;
+    position: relative;
+    top: -4px;
+    padding: 0 0 0 5px;
+    margin: 0;
+}
+
+.chart-navigation-container .pricegrabber-navigation {
+    height: 67px;
+    border-right: 1px solid #62A744;
+    border-left: 1px solid #62A744;
+    border-bottom: 1px solid #c3d2e0;
+    background-position: bottom right;
+}
+
+.chart-navigation-container .pricegrabber-navigation img {
+    float: right;
+    border: none;
+    padding: 12px;
+}
+
+* + html .chart-navigation-container .secondary-navigation-products {
+    top: 0;
+}
+
+* html .chart-navigation-container .secondary-navigation-products {
+    top: 0;
+}
+
+.chart-navigation-container .secondary-navigation-products .nav-item {
+    padding: 10px 0 0 20px;
+    float: left;
+}
+
+.chart-navigation-container .secondary-navigation-products .nav-item a:link {
+    font: normal 11px Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    color: #176FCC;
+}
+
+.chart-navigation-container .secondary-navigation-products .nav-item a:visited {
+    font: normal 11px Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    color: #176FCC;
+}
+
+.chart-navigation-container .secondary-navigation-products .nav-item a:hover {
+    font: normal 11px Arial, Helvetica, sans-serif;
+    text-decoration: underline;
+    color: #176FCC;
+}
+
+.chart-navigation-container .secondary-navigation-products .nav-item a:active {
+    font: normal 11px Arial, Helvetica, sans-serif;
+    text-decoration: underline;
+    color: #176FCC;
+}

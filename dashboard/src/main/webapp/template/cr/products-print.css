@@ -1,0 +1,30 @@
+@charset "utf-8";
+/* CSS Document */
+* {
+    overflow: visible !important;
+}
+
+#sign-in-wrap, #subscribe-wrap, #typeahead, #AZ-link, #main_nav, #main-sub-nav, #homepage-footer, #homepage-footer-container, .breadcrumb, #main_nav, #content-navigation, .sub-tabs, .overview-title {
+    display: none;
+}
+
+#t-header * {
+    float: none !important;
+}
+
+#header-content, #t-header {
+    /*height:80px; */
+}
+
+#static_ratings, #article_rightLarge_column {
+    float: none !important;
+}
+
+#cr-logo {
+    margin-left: 10px;
+}
+
+.find-ratings-wrap {
+    display: none;
+}
+

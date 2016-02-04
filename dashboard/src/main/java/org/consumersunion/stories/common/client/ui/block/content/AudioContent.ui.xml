@@ -1,0 +1,13 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder' xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style>
+        .description {
+            font-size: 90%;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:Label ui:field="title"/>
+        <iframe ui:field="audio" width="600" height="120" scrolling="no" frameborder="no"/>
+        <g:HTML ui:field="description" styleName="{style.description}"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

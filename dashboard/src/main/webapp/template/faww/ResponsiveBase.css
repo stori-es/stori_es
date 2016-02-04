@@ -1,0 +1,514 @@
+/*  Less Framework 4
+    http://lessframework.com
+    by Joni Korpi
+    License: http://opensource.org/licenses/mit-license.php */
+
+/*      Default Layout: 992px. 
+        Gutters: 24px.
+        Outer margins: 48px.
+        Leftover space for scrollbars @1024px: 32px.
+-------------------------------------------------------------------------------
+cols    1     2      3      4      5      6      7      8      9      10
+px      68    160    252    344    436    528    620    712    804    896    */
+
+div.responsive {
+	color: rgb(60,60,60);
+    -webkit-text-size-adjust: 100%; /* Stops Mobile Safari from auto-adjusting font-sizes */
+    font-family: Verdana, Helvetica, Arial, sans-serif; 
+    font-size: 1em;
+	width: 896px;
+	margin: auto;
+}
+
+.clearfix:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+     }
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+/* close commented backslash hack */
+
+.resp-debug div.responsive {
+    border: 2px dotted green!important;
+    border-radius: 0!important;
+}
+
+/* Reset */
+div.responsive label {
+    white-space: normal;
+}
+
+div.responsive legend {
+    float: none;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+div.responsive textarea, 
+div.responsive input,
+div.responsive select,
+div.responsive option {
+    font-family: inherit;
+    font-size: inherit;
+    vertical-align: top;
+}
+
+div.responsive a:visited,
+div.responsive a:link {
+    color: #3596D4;
+}
+
+div.responsive a.btn:link {
+    color: #ffffff;
+}
+
+div.responsive pre, div.custom-wysiwyg-text p {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+/* ******************************************************************************** */
+/*  Shared Page Components                                                          */
+/* ******************************************************************************** */
+
+/* this is needed to prevent the input button from shifting to the right in the mobile view on some of the mobile devices */
+div.responsive input.default-submit-hack {
+    display: block;
+}
+
+div.responsive .input-container ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+div.responsive a.step-button {
+    display: inline-block;
+    text-decoration: none;
+    zoom: 1;
+}
+
+div.responsive a.step-button,
+div.responsive button.step-button {
+    background-color: #E3E3E3;
+    border: 1px solid #DBDBDB;
+    cursor: pointer;
+    padding: 10px 7px;
+    min-width: 132px;
+    border-radius: 3px; /*CSS3, the box won't curve in older browsers*/
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    
+    /* background */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eaeaea', endColorstr='#dbdbdb');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#eaeaea', endColorstr='#dbdbdb')";
+    background-image: -ms-linear-gradient(top, #eaeaea, #dbdbdb);
+    background-image: -webkit-linear-gradient(top, #eaeaea, #dbdbdb);
+    background-image: -moz-linear-gradient(top, #eaeaea, #dbdbdb);
+    background-image: -o-linear-gradient(top, #eaeaea, #dbdbdb);
+    background-image: linear-gradient(top, #eaeaea, #dbdbdb);
+    
+    color: #646464;
+    overflow: visible;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+div.responsive a.step-button:hover,
+div.responsive button.step-button:hover {
+    /* background */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dbdbdb', endColorstr='#eaeaea');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#dbdbdb', endColorstr='#eaeaea')";
+    background-image: -ms-linear-gradient(top, #dbdbdb, #eaeaea);
+    background-image: -webkit-linear-gradient(top, #dbdbdb, #eaeaea);
+    background-image: -moz-linear-gradient(top, #dbdbdb, #eaeaea);
+    background-image: -o-linear-gradient(top, #dbdbdb, #eaeaea);
+    background-image: linear-gradient(top, #dbdbdb, #eaeaea);
+}
+
+div.responsive a.step-button:active,
+div.responsive button.step-button:active {
+    filter: none;
+    background: #a3a3a3;
+    border-color: #a3a3a3;
+    color: #ffffff;
+}
+
+div.responsive button.previous-step,
+div.responsive button.cancel-step {
+    float: left;
+}
+
+div.responsive a.next-step,
+div.responsive button.next-step {
+    border: 1px solid #a7d08e;
+    background-color: #d2e5c5;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2e5c5', endColorstr='#b8d39c');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#d2e5c5', endColorstr='#b8d39c')";
+    background-image: -ms-linear-gradient(top, #d2e5c5, #b8d39c);
+    background-image: -webkit-linear-gradient(top, #d2e5c5, #b8d39c);
+    background-image: -moz-linear-gradient(top, #d2e5c5, #b8d39c);
+    background-image: -o-linear-gradient(top, #d2e5c5, #b8d39c);
+    background-image: linear-gradient(top, #d2e5c5, #b8d39c);
+    color: #2f6601;
+}
+
+div.responsive a.next-step,
+div.responsive button.next-step,
+div.responsive button.finish-step {
+    float: right;
+}
+
+div.responsive a.next-step:hover,
+div.responsive button.next-step:hover {
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b8d39c', endColorstr='#d2e5c5');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#b8d39c', endColorstr='#d2e5c5')";
+    background-image: -ms-linear-gradient(top, #b8d39c, #d2e5c5);
+    background-image: -webkit-linear-gradient(top, #b8d39c, #d2e5c5);
+    background-image: -moz-linear-gradient(top, #b8d39c, #d2e5c5);
+    background-image: -o-linear-gradient(top, #b8d39c, #d2e5c5);
+    background-image: linear-gradient(top, #b8d39c, #d2e5c5);
+}
+
+div.responsive a.next-step:active,
+div.responsive button.next-step:active {
+    background: #649140;
+    border-color: #649140;
+}
+
+div.responsive button.next-step[disabled="disabled"] {
+    background-color: #ebebeb;
+    border: 1px solid #e2e2e2;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efefef', endColorstr='#e6e6e6');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#e6e6e6')";
+    background-image: -ms-linear-gradient(top, #efefef, #e6e6e6);
+    background-image: -webkit-linear-gradient(top, #efefef, #e6e6e6);
+    background-image: -moz-linear-gradient(top, #efefef, #e6e6e6);
+    background-image: -o-linear-gradient(top, #efefef, #e6e6e6);
+    background-image: linear-gradient(top, #efefef, #e6e6e6);
+    color: #c7c7c7;
+}
+
+div.responsive a.secondary-step,
+div.responsive button.secondary-step {
+    border: 1px solid #c9d8e2;
+    background-color: #e5eff4;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#bbdbf0');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#bbdbf0')";
+    background-image: -ms-linear-gradient(top, #ffffff, #bbdbf0);
+    background-image: -webkit-linear-gradient(top, #ffffff, #bbdbf0);
+    background-image: -moz-linear-gradient(top, #ffffff, #bbdbf0);
+    background-image: -o-linear-gradient(top, #ffffff, #bbdbf0);
+    background-image: linear-gradient(top, #ffffff, #bbdbf0);
+    color: #0e7ed1;
+    float: right;
+    margin-right: 20px;
+}
+
+div.responsive button.secondary-step:hover {
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bbdbf0', endColorstr='#ffffff');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#bbdbf0', endColorstr='#ffffff')";
+    background-image: -ms-linear-gradient(top, #bbdbf0, #ffffff);
+    background-image: -webkit-linear-gradient(top, #bbdbf0, #ffffff);
+    background-image: -moz-linear-gradient(top, #bbdbf0, #ffffff);
+    background-image: -o-linear-gradient(top, #bbdbf0, #ffffff);
+    background-image: linear-gradient(top, #bbdbf0, #ffffff);
+}
+
+div.responsive button.secondary-step:active {
+    background: #017acb;
+    border-color: #017acb;
+}
+
+div.responsive button.action-button {
+    border: 1px solid #b5cbd9;
+    background-color: #d4e8f3;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#bcdbf0');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#bcdbf0')";
+    background-image: -ms-linear-gradient(top, #ffffff, #bcdbf0);
+    background-image: -webkit-linear-gradient(top, #ffffff, #bcdbf0);
+    background-image: -moz-linear-gradient(top, #ffffff, #bcdbf0);
+    background-image: -o-linear-gradient(top, #ffffff, #bcdbf0);
+    background-image: linear-gradient(top, #ffffff, #bcdbf0);
+    color: #0275ce;
+}
+
+div.responsive button.cancel-step {
+	overflow:visible;
+    border:0;
+    min-width: inherit;
+    color:#3596D4;
+    filter: inherit;
+    background:transparent;
+    font:inherit;
+    line-height:normal;
+    text-decoration:underline; 
+    cursor:pointer; 
+    -moz-user-select:text; 
+}
+
+div.responsive button.cancel-step:hover,
+div.responsive button.cancel-step:focus,
+div.responsive button.cancel-step:active {
+    color:inherit;
+    filter: inherit;
+    -ms-filter: inherit;
+    background-image: inherit;
+}
+
+div.responsive input[type="text"], 
+div.responsive input[type="number"],
+div.responsive input[type="password"],
+div.responsive textarea {
+    border: 1px solid #d9d6cf;
+    padding: 5px 7px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: inset 3px 3px 3px #f0f0f0;
+    -moz-box-shadow: inset 3px 3px 3px #f0f0f0;
+    box-shadow: inset 3px 3px 3px #f0f0f0;
+}
+
+div.responsive div.form-content {
+    /*William: Was- margin-bottom: 15px; */
+    margin-right: 10px;
+}
+
+div.responsive .hidden {
+    display: none;
+}
+
+/* *********************************************************** */
+/* ERROR message/indicator related CSS                         */ 
+/* *********************************************************** */
+div.responsive span.field-required {
+    display: inline-block;
+    zoom: 1;
+    height: 9px;
+    width: 9px;
+    background-image: url('../../images/required.png');
+    background-repeat: no-repeat;
+    vertical-align: top;
+    margin-top: 2px;
+}
+
+div.responsive span.header-warning-message {
+    display: inline-block;
+    zoom: 1;
+    height: 16px;
+    width: 16px;
+    background-image: url('../../images/warning.gif');
+    background-repeat: no-repeat;
+    vertical-align: top;
+    margin-top: 2px;
+}
+
+div.responsive span.header-info-message {
+    display: inline-block;
+    zoom: 1;
+    height: 16px;
+    width: 16px;
+    background-image: url('../../images/info.gif');
+    background-repeat: no-repeat;
+    vertical-align: top;
+    margin-top: 2px;
+}
+
+div.responsive div.ErrorMessage {
+  margin-bottom: 4px;
+}
+/* Page level errors */
+div.responsive div.ErrorMessage.page-error {
+    border: 1px solid #B94A49;
+    background-color: #feeaeb;
+    padding: 3px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    width: 886px;
+    margin-top: 4px;
+}
+
+/* Page level error indicator */
+div.responsive div.ErrorMessage.page-error>span.field-error-indicator {
+    height: 23px;
+    width: 18px;
+    background-image: url('../../images/page_error_icon.png');
+    vertical-align: top;
+    background-repeat: no-repeat;
+    display: inline-block;
+    zoom: 1;
+}
+
+/* Page level error text */
+div.responsive div.ErrorMessage.page-error>span.field-error-text {
+    border: 1px solid #e0b1b2;
+    background-color: #FFFFFF;
+    color: #990000;
+    padding: 6px;
+    -moz-border-radius: 0px 3px 3px 0px;
+    -webkit-border-radius: 0px 3px 3px 0px;
+    border-radius: 0px 3px 3px 0px;
+    font-size: 1em;
+    display: inline-block;
+    zoom: 1;
+    width: 840px;
+}
+
+/* Field error text */
+div.responsive span.field-error-text {
+  color: #990000;
+  font-size: 1em;
+
+}
+  
+div.responsive div.form-error {
+    border: 1px solid #B94A49;
+    background-color: #feeaeb;
+    padding: 3px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    margin-top: 4px;
+}
+
+/* ********************************************************** */
+/* Media Query Overrides                                      */
+/* ********************************************************** */
+
+/*      Tablet Layout: 768px.
+        Gutters: 24px.
+        Outer margins: 28px.
+        Inherits styles from: Default Layout.
+-----------------------------------------------------------------
+cols    1     2      3      4      5      6      7      8
+px      68    160    252    344    436    528    620    712    */
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    
+    .mobile div.responsive {
+        width: 712px;
+    }
+  
+    .resp-debug.mobile  div.responsive{
+      border: 2px dotted blue!important;
+    }
+
+    
+    /* Page level errors */
+    .mobile div.responsive div.ErrorMessage.page-error {
+      width: 702px;
+    }
+    
+    /* Page level error text */
+    .mobile div.responsive div.ErrorMessage.page-error>span.field-error-text {
+        width: 656px;
+    }
+}
+
+
+
+/*      Mobile Layout: 320px.
+        Gutters: 24px.
+        Outer margins: 34px.
+        Inherits styles from: Default Layout.
+---------------------------------------------
+cols    1     2      3
+px      68    160    252    */
+
+@media only screen and (max-width: 767px) {
+    
+    .mobile div.responsive {
+        width: 252px;
+    }
+ 
+    .resp-debug.mobile div.responsive {
+        border: 2px dotted red!important;
+    }
+    
+    /* Page level errors */
+    .mobile div.responsive div.ErrorMessage.page-error {
+      width: 242px;
+    }
+    
+    /* Page level error text */
+    .mobile div.responsive div.ErrorMessage.page-error>span.field-error-text {
+        width: 196px;
+    }
+    
+    .mobile div.responsive button.step-button {
+        float: none;
+    }
+    
+    .mobile div.responsive button.secondary-step {
+        margin-right: 0;
+    }
+}
+
+
+
+/*      Wide Mobile Layout: 480px.
+        Gutters: 24px.
+        Outer margins: 22px.
+        Inherits styles from: Default Layout, Mobile Layout.
+------------------------------------------------------------
+cols    1     2      3      4      5
+px      68    160    252    344    436    */
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+    
+    .mobile div.responsive {
+        width: 436px;
+    }
+
+    .resp-debug.mobile div.responsive {
+      border: 2px dotted yellow!important;
+    }
+    
+    /* Page level errors */
+    .mobile div.responsive div.ErrorMessage.page-error {
+      width: 426px;
+    }
+    
+    /* Page level error text */
+    .mobile div.responsive div.ErrorMessage.page-error>span.field-error-text {
+        width: 380px;
+    }
+    
+    .mobile div.responsive button.next-step {
+        float: right;
+    }
+}
+
+/*****************************/
+/* Debug and reminder styles */
+/*****************************/
+
+.resp-debug .debug1 div.responsive{
+  border: 1px dashed red!important;
+}
+.resp-debug .debug2 div.responsive{
+  border: 1px dashed green!important;
+}
+.resp-debug .debug3  div.responsive{
+  border: 1px dashed blue!important;
+}
+.resp-debug .debug4  div.responsive{
+  border: 1px dashed orange!important;
+}
+.resp-debug .debug5  div.responsive{
+  border: 1px dashed pink!important;
+}
+
+.resp-debug div.responsive table.todo-remove-table, 
+.resp-debug div.responsive .todo {
+  border: 1px dotted red!important;
+  background-image: url('../../images/burninatingInProgress.png');
+}

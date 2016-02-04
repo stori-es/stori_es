@@ -1,0 +1,23 @@
+/* the 'button' makes the selection more specific to override the GWT style, which is often loaded dynamically after
+ * our style and therefore cannot be overriden by the normal load precedence */
+.cu-collectionSubmit > button {
+    background: #003;
+    color: white;
+    border-radius: 0;
+    border: none;
+    text-transform: uppercase;
+    padding: 8px 40px;
+}
+
+.cu-collectionSubmit {
+    text-align: center;
+}
+
+.cu-collectionSurveyTitle {
+    display: none;
+}
+
+#questionnaireWidget {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

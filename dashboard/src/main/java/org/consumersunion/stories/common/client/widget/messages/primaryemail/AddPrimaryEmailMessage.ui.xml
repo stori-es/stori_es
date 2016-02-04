@@ -1,0 +1,52 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+    <ui:with field="resources" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+
+    <ui:style gss="true">
+        .hint {
+            color: #8E8E8E;
+        }
+
+        .form {
+            margin-left: 45px;
+            margin-bottom: 16px;
+        }
+
+        .inputEmail {
+            width: 320px;
+            padding: 5px 8px;
+            box-sizing: border-box;
+        }
+
+        .error {
+            width: 320px;
+            line-height: 26px;
+
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: -4px;
+            margin-bottom: 0;
+
+        }
+    </ui:style>
+
+    <g:HTMLPanel ui:field="main"
+                 styleName="{resources.messagesStyle.interactiveMain} {resources.messagesStyle.interactiveMainBlock}">
+        <h3>Add an email address</h3>
+        <div class="{style.hint}">
+            <em>You will be able to use this email address to sign in to your account.</em>
+        </div>
+        <div class="{style.form}">
+            <div class="{resources.generalStyleCss.error} {style.error}" ui:field="errorWrapper">
+                <i class="icon-exclamation-sign"/>
+                <span ui:field="errorText"/>
+            </div>
+            <input type="text" class="{style.inputEmail}" ui:field="primaryEmail"/>
+            <button class="{resources.messagesStyle.button} {resources.messagesStyle.confirmButton}"
+                    ui:field="confirm">Confirm primary email address
+            </button>
+        </div>
+        <div class="{resources.messagesStyle.progress}" ui:field="progress"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

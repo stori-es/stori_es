@@ -1,0 +1,172 @@
+#content-body {
+    margin: 0 !important;
+    padding: 0 36px 0 10px;
+    width: 694px !important;
+    float: left;
+    clear: both;
+}
+
+#content-right-rail {
+    width: 180px;
+    float: left;
+    margin: 20px 0 0 0;
+}
+
+#footer {
+    clear: both;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.shopping-behind-ratings {
+    float: left;
+    clear: both;
+    width: 180px;
+    margin: 0 0 20px 0;
+    padding: 0 0 20px 0;
+    background: url(branding_box_sm_btm.gif) no-repeat bottom left;
+}
+
+.shopping-behind-ratings a:link {
+    text-decoration: none;
+    color: #176fcc;
+}
+
+.shopping-behind-ratings a:visited {
+    text-decoration: none;
+    color: #176fcc;
+}
+
+.shopping-behind-ratings a:hover {
+    text-decoration: underline;
+    color: #176fcc;
+}
+
+.shopping-behind-ratings a:active {
+    text-decoration: underline;
+    color: #176fcc;
+}
+
+.shopping-behind-ratings .mainhead {
+    background: url(branding_box_sm_top.gif) no-repeat top left;
+    font: bold 14px/16px Arial, Helvetica, sans-serif;
+    color: #091c30;
+    margin: 0;
+    padding: 12px 0 0 12px;
+    width: 168px;
+    float: left;
+    clear: both;
+}
+
+.shopping-behind-ratings dl dd {
+    background: url(branding_box_sm_mid.gif) repeat-y;
+    width: 160px;
+    margin: 0;
+    padding: 0;
+}
+
+.shopping-behind-ratings .video {
+    padding: 5px 18px 5px 13px;
+    margin: 0;
+    float: left;
+    clear: both;
+    width: 149px;
+    background: url(branding_box_sm_mid.gif) repeat-y;
+    position: relative;
+}
+
+.shopping-behind-ratings .video img.thumbnail {
+    position: relative;
+    top: 0;
+    left: 0
+}
+
+.shopping-behind-ratings .video img.play-button {
+    position: absolute;
+    top: 55px;
+    right: 30px
+}
+
+.shopping-behind-ratings .subhead {
+    margin: 0;
+    padding: 0 14px;
+    width: 152px;
+    font: 11px/14px Arial, Helvetica, sans-serif;
+    color: #000;
+    float: left;
+    clear: both;
+    background: url(branding_box_sm_mid.gif) repeat-y;
+}
+
+.shopping-behind-ratings .divider {
+    margin: 0;
+    padding: 10px 14px 6px 14px;
+    float: left;
+    clear: both;
+    width: 149px;
+    background: url(branding_box_sm_mid.gif) repeat-y;
+}
+
+.shopping-behind-ratings .divider .line {
+    margin: 0;
+    padding: 0;
+    width: 149px;
+    background: #fff;
+    border-top: 1px solid #e5e6e6;
+    float: left;
+    clear: both;
+    height: 1px;
+    line-height: 1px;
+    width: 149px;
+}
+
+.shopping-behind-ratings .bullet-list {
+    margin: 0;
+    padding: 0px 12px 0 24px;
+    font: normal 11px/18px Arial, Helvetica, sans-serif;
+    color: #000;
+    background: url(../images/squarebullet.gif) no-repeat left;
+    background-position: 14px 7px;
+    float: left;
+    clear: both;
+    width: 144px;
+}
+
+.shopping-behind-ratings .bullet-list-arrow {
+    margin: 0;
+    padding: 0px 12px 0 24px;
+    font: bold 11px/18px Arial, Helvetica, sans-serif;
+    color: #000;
+    background: url(../images/cro_more_arrows.gif) no-repeat left;
+    background-position: 14px 6px;
+    float: left;
+    clear: both;
+    width: 144px;
+}
+
+.shopping-behind-ratings .bullet-list-arrow a:link {
+    font-weight: bold;
+}
+
+.shopping-behind-ratings .bullet-list-arrow a:visited {
+    font-weight: bold;
+}
+
+.shopping-behind-ratings .bullet-list-arrow a:hover {
+    font-weight: bold;
+}
+
+.shopping-behind-ratings .bullet-list-arrow a:active {
+    font-weight: bold;
+}
+
+.shopping-behind-ratings .bullet-list-title {
+    margin: 0;
+    padding: 7px 12px 0px 14px;
+    font: 11px/18px Arial, Helvetica, sans-serif;
+    color: #000;
+    float: left;
+    clear: both;
+    width: 154px;
+}

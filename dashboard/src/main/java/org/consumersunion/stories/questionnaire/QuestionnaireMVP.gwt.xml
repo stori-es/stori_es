@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="questionnairemvp">
+    <inherits name='com.google.gwt.inject.Inject'/>
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.google.gwt.user.cellview.CellView'/>
+    <inherits name='com.google.gwt.logging.Logging'/>
+    <inherits name='com.google.gwt.resources.Resources'/>
+    <inherits name='com.google.gwt.editor.Editor'/>
+    <inherits name='com.google.gwt.text.Text'/>
+    <inherits name="com.google.common.base.Base"/>
+    <inherits name="com.google.common.collect.Collect"/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
+
+    <inherits name='com.google.gwt.query.Query'/>
+    <inherits name='com.google.gwt.maps.Maps'/>
+    <inherits name="org.consumersunion.stories.common.Common"/>
+    <inherits name="com.gwtplatform.mvp.MvpWithEntryPoint"/>
+
+    <source path='client'/>
+
+    <add-linker name="xsiframe"/>
+
+    <extend-configuration-property name="gin.ginjector.modules"
+                                   value="org.consumersunion.stories.questionnaire.client.gin.ClientModule"/>
+
+    <!-- Logging Configuration -->
+    <set-property name="gwt.logging.enabled" value="TRUE"/>
+    <set-property name="gwt.logging.logLevel" value="SEVERE"/>
+    <set-property name="gwt.logging.consoleHandler" value="ENABLED"/>
+    <set-property name="gwt.logging.developmentModeHandler" value="ENABLED"/>
+    <set-property name="gwt.logging.hasWidgetsHandler" value="DISABLED"/>
+    <set-property name="gwt.logging.systemHandler" value="ENABLED"/>
+    <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED"/>
+</module>

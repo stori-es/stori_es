@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="stories-common" basedir="."
+         xmlns:if="ant:if"
+         xmlns:unless="ant:unless"
+         xmlns:rsel="antlib:org.apache.tools.ant.types.resources.selectors"
+         xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+    <property environment="env"/>
+    <condition property="JDBC_URL" value="${env.JDBC_URL}" else="">
+        <isset property="env.JDBC_URL"/>
+    </condition>
+    <condition property="PARAM1" value="${env.PARAM1}" else="">
+        <isset property="env.PARAM1"/>
+    </condition>
+    <condition property="PARAM2" value="${env.PARAM2}" else="">
+        <isset property="env.PARAM2"/>
+    </condition>
+    <condition property="SMTP_FROM" value="${env.SMTP_FROM}" else="">
+        <isset property="env.SMTP_FROM"/>
+    </condition>
+
+    <path id="maven-ant-tasks.classpath" path="ant/maven-ant-tasks-2.1.3.jar"/>
+    <path id="antlib.classpath">
+        <fileset dir="ant/" includes="*.jar"/>
+    </path>
+
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+             uri="antlib:org.apache.maven.artifact.ant"
+             classpathref="maven-ant-tasks.classpath"/>
+
+    <path id="dashboard.gwt">
+        <file file="lib/closure-stylesheets-rebased.jar"/>
+        <pathelement location="dashboard/target/classes"/>
+        <pathelement location="shared/src/main/java"/>
+        <pathelement location="shared/src/main/resources"/>
+        <pathelement location="dashboard/src/main/java"/>
+        <pathelement location="dashboard/src/main/resources"/>
+        <pathelement location="conf"/>
+    </path>
+
+    <path id="dashboard.gwt.tests">
+        <path refid="dashboard.gwt"/>
+        <pathelement location="dashboard/target/classes"/>
+        <pathelement location="shared/src/test/java"/>
+        <pathelement location="shared/src/test/resources"/>
+        <pathelement location="dashboard/src/test/java"/>
+        <pathelement location="dashboard/src/test/resources"/>
+    </path>
+
+    <macrodef name="mvn-init">
+        <attribute name="pom"/>
+        <sequential>
+            <sequential unless:set="mvn-init.@{pom}">
+                <property name="mvn-init.@{pom}" value="true"/>
+                <condition property="maven.repo.local" value="${env.maven.repo.local}" else="libs/">
+                    <isset property="env.maven.repo.local"/>
+                </condition>
+                <echo>maven.repo.local=${maven.repo.local}</echo>
+                <artifact:localRepository id="local.repository" path="${maven.repo.local}"/>
+
+                <copy file="lib/droppable-plugin-1.0.9.jar"
+                      tofile="${maven.repo.local}/com/googlecode/gwtquery/plugins/droppable-plugin/1.0.9-SNAPSHOT/droppable-plugin-1.0.9-SNAPSHOT.jar"
+                      failonerror="false"/>
+                <copy file="lib/gwt-xdm-0.1.0.jar"
+                      tofile="${maven.repo.local}/de/devbliss/gwt/xdm/core/0.1.0/core-0.1.0.jar"
+                      failonerror="false"/>
+                <copy file="lib/restygwt-1.2-SEC.19.jar"
+                      tofile="${maven.repo.local}/org/fusesource/restygwt/restygwt/1.2-SEC.19-SNAPSHOT/restygwt-1.2-SEC.19-SNAPSHOT.jar"
+                      failonerror="false"/>
+
+                <artifact:pom file="@{pom}" id="maven.project">
+                    <profile id="ant" active="true"/>
+                </artifact:pom>
+                <artifact:dependencies pathId="compile-classpath" filesetId="compile.fileset" useScope="compile">
+                    <pom refid="maven.project"/>
+                    <localRepository refid="local.repository"/>
+                </artifact:dependencies>
+                <artifact:dependencies pathId="test-classpath" filesetId="test.fileset" useScope="test">
+                    <pom refid="maven.project"/>
+                    <localRepository refid="local.repository"/>
+                </artifact:dependencies>
+                <artifact:dependencies pathId="runtime-classpath" filesetId="runtime.fileset" useScope="runtime">
+                    <pom refid="maven.project"/>
+                    <localRepository refid="local.repository"/>
+                </artifact:dependencies>
+
+                <artifact:pom file="shared/pom.xml" id="shared.maven.project"/>
+                <artifact:dependencies pathId="shared-compile-classpath" filesetId="shared-compile.fileset"
+                                       useScope="compile">
+                    <pom refid="shared.maven.project"/>
+                    <localRepository refid="local.repository"/>
+                </artifact:dependencies>
+                <artifact:dependencies pathId="shared-test-classpath" filesetId="shared-test.fileset" useScope="test">
+                    <pom refid="shared.maven.project"/>
+                    <localRepository refid="local.repository"/>
+                </artifact:dependencies>
+                <artifact:dependencies pathId="shared-runtime-classpath" filesetId="shared-runtime.fileset"
+                                       useScope="runtime">
+                    <pom refid="shared.maven.project"/>
+                    <localRepository refid="local.repository"/>
+                </artifact:dependencies>
+
+                <path id="compile.classpath">
+                    <path refid="compile-classpath"/>
+                    <path refid="shared-compile-classpath"/>
+                </path>
+                <path id="runtime.classpath">
+                    <path refid="runtime-classpath"/>
+                    <path refid="shared-runtime-classpath"/>
+                </path>
+                <path id="test.classpath">
+                    <file file="ant/ant.jar"/>
+                    <file file="ant/ant-launcher.jar"/>
+                    <path refid="test-classpath"/>
+                    <path refid="shared-test-classpath"/>
+                </path>
+            </sequential>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="mvn-compile">
+        <attribute name="module"/>
+        <sequential>
+            <mkdir dir="@{module}/target/classes/"/>
+            <javac destdir="@{module}/target/classes"
+                   excludes="**/super/**" encoding="utf-8"
+                   source="1.6" target="1.6" nowarn="true" debug="true" debuglevel="lines,vars,source">
+                <classpath refid="compile.classpath"/>
+                <src path="shared/src/main/java"/>
+                <src path="@{module}/src/main/java"/>
+            </javac>
+            <copy todir="@{module}/target/classes" failonerror="false">
+                <fileset dir="shared/src/main/resources"/>
+                <fileset dir="@{module}/src/main/resources"/>
+            </copy>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="mvn-test-compile">
+        <attribute name="module"/>
+        <sequential>
+            <mkdir dir="@{module}/target/test-classes"/>
+            <javac srcdir="@{module}/src/test/java" includes="**" encoding="utf-8" source="1.6" target="1.6"
+                   nowarn="true"
+                   destdir="@{module}/target/test-classes" debug="true" debuglevel="lines,vars,source">
+                <classpath>
+                    <pathelement location="@{module}/target/classes"/>
+                    <path refid="test.classpath"/>
+                </classpath>
+            </javac>
+            <copy todir="@{module}/target/test-classes" failonerror="false">
+                <fileset dir="@{module}/src/test/resources"/>
+            </copy>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="package-war">
+        <attribute name="module"/>
+        <sequential>
+            <mkdir dir="@{module}/target/war"/>
+            <copy todir="@{module}/target/war">
+                <fileset dir="@{module}/src/main/webapp"/>
+            </copy>
+            <copy todir="@{module}/target/war/WEB-INF/classes">
+                <fileset dir="@{module}/target/classes"/>
+            </copy>
+            <copy todir="@{module}/target/war/WEB-INF/lib" flatten="true">
+                <path refid="runtime.classpath"/>
+            </copy>
+            <delete>
+                <fileset dir="@{module}/target/war/WEB-INF/lib" includes="shared*.jar"/>
+            </delete>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="create-war">
+        <attribute name="module"/>
+        <attribute name="output"/>
+        <sequential>
+            <exec executable="git" output="@{module}/target/war/git-version-hash">
+                <arg value="rev-parse"/>
+                <arg value="HEAD"/>
+            </exec>
+            <zip destfile="tmp/@{output}" basedir="@{module}/target/war"/>
+        </sequential>
+    </macrodef>
+</project>

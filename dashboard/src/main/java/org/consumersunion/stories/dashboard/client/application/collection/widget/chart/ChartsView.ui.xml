@@ -1,0 +1,24 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+
+            text-align: center;
+            margin-top: 18px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <div class="{style.title}">STORIES RECEIVED</div>
+        <g:SimplePanel ui:field="timeline"/>
+        <div class="{style.title}">TIME DISTRIBUTION</div>
+        <g:SimplePanel ui:field="timeDistribution"/>
+        <div class="{style.title}">GEOGRAPHIC DISTRIBUTION</div>
+        <g:SimplePanel ui:field="map"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

@@ -1,0 +1,49 @@
+/*---:[ copyright notice ]:----------------------------------------------------
+
+The CSS, JavaScript, and images contained in Thesis are all released under the
+Thesis Proprietary Use License and cannot be redistributed. Doing so will
+result in termination of membership with DIYthemes.
+
+The custom.css file and any images in the custom images folder do NOT fall
+under the Thesis Proprietary Use License. The end user determines the license
+that should be applied here (if applicable).
+
+The jscolor color picker script and associated images do NOT fall under the
+Thesis Proprietary Use License and are free for use as determined by the GNU
+Lesser GPL.
+
+For more information on Thesis licensing and the Terms of Service, please see
+the terms_of_service.txt file included in this package.
+
+-----------------------------------------------------------------------------*/
+
+/*---:[ all versions of IE ]:---*/
+.menu {
+    width: 100%;
+}
+
+input.form_submit {
+    width: auto;
+    overflow: visible;
+}
+
+/*---:[ IE 6 styles ]:---*/
+.menu a:hover {
+    height: auto;
+}
+
+.menu table td {
+    font-size: 10px;
+}
+
+#content, .sidebar {
+    overflow: hidden;
+}
+
+dl#comment_list dd {
+    border-bottom: 1px dotted #bbb;
+}
+
+dl#comment_list dl.children dd {
+    border-bottom: 0
+}

@@ -1,0 +1,677 @@
+a:link {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+a:visited {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+a:hover {
+    color: #176fcc;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+a:active {
+    color: #176fcc;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+/* Style to nudge PriceGrabber styled table up */
+
+.chart-content-pricegrabber {
+    position: relative;
+    top: -4px;
+}
+
+.chart-content .why-shop-here {
+    width: 668px;
+    float: left;
+    clear: both;
+    margin: 0;
+    padding: 12px;
+    border-left: 1px solid #62A744;
+    border-right: 1px solid #62A744;
+    border-bottom: 1px solid #C3D2E0;
+    border-top: none;
+    font: normal 11px/14px Arial, Helvetica, sans-serif;
+}
+
+.chart-content table.price-and-shop {
+    width: 694px;
+    float: left;
+    clear: both;
+    margin: 0 0 30px 0;
+    padding: 0;
+    border: 1px solid #C3D2E0;
+    border-collapse: separate;
+}
+
+.chart-content table.pricegrabber {
+    border: 1px solid #62A744;
+    border-top: none;
+}
+
+.chart-content table.price-and-shop th {
+    background: #eef1f6;
+    font: bold 11px Arial, Helvetica, sans-serif;
+    padding: 6px;
+    border-top: 1px solid #C3D2E0;
+    border-right: 1px solid #C3D2E0;
+    text-align: center;
+}
+
+.chart-content table.price-and-shop th a:link {
+    font-weight: bold;
+}
+
+.chart-content table.price-and-shop th a:visited {
+    font-weight: bold;
+}
+
+.chart-content table.price-and-shop th a:hover {
+    font-weight: bold;
+}
+
+.chart-content table.price-and-shop th a:active {
+    font-weight: bold;
+}
+
+.chart-content table.price-and-shop th:first-child {
+    text-align: left;
+    padding-left: 12px;
+}
+
+.chart-content table.price-and-shop th.number-of-sellers {
+    background: #f8f8f8;
+    width: 339px;
+}
+
+.chart-content table.price-and-shop th.spanned {
+    border-right: none;
+}
+
+.chart-content table.price-and-shop th.zip-code {
+    background: #f8f8f8;
+    width: 200px;
+}
+
+.chart-content table.price-and-shop th.blank {
+    border-right: none;
+    background: #f8f8f8;
+    width: 0;
+    padding: 0 0 0 153px;
+}
+
+.chart-content table.price-and-shop th.zip-code .value {
+    font-weight: normal;
+}
+
+.chart-content table.price-and-shop th.zip-code .value a:link {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.chart-content table.price-and-shop th.zip-code .value a:visited {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.chart-content table.price-and-shop th.zip-code .value a:hover {
+    color: #176fcc;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+.chart-content table.price-and-shop th.zip-code .value a:active {
+    color: #176fcc;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+.chart-content table.price-and-shop th img {
+    border: none;
+    margin: 0 0 0 6px;
+    padding: 0;
+}
+
+.chart-content table.price-and-shop th.shop-online {
+    border-right: none;
+}
+
+.chart-content table.price-and-shop thead th {
+    background: #eef1f6;
+    font: bold 14px Arial, Helvetica, sans-serif;
+    padding: 6px 12px;
+    border-top: none;
+    border-right: none;
+    border-bottom: 1px solid #C3D2E0;
+    text-align: center;
+    width: 596px;
+}
+
+.chart-content table.price-and-shop thead th .model-name {
+    font: normal 11px Arial, Helvetica, sans-serif;
+}
+
+.chart-content table.price-and-shop td {
+    background: #fff;
+    font: normal 11px/14px Arial, Helvetica, sans-serif;
+    color: #000;
+    padding: 6px;
+    text-align: center;
+    border-top: 1px solid #C3D2E0;
+    border-right: 1px solid #C3D2E0;
+    vertical-align: middle;
+}
+
+.chart-content table.price-and-shop td:first-child {
+    text-align: left;
+}
+
+.chart-content table.price-and-shop td img {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.chart-content table.price-and-shop td.table-info {
+    padding: 12px;
+    border-right: none;
+    border-top: none;
+    text-align: left;
+}
+
+.chart-content table.price-and-shop td.table-info img {
+    border: none;
+    padding: 0;
+    margin: 0 6px 0 0;
+}
+
+.chart-content table.price-and-shop td.table-info a:link {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.chart-content table.price-and-shop td.table-info a:visited {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.chart-content table.price-and-shop td.table-info a:hover {
+    color: #176fcc;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+.chart-content table.price-and-shop td.table-info a:active {
+    color: #176fcc;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+.chart-content table.price-and-shop td.seller {
+    min-width: 110px;
+    padding-left: 12px;
+}
+
+.chart-content table.price-and-shop td.price {
+    width: 54px;
+}
+
+.chart-content table.price-and-shop td.tax {
+    width: 54px;
+}
+
+.chart-content table.price-and-shop td.sh {
+    width: 54px;
+}
+
+.chart-content table.price-and-shop td.total {
+    width: 54px;
+}
+
+.chart-content table.price-and-shop td.availability {
+    text-align: left;
+    width: 64px;
+}
+
+.chart-content table.price-and-shop td.shop-online {
+    border-right: none;
+}
+
+.chart-content table.price-and-shop td.shop-online .shop-button {
+    clear: both;
+    text-align: center;
+    font: normal 10px Arial, Helvetica, sans-serif;
+    margin: 0 0 3px 0;
+    padding: 0;
+}
+
+.chart-content table.price-and-shop td.shop-online .shop-button img {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.chart-content table.price-and-shop td.shop-online .shop-at-store-name {
+    clear: both;
+    font: normal 10px Arial, Helvetica, sans-serif;
+}
+
+.chart-content table.price-and-shop .best-price {
+    background: #f8f8f8;
+}
+
+.chart-content table.price-and-shop .best-price img {
+    margin-bottom: 3px;
+}
+
+.chart-content table.price-and-shop .best-price .best-price-head {
+    text-align: center;
+    width: 100%;
+    float: left;
+}
+
+.chart-content table.price-and-shop .best-price .value {
+    width: 100%;
+    float: left;
+    clear: both;
+    text-align: center;
+}
+
+.chart-content table.price-and-shop .zip-code-module {
+    background: #f8f8f8;
+    vertical-align: top;
+    width: 164px;
+}
+
+.chart-content table.price-and-shop .zip-code-module .header {
+    float: left;
+    clear: both;
+    width: 164px;
+    text-align: center;
+    font: bold 11px Arial, Helvetica, sans-serif;
+    margin: 22px 0 0 0;
+}
+
+.chart-content table.price-and-shop .zip-code-module .sub-header {
+    float: left;
+    clear: both;
+    width: 164px;
+    text-align: center;
+    font: normal 11px Arial, Helvetica, sans-serif;
+}
+
+.chart-content table.price-and-shop .zip-code-module .form-field {
+    float: left;
+    clear: both;
+    width: 115px;
+    text-align: center;
+    margin: 8px 0;
+    padding: 0 0 0 44px;
+}
+
+.chart-content table.price-and-shop .zip-code-module form {
+    float: left;
+    clear: both;
+    margin: 0;
+    padding: 0;
+    font: normal 10px Arial, Helvetica, sans-serif;
+}
+
+.chart-content table.price-and-shop .zip-code-module form input {
+    font: normal 10px Arial, Helvetica, sans-serif;
+    width: 75px;
+}
+
+.chart-content table.price-and-shop .zip-code-module .go-button {
+    float: left;
+    clear: both;
+    width: 164px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.chart-content table.price-and-shop tfoot td.price-grabber {
+    background: #eef1f6;
+    padding: 6px 12px 6px 12px;
+    border-top: 1px solid #C3D2E0;
+    border-bottom: none;
+    border-right: none;
+    text-align: left;
+}
+
+.chart-content table.price-and-shop tfoot td.price-grabber .see-all-sellers {
+    font: bold 11px Arial, Helvetica, sans-serif;
+    float: left;
+    margin: 12px 0 0 0;
+    padding: 0;
+}
+
+.chart-content table.price-and-shop tfoot td.price-grabber .see-all-sellers a:link {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.chart-content table.price-and-shop tfoot td.price-grabber .see-all-sellers a:visited {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.chart-content table.price-and-shop tfoot td.price-grabber .see-all-sellers a:hover {
+    color: #176fcc;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.chart-content table.price-and-shop tfoot td.price-grabber .see-all-sellers a:active {
+    color: #176fcc;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.chart-content table.price-and-shop tfoot td.price-grabber img {
+    float: right;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* stars rating styles */
+
+.ratings-stars {
+    height: 15px;
+    width: 83px;
+    line-height: 15px;
+    background: url(../images/stars_small.gif);
+    text-align: center;
+    margin: 0 8px;
+    padding: 0;
+    position: relative;
+    left: 11px;
+}
+
+* + html .chart-content table.price-and-shop .ratings-stars {
+    left: 0;
+}
+
+* html .chart-content table.price-and-shop .ratings-stars {
+    left: 0;
+}
+
+.chart-content table.price-and-shop td.ratings-stars-cell {
+    text-align: center;
+    margin: 0;
+    padding: 0 6px;
+    width: 131px;
+}
+
+.chart-content table.price-and-shop td.ratings-stars a:link {
+    color: #176fcc;
+    text-decoration: none;
+    font: normal 10px Arial, Helvetica, sans-serif;
+}
+
+.chart-content table.price-and-shop td.ratings-stars a:visited {
+    color: #176fcc;
+    text-decoration: none;
+    font: normal 10px Arial, Helvetica, sans-serif;
+}
+
+.chart-content table.price-and-shop td.ratings-stars a:hover {
+    color: #176fcc;
+    text-decoration: underline;
+    font: normal 10px Arial, Helvetica, sans-serif;
+}
+
+.chart-content table.price-and-shop td.ratings-stars a:active {
+    color: #176fcc;
+    text-decoration: underline;
+    font: normal 10px Arial, Helvetica, sans-serif;
+}
+
+/* Product Level Styles */
+
+table.product-level {
+    width: 760px;
+    margin: 20px 0 30px 0;
+    padding: 0;
+    border: 1px solid #C3D2E0;
+    border-collapse: separate;
+    float: left;
+}
+
+table.product-level th {
+    background: #eef1f6;
+    font: bold 11px Arial, Helvetica, sans-serif;
+    padding: 6px;
+    border-top: 1px solid #C3D2E0;
+    border-right: 1px solid #C3D2E0;
+    text-align: center;
+}
+
+table.product-level th a:link {
+    font-weight: bold;
+}
+
+table.product-level th a:visited {
+    font-weight: bold;
+}
+
+table.product-level th a:hover {
+    font-weight: bold;
+}
+
+table.product-level th a:active {
+    font-weight: bold;
+}
+
+table.product-level th:first-child {
+    text-align: left;
+    padding-left: 12px;
+}
+
+table.product-level th.showing-number-of-models {
+    text-align: left;
+}
+
+table.product-level th.number-of-models {
+    border-right: none;
+    background: #f8f8f8;
+}
+
+table.product-level th.page-numbers {
+    text-align: right;
+    border-right: none;
+    background: #f8f8f8;
+}
+
+table.product-level th.page-numbers a:link {
+    font-weight: normal;
+}
+
+table.product-level th.page-numbers a:visited {
+    font-weight: normal;
+}
+
+table.product-level th.page-numbers a:hover {
+    font-weight: normal;
+}
+
+table.product-level th.page-numbers a:active {
+    font-weight: normal;
+}
+
+table.product-level th .page-number-divider {
+    margin: 0 6px;
+}
+
+table.product-level th.shop-online {
+    border-right: none;
+}
+
+table.product-level th img {
+    border: none;
+    margin: 0 0 0 6px;
+    padding: 0;
+}
+
+table.product-level thead th {
+    background: #eef1f6;
+    font: bold 14px Arial, Helvetica, sans-serif;
+    padding: 6px 12px;
+    border-top: none;
+    border-right: none;
+    text-align: center;
+    width: 596px;
+}
+
+table.product-level td {
+    background: #fff;
+    font: normal 11px/14px Arial, Helvetica, sans-serif;
+    color: #000;
+    padding: 9px 12px;
+    text-align: center;
+    border-top: 1px solid #C3D2E0;
+    border-right: 1px solid #C3D2E0;
+    vertical-align: middle;
+}
+
+table.product-level td:first-child {
+    text-align: left;
+}
+
+table.product-level td img {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+table.product-level td.model-info {
+    width: 464px;
+}
+
+table.product-level td.model-info .make-and-model {
+    font: bold 12px Arial, Helvetica, sans-serif;
+    float: left;
+    clear: both;
+}
+
+table.product-level td.model-info .make-and-model a:link {
+    font-weight: bold;
+}
+
+table.product-level td.model-info .make-and-model a:visited {
+    font-weight: bold;
+}
+
+table.product-level td.model-info .make-and-model a:hover {
+    font-weight: bold;
+}
+
+table.product-level td.model-info .make-and-model a:active {
+    font-weight: bold;
+}
+
+table.product-level td.model-info .make-and-model img {
+    margin: 0 0 0 6px;
+    padding: 0;
+    border: none;
+}
+
+table.product-level td.model-info .features {
+    float: left;
+    clear: both;
+}
+
+table.product-level td.model-info .features .option {
+    font: normal 11px Arial, Helvetica, sans-serif;
+}
+
+table.product-level td.price-range-value {
+    width: 82px;
+}
+
+table.product-level td.shop-online {
+    border-right: none;
+    width: 100px;
+}
+
+table.product-level td.shop-online .shop-button {
+    clear: both;
+    text-align: center;
+    font: normal 10px Arial, Helvetica, sans-serif;
+    margin: 0 0 3px 0;
+    padding: 0;
+}
+
+table.product-level td.shop-online .shop-button img {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+table.product-level td.shop-online .shop-at-store-name {
+    clear: both;
+    font: normal 10px Arial, Helvetica, sans-serif;
+}
+
+table.product-level tfoot td.price-grabber {
+    background: #eef1f6;
+    padding: 6px 12px 6px 12px;
+    border-top: 1px solid #C3D2E0;
+    border-bottom: none;
+    border-right: none;
+    text-align: left;
+}
+
+table.product-level tfoot td.price-grabber .see-all-sellers {
+    font: bold 11px Arial, Helvetica, sans-serif;
+    float: left;
+    margin: 12px 0 0 0;
+    padding: 0;
+}
+
+table.product-level tfoot td.price-grabber .see-all-sellers a:link {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+table.product-level tfoot td.price-grabber .see-all-sellers a:visited {
+    color: #176fcc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+table.product-level tfoot td.price-grabber .see-all-sellers a:hover {
+    color: #176fcc;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+table.product-level tfoot td.price-grabber .see-all-sellers a:active {
+    color: #176fcc;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+table.product-level tfoot td.price-grabber img {
+    float: right;
+    border: none;
+    margin: 0;
+    padding: 0;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:form="urn:import:org.consumersunion.stories.common.client.ui.form"
+             xmlns:cell="urn:import:com.google.gwt.user.cellview.client"
+             xmlns:u="urn:import:org.consumersunion.stories.common.client.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .leftZone {
+            float: left;
+            width: 25%;
+        }
+
+        .rightZone {
+            float: right;
+            padding-left: 0;
+            width: 75%;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:HTMLPanel styleName="{resource.generalStyleCss.mainWrapper}">
+            <g:HTMLPanel styleName="{style.leftZone}">
+                <cell:CellTable ui:field="orgsTable"/>
+                <u:TextPager ui:field="pager"/>
+                <g:Label ui:field="displayLabel" text="Display"/>
+                <g:IntegerBox ui:field="pageSize"/>
+                <g:Label ui:field="rowsLabel" text="rows"/>
+            </g:HTMLPanel>
+            <g:HTMLPanel ui:field="mainPanel" styleName="{style.rightZone}">
+                <g:Label ui:field="formTitle" styleName="cu-password-update-main-label"/>
+                <form:OrganizationForm ui:field="form"/>
+                <div class="cu-password-update-button-panel">
+                    <g:Button ui:field="buttonSave"/>
+                </div>
+            </g:HTMLPanel>
+            <div class="{resource.generalStyleCss.clearBoth}"/>
+        </g:HTMLPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>

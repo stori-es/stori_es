@@ -1,0 +1,52 @@
+/**
+  * Default style for  Permanent link global page/style
+**/
+#default-main-content {
+    margin-left: 35px;
+    margin-top: 50px;
+}
+
+.cu-collectionSubmit {
+    margin-bottom: 25px;
+}
+
+.cu-collectionSubmit {
+    text-align: left;
+    margin-top: 25px;
+}
+
+.cu-collection-submit-thank-you {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.serverResponseLabelError {
+    text-align: left;
+}
+
+.serverResponseLabelError {
+    margin-bottom: -25px;
+}
+
+/*
+#questionnaireWidget div>table {
+	width: 1200px;
+}
+
+#questionnaireWidget #questioinnaire-display table.stories-inputGroup table.cu-formElement-label-container{
+	width: 650px;
+}
+
+#questionnaireWidget #questioinnaire-display table.stories-inputGroup table.cu-formElement-label-container td:nth-child(1) {
+	width: 0%;
+	max-width: 430px;
+}
+
+#questionnaireWidget #questioinnaire-display table.stories-inputGroup table.cu-formElement-label-container td:nth-child(2) {
+	width: 100%;
+}
+
+#questionnaireWidget #questioinnaire-display table.stories-inputGroup table.cu-formElement-label-container td:nth-child(2) table td {
+	display: inline;
+}
+*/

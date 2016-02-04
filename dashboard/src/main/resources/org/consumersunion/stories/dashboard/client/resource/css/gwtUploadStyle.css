@@ -1,0 +1,96 @@
+@external GWTUpld;
+@external DecoratedFileUpload;
+@external upld-drop-zone;
+@external upld-status;
+@external filename;
+@external prgbar*;
+@external cancel;
+@external container;
+@external gwt-Label;
+@external long;
+
+table.GWTUpld {
+    width: 100%;
+    font-family: "Droid Sans", sans-serif;
+    font-size: small;
+    font-weight: normal;
+}
+
+table.GWTUpld .DecoratedFileUpload {
+    display: block;
+    margin-right: 0;
+}
+
+table.GWTUpld .upld-drop-zone {
+    border: none;
+}
+
+table.GWTUpld .upld-status > .gwt-Label {
+    display: inline-block;
+    width: 100px;
+}
+
+table.GWTUpld .upld-status .container {
+    background-color: #fff;
+    border-radius: 7px;
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 5px;
+    width: 540px;
+    height: 28px;
+}
+
+table.GWTUpld .upld-status .filename {
+    width: 100px;
+}
+
+table.GWTUpld .upld-status .prgbar {
+    width: 381px;
+    float: none;
+}
+
+table.GWTUpld .upld-status .prgbar-back {
+    border-color: #d4d4d4;
+}
+
+table.GWTUpld .upld-status .prgbar .prgbar-done {
+    background-color: #0259b2;
+}
+
+table.GWTUpld .upld-status div.cancel,
+table.GWTUpld .upld-status div.cancel:hover {
+    float: right;
+    margin-top: 7px;
+    font-family: FontAwesome;
+    background: none;
+    font-size: 13px;
+    margin-right: 10px;
+    width: 12px;
+    height: 12px;
+}
+
+table.GWTUpld .upld-status .filename {
+    line-height: 14px;
+    color: #d4d4d4;
+    max-width: none;
+    width: 100px;
+}
+
+table.GWTUpld .upld-status .filename.long {
+    width: 490px;
+    color: #000;
+    margin-top: 8px;
+}
+
+table.GWTUpld .upld-status .filename,
+table.GWTUpld .upld-status .gwt-Label {
+    font-size: small;
+    font-weight: normal;
+}
+
+table.GWTUpld .upld-status .filename,
+table.GWTUpld .upld-status .prgbar {
+    height: 13px;
+    display: inline-block;
+    margin-top: 5px;
+}

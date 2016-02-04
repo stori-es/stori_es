@@ -1,0 +1,9 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'>
+
+    <ui:with field="commonResource" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+
+    <div class="{commonResource.generalStyleCss.w100} cu-collectionSubmit">
+        <button ui:field="button"/>
+        <div class="{commonResource.generalStyleCss.clearBoth}"></div>
+    </div>
+</ui:UiBinder>

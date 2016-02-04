@@ -1,0 +1,10 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <g:HTMLPanel ui:field="main" tag="span"
+                 styleName="simptip-movable simptip-position-top {resource.cards.toolbarIcon}">
+        <span ui:field="icon" class="{resource.generalStyleCss.blue}"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

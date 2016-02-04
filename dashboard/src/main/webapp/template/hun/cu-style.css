@@ -1,0 +1,268 @@
+/*
+Theme Name: Consumers Union
+Theme URI: https://github.com/consumersunion/consumersunion
+Author: Consumers Union
+Description: The WordPress parent theme for Consumers Union websites.  Initially crafted atop the Whiteboard Framework from Bold Perspective Labs (version 3.0.3).
+Version: 0.1
+
+The Whiteboard Framework is licensed under the GPL license. Feel free to use the Whiteboard Framework for commercial and non-commercial ventures. We require a link in the CSS file and request a link on the website.
+*/
+
+/*
+List of divs in Whiteboard
+Note that this list does not include the dynamically generated ids and classes, such as the body classes, the post ids, etc
+*/
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#main {
+
+}
+
+.container {
+    margin: 0 auto;
+    width: 1000px;
+}
+
+header {
+
+}
+
+#header-image {
+
+}
+
+nav {
+
+}
+
+nav.primary {
+
+}
+
+nav.footer {
+
+}
+
+#sidebar-header {
+
+}
+
+#body {
+
+}
+
+#sidebar-alert {
+
+}
+
+#content {
+
+}
+
+article {
+
+}
+
+.featured-thumbnail {
+
+}
+
+.post-content {
+
+}
+
+.pagination {
+
+}
+
+.post-meta {
+
+}
+
+.post-navigation {
+
+}
+
+#comments {
+
+}
+
+li.comment {
+
+}
+
+.odd {
+
+}
+
+.even {
+
+}
+
+.author-comment {
+
+}
+
+.comment-text {
+
+}
+
+.comment-meta {
+
+}
+
+p.gravatar {
+
+}
+
+.waiting-for-approval {
+
+}
+
+#trackbacks {
+
+}
+
+li.trackback {
+
+}
+
+p#no-comments {
+
+}
+
+#comments-form {
+
+}
+
+#respond {
+
+}
+
+.cancel-comment-reply {
+
+}
+
+.page {
+
+}
+
+#page-content {
+
+}
+
+#page-meta {
+
+}
+
+.post {
+
+}
+
+.postContent {
+
+}
+
+.post-excerpt {
+
+}
+
+nav.content-navigation {
+
+}
+
+.previous {
+
+}
+
+.next {
+
+}
+
+.search {
+
+}
+
+.author {
+
+}
+
+#recent-author-posts {
+
+}
+
+#recent-author-comments {
+
+}
+
+#error404 {
+
+}
+
+#sidebar {
+
+}
+
+#sidebar-1 {
+
+}
+
+#sidebar-2 {
+
+}
+
+#sidebar-search {
+
+}
+
+#sidebar-nav {
+
+}
+
+#sidebar-archives {
+
+}
+
+#sidebar-meta {
+
+}
+
+.widget {
+
+}
+
+#footer {
+
+}
+
+#sidebar-footer {
+
+}
+
+#footer-nav {
+
+}
+
+.no-results {
+
+}
+
+.widget-area {
+
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+.clear {
+    clear: both;
+}

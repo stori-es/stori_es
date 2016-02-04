@@ -1,0 +1,40 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:d="urn:import:org.consumersunion.stories.common.client.widget"
+             xmlns:chzn="urn:import:com.arcbees.chosen.client.gwt">
+
+    <ui:with field="common" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+    <ui:with field="resources" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <g:HTMLPanel styleName="{resources.blockConfigurators.main}">
+        <div class="{resources.blockConfigurators.fullRow}">
+            <g:Label text="Prompt *"/>
+            <span>
+                <g:TextBox ui:field="prompt"/>
+            </span>
+        </div>
+        <g:Label ui:field="textError" styleName="{common.generalStyleCss.errorLabel}"/>
+        <div class="{resources.blockConfigurators.shortRow}">
+            <g:Label text="Size *"/>
+            <span>
+                <g:ValueListBox ui:field="size"/>
+            </span>
+        </div>
+        <div class="{resources.blockConfigurators.shortRow}">
+            <g:Label text="Position *"/>
+            <span>
+                <d:RadioButtonGroup ui:field="position"/>
+            </span>
+        </div>
+        <div class="{resources.blockConfigurators.shortRow}">
+            <g:Label text="Next Document *"/>
+            <span>
+                <chzn:ChosenValueListBox ui:field="nextDocumentSelect"/>
+            </span>
+        </div>
+        <div class="{resources.blockConfigurators.buttonContainer}">
+            <g:Button ui:field="done" text="Done"/>
+            <g:Anchor ui:field="cancel" text="Cancel"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

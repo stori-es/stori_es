@@ -1,0 +1,40 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:cell="urn:import:com.google.gwt.user.cellview.client">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .notesLabel {
+            color: #666666;
+            font-size: 15px;
+            font-family: 'Droid Sans', sans-serif;
+            font-weight: bold;
+        }
+
+        .textArea {
+            width: 280px;
+            height: 30px;
+            font-family: 'Droid Sans', sans-serif;
+        }
+
+        .buttonWrapper {
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:Label text="Notes" styleName="{style.notesLabel}"/>
+        <g:TextArea ui:field="noteText" addStyleNames="{style.textArea}"/>
+
+        <div class="{style.buttonWrapper}">
+            <g:Button ui:field="submit" text="Post" styleName="{resource.buttonStyleCss.button}"
+                      addStyleNames="{resource.generalStyleCss.floatRight}"/>
+            <div style="clear: both"/>
+        </div>
+
+        <cell:CellList ui:field="noteList"/>
+    </g:HTMLPanel>
+</ui:UiBinder> 

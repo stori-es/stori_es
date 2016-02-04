@@ -1,0 +1,43 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:widget="urn:import:org.consumersunion.stories.common.client.widget">
+
+    <ui:with field="resources" type="org.consumersunion.stories.common.client.resource.CommonResources"/>
+
+    <ui:style gss="true">
+        @external 'gwt-*';
+        .hint {
+            color: #8E8E8E;
+        }
+
+        .form {
+            margin-left: 45px;
+            margin-bottom: 16px;
+        }
+
+        .form .gwt-RadioButton {
+            display: block;
+            line-height: 24px;
+        }
+
+        .addEmail {
+            margin-left: 12px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel ui:field="main"
+                 styleName="{resources.messagesStyle.interactiveMain} {resources.messagesStyle.interactiveMainBlock}">
+        <h3>Choose your primary email address</h3>
+        <div class="{style.hint}">
+            <em>You will be able to use this email address to sign in to your account.</em>
+        </div>
+        <div class="{style.form}">
+            <widget:RadioButtonGroup ui:field="contactRadioButtonGroup"/>
+            <g:Button styleName="{resources.messagesStyle.button}" ui:field="save">Update user information
+            </g:Button>
+            <span ui:field="addEmail" class="{resources.messagesStyle.link} {style.addEmail}">Add an email address
+            </span>
+        </div>
+        <div class="{resources.messagesStyle.progress}" ui:field="progress"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

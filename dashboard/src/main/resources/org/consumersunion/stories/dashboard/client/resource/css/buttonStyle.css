@@ -1,0 +1,68 @@
+@def settingsButtonWidth 165px;
+@def transfertButtonWidth 94px;
+
+.button, .button:visited {
+    font-family: 'Droid Sans', sans-serif;
+    text-align: center;
+    display: inline-block;
+    padding: 5px 10px 6px;
+    color: #333333;
+    margin-left: 10px;
+    text-decoration: none;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    text-shadow: white 0 1px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    position: relative;
+    cursor: pointer;
+    -webkit-transition-property: background;
+    -webkit-transition-duration: 200ms;
+    -webkit-transition-timing-function: linear, ease-in;
+    min-width: 40px;
+    border: none;
+    background-color: #b4b4b4;
+    background: literal("-moz-linear-gradient(top,  #f9f9f9,  #b4b4b4)") repeat scroll 0 0 transparent;
+    background: literal("-webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#b4b4b4))");
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#f9f9f9', EndColorStr='#b4b4b4')";
+}
+
+.button:hover {
+    background-color: #cdcdcd;
+    color: #333333;
+}
+
+.button:active {
+    top: 1px;
+}
+
+.small.button, .small.button:visited {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.button, .button:visited, .medium.button, .medium.button:visited {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1;
+    text-shadow: white 0 1px 0;
+}
+
+.large.button, .large.button:visited {
+    font-size: 14px;
+    padding: 8px 14px 9px;
+}
+
+@sprite .addButton {
+    gwt-image: "addButton";
+    width: 16px;
+    height: 16px;
+    border: none;
+}
+
+@sprite .addButton:hover {
+    gwt-image: "addButtonHover";
+}

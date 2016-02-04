@@ -1,0 +1,114 @@
+@external gwt-PushButton-up, gwt-PushButton-up-hovering, gwt-PushButton-down, gwt-PushButton-down,
+          gwt-PushButton-down-hovering, gwt-PushButton-up-disabled, gwt-ToggleButton-up,
+          gwt-ToggleButton-up-hovering, gwt-ToggleButton-down, gwt-ToggleButton-down,
+          gwt-ToggleButton-down-hovering, gwt-ToggleButton-up-disabled, gwt-ListBox;
+
+.toolbar {
+    border: 1px solid #DDD;
+    background: #F1F1F1;
+    width: 100%;
+}
+
+.toolbar > * {
+    display: inline-block;
+}
+
+.separator {
+    height: 28px;
+    border-left: 1px solid #b3b2af;
+    margin-left: 8px;
+    margin-top: 3px;
+    width: 8px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.toolbar .gwt-PushButton-up {
+    background: none;
+    padding: 4px;
+    border: none;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.toolbar .gwt-PushButton-up-hovering {
+    background: none;
+    background-color: #b5bed6;
+    padding: 3px 4px 2px 4px;
+    border: 1px solid #28407c;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.toolbar .gwt-PushButton-down {
+    background: none;
+    background-color: #f6b27b;
+    padding: 3px 4px 2px 4px;
+    border: 1px solid #f5862e;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.toolbar .gwt-PushButton-down-hovering {
+    background: none;
+    background-color: #f6b27b;
+    padding: 3px 4px 2px 4px;
+    border: 1px solid #f5862e;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.toolbar .gwt-PushButton-up-disabled {
+    background: none;
+    padding: 5px 5px 3px 5px;
+    border: none;
+    opacity: 0.5;
+}
+
+.toolbar .gwt-ToggleButton-up {
+    background: none;
+    padding: 5px 5px 3px 5px;
+    border: none;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.toolbar .gwt-ToggleButton-up-hovering {
+    background: none;
+    background-color: #b5bed6;
+    padding: 3px 4px 2px 4px;
+    border: 1px solid #28407c;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.toolbar .gwt-ToggleButton-down {
+    background: none;
+    background-color: #f6b27b;
+    padding: 3px 4px 2px 4px;
+    border: 1px solid #f5862e;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.toolbar .gwt-ToggleButton-down-hovering {
+    background: none;
+    background-color: #f6b27b;
+    padding: 3px 4px 2px 4px;
+    border: 1px solid #f5862e;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.toolbar .gwt-ToggleButton-up-disabled {
+    background: none;
+    padding: 5px 5px 3px 5px;
+    border: none;
+    opacity: 0.5;
+}
+
+.toolbar .gwt-ListBox {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+

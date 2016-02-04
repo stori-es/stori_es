@@ -1,0 +1,56 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .wrapper {
+            padding: 10px;
+            width: 350px;
+        }
+
+        .bigTitle {
+            color: #666666;
+            font-size: 15px;
+            font-family: 'Droid Sans', sans-serif;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .row {
+            margin-bottom: 8px;
+        }
+
+        .label {
+            display: inline-block;
+            width: 60px;
+            text-align: right;
+        }
+
+        .buttonWrapper {
+            margin-top: 20px;
+        }
+    </ui:style>
+
+    <g:PopupPanel modal="true" autoHideEnabled="true" glassEnabled="true">
+        <g:HTMLPanel styleName="{style.wrapper}">
+            <g:Label styleName="{style.bigTitle}" text="Attachments:"/>
+
+            <div class="{style.row}">
+                <g:Label styleName="{style.label}" text="URL"/>
+                <g:TextBox ui:field="url" width="270px"/>
+            </div>
+
+            <div class="{style.row}">
+                <g:Label styleName="{style.label}" text="Link text"/>
+                <g:TextBox ui:field="text" width="270px"/>
+            </div>
+
+            <div class="{style.buttonWrapper}">
+                <g:Button ui:field="link" text="Link" styleName="{resource.buttonStyleCss.button}"
+                          addStyleNames="{resource.generalStyleCss.floatRight}"/>
+                <div style="clear: both"/>
+            </div>
+        </g:HTMLPanel>
+    </g:PopupPanel>
+</ui:UiBinder>

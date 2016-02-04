@@ -1,0 +1,20 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+    <ui:with field="i18n" type="org.consumersunion.stories.common.shared.i18n.CommonI18nLabels"/>
+
+    <ui:style>
+        .confirmation ol, .confirmation ul {
+            list-style-position: inside;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:SimplePanel ui:field="confirmation" addStyleNames="{style.confirmation} cu-text-align-center"/>
+
+        <div class="cu-text-align-center cu-collection-submit-thank-you">
+            <g:Button ui:field="back" text="{i18n.returnToQuestionnaire}"
+                      addStyleNames="cu-clickable cu-text-align-center"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

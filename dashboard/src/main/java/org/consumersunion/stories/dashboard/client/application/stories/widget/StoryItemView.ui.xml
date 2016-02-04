@@ -1,0 +1,118 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:s="urn:import:org.consumersunion.stories.dashboard.client.application.widget.card"
+             xmlns:d="urn:import:org.consumersunion.stories.dashboard.client.application.ui">
+
+    <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
+
+    <ui:style>
+        .storyCheckbox {
+            text-decoration: none;
+            display: inline-block;
+            margin-right: 5px;
+            float: left;
+            margin-left: -25px;
+            margin-top: 2px;
+        }
+
+        .tagsHeader {
+            display: inline-block;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .tagsIcon {
+            font-size: 22px;
+            vertical-align: middle;
+        }
+
+        .tagsTitle {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .defaulContent {
+            display: inline-block;
+            width: 90px;
+        }
+
+        .box {
+            display: inline-block;
+
+            background-color: #f5f5f5;
+            border: 1px solid #d4d4d4;
+            border-radius: 4px;
+            padding: 6px;
+            color: #000;
+            margin-right: 8px;
+        }
+
+        .contentList {
+            width: 77%;
+            padding: 6px 8px;
+            margin-right: 12px;
+            display: inline-block;
+
+            border: 1px #878787 solid;
+        }
+
+        .noContent {
+            font-style: italic;
+            color: #878787;
+
+            width: 55%;
+            padding: 6px 8px;
+            margin-right: 12px;
+            display: inline-block;
+
+            border: 1px #878787 solid;
+            background-color: #fff;
+        }
+    </ui:style>
+
+    <g:HTMLPanel ui:field="main" styleName="{resource.cards.main}">
+        <div ui:field="rightColumn" class="{resource.cards.rightColumn}"> <!-- Right Column-->
+            <s:CardToolbarWidget ui:field="toolbar"/>
+            <d:TimeMetadataWidget ui:field="timeContainer" addStyleNames="{resource.generalStyleCss.w100}"/>
+            <div ui:field="collectionsWrapper" class="{resource.cards.collections}">
+                <g:SimplePanel ui:field="collections"/>
+            </div>
+        </div>
+        <div class="{resource.cards.leftColumn}"> <!-- Left Column-->
+            <a ui:field="cardTitleAnchor" class="{resource.cards.titleWrapper}">
+                <s:CardTitleWidget ui:field="cardTitle"/>
+            </a>
+            <div ui:field="content">
+                <g:CheckBox ui:field="checkbox" styleName="{style.storyCheckbox}" name="story" visible="false"/>
+                <s:CardSummaryWidget ui:field="cardSummary"/>
+            </div>
+            <div ui:field="editContent" class="{resource.cards.editPanel} {resource.generalStyleCss.font14}">
+                <div class="{style.defaulContent}">Default Content</div>
+                <div ui:field="defaultContent" class="{style.box}">
+                    <span class="icon-file-text-alt"/>
+                    <span ui:field="defaultContentTitle"/>
+                    <span ui:field="removeDefaultContent"
+                          class="simptip-position-top {resource.generalStyleCss.delete}"/>
+                </div>
+                <span ui:field="noDefaultContent">
+                    <g:ValueListBox ui:field="contentDocuments" styleName="{style.contentList}"/>
+                </span>
+                <span ui:field="noDefaultContentNoContent">
+                    <span ui:field="newContentTitle" class="{style.noContent}"/>
+                    <span ui:field="addContent" class="{resource.generalStyleCss.link}">Add Content</span>
+                </span>
+            </div>
+            <div>
+                <div ui:field="tagsContainer">
+                    <div ui:field="tagsHeader"
+                         class="{style.tagsHeader} {resource.generalStyleCss.blue} simptip-position-top">
+                        <span class="{style.tagsTitle}">Tags</span>
+                        <span class="{style.tagsIcon} icon-tags"/>
+                    </div>
+                    <g:SimplePanel ui:field="tags" styleName="{resource.generalStyleCss.blue}"/>
+                </div>
+            </div>
+        </div>
+        <div class="{resource.generalStyleCss.clearBoth}"/>
+    </g:HTMLPanel>
+</ui:UiBinder>
