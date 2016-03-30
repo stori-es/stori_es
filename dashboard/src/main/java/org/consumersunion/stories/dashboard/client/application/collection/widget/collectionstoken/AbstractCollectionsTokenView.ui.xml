@@ -46,9 +46,9 @@
         <div ui:field="collectionLabelDiv" class="{style.collectionTitleWrapper}">
             <g:HTML ui:field="collectionsEdit"
                     styleName="{style.collectionsLabel} {res.generalStyleCss.blue} simptip-position-top simptip-movable">
-                <span>Collections</span>
-                <span class="icon-list-alt"/>
-                <span class="icon-folder-close"/>
+                <span ui:field="title">Collections</span>
+                <span class="icon-list-alt" ui:field="questionnaireIcon"/>
+                <span class="icon-folder-close" ui:field="collectionIcon"/>
             </g:HTML>
             <div class="{res.generalStyleCss.clearBoth}"/>
         </div>

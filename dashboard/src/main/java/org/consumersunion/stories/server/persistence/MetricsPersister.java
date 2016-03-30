@@ -202,7 +202,7 @@ public class MetricsPersister {
                                     + " JOIN questionnaire qnre ON qnre.id = b.document"
                                     + " JOIN collection_sources col ON col.sourceQuestionnaire = qnre.id"
                                     + " JOIN systemEntity colE ON col.targetCollection=colE.id "
-                                    + " WHERE b.standardMeaning = '" + BlockType.UPDATES_OPT_IN.code() + "'"
+                                    + " WHERE b.blockType = '" + BlockType.UPDATES_OPT_IN.code() + "'"
                                     + " AND reportValue IS NOT NULL "
                                     + " AND reportValue <> ''"
                                     + " AND colE.owner=?"

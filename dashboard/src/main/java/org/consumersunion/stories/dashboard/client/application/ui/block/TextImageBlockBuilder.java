@@ -30,7 +30,7 @@ public class TextImageBlockBuilder extends BlockBuilder {
         this.value = configurator.getEditedValue();
         this.element.display(value);
 
-        if (value.getStandardMeaning() == null) {
+        if (value.getBlockType().isCustom()) {
             setShowDuplicate(showDuplicate);
         } else {
             setShowDuplicate(false);

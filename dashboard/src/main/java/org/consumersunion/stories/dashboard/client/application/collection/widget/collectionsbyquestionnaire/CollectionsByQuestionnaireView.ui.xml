@@ -1,8 +1,0 @@
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui"
-             xmlns:cell="urn:import:com.google.gwt.user.cellview.client">
-
-    <g:HTMLPanel>
-        <cell:CellList ui:field="collectionsList"/>
-    </g:HTMLPanel>
-</ui:UiBinder>

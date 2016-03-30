@@ -269,14 +269,16 @@ public class CollectionPresenter
         documentsListPresenter.setDocuments(collectionData.getDocuments(), CONTENT, NOTE, ATTACHMENT);
 
         if (collection.isQuestionnaire()) {
-            questionnaireService.getQuestionnaireI15d(collectionId,
-                    new ResponseHandler<DatumResponse<QuestionnaireI15d>>() {
-                        @Override
-                        public void handleSuccess(DatumResponse<QuestionnaireI15d> result) {
-                            collectionObserver.display(result.getDatum());
-                            handleReveal(reveal, collectionData);
-                        }
-                    });
+            if (collectionId != null) {
+                questionnaireService.getQuestionnaireI15d(collectionId,
+                        new ResponseHandler<DatumResponse<QuestionnaireI15d>>() {
+                            @Override
+                            public void handleSuccess(DatumResponse<QuestionnaireI15d> result) {
+                                collectionObserver.display(result.getDatum());
+                                handleReveal(reveal, collectionData);
+                            }
+                        });
+            }
         } else {
             collectionObserver.display(collection);
             handleReveal(reveal, collectionData);

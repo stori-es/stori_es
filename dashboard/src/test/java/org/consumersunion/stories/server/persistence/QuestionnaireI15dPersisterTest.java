@@ -136,7 +136,7 @@ public class QuestionnaireI15dPersisterTest extends SpringTestCase {
         TestCase.assertTrue("First FormElement is not a Question",
                 response.getSurvey().getBlocks().get(0) instanceof Question);
         assertEquals("FormType not match", BlockType.TEXT_INPUT,
-                (response.getSurvey().getBlocks().get(0)).getFormType());
+                (response.getSurvey().getBlocks().get(0)).getRenderType());
         assertEquals("Label not match", label, ((Question) response.getSurvey().getBlocks().get(0)).getLabel());
         assertEquals("Min length not match", min, ((Question) response.getSurvey().getBlocks().get(0)).getMinLength()
                 .intValue());
@@ -150,7 +150,7 @@ public class QuestionnaireI15dPersisterTest extends SpringTestCase {
         TestCase.assertTrue("Second FormElement is not a TextImageBlock",
                 response.getSurvey().getBlocks().get(1) instanceof TextImageBlock);
         assertEquals("FormType not match", BlockType.TEXT_IMAGE, response.getSurvey().getBlocks()
-                .get(1).getFormType());
+                .get(1).getRenderType());
 
         assertTrue(((TextImageBlock) response.getSurvey().getBlocks().get(1)).getText().equals(text[0]));
     }
@@ -169,7 +169,7 @@ public class QuestionnaireI15dPersisterTest extends SpringTestCase {
         TestCase.assertTrue("First FormElement is not a Question",
                 response.getSurvey().getBlocks().get(0) instanceof Question);
         assertEquals("FormType not match", BlockType.TEXT_INPUT,
-                response.getSurvey().getBlocks().get(0).getFormType());
+                response.getSurvey().getBlocks().get(0).getRenderType());
         assertEquals("Label not match", label, ((Question) response.getSurvey().getBlocks().get(0)).getLabel());
         assertEquals("Min length not match", min, ((Question) response.getSurvey().getBlocks().get(0)).getMinLength()
                 .intValue());
@@ -189,7 +189,7 @@ public class QuestionnaireI15dPersisterTest extends SpringTestCase {
         TestCase.assertTrue("Second FormElement is not a TextImageBlock",
                 response.getSurvey().getBlocks().get(1) instanceof TextImageBlock);
         assertEquals("FormType not match", BlockType.TEXT_IMAGE,
-                response.getSurvey().getBlocks().get(1).getFormType());
+                response.getSurvey().getBlocks().get(1).getRenderType());
 
         assertTrue(((TextImageBlock) response.getSurvey().getBlocks().get(1)).getText().equals(text[0]));
     }
@@ -286,7 +286,7 @@ public class QuestionnaireI15dPersisterTest extends SpringTestCase {
         final ArrayList<Block> elements = new ArrayList<Block>();
 
         final Question question = new Question();
-        question.setFormType(BlockType.TEXT_INPUT);
+        question.setBlockType(BlockType.TEXT_INPUT);
         question.setText(text[0]);
         question.setHelpText(helpText[0]);
         question.setLabel(label);
@@ -300,7 +300,7 @@ public class QuestionnaireI15dPersisterTest extends SpringTestCase {
         elements.add(tiBlock);
 
         final SubmitBlock submitBlock = new SubmitBlock();
-        submitBlock.setFormType(BlockType.SUBMIT);
+        submitBlock.setBlockType(BlockType.SUBMIT);
         submitBlock.setPrompt("Done");
         submitBlock.setPosition(Position.CENTER);
         submitBlock.setSize(Size.MEDIUM);
@@ -335,7 +335,7 @@ public class QuestionnaireI15dPersisterTest extends SpringTestCase {
         final ArrayList<Block> elements = new ArrayList<Block>();
 
         final Question question = new Question();
-        question.setFormType(BlockType.TEXT_INPUT);
+        question.setBlockType(BlockType.TEXT_INPUT);
         question.setText(text[0]);
         question.setHelpText(helpText[0]);
         question.setLabel(label);

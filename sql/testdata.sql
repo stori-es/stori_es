@@ -305,15 +305,15 @@ INSERT INTO story (id, permalink, owner, defaultContent, published, firstPublish
 
 -- SystemEntity 6 -- 19
 INSERT INTO systemEntity (id, version,public) values (101, 1, 0), (102, 1, 0), (103, 1, 0), (104, 1, 0), (105, 1, 0), (106, 1, 1), (107, 1, 0), (108, 1, 0);
-INSERT INTO document (`id`,`systemEntity`,`systemEntityRelation`,`primaryAuthor`,`permalink`,locale) VALUES
-       (101, 6, 'ANSWER_SET', 1001, '','en'),
-       (102, 7, 'ANSWER_SET', 1001, '','en'),
-       (103, 8, 'ANSWER_SET', 1001, '','en'),
-       (104, 9, 'ANSWER_SET', 1001, '','en'),
-       (105, 10, 'ANSWER_SET', 1001, '','en'),
-       (106, 11, 'ANSWER_SET', 1001, '','en'),
-       (107, 12, 'ANSWER_SET', 1001, '','en'),
-       (108, 13, 'ANSWER_SET', 1001, '','en');
+INSERT INTO document (`id`,`systemEntity`,`systemEntityRelation`,`primaryAuthor`,`permalink`,locale,version) VALUES
+       (101, 6, 'ANSWER_SET', 1001, '','en',1),
+       (102, 7, 'ANSWER_SET', 1001, '','en',1),
+       (103, 8, 'ANSWER_SET', 1001, '','en',1),
+       (104, 9, 'ANSWER_SET', 1001, '','en',1),
+       (105, 10, 'ANSWER_SET', 1001, '','en',1),
+       (106, 11, 'ANSWER_SET', 1001, '','en',1),
+       (107, 12, 'ANSWER_SET', 1001, '','en',1),
+       (108, 13, 'ANSWER_SET', 1001, '','en',1);
 INSERT INTO answerSet (id, questionnaire) values
        (101, 33), (102, 33), (103, 33), (104, 33), (105, 33), (106, 33), (107, 33), (108, 33);
 

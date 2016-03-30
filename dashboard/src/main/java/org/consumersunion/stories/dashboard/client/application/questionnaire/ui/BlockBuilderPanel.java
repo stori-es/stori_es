@@ -138,13 +138,14 @@ public class BlockBuilderPanel extends DroppableWidget<FlowPanel>
     }
 
     @Override
-    public void createBlockAndReplace(BlockType blockType, BlockType formType, MetaBlock metaBlock) {
+    public void createBlockAndReplace(BlockType blockType, MetaBlock metaBlock) {
         BlockBuilder blockBuilder;
-        if (formType == null) {
-            blockBuilder = blockBuilderFactory.createNewCustomBlock(this, blockType, readOnly);
+        if (blockType.isStandard()) {
+            blockBuilder =
+                    blockBuilderFactory.createNewStandardBlock(this, standardElements, blockType, readOnly);
         } else {
             blockBuilder =
-                    blockBuilderFactory.createNewStandardBlock(this, standardElements, blockType, formType, readOnly);
+                    blockBuilderFactory.createNewCustomBlock(this, blockType, readOnly);
         }
 
         Block block = blockBuilder.getValue();
@@ -263,10 +264,8 @@ public class BlockBuilderPanel extends DroppableWidget<FlowPanel>
     }
 
     private void updateElement(BlockBuilder blockBuilder, Block element) {
-        BlockType standardMeaning = element.getStandardMeaning();
-        if (standardMeaning != null) {
-            standardElements.put(standardMeaning, blockBuilder);
-        }
+        BlockType blockType = element.getBlockType();
+        standardElements.put(blockType, blockBuilder);
 
         if (blockBuilder instanceof ContactBlockBuilder) {
             ContactBlockBuilder contactBlockBuilder = (ContactBlockBuilder) blockBuilder;

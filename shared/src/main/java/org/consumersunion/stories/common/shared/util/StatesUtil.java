@@ -1,11 +1,11 @@
 package org.consumersunion.stories.common.shared.util;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableList;
 
 public class StatesUtil {
@@ -13,10 +13,10 @@ public class StatesUtil {
     public static final String armedForces = "AA, AE, AP";
     public static final String STATE_OPTIONS;
 
-    private static final Map<String, String> STATE_MAP;
+    private static final BiMap<String, String> STATE_MAP;
 
     static {
-        STATE_MAP = new LinkedHashMap<String, String>();
+        STATE_MAP = HashBiMap.create();
         STATE_MAP.put("AL", "Alabama");
         STATE_MAP.put("AK", "Alaska");
         STATE_MAP.put("AS", "American Samoa");
@@ -76,6 +76,10 @@ public class StatesUtil {
         STATE_MAP.put("WY", "Wyoming");
 
         STATE_OPTIONS = Joiner.on(", ").join(STATE_MAP.keySet());
+    }
+
+    public static String getStateCode(String state) {
+        return STATE_MAP.inverse().get(state);
     }
 
     public static String getStateName(String code) {

@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import org.consumersunion.stories.common.client.event.MapBoundariesChangeEvent;
 import org.consumersunion.stories.common.client.event.SearchEvent;
+import org.consumersunion.stories.common.client.event.StateSearchEvent;
 import org.consumersunion.stories.common.client.model.StorySortFieldDropDownItem;
 import org.consumersunion.stories.common.client.service.RpcStoryServiceAsync;
 import org.consumersunion.stories.common.client.service.datatransferobject.Coordinates;
@@ -54,7 +55,7 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 public class StoriesWidgetPresenter extends PresenterWidget<StoriesWidgetPresenter.MyView>
         implements StoriesListHandler, MapBoundariesChangeEvent.MapBoundariesChangeHandler,
         StoriesWidgetUiHandlers, StoriesSelectionEvent.StoriesSelectionHandler,
-        CollectionObserver.CollectionHandler<Collection>, SearchEvent.SearchHandler {
+        CollectionObserver.CollectionHandler<Collection>, SearchEvent.SearchHandler, StateSearchEvent.SearchHandler {
     interface MyView extends View, HasUiHandlers<StoriesWidgetUiHandlers> {
         void setAddToWidget(AddToMenuWidget addToWidget);
 
@@ -78,6 +79,7 @@ public class StoriesWidgetPresenter extends PresenterWidget<StoriesWidgetPresent
     private final DefaultLocationProvider defaultLocationProvider;
 
     private String searchToken;
+    private String delayedSearchToken;
     private Integer collectionId;
     private LatLng northEast;
     private LatLng southWest;
@@ -137,7 +139,6 @@ public class StoriesWidgetPresenter extends PresenterWidget<StoriesWidgetPresent
     @Override
     public void onSearch(SearchEvent event) {
         searchToken = event.getSearchToken();
-        event.getSortDropDownItem();
 
         loadAllStoriesPosition(collectionId);
     }
@@ -164,6 +165,25 @@ public class StoriesWidgetPresenter extends PresenterWidget<StoriesWidgetPresent
     }
 
     @Override
+    public void onStateSearch(StateSearchEvent event) {
+        delayedSearchToken = "state:" + event.getState();
+    }
+
+    @Override
+    protected void onReveal() {
+        super.onReveal();
+
+        if (delayedSearchToken != null) {
+            searchPresenter.init(delayedSearchToken, StorySortFieldDropDownItem.defaultSortField());
+            switchToList();
+            searchToken = delayedSearchToken;
+            delayedSearchToken = null;
+        } else {
+            searchPresenter.init(searchToken, StorySortFieldDropDownItem.defaultSortField());
+        }
+    }
+
+    @Override
     public StoriesListContainer getStoriesListContainer() {
         return listStoriesPresenter;
     }
@@ -176,6 +196,7 @@ public class StoriesWidgetPresenter extends PresenterWidget<StoriesWidgetPresent
                 northEast.getLongitude());
         Coordinates southWestCoordinates = southWest == null ? null : new Coordinates(southWest.getLatitude(),
                 southWest.getLongitude());
+
         if (collectionObserver.getCollection().isQuestionnaire()) {
             storySearchParameters = new StorySearchParameters(start, length, null, collectionId, searchToken,
                     northEastCoordinates, southWestCoordinates, AuthConstants.ACCESS_MODE_EXPLICIT,
@@ -234,6 +255,7 @@ public class StoriesWidgetPresenter extends PresenterWidget<StoriesWidgetPresent
 
         addVisibleHandler(SearchEvent.TYPE, this);
         addVisibleHandler(MapBoundariesChangeEvent.TYPE, this);
+        addRegisteredHandler(StateSearchEvent.TYPE, this);
 
         setInSlot(SLOT_SEARCH, searchPresenter);
         setInSlot(SLOT_STORIES, listStoriesPresenter);

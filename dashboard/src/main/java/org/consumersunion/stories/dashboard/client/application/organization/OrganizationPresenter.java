@@ -186,7 +186,7 @@ public class OrganizationPresenter extends Presenter<OrganizationPresenter.MyVie
                     public void handleSuccess(DataResponse<Document> result) {
                         final List<Document> permissions = result.getData();
                         // really should be only one at the moment
-                        defaultPermissions = permissions.get(0);
+                        defaultPermissions = permissions.isEmpty() ? null : permissions.get(0);
                         revealCurrentOrganization();
                     }
                 });

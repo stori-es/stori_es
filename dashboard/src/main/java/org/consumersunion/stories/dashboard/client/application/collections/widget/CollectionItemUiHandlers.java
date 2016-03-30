@@ -13,8 +13,6 @@ public interface CollectionItemUiHandlers extends UiHandlers {
 
     void enableTagsEdit();
 
-    void addSourceOrTarget();
-
     void watchCollection(boolean enable);
 
     void copyQuestionnaire(CollectionContent data);

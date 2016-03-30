@@ -33,10 +33,10 @@ import org.consumersunion.stories.common.shared.service.datatransferobject.Colle
 import org.consumersunion.stories.common.shared.service.datatransferobject.CollectionSummary;
 import org.consumersunion.stories.dashboard.client.application.StoriesDashboardPresenter;
 import org.consumersunion.stories.dashboard.client.application.collection.CollectionObserver;
-import org.consumersunion.stories.dashboard.client.application.collection.popup.SourceOrTargetSelectPresenter;
-import org.consumersunion.stories.dashboard.client.application.collection.widget.collectionsbyquestionnaire
-        .CollectionsByQuestionnairePresenter;
-import org.consumersunion.stories.dashboard.client.application.questionnaire.widget.ListQuestionnairePresenter;
+import org.consumersunion.stories.dashboard.client.application.collection.widget.collectionstoken
+        .CollectionsTokenByQuestionnairePresenter;
+import org.consumersunion.stories.dashboard.client.application.collection.widget.collectionstoken
+        .SourceQuestionnaireTokenPresenter;
 import org.consumersunion.stories.dashboard.client.application.widget.TagsPresenter;
 import org.consumersunion.stories.dashboard.client.application.widget.TagsPresenterFactory;
 import org.consumersunion.stories.dashboard.client.event.CloseCardEvent;
@@ -97,9 +97,8 @@ public class CollectionItemPresenter extends PresenterWidget<CollectionItemPrese
     private final RpcCollectionServiceAsync collectionService;
     private final RpcQuestionnaireServiceAsync questionnaireService;
     private final RpcDocumentServiceAsync documentService;
-    private final CollectionsByQuestionnairePresenter collectionsByQuestionnairePresenter;
-    private final ListQuestionnairePresenter listQuestionnairePresenter;
-    private final SourceOrTargetSelectPresenter sourceOrTargetSelectPresenter;
+    private final CollectionsTokenByQuestionnairePresenter collectionsTokenByQuestionnairePresenter;
+    private final SourceQuestionnaireTokenPresenter sourceQuestionnaireTokenPresenter;
     private final CommonI18nMessages messages;
     private final StoryTellerDashboardI18nLabels labels;
     private final TagsPresenter tagsPresenter;
@@ -126,9 +125,8 @@ public class CollectionItemPresenter extends PresenterWidget<CollectionItemPrese
             RpcCollectionServiceAsync collectionService,
             RpcQuestionnaireServiceAsync questionnaireService,
             RpcDocumentServiceAsync documentService,
-            CollectionsByQuestionnairePresenter collectionsByQuestionnairePresenter,
-            ListQuestionnairePresenter listQuestionnairePresenter,
-            SourceOrTargetSelectPresenter sourceOrTargetSelectPresenter,
+            CollectionsTokenByQuestionnairePresenter collectionsTokenByQuestionnairePresenter,
+            SourceQuestionnaireTokenPresenter sourceQuestionnaireTokenPresenter,
             TagsPresenterFactory tagsPresenterFactory,
             CommonI18nMessages messages,
             StoryTellerDashboardI18nLabels labels,
@@ -146,9 +144,8 @@ public class CollectionItemPresenter extends PresenterWidget<CollectionItemPrese
         this.collectionService = collectionService;
         this.questionnaireService = questionnaireService;
         this.documentService = documentService;
-        this.collectionsByQuestionnairePresenter = collectionsByQuestionnairePresenter;
-        this.listQuestionnairePresenter = listQuestionnairePresenter;
-        this.sourceOrTargetSelectPresenter = sourceOrTargetSelectPresenter;
+        this.collectionsTokenByQuestionnairePresenter = collectionsTokenByQuestionnairePresenter;
+        this.sourceQuestionnaireTokenPresenter = sourceQuestionnaireTokenPresenter;
         this.messages = messages;
         this.labels = labels;
         this.collectionObserver = collectionObserver;
@@ -269,12 +266,6 @@ public class CollectionItemPresenter extends PresenterWidget<CollectionItemPrese
     @Override
     public void enableTagsEdit() {
         tagsPresenter.startEdit();
-    }
-
-    @Override
-    public void addSourceOrTarget() {
-        sourceOrTargetSelectPresenter.initialize(collection);
-        addToPopupSlot(sourceOrTargetSelectPresenter, true);
     }
 
     @Override
@@ -441,9 +432,9 @@ public class CollectionItemPresenter extends PresenterWidget<CollectionItemPrese
         setInSlot(SLOT_TAGS, tagsPresenter);
 
         if (collection.isQuestionnaire()) {
-            setInSlot(SLOT_SOURCE_OR_TARGET, collectionsByQuestionnairePresenter);
+            setInSlot(SLOT_SOURCE_OR_TARGET, collectionsTokenByQuestionnairePresenter);
         } else {
-            setInSlot(SLOT_SOURCE_OR_TARGET, listQuestionnairePresenter);
+            setInSlot(SLOT_SOURCE_OR_TARGET, sourceQuestionnaireTokenPresenter);
         }
     }
 
@@ -493,10 +484,10 @@ public class CollectionItemPresenter extends PresenterWidget<CollectionItemPrese
                     filtered.add(cs);
                 }
             }
-            collectionsByQuestionnairePresenter.init(collection, filtered);
+            collectionsTokenByQuestionnairePresenter.init(collection, filtered);
             fetchCollectionData(null);
         } else {
-            listQuestionnairePresenter.initPresenter(collection, collectionData.getSourceQuestionnaires());
+            sourceQuestionnaireTokenPresenter.init(collection, collectionData.getSourceQuestionnaires());
         }
     }
 
@@ -515,11 +506,17 @@ public class CollectionItemPresenter extends PresenterWidget<CollectionItemPrese
     }
 
     private void fetchCollectionData(final AsyncCallback<DatumResponse<CollectionData>> callback) {
-        if (fetchCollectionRequest == null || fetchCollectionRequest.isPending()) {
+        if (fetchCollectionRequest != null && fetchCollectionRequest.isPending()) {
+            fetchCollectionRequest.cancel();
+            fetchCollectionRequest = null;
+        }
+
+        if (fetchCollectionRequest == null) {
             fetchCollectionRequest = collectionService.getCollection(collection.getId(), ROLE_CURATOR,
                     new ResponseHandler<DatumResponse<CollectionData>>() {
                         @Override
                         public void handleSuccess(DatumResponse<CollectionData> result) {
+                            fetchCollectionRequest = null;
                             collectionData = result.getDatum();
                             collection = collectionData.getCollection();
                             if (isDetails) {
@@ -537,6 +534,7 @@ public class CollectionItemPresenter extends PresenterWidget<CollectionItemPrese
                         public void onFailure(Throwable e) {
                             super.onFailure(e);
 
+                            fetchCollectionRequest = null;
                             if (callback != null) {
                                 callback.onFailure(e);
                             }

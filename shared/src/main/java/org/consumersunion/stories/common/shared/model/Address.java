@@ -9,8 +9,9 @@ import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Ordering;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class Address implements Serializable, Comparable<Address> {
+public class Address implements Serializable, Comparable<Address>, IsSerializable {
     public enum GeoCodeStatus {
         SUCCESS, SKIPPED, FAILED
     }

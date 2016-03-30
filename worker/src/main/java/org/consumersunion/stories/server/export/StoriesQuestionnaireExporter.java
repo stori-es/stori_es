@@ -92,8 +92,8 @@ public class StoriesQuestionnaireExporter extends StoriesCollectionExporter {
     }
 
     private boolean blockNotTitleOrText(Block block) {
-        return !BlockType.STORY_ASK.equals(block.getStandardMeaning())
-                && !BlockType.STORY_TITLE.equals(block.getStandardMeaning());
+        return !block.getBlockType().isStoryAsk()
+                && !BlockType.STORY_TITLE.equals(block.getBlockType());
     }
 
     private Map<BlockType, String> getBlockKeyMap() {

@@ -92,8 +92,7 @@ public class TextImageConfigurator extends AbstractConfigurator<TextImageBlock> 
             }
 
             TextImageBlock oldContent = getEditedValue();
-            content.setFormType(oldContent.getFormType());
-            content.setStandardMeaning(oldContent.getStandardMeaning());
+            content.setBlockType(oldContent.getBlockType());
             doneCallback.onSuccess(content);
 
             setEditedValue(content);

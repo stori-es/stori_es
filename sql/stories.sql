@@ -121,6 +121,23 @@ CREATE TABLE `activity` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `addStoriesTask`
+--
+
+DROP TABLE IF EXISTS `addStoriesTask`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `addStoriesTask` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `collections` varchar(512) DEFAULT NULL,
+  `searchToken` varchar(255) DEFAULT NULL,
+  `collectionId` int(11) DEFAULT NULL,
+  `questionnaireId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `address`
 --
 
@@ -622,6 +639,25 @@ CREATE TABLE `entity` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `exportTask`
+--
+
+DROP TABLE IF EXISTS `exportTask`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `exportTask` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `kind` varchar(32) DEFAULT NULL,
+  `container` varchar(32) DEFAULT NULL,
+  `objectId` int(11) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `expires` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_exportTask_collection` (`objectId`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `favorite`
 --
 
@@ -811,8 +847,26 @@ DROP TABLE IF EXISTS `questionnaire`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `questionnaire` (
   `id` int(11) NOT NULL,
+  `confirmation2` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_questionarie_systemEntity` FOREIGN KEY (`id`) REFERENCES `systemEntity` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `reset_password`
+--
+
+DROP TABLE IF EXISTS `reset_password`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reset_password` (
+  `handle` varchar(64) NOT NULL,
+  `nonce` varchar(32) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`handle`),
+  UNIQUE KEY `fk_reset_password_handle` (`handle`),
+  CONSTRAINT `fk_reset_password_handle` FOREIGN KEY (`handle`) REFERENCES `user` (`handle`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -828,8 +882,9 @@ CREATE TABLE `roles` (
   `role` varchar(16) NOT NULL,
   `grantee` int(11) NOT NULL,
   PRIMARY KEY (`grantor`,`grantee`),
-  CONSTRAINT fk_roles_grantor_entity FOREIGN KEY (grantor) REFERENCES entity (id),
-  CONSTRAINT fk_roles_grantee_entity FOREIGN KEY (grantee) REFERENCES entity (id)
+  KEY `fk_roles_grantee_entity` (`grantee`),
+  CONSTRAINT `fk_roles_grantee_entity` FOREIGN KEY (`grantee`) REFERENCES `entity` (`id`),
+  CONSTRAINT `fk_roles_grantor_entity` FOREIGN KEY (`grantor`) REFERENCES `entity` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -909,9 +964,10 @@ CREATE TABLE `systemEntity` (
   `version` int(11) NOT NULL,
   `public` tinyint(1) NOT NULL DEFAULT '0',
   `owner` int(11) DEFAULT '0',
+  `creator` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `systemEntity_owner_index` (`owner`)
-) ENGINE=InnoDB AUTO_INCREMENT=779607 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=779635 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -927,6 +983,27 @@ CREATE TABLE `tag` (
   PRIMARY KEY (`systemEntity`,`value`),
   CONSTRAINT `fk_tag_systemEntity1` FOREIGN KEY (`systemEntity`) REFERENCES `systemEntity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `task`
+--
+
+DROP TABLE IF EXISTS `task`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `task` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `profile` int(11) DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL,
+  `status` varchar(32) DEFAULT NULL,
+  `count` int(11) DEFAULT '0',
+  `total` int(11) DEFAULT '0',
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastModified` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_task_user` (`profile`)
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -985,7 +1062,7 @@ CREATE TABLE `verification_nonce` (
   `nonce` varchar(32) DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`profile`,`email`),
-  CONSTRAINT `fk_verification_profile` FOREIGN KEY (`profile`) REFERENCES `profile` (`id`)
+  CONSTRAINT `fk_verification_entity` FOREIGN KEY (`profile`) REFERENCES `systemEntity` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1014,8 +1091,9 @@ CREATE TABLE `white_list` (
   `max_role` varchar(16) NOT NULL,
   `member` int(11) NOT NULL,
   PRIMARY KEY (`organization`,`member`),
-  CONSTRAINT fk_white_list_organization FOREIGN KEY (organization) REFERENCES organization (id),
-  CONSTRAINT fk_white_list_member_entity FOREIGN KEY (member) REFERENCES entity (id)
+  KEY `fk_white_list_member_entity` (`member`),
+  CONSTRAINT `fk_white_list_organization` FOREIGN KEY (`organization`) REFERENCES `organization` (`id`),
+  CONSTRAINT `fk_white_list_member_entity` FOREIGN KEY (`member`) REFERENCES `entity` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1028,4 +1106,4 @@ CREATE TABLE `white_list` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-13 20:39:07
+-- Dump completed on 2016-02-15 15:05:07

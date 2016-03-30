@@ -15,6 +15,10 @@ body a {
     color: #0059b2;
 }
 
+i {
+    font-style: normal;
+}
+
 .attachedCollections {
     text-decoration: none;
 }
@@ -100,6 +104,11 @@ input[type=text].disabled {
     border: 1px solid #ccc;
     border-top: 1px solid #999;
     font-size: small;
+}
+
+.gwt-TextBox[disabled] {
+    color: rgb(84, 84, 84);
+    background-color: rgb(235, 235, 228);
 }
 
 .gwt-TextBox-readonly {

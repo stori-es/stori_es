@@ -5,7 +5,9 @@
 
     <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
 
-    <ui:style>
+    <ui:style gss="true">
+        @external 'icon*';
+
         .storyCheckbox {
             text-decoration: none;
             display: inline-block;
@@ -36,15 +38,21 @@
             width: 90px;
         }
 
-        .box {
-            display: inline-block;
-
-            background-color: #f5f5f5;
-            border: 1px solid #d4d4d4;
-            border-radius: 4px;
-            padding: 6px;
+        .defaultContent {
             color: #000;
+            background-color: #f5f5f5;
+
+            display: inline-block;
+            border: 1px solid #d4d4d4;
+            padding: 6px;
             margin-right: 8px;
+
+            border-radius: 4px;
+        }
+
+        .defaultContent .icon-file-text-alt {
+            font-size: 18px;
+            color: #F8B200;
         }
 
         .contentList {
@@ -74,7 +82,7 @@
         <div ui:field="rightColumn" class="{resource.cards.rightColumn}"> <!-- Right Column-->
             <s:CardToolbarWidget ui:field="toolbar"/>
             <d:TimeMetadataWidget ui:field="timeContainer" addStyleNames="{resource.generalStyleCss.w100}"/>
-            <div ui:field="collectionsWrapper" class="{resource.cards.collections}">
+            <div class="{resource.cards.collections}">
                 <g:SimplePanel ui:field="collections"/>
             </div>
         </div>
@@ -88,7 +96,7 @@
             </div>
             <div ui:field="editContent" class="{resource.cards.editPanel} {resource.generalStyleCss.font14}">
                 <div class="{style.defaulContent}">Default Content</div>
-                <div ui:field="defaultContent" class="{style.box}">
+                <div ui:field="defaultContent" class="{style.defaultContent}">
                     <span class="icon-file-text-alt"/>
                     <span ui:field="defaultContentTitle"/>
                     <span ui:field="removeDefaultContent"

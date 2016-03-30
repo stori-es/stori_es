@@ -103,7 +103,7 @@ public class CollectionStoryConfigurator extends AbstractConfigurator<Content>
         this.storyBox = storySuggestFactory.create(storySuggestionOracle);
         this.collectionService = collectionService;
         generalStyle = resources.generalStyleCss();
-        isStory = BlockType.STORY.equals(content.getFormType());
+        isStory = BlockType.STORY.equals(content.getBlockType());
 
         initSuggestBoxes();
 
@@ -181,8 +181,7 @@ public class CollectionStoryConfigurator extends AbstractConfigurator<Content>
             Content oldContent = getEditedValue();
             Content content = (Content) oldContent.clone();
             content.setContent(getValue());
-            content.setFormType(oldContent.getFormType());
-            content.setStandardMeaning(oldContent.getStandardMeaning());
+            content.setBlockType(oldContent.getBlockType());
             doneCallback.onSuccess(content);
 
             setEditedValue(content);

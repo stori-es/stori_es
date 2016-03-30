@@ -21,17 +21,16 @@ public class QuestionnairePersisterTest extends TestCase {
         final Questionnaire template = new Questionnaire();
 
         final Question question = new Question();
-        question.setFormType(BlockType.TEXT_INPUT);
+        question.setBlockType(BlockType.FIRST_NAME);
         question.setDataType("foo");
         question.setLabel("foo label");
         question.addOption("foo1", "foo2");
         question.setRequired(true);
         question.setMinLength(1);
         question.setMaxLength(4);
-        question.setStandardMeaning(BlockType.FIRST_NAME);
 
         final Content content = new Content();
-        content.setFormType(BlockType.CONTENT);
+        content.setBlockType(BlockType.CONTENT);
         content.setContent("foo");
 
         final ArrayList<Block> elements = new ArrayList<Block>();
@@ -44,17 +43,16 @@ public class QuestionnairePersisterTest extends TestCase {
         final Questionnaire template = new Questionnaire();
 
         final Question question = new Question();
-        question.setFormType(BlockType.TEXT_INPUT);
+        question.setBlockType(BlockType.FIRST_NAME);
         question.setDataType("foo");
         question.setLabel("foo label");
         question.addOption("foo1", "foo2");
         question.setRequired(true);
         question.setMinLength(1);
         question.setMaxLength(4);
-        question.setStandardMeaning(BlockType.FIRST_NAME);
 
         final Content content = new Content();
-        content.setFormType(BlockType.CONTENT);
+        content.setBlockType(BlockType.CONTENT);
         content.setContent("foo");
 
         final ArrayList<Block> elements = new ArrayList<Block>();
@@ -68,17 +66,16 @@ public class QuestionnairePersisterTest extends TestCase {
         final Questionnaire template = new Questionnaire();
 
         final Question question = new Question();
-        question.setFormType(BlockType.TEXT_INPUT);
+        question.setBlockType(BlockType.FIRST_NAME);
         question.setDataType("foo");
         question.setLabel("foo label");
         question.addOption("foo1", "foo2");
         question.setRequired(true);
         question.setMinLength(1);
         question.setMaxLength(4);
-        question.setStandardMeaning(BlockType.FIRST_NAME);
 
         final Content content = new Content();
-        content.setFormType(BlockType.CONTENT);
+        content.setBlockType(BlockType.CONTENT);
         content.setContent("foo");
 
         final ArrayList<Block> elements = new ArrayList<Block>();

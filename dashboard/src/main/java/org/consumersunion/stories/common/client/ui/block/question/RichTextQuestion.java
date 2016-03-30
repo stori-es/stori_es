@@ -9,6 +9,7 @@ import org.consumersunion.stories.common.shared.model.questionnaire.Answer;
 import org.consumersunion.stories.common.shared.model.questionnaire.Question;
 
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -67,8 +68,18 @@ public class RichTextQuestion extends QuestionWidget implements QuestionElement<
 
     @Override
     public void setAnswer(List<String> reportedValues, Boolean enable) {
-        richText.setHTML(reportedValues.get(0));
-        richText.setEnabled(enable);
+        if (!enable) {
+            questionPanel.clear();
+
+            HTML richText = new HTML(reportedValues.get(0));
+            richText.setStyleName("gwt-TextBox");
+            richText.getElement().setAttribute("disabled", "");
+
+            questionPanel.add(richText);
+        } else {
+            richText.setHTML(reportedValues.get(0));
+            richText.setEnabled(enable);
+        }
     }
 
     private String getHtml() {

@@ -207,8 +207,9 @@ public class ListStoriesPresenter extends PresenterWidget<ListStoriesPresenter.M
     protected void onReveal() {
         super.onReveal();
 
-        currentPage = Integer.valueOf(placeManager.getCurrentPlaceRequest().getParameter(ParameterTokens.page, "1"));
-        getView().goToPage(currentPage, true);
+        if (storiesListHandler != null) {
+            doReveal();
+        }
     }
 
     @Override
@@ -240,7 +241,16 @@ public class ListStoriesPresenter extends PresenterWidget<ListStoriesPresenter.M
         getView().setupPager(rowHandler);
     }
 
+    private void doReveal() {
+        currentPage = Integer.valueOf(placeManager.getCurrentPlaceRequest().getParameter(ParameterTokens.page, "1"));
+        getView().goToPage(currentPage, true);
+    }
+
     private void loadStoriesByCollection(final int start, final int length) {
+        if (storiesListHandler == null) {
+            return;
+        }
+
         StorySearchParameters storySearchParameters =
                 storiesListHandler.getStorySearchParameters(start, length);
 

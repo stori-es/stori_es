@@ -88,7 +88,7 @@ public class MetaBlock extends Composite {
                 .append(createDiv(labels.text(), BlockType.TEXT_INPUT.code()))
                 .append(createDiv(labels.multipleChoice(), BlockType.RADIO.code()))
                 .append(createDiv(labels.rating(),
-                        createCompositeBlockType(BlockType.RATING, BlockType.STARS)))
+                        getCode(BlockType.RATING_STARS)))
                 .append(createDiv(labels.date(), BlockType.DATE.code()))
                 .append(createDiv(labels.attachments(), BlockType.ATTACHMENTS.code()));
     }
@@ -99,23 +99,24 @@ public class MetaBlock extends Composite {
         GQuery leftBank = GQuery.$(questionBankLeft).empty();
 
         addToQuestionBank(existingBlockTypes, leftBank,
-                createCompositeBlockType(BlockType.STORY_TITLE, BlockType.TEXT_INPUT),
+                getCode(BlockType.STORY_TITLE),
                 labels.standQuestStoryTitle());
         addToQuestionBank(existingBlockTypes, leftBank,
-                createCompositeBlockType(BlockType.STORY_ASK, BlockType.TEXT_AREA),
+		// Actually indicatory for the 'Story Ask' control.
+                getCode(BlockType.STORY_ASK_RICH),
                 labels.standQuestStoryAsk());
         addToQuestionBank(existingBlockTypes, leftBank,
-                createCompositeBlockType(BlockType.FIRST_NAME, BlockType.TEXT_INPUT),
+                getCode(BlockType.FIRST_NAME),
                 labels.standQuestFirstName());
         addToQuestionBank(existingBlockTypes, leftBank,
-                createCompositeBlockType(BlockType.LAST_NAME, BlockType.TEXT_INPUT),
+                getCode(BlockType.LAST_NAME),
                 labels.standQuestLastName());
 
         leftBank.append(createDiv(labels.standQuestEmail(),
-                createCompositeBlockType(BlockType.EMAIL, BlockType.CONTACT)));
+                getCode(BlockType.EMAIL)));
 
         leftBank.append(createDiv(labels.standQuestPhone(),
-                createCompositeBlockType(BlockType.PHONE, BlockType.CONTACT)));
+                getCode(BlockType.PHONE)));
 
         String[] stdValues = getStandardValues();
         String[] stdLabels = getStandardLabels();
@@ -141,10 +142,6 @@ public class MetaBlock extends Composite {
                 });
     }
 
-    private String createCompositeBlockType(BlockType blockType, BlockType formType) {
-        return blockType.code() + "/" + formType.code();
-    }
-
     private boolean isBlockTypeAlreadyAdded(
             Multimap<BlockType, BlockBuilder> existingBlockTypes,
             BlockType blockType) {
@@ -153,17 +150,14 @@ public class MetaBlock extends Composite {
 
     private void onElementClicked(Element e) {
         String value = e.getAttribute("data-value");
-        String[] values = value.split("/");
+        BlockType blockType = BlockType.valueOfCode(value);
 
-        BlockType blockType = BlockType.valueOfCode(values[0]);
-        BlockType formType = values.length > 1 ? BlockType.valueOfCode(values[1]) : null;
-
-        handler.createBlockAndReplace(blockType, formType, this);
+        handler.createBlockAndReplace(blockType, this);
     }
 
     private void addToQuestionBank(Multimap<BlockType, BlockBuilder> existingBlockTypes, GQuery element, String code,
             String label) {
-        BlockType blockType = BlockType.valueOfCode(code.split("/")[0]);
+        BlockType blockType = BlockType.valueOfCode(code);
 
         DivElement divElement = createDiv(label, code, !existingBlockTypes.containsKey(blockType));
 
@@ -200,12 +194,16 @@ public class MetaBlock extends Composite {
 
     private String[] getStandardValues() {
         return new String[]{
-                createCompositeBlockType(BlockType.STREET_ADDRESS_1, BlockType.PLAIN_TEXT),
-                createCompositeBlockType(BlockType.CITY, BlockType.TEXT_INPUT),
-                createCompositeBlockType(BlockType.STATE, BlockType.SELECT),
-                createCompositeBlockType(BlockType.ZIP_CODE, BlockType.TEXT_INPUT),
-                createCompositeBlockType(BlockType.UPDATES_OPT_IN, BlockType.CHECKBOX),
-                createCompositeBlockType(BlockType.PREFERRED_EMAIL_FORMAT, BlockType.SELECT)
+                getCode(BlockType.STREET_ADDRESS_1),
+                getCode(BlockType.CITY),
+                getCode(BlockType.STATE),
+                getCode(BlockType.ZIP_CODE),
+                getCode(BlockType.UPDATES_OPT_IN),
+                getCode(BlockType.PREFERRED_EMAIL_FORMAT)
         };
+    }
+
+    private String getCode(BlockType blockType) {
+        return blockType.code();
     }
 }

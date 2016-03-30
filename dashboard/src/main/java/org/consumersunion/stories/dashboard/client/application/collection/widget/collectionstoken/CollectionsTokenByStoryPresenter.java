@@ -1,7 +1,6 @@
-package org.consumersunion.stories.dashboard.client.application.collection.widget.collectionsbystory;
+package org.consumersunion.stories.dashboard.client.application.collection.widget.collectionstoken;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.consumersunion.stories.common.client.event.RedrawEvent;
@@ -25,9 +24,7 @@ import org.consumersunion.stories.dashboard.shared.place.NameTokens;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
-import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 
@@ -35,13 +32,10 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
  * Presenter listing the {@link Collection}s to which a particular {@link Story} is associated. Provides controls to
  * add, create, and remove the {@link Story} in question from {@link Collection}.
  */
-public class CollectionsByStoryPresenter extends PresenterWidget<CollectionsByStoryPresenter.MyView>
-        implements CollectionsByStoryUiHandlers, RedrawEvent.RedrawHandler<StorySummary> {
-    interface MyView extends View, HasUiHandlers<CollectionsByStoryUiHandlers> {
-        void setData(List<CollectionSummary> data);
-
-        void clear();
-    }
+public class CollectionsTokenByStoryPresenter
+        extends PresenterWidget<CollectionsTokenView<CollectionSummary, Collection, CollectionData>>
+        implements CollectionsTokenUiHandlers<CollectionSummary, Collection, CollectionData>,
+        RedrawEvent.RedrawHandler<StorySummary> {
 
     private final RpcCollectionServiceAsync collectionService;
     private final CommonI18nMessages messages;
@@ -53,9 +47,9 @@ public class CollectionsByStoryPresenter extends PresenterWidget<CollectionsBySt
     private Story currentStory;
 
     @Inject
-    CollectionsByStoryPresenter(
+    CollectionsTokenByStoryPresenter(
             EventBus eventBus,
-            MyView view,
+            CollectionsTokenView<CollectionSummary, Collection, CollectionData> view,
             RpcCollectionServiceAsync collectionService,
             CurrentUser currentUser,
             PlaceManager placeManager,
@@ -70,6 +64,7 @@ public class CollectionsByStoryPresenter extends PresenterWidget<CollectionsBySt
         this.storyService = storyService;
 
         getView().setUiHandlers(this);
+        getView().showQuestionnaireIcon();
     }
 
     public void initPresenter(StorySummary storySummary) {
@@ -90,7 +85,7 @@ public class CollectionsByStoryPresenter extends PresenterWidget<CollectionsBySt
     }
 
     @Override
-    public void removeFromCollection(CollectionSummary collection) {
+    public void removeCollection(CollectionSummary collection) {
         final int collectionId = collection.getId();
         int storyId = currentStory.getId();
 
@@ -104,12 +99,13 @@ public class CollectionsByStoryPresenter extends PresenterWidget<CollectionsBySt
     }
 
     @Override
-    public void addStoryToCollection(Collection collection) {
+    public void onCollectionSelected(Collection collection) {
         addCollection(collection);
     }
 
     @Override
-    public void collectionDetails(Integer collectionId) {
+    public void collectionDetails(CollectionSummary collectionSummary) {
+        int collectionId = collectionSummary.getId();
         PlaceRequest place = new PlaceRequest.Builder()
                 .nameToken(NameTokens.collection)
                 .with(ParameterTokens.id, String.valueOf(collectionId))
@@ -161,8 +157,7 @@ public class CollectionsByStoryPresenter extends PresenterWidget<CollectionsBySt
                 new ResponseHandlerLoader<ActionResponse>() {
                     @Override
                     public void handleSuccess(ActionResponse result) {
-                        messageDispatcher.displayMessage(MessageStyle.SUCCESS,
-                                messages.storiesAddedSuccessfully());
+                        messageDispatcher.displayMessage(MessageStyle.SUCCESS, messages.storiesAddedSuccessfully());
                         reloadData();
                     }
                 });

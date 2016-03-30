@@ -54,15 +54,18 @@ public class QuestionnaireI15dPersister implements Persister<QuestionnaireI15d> 
     private final PersistenceService persistenceService;
     private final DocumentPersister documentPersister;
     private final CollectionPersister collectionPersister;
+    private final AvailablePermalinkExtractor availablePermalinkExtractor;
 
     @Inject
     QuestionnaireI15dPersister(
             PersistenceService persistenceService,
             DocumentPersister documentPersister,
-            CollectionPersister collectionPersister) {
+            CollectionPersister collectionPersister,
+            AvailablePermalinkExtractor availablePermalinkExtractor) {
         this.persistenceService = persistenceService;
         this.documentPersister = documentPersister;
         this.collectionPersister = collectionPersister;
+        this.availablePermalinkExtractor = availablePermalinkExtractor;
     }
 
     @Override
@@ -140,6 +143,28 @@ public class QuestionnaireI15dPersister implements Persister<QuestionnaireI15d> 
 
     public QuestionnaireI15d updateQuestionnaire(QuestionnaireI15d questionnaire) {
         return persistenceService.process(updateQuestionnaireFunc(questionnaire));
+    }
+
+    public String getAvailablePermalink(String slug) {
+        return persistenceService.process(new ProcessFunc<String, String>("/questionnaires/" + slug) {
+            @Override
+            public String process() {
+                try {
+                    PreparedStatement select = conn.prepareStatement(
+                            "SELECT e.permalink FROM questionnaire q " +
+                                    "JOIN entity e ON q.id = e.id " +
+                                    "WHERE e.permalink LIKE ?");
+
+                    select.setString(1, input + "%");
+
+                    ResultSet rs = select.executeQuery();
+
+                    return availablePermalinkExtractor.extractPermalink(rs, input);
+                } catch (SQLException e) {
+                    throw new GeneralException(e);
+                }
+            }
+        });
     }
 
     static class CreateQuestionnaireFunc extends CollectionPersister.CreateCollectionFunc<QuestionnaireI15d> {
@@ -318,6 +343,7 @@ public class QuestionnaireI15dPersister implements Persister<QuestionnaireI15d> 
                 SearchByCollectionPagedParams params,
                 DocumentPersister documentPersister) {
             super(params);
+
             this.documentPersister = documentPersister;
         }
 
@@ -326,14 +352,17 @@ public class QuestionnaireI15dPersister implements Persister<QuestionnaireI15d> 
             try {
                 List<QuestionnaireI15d> result = new ArrayList<QuestionnaireI15d>();
 
+                boolean hasLimit = input.getStart() != 0 && input.getLength() != 0;
                 PreparedStatement qps = conn.prepareStatement(selectClause + fromClause +
                         " JOIN collection_sources cSource ON cSource.sourceQuestionnaire=q.id "
                         + "WHERE cSource.targetCollection=? "
                         + "AND c.deleted=0 "
-                        + "ORDER BY e.id DESC" + " LIMIT ?, ?");
+                        + "ORDER BY e.id DESC" + (hasLimit ? " LIMIT ?, ?" : ""));
                 qps.setInt(1, input.getCollectionId());
-                qps.setInt(2, input.getStart());
-                qps.setInt(3, input.getLength());
+                if (hasLimit) {
+                    qps.setInt(2, input.getStart());
+                    qps.setInt(3, input.getLength());
+                }
 
                 ResultSet qrs = qps.executeQuery();
 

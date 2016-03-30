@@ -43,18 +43,17 @@ public class TextQuestionConfigurator extends AbstractConfigurator<Question> imp
 
         private final BlockType code;
 
-        TextBoxFormat(
-                BlockType formType) {
-            this.code = formType;
+        TextBoxFormat(BlockType renderType) {
+            this.code = renderType;
         }
 
-        public BlockType getFormType() {
+        public BlockType getBlockType() {
             return code;
         }
 
         public static TextBoxFormat fromQuestion(Question question) {
             for (TextBoxFormat format : values()) {
-                if (format.code.equals(question.getFormType())) {
+                if (format.code.equals(question.getRenderType())) {
                     return format;
                 }
             }
@@ -62,8 +61,9 @@ public class TextQuestionConfigurator extends AbstractConfigurator<Question> imp
             throw new GeneralException("Unexpected form type");
         }
 
-        public static Collection<TextBoxFormat> validValues(BlockType standardMeaning) {
-            if (BlockType.STORY_ASK.equals(standardMeaning)) {
+        public static Collection<TextBoxFormat> validValues(BlockType blockType) {
+            if (BlockType.STORY_ASK_PLAIN.equals(blockType)
+            		|| BlockType.STORY_ASK_RICH.equals(blockType)) {
                 return Lists.newArrayList(PLAIN_TEXT, RICH_TEXT);
             } else {
                 return Lists.newArrayList(values());
@@ -117,7 +117,7 @@ public class TextQuestionConfigurator extends AbstractConfigurator<Question> imp
         });
 
         format.setValue(TextBoxFormat.fromQuestion(question));
-        format.setAcceptableValues(TextBoxFormat.validValues(question.getStandardMeaning()));
+        format.setAcceptableValues(TextBoxFormat.validValues(question.getBlockType()));
 
         initWidget(uiBinder.createAndBindUi(this));
         driver.initialize(this);
@@ -162,7 +162,15 @@ public class TextQuestionConfigurator extends AbstractConfigurator<Question> imp
         Question question = driver.flush();
         if (validate()) {
             resetErrors();
-            question.setFormType(format.getValue().getFormType());
+	    // The 'Story Ask' block is special because there is one
+	    // 'Standard Question' presented to the user which
+	    // encompasses both variations.
+            if (question.getBlockType().isStoryAsk()) {
+            	question.setBlockType(format.getValue() == TextBoxFormat.RICH_TEXT
+            			              ? BlockType.STORY_ASK_RICH
+            			              : BlockType.STORY_ASK_PLAIN);
+            }
+
             doneCallback.onSuccess(question);
 
             setEditedValue(question);
@@ -170,9 +178,11 @@ public class TextQuestionConfigurator extends AbstractConfigurator<Question> imp
     }
 
     private boolean hideFormatSelection(Question question) {
-        BlockType standardMeaning = question.getStandardMeaning();
+        BlockType blockType = question.getBlockType();
 
-        return standardMeaning != null && !BlockType.STORY_ASK.equals(standardMeaning);
+	// TODO: actually, don't think blockType can be null...
+        return blockType != null 
+        		&& !blockType.isStoryAsk();
     }
 
     private void bind() {
@@ -201,6 +211,6 @@ public class TextQuestionConfigurator extends AbstractConfigurator<Question> imp
     }
 
     private boolean hasAdvancedPanel() {
-        return !BlockType.ZIP_CODE.equals(getEditedValue().getStandardMeaning());
+        return !BlockType.ZIP_CODE.equals(getEditedValue().getBlockType());
     }
 }

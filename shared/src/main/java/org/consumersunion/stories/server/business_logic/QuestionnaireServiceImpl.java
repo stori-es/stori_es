@@ -10,6 +10,7 @@ import org.consumersunion.stories.common.shared.model.document.BlockType;
 import org.consumersunion.stories.common.shared.model.document.Content;
 import org.consumersunion.stories.common.shared.model.document.Document;
 import org.consumersunion.stories.common.shared.model.document.SubmitBlock;
+import org.consumersunion.stories.common.shared.model.document.TextImageBlock;
 import org.consumersunion.stories.common.shared.model.questionnaire.Questionnaire;
 import org.consumersunion.stories.common.shared.model.questionnaire.QuestionnaireI15d;
 import org.consumersunion.stories.i18n.CommonI18nMessages;
@@ -32,6 +33,7 @@ import net.lightoze.gwt.i18n.server.LocaleFactory;
 import static org.consumersunion.stories.common.shared.AuthConstants.ROLE_CURATOR;
 import static org.consumersunion.stories.common.shared.AuthConstants.ROLE_READER;
 import static org.consumersunion.stories.common.shared.model.document.Content.TextType.HTML;
+import static org.consumersunion.stories.server.util.StringUtil.generateSlug;
 
 @Service
 public class QuestionnaireServiceImpl implements QuestionnaireService {
@@ -79,9 +81,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     public Questionnaire getQuestionnaire(String permalink) {
         permalink = StringUtil.cleanPermalink(permalink);
 
-        QuestionnaireI15d questionnaire = questionnaireI15dPersister.getByPermalink(permalink);
-
-        return checkQuestionnaireAuth(questionnaire);
+        return questionnaireI15dPersister.getByPermalink(permalink).toQuestionnaire();
     }
 
     @Override
@@ -111,11 +111,8 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
             collectionService.setTheme(questionnaire);
             setDefaultBlocks(questionnaire);
 
-            questionnaire.setPermalink("/questionnaires/" + StringUtil.generateSlug(questionnaire.getTitle()));
-            boolean availableLink = checkPermalinkAvailability(questionnaire.getPermalink());
-            if (!availableLink) {
-                throw new PermalinkAlreadyExistsException();
-            }
+            String availablePermalink = questionnaireI15dPersister.getAvailablePermalink(generateSlug(questionnaire.getTitle()));
+            questionnaire.setPermalink(availablePermalink);
 
             QuestionnaireI15d dbQuestionnaire = questionnaireI15dPersister.createQuestionnaire(questionnaire);
 
@@ -148,15 +145,6 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         return questionnaireI15dPersister.updateQuestionnaire(questionnaire);
     }
 
-    private boolean checkPermalinkAvailability(String permalink) {
-        try {
-            questionnaireI15dPersister.getByPermalink(permalink);
-            return false;
-        } catch (NotFoundException ignored) {
-            return true;
-        }
-    }
-
     private Questionnaire checkQuestionnaireAuth(QuestionnaireI15d questionnaire) {
         if (questionnaire.isPublic() && questionnaire.isPublished()
                 || authService.isEntityAuthorized(userService.getActiveProfileId(), ROLE_READER, questionnaire)) {
@@ -173,7 +161,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         if (survey.getBlocks().isEmpty()) {
             CommonI18nMessages messages = LocaleFactory.get(CommonI18nMessages.class);
 
-            Content defaultTextContentBlock = new Content(BlockType.CONTENT, messages.defaultTextBlock(), HTML);
+            TextImageBlock defaultTextContentBlock = new TextImageBlock(messages.defaultTextBlock());
             defaultTextContentBlock.setDocument(questionnaire.getId());
 
             Content defaultWaiver = createDefaultWaiver(questionnaire);
@@ -201,8 +189,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
     private Content createDefaultWaiver(String waiver, QuestionnaireI15d questionnaire) {
         Content waiverElement = new Content();
-        waiverElement.setStandardMeaning(BlockType.CUSTOM_PERMISSIONS);
-        waiverElement.setFormType(BlockType.CONTENT);
+        waiverElement.setBlockType(BlockType.CUSTOM_PERMISSIONS);
         waiverElement.setDocument(questionnaire.getId());
         waiverElement.setTextType(HTML);
         waiverElement.setContent(waiver);

@@ -34,30 +34,29 @@ public class ElementFactoryImpl {
     }
 
     public IsWidget create(Block block) {
-        BlockType formType = block.getFormType();
-        BlockType standardMeaning = block.getStandardMeaning();
+        BlockType renderType = block.getBlockType().getRenderType();
 
-        if (SUBHEADER.equals(formType)) {
+        if (SUBHEADER.equals(renderType)) {
             return elementFactory.createHeader((Content) block);
-        } else if (TEXT_IMAGE.equals(formType)) {
+        } else if (TEXT_IMAGE.equals(renderType)) {
             return elementFactory.createTextImage((TextImageBlock) block);
-        } else if (CONTENT.equals(formType)) {
+        } else if (CONTENT.equals(renderType)) {
             return elementFactory.createText((Content) block);
-        } else if (CUSTOM_PERMISSIONS.equals(standardMeaning)) {
+        } else if (CONTENT.equals(renderType)) {
             return elementFactory.createText((Content) block);
-        } else if (IMAGE.equals(formType)) {
+        } else if (IMAGE.equals(renderType)) {
             return elementFactory.createImage((ImageBlock) block);
-        } else if (VIDEO.equals(formType)) {
+        } else if (VIDEO.equals(renderType)) {
             return elementFactory.createVideo((MediaBlock) block);
-        } else if (AUDIO.equals(formType)) {
+        } else if (AUDIO.equals(renderType)) {
             return elementFactory.createAudio((MediaBlock) block);
-        } else if (DOCUMENT.equals(formType)) {
+        } else if (DOCUMENT.equals(renderType)) {
             return elementFactory.createDocument((DocumentBlock) block);
-        } else if (COLLECTION.equals(formType)) {
+        } else if (COLLECTION.equals(renderType)) {
             return elementFactory.createCollection((Content) block);
-        } else if (STORY.equals(formType)) {
+        } else if (STORY.equals(renderType)) {
             return elementFactory.createStory((Content) block);
-        } else if (SUBMIT.equals(formType)) {
+        } else if (SUBMIT.equals(renderType)) {
             return elementFactory.createSubmitButton((SubmitBlock) block);
         }
 

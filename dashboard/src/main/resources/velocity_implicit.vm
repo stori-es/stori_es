@@ -1,0 +1,7 @@
+#* @implicitly included *#
+#* @vtlvariable name="verification" type="org.consumersunion.stories.common.server.model.Verification" *#
+#* @vtlvariable name="subscriptionSummary" type="org.consumersunion.stories.server.notification_channel.SubscriptionSummary" *#
+#* @vtlvariable name="story" type="org.consumersunion.stories.common.shared.model.Story" *#
+#* @vtlvariable name="storySummary" type="org.consumersunion.stories.common.shared.service.datatransferobject.StorySummary" *#
+#* @vtlvariable name="organization" type="org.consumersunion.stories.common.shared.model.Organization" *#
+#* @vtlvariable name="collection" type="org.consumersunion.stories.common.shared.model.Collection" *#

@@ -1,7 +1,5 @@
 package org.consumersunion.stories.common.client.ui.questionnaire;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +9,12 @@ import org.consumersunion.stories.common.client.ui.block.QuestionElement;
 import org.consumersunion.stories.common.client.ui.block.QuestionElementFactory;
 import org.consumersunion.stories.common.shared.model.HasBlocks;
 import org.consumersunion.stories.common.shared.model.document.Block;
+import org.consumersunion.stories.common.shared.model.document.BlockType;
 import org.consumersunion.stories.common.shared.model.questionnaire.Answer;
 import org.consumersunion.stories.common.shared.model.questionnaire.AnswerSet;
+import org.consumersunion.stories.common.shared.model.questionnaire.Question;
 
+import com.google.common.collect.Lists;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -56,6 +57,10 @@ public class QuestionnaireRenderer extends Composite {
             QuestionElement questionElement = questionElementFactory.create(element);
             if (questionElement != null) {
                 addQuestionElement(questionElement);
+                if (BlockType.STORY_ASK_PLAIN == element.getBlockType()
+                	|| BlockType.STORY_ASK_RICH == element.getBlockType()) {
+                    questionElement.setAnswer(Lists.newArrayList(""), true);
+                }
             } else {
                 IsWidget block = elementFactory.create(element);
                 if (block != null) {
@@ -75,6 +80,13 @@ public class QuestionnaireRenderer extends Composite {
             if (element != null) {
                 element.setAnswer(answer.getReportValues(), enabled);
             }
+        }
+    }
+
+    public void setText(Block storyAskBlock, String text) {
+        if (storyAskBlock != null) {
+            QuestionElement<?> questionElement = questions.get(((Question) storyAskBlock).getLabel());
+            questionElement.setAnswer(Lists.newArrayList(text), false);
         }
     }
 

@@ -165,8 +165,10 @@ public class StoryPersister implements Persister<Story> {
                                 }
                             }).toList();
 
-            storySolrServer.add(documents);
-            storySolrServer.commit();
+            if (!documents.isEmpty()) {
+                storySolrServer.add(documents);
+                storySolrServer.commit();
+            }
         } catch (SolrServerException e) {
             e.printStackTrace();
         } catch (IOException e) {

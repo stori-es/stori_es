@@ -85,6 +85,7 @@ public class UserConverter extends Converter<User, UserResponse> {
             profiles.add(resourceLinksHelper.replaceId(endsWithId(PROFILES), profile.getProfile().getId()));
         }
         links.setProfiles(profiles);
+        links.setDefaultProfile(resourceLinksHelper.replaceId(endsWithId(PROFILES), user.getDefaultProfile()));
 
         return links;
     }

@@ -10,6 +10,9 @@ import org.consumersunion.stories.server.persistence.QuestionnaireI15dPersister;
 public interface QuestionnaireService {
     Questionnaire getQuestionnaire(int id);
 
+    /**
+     * Gets the questionnaire by permalink, skipping any auth check
+     */
     Questionnaire getQuestionnaire(String permalink);
 
     void deleteQuestionnaire(int id);

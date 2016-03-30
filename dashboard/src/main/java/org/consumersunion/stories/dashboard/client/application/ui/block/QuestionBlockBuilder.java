@@ -12,7 +12,7 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 public class QuestionBlockBuilder extends BlockBuilder {
-    private BlockType formType;
+    private BlockType renderType;
     private QuestionElement<Question> preview;
     private Question value;
 
@@ -28,19 +28,20 @@ public class QuestionBlockBuilder extends BlockBuilder {
 
         this.preview = questionElement;
         this.value = questionConfigurator.getEditedValue();
-        formType = value.getFormType();
+        renderType = value.getRenderType();
 
-        BlockType standardMeaning = value.getStandardMeaning();
-        setShowDuplicate(standardMeaning == null
-                || BlockType.RATING.equals(standardMeaning));
+        BlockType blockType = value.getBlockType();
+        setShowDuplicate(blockType.isCustom() 
+			 || BlockType.RATING_STARS.equals(blockType)
+			 || BlockType.RATING_NUMBERS.equals(blockType));
 
         questionConfigurator.setDoneCallback(new Callback<Question>() {
             @Override
             public void onSuccess(Question question) {
-                if (formTypeChanged(question)) {
+                if (renderTypeChanged(question)) {
                     preview = elementFactory.create(question);
                     setPreviewView(preview);
-                    formType = question.getFormType();
+                    renderType = question.getRenderType();
                 }
 
                 value = question;
@@ -61,12 +62,9 @@ public class QuestionBlockBuilder extends BlockBuilder {
         return value;
     }
 
-    private boolean formTypeChanged(Question question) {
-        BlockType valueFormType = formType;
-        BlockType questionFormType = question.getFormType();
+    private boolean renderTypeChanged(Question question) {
+        BlockType newRenderType = question.getRenderType();
 
-        return valueFormType == null && questionFormType != null
-                || valueFormType != null && questionFormType == null
-                || valueFormType != null && !valueFormType.equals(questionFormType);
+        return !renderType.equals(newRenderType);
     }
 }

@@ -3,14 +3,7 @@
              xmlns:u="urn:import:org.consumersunion.stories.common.client.ui.questionnaire"
              xmlns:v="urn:import:org.consumersunion.stories.dashboard.client.application.questionnaire.ui">
 
-    <ui:style>
-        .storyContentWrapper {
-            margin-bottom: 10px;
-        }
-    </ui:style>
-
     <g:HTMLPanel>
-        <g:HTML ui:field="storyContent" styleName="{style.storyContentWrapper}"/>
         <g:DeckPanel ui:field="answerSetPanel">
             <u:QuestionnaireRenderer ui:field="questionnaireRenderer"/>
             <v:DegradedAnswerSetRenderer ui:field="degradedRenderer"/>

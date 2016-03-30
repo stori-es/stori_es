@@ -46,8 +46,7 @@ public class TextImageBlock extends ContentBase {
     public Object clone() {
         TextImageBlock clone = new TextImageBlock();
 
-        clone.setFormType(getFormType());
-        clone.setStandardMeaning(getStandardMeaning());
+        clone.setBlockType(getBlockType());
         clone.setKey(getKey());
         if (image != null) {
             clone.image = (TextImage) image.clone();

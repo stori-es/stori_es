@@ -3,22 +3,43 @@
 
     <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
 
-    <ui:style>
+    <ui:style gss="true">
         .title {
             font-size: 16px;
             font-weight: bold;
 
             text-align: center;
+            margin-top: 64px;
+            margin-bottom: -40px;
+
+            z-index: 10;
+            overflow: visible;
+        }
+
+        .title:first-child {
             margin-top: 18px;
         }
-    </ui:style>
+
+        .title.titleMap {
+            margin-bottom: 0;
+            margin-top: 44px;
+        }
+
+        .title:last-child {
+            display: none;
+        }
+
+        defs + rect {
+            display: none;
+        }
+        </ui:style>
 
     <g:HTMLPanel>
         <div class="{style.title}">STORIES RECEIVED</div>
         <g:SimplePanel ui:field="timeline"/>
         <div class="{style.title}">TIME DISTRIBUTION</div>
         <g:SimplePanel ui:field="timeDistribution"/>
-        <div class="{style.title}">GEOGRAPHIC DISTRIBUTION</div>
+        <div class="{style.title} {style.titleMap}">GEOGRAPHIC DISTRIBUTION</div>
         <g:SimplePanel ui:field="map"/>
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.google.common.base.Objects;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * The SystemEntity defines the basic concept of an "independent thing". The
@@ -25,7 +26,7 @@ import com.google.common.base.Objects;
  * a SystemEntity is what the system refers to, and an Entity is what a user
  * refers to.
  */
-public class SystemEntity implements Serializable {
+public class SystemEntity implements Serializable, IsSerializable, HasId {
     protected static int DEFAULT_ID = -1;
     protected static int DEFAULT_VERSION = 1;
 
@@ -57,6 +58,8 @@ public class SystemEntity implements Serializable {
      */
     private Integer owner;
 
+    private Integer creator;
+
     /**
      * Constructor for new SystemEntities and serialization
      */
@@ -82,6 +85,7 @@ public class SystemEntity implements Serializable {
      *
      * @return
      */
+    @Override
     public int getId() {
         return id;
     }
@@ -153,6 +157,17 @@ public class SystemEntity implements Serializable {
 
     public void setOwner(Integer owner) {
         this.owner = owner;
+        if (creator == null) {
+            creator = owner;
+        }
+    }
+
+    public Integer getCreator() {
+        return creator;
+    }
+
+    public void setCreator(Integer creator) {
+        this.creator = creator;
     }
 
     /**

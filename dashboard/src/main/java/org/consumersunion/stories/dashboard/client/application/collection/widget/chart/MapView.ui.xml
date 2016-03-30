@@ -3,9 +3,13 @@
 
     <ui:with field="resource" type="org.consumersunion.stories.dashboard.client.resource.Resources"/>
 
-    <ui:style>
+    <ui:style gss="true">
         .height {
             height: 350px;
+        }
+
+        path:not([fill^="#f5f5f5"]):hover {
+            cursor: pointer;
         }
     </ui:style>
 

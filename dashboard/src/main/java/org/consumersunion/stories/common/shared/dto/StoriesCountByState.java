@@ -24,4 +24,8 @@ public class StoriesCountByState implements IsSerializable {
     public void setCountByState(Map<String, Integer> countByState) {
         this.countByState = countByState;
     }
+
+    public boolean hasData() {
+        return !countByState.isEmpty();
+    }
 }

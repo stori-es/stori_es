@@ -105,7 +105,9 @@ public class ListStoriesView extends ViewWithUiHandlers<ListStoriesUiHandlers>
 
     @Override
     public void onGoToPage(Integer pageNumber) {
+        pager.getPager().setRangeLimited(false);
         pager.getPager().setPage(pageNumber - 1);
+        pager.getPager().setRangeLimited(true);
         fetchData();
     }
 

@@ -28,7 +28,7 @@ public class ContentBlockBuilder extends BlockBuilder {
         this.preview = contentElement;
         this.value = contentConfigurator.getEditedValue();
 
-        if (value.getStandardMeaning() == null) {
+        if (value.getBlockType().isCustom()) {
             setShowDuplicate(showDuplicate);
         } else {
             setShowDuplicate(false);

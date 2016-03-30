@@ -1,21 +1,19 @@
-package org.consumersunion.stories.dashboard.client.application.collection.widget.collectionsbystory;
+package org.consumersunion.stories.dashboard.client.application.collection.widget.collectionstoken;
 
 import java.util.Comparator;
 import java.util.List;
 
-import org.consumersunion.stories.common.client.ui.CollectionSuggestionOracle;
 import org.consumersunion.stories.common.client.ui.EntitySuggestionOracle.EntitySuggestion;
-import org.consumersunion.stories.common.client.widget.CollectionListItem;
-import org.consumersunion.stories.common.client.widget.CollectionListItemFactory;
+import org.consumersunion.stories.common.client.widget.ListItemHandler;
 import org.consumersunion.stories.common.shared.i18n.CommonI18nLabels;
-import org.consumersunion.stories.common.shared.model.Collection;
-import org.consumersunion.stories.common.shared.service.datatransferobject.CollectionSummary;
+import org.consumersunion.stories.common.shared.model.HasTitle;
 import org.consumersunion.stories.dashboard.client.resource.Resources;
 
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -29,34 +27,26 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import static com.google.gwt.query.client.GQuery.$;
 
-public class CollectionsByStoryView extends ViewWithUiHandlers<CollectionsByStoryUiHandlers>
-        implements CollectionsByStoryPresenter.MyView, CollectionListItem.ListItemHandler {
-    interface Binder extends UiBinder<Widget, CollectionsByStoryView> {
+public abstract class AbstractCollectionsTokenView<Summary, Dto extends HasTitle, Data>
+        extends ViewWithUiHandlers<CollectionsTokenUiHandlers<Summary, Dto, Data>>
+        implements CollectionsTokenView<Summary, Dto, Data>, ListItemHandler<Summary>, Comparator<Summary> {
+    interface Binder extends UiBinder<Widget, AbstractCollectionsTokenView> {
     }
 
-    private static final Comparator<CollectionSummary> collectionItemOrderComparator
-            = new Comparator<CollectionSummary>() {
-        @Override
-        public int compare(CollectionSummary o1, CollectionSummary o2) {
-            if (o1.isQuestionnaire() && !o2.isQuestionnaire()) {
-                return -1;
-            } else if (o2.isQuestionnaire() && !o1.isQuestionnaire()) {
-                return 1;
-            }
+    static final CommonI18nLabels LABELS = GWT.create(CommonI18nLabels.class);
 
-            return o1.getTitle().compareToIgnoreCase(o2.getTitle());
-        }
-    };
+    private static final Binder BINDER = GWT.create(Binder.class);
+    private static final Resources RESOURCES = GWT.create(Resources.class);
 
     @UiField(provided = true)
     final SuggestBox itemBox;
@@ -67,53 +57,39 @@ public class CollectionsByStoryView extends ViewWithUiHandlers<CollectionsByStor
     HTML collectionsEdit;
     @UiField
     FocusPanel collectionsListWrapper;
-
-    private final CommonI18nLabels labels;
-    private final CollectionListItemFactory collectionListItemFactory;
-    private final Resources resources;
+    @UiField
+    SpanElement title;
+    @UiField
+    SpanElement questionnaireIcon;
+    @UiField
+    SpanElement collectionIcon;
 
     private boolean editing;
 
-    @Inject
-    CollectionsByStoryView(
-            Binder uiBinder,
-            CommonI18nLabels labels,
-            final CollectionSuggestionOracle collectionSuggestionOracle,
-            CollectionListItemFactory collectionListItemFactory,
-            Resources resources) {
-        this.labels = labels;
-        this.collectionListItemFactory = collectionListItemFactory;
-        this.resources = resources;
-        this.itemBox = new SuggestBox(collectionSuggestionOracle, new TextBox(), getSuggestionDisplay());
+    AbstractCollectionsTokenView(
+            final SuggestOracle suggestOracle) {
+        this.itemBox = new SuggestBox(suggestOracle, new TextBox(), getSuggestionDisplay());
 
-        initWidget(uiBinder.createAndBindUi(this));
+        initWidget(BINDER.createAndBindUi(this));
 
-        setEditing(false, labels);
+        setEditing(false, LABELS);
 
         itemBox.setAutoSelectEnabled(true);
 
         initSuggestionBox();
 
         itemBox.setVisible(false);
-
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                collectionSuggestionOracle.setFilter(getUiHandlers());
-            }
-        });
     }
 
     @Override
-    public void setData(List<CollectionSummary> data) {
+    public void setData(List<Summary> data) {
         clear();
 
-        ImmutableList<CollectionSummary> sortedData = FluentIterable.from(data)
-                .toSortedList(collectionItemOrderComparator);
+        List<Summary> sortedData = FluentIterable.from(data).toSortedList(this);
 
-        for (CollectionSummary collectionSummary : sortedData) {
-            boolean canRemove = getUiHandlers().canRemoveCollection(collectionSummary);
-            CollectionListItem item = collectionListItemFactory.create(collectionSummary, this, canRemove);
+        for (Summary summary : sortedData) {
+            boolean canRemove = getUiHandlers().canRemoveCollection(summary);
+            IsWidget item = createItem(summary, canRemove);
             collectionsList.add(item);
         }
     }
@@ -124,14 +100,21 @@ public class CollectionsByStoryView extends ViewWithUiHandlers<CollectionsByStor
     }
 
     @Override
-    public void onListItemClicked(CollectionSummary collection) {
-        getUiHandlers().collectionDetails(collection.getId());
+    public void showQuestionnaireIcon() {
+        $(questionnaireIcon).show();
     }
 
     @Override
-    public void onListItemRemoved(CollectionSummary collection) {
-        getUiHandlers().removeFromCollection(collection);
+    public void onListItemClicked(Summary summary) {
+        getUiHandlers().collectionDetails(summary);
     }
+
+    @Override
+    public void onListItemRemoved(Summary summary) {
+        getUiHandlers().removeCollection(summary);
+    }
+
+    protected abstract IsWidget createItem(Summary summary, boolean canRemove);
 
     @UiHandler("collectionsEdit")
     void onAddToCollectionClick(ClickEvent event) {
@@ -140,7 +123,7 @@ public class CollectionsByStoryView extends ViewWithUiHandlers<CollectionsByStor
             $(collectionsListWrapper).css("box-shadow", "0 0 0 1px #000").css("background-color", "#fff");
             itemBox.setVisible(true);
             setFocus(true);
-            setEditing(true, labels);
+            setEditing(true, LABELS);
         } else {
             editComplete();
         }
@@ -174,8 +157,8 @@ public class CollectionsByStoryView extends ViewWithUiHandlers<CollectionsByStor
     private void initSuggestionBox() {
         itemBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
             public void onSelection(SelectionEvent<SuggestOracle.Suggestion> event) {
-                EntitySuggestion<Collection> selectedItem = (EntitySuggestion<Collection>) event.getSelectedItem();
-                getUiHandlers().addStoryToCollection(selectedItem.getEntity());
+                EntitySuggestion<Dto> selectedItem = (EntitySuggestion<Dto>) event.getSelectedItem();
+                getUiHandlers().onCollectionSelected(selectedItem.getEntity());
                 itemBox.setText("");
                 setFocus(true);
             }
@@ -203,7 +186,7 @@ public class CollectionsByStoryView extends ViewWithUiHandlers<CollectionsByStor
     private void editComplete() {
         itemBox.setText("");
         itemBox.setVisible(false);
-        setEditing(false, labels);
+        setEditing(false, LABELS);
         setFocus(false);
         $(collectionsListWrapper).css("box-shadow", "none").css("background-color", "transparent");
     }
@@ -213,7 +196,7 @@ public class CollectionsByStoryView extends ViewWithUiHandlers<CollectionsByStor
             @Override
             protected PopupPanel createPopup() {
                 PopupPanel popup = super.createPopup();
-                popup.addStyleName(resources.generalStyleCss().addToCollectionSuggest());
+                popup.addStyleName(RESOURCES.generalStyleCss().addToCollectionSuggest());
                 return popup;
             }
 

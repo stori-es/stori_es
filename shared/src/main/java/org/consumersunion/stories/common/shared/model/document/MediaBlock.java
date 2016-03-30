@@ -44,9 +44,8 @@ public class MediaBlock extends ContentBase implements Serializable {
     public Object clone() {
         MediaBlock audio = new MediaBlock();
         audio.setDocument(getDocument());
-        audio.setFormType(getFormType());
+        audio.setBlockType(getBlockType());
         audio.setKey(getKey());
-        audio.setStandardMeaning(getStandardMeaning());
         audio.setUrl(getUrl());
         audio.setTitle(getTitle());
         audio.setDescription(getDescription());

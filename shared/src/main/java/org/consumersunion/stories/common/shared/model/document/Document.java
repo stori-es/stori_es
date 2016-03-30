@@ -247,7 +247,7 @@ public class Document extends SystemEntity implements HasBlocks {
 
     public String getFirstContent() {
         Block firstContentBlock = getFirstContentBlock();
-        if (firstContentBlock instanceof Content && BlockType.isText(firstContentBlock.getFormType())) {
+        if (firstContentBlock instanceof Content && firstContentBlock.getBlockType().getRenderType().isText()) {
             return ((Content) firstContentBlock).getContent();
         } else if (firstContentBlock instanceof TextImageBlock) {
             return ((TextImageBlock) firstContentBlock).getText();
@@ -258,7 +258,7 @@ public class Document extends SystemEntity implements HasBlocks {
 
     public Block getFirstContentBlock() {
         for (Block block : getBlocks()) {
-            if (block instanceof Content && BlockType.isText(block.getFormType())
+            if (block instanceof Content && block.getBlockType().getRenderType().isText()
                     || block instanceof TextImageBlock) {
                 return block;
             }

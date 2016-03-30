@@ -7,12 +7,12 @@ import com.google.inject.assistedinject.Assisted;
 public interface CollectionListItemFactory {
     CollectionListItem create(
             CollectionSummary collectionSummary,
-            CollectionListItem.ListItemHandler handler,
+            ListItemHandler<CollectionSummary> handler,
             boolean canRemove);
 
     CollectionListItem create(
             CollectionSummary collectionSummary,
-            CollectionListItem.ListItemHandler handler,
+            ListItemHandler<CollectionSummary> handler,
             @Assisted("canRemove") boolean canRemove,
             @Assisted("withClickAction") boolean withClickAction);
 }

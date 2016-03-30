@@ -37,8 +37,7 @@ public class DocumentBlock extends ContentBase implements Serializable {
         documentBlock.setKey(getKey());
         documentBlock.setUrl(getUrl());
         documentBlock.setDocument(getDocument());
-        documentBlock.setFormType(getFormType());
-        documentBlock.setStandardMeaning(getStandardMeaning());
+        documentBlock.setBlockType(getBlockType());
 
         return documentBlock;
     }

@@ -3,11 +3,14 @@ package org.consumersunion.stories.common.shared.service.datatransferobject;
 import java.io.Serializable;
 
 import org.consumersunion.stories.common.shared.model.Collection;
+import org.consumersunion.stories.common.shared.model.HasId;
+import org.consumersunion.stories.common.shared.model.HasTitle;
 
 import com.google.common.base.MoreObjects;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class CollectionSummary implements Serializable, Comparable<CollectionSummary> {
-    private Integer id;
+public class CollectionSummary implements Serializable, Comparable<CollectionSummary>, HasId, HasTitle, IsSerializable {
+    private int id;
     private String title;
     private boolean questionnaire;
     private boolean deleted;
@@ -25,14 +28,16 @@ public class CollectionSummary implements Serializable, Comparable<CollectionSum
         this.nbStories = collection.getStories().size();
     }
 
-    public Integer getId() {
+    @Override
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }

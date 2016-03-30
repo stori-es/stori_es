@@ -10,11 +10,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>stori.es | <%=(String) request.getAttribute("title") %>
     </title>
-    <meta name="cuModelID" content="99030215">
-    <meta name="searchTitle" content="Jenn-Air JDB3200AW[W] information from Consumer Reports">
-    <meta name="description"
-          content="Get the latest information from Consumer Reports to help you shop for a Jenn-Air JDB3200AW[W], including user reviews and a list of features.">
-    <meta name="keywords" content="Jenn-Air JDB3200AW[W]">
     <meta name="robots" content="INDEX,FOLLOW">
     <meta name="pagePayState" content="free">
     <link rel="stylesheet" type="text/css" href="<%= realContext %>/template/cr/silver.css">

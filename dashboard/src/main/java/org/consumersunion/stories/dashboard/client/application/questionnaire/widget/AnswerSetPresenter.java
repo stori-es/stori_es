@@ -19,7 +19,7 @@ public class AnswerSetPresenter extends PresenterWidget<AnswerSetPresenter.MyVie
     interface MyView extends View {
         void displayData(Questionnaire questionnaire, AnswerSet answerSet);
 
-        void setStoryContent(String content);
+        void setStoryContent(String storyContent);
     }
 
     private final RpcQuestionnaireServiceAsync questionnaireService;
@@ -39,7 +39,6 @@ public class AnswerSetPresenter extends PresenterWidget<AnswerSetPresenter.MyVie
 
     public void initPresenter(AnswerSet answerSet) {
         if (answerSet != null) {
-            setOriginalStoryContent(answerSet.getSystemEntity());
             setAnswerSet(answerSet.getId());
         }
     }
@@ -49,7 +48,8 @@ public class AnswerSetPresenter extends PresenterWidget<AnswerSetPresenter.MyVie
                 new ResponseHandlerLoader<AnswerSetAndQuestionnaireResponse>() {
                     @Override
                     public void handleSuccess(AnswerSetAndQuestionnaireResponse result) {
-                        if (result.getGlobalErrorMessages().size() == 0) {
+                        if (result.getGlobalErrorMessages().isEmpty()) {
+                            setOriginalStoryContent(result.getAnswerSet().getSystemEntity());
                             getView().displayData(result.getQuestionnaire(), result.getAnswerSet());
                         }
                     }

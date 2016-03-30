@@ -142,7 +142,7 @@ public abstract class BlockBuilder extends DraggableWidget<Widget> {
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
             public void execute() {
-                questionType.setInnerText(getQuestionType());
+                questionType.setInnerText(getValue().getBlockType().label());
             }
         });
 
@@ -301,25 +301,5 @@ public abstract class BlockBuilder extends DraggableWidget<Widget> {
         addBeforeDragHandler(HANDLER);
         addDragStopHandler(HANDLER);
         setHandle("." + resources.builderStyleCss().blockHeader());
-    }
-
-    private String getQuestionType() {
-        Block block = getValue();
-        if (block.getStandardMeaning() == null) {
-            BlockType formType = block.getFormType();
-
-            return formType.label();
-        } else {
-            BlockType standardMeaning = block.getStandardMeaning();
-
-            if (standardMeaning.equals(BlockType.EMAIL)
-                    && !BlockType.PREFERRED_EMAIL_FORMAT.equals(standardMeaning)) {
-                standardMeaning = BlockType.EMAIL;
-            } else if (standardMeaning.equals(BlockType.PHONE)) {
-                standardMeaning = BlockType.PHONE;
-            }
-
-            return standardMeaning.label();
-        }
     }
 }

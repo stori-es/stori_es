@@ -10,11 +10,9 @@ import org.consumersunion.stories.common.shared.model.questionnaire.AnswerSet;
 import org.consumersunion.stories.common.shared.model.questionnaire.Questionnaire;
 import org.consumersunion.stories.dashboard.client.application.questionnaire.ui.DegradedAnswerSetRenderer;
 
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.DeckPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -27,10 +25,10 @@ public class AnswerSetView extends ViewImpl implements AnswerSetPresenter.MyView
     final QuestionnaireRenderer questionnaireRenderer;
     @UiField(provided = false)
     DeckPanel answerSetPanel;
-    @UiField
-    HTML storyContent;
     @UiField(provided = false)
     DegradedAnswerSetRenderer degradedRenderer;
+
+    private Questionnaire questionnaire;
 
     @Inject
     AnswerSetView(
@@ -43,8 +41,8 @@ public class AnswerSetView extends ViewImpl implements AnswerSetPresenter.MyView
 
     @Override
     public void displayData(Questionnaire questionnaire, AnswerSet answerSet) {
+        this.questionnaire = questionnaire;
         if (questionnaire != null && answerSet != null && questionnaire.matches(answerSet)) {
-            questionnaire = removeStoryQuestions(questionnaire);
             questionnaire.initBlocksKey();
 
             answerSetPanel.showWidget(0);
@@ -57,25 +55,27 @@ public class AnswerSetView extends ViewImpl implements AnswerSetPresenter.MyView
     }
 
     @Override
-    public void setStoryContent(String content) {
-        storyContent.setHTML(SafeHtmlUtils.fromTrustedString(content));
+    public void setStoryContent(String storyContent) {
+        Block storyAsk = findStoryAskBlock(questionnaire);
+        questionnaireRenderer.setText(storyAsk, storyContent);
     }
 
-    private Questionnaire removeStoryQuestions(Questionnaire original) {
+    private Block findStoryAskBlock(Questionnaire original) {
         List<Block> blocks = original.getSurvey().getBlocks();
 
         Iterator<Block> it = blocks.iterator();
         for (; it.hasNext(); ) {
             Block block = it.next();
             if (isStoryAsk(block)) {
-                it.remove();
+                return block;
             }
         }
 
-        return original;
+        return null;
     }
 
     private boolean isStoryAsk(Block block) {
-        return BlockType.STORY_ASK.equals(block.getStandardMeaning());
+        return BlockType.STORY_ASK_RICH.equals(block.getBlockType())
+        		|| BlockType.STORY_ASK_PLAIN.equals(block.getBlockType());
     }
 }

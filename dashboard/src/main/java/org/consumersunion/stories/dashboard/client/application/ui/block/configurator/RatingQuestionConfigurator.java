@@ -96,7 +96,7 @@ public class RatingQuestionConfigurator extends AbstractConfigurator<RatingQuest
         displayType = new RadioButtonGroup<RatingQuestion.DisplayType>(
                 this.<RatingQuestion.DisplayType>createRenderer(labels), "rating" + question.getIdx());
         displayType.add(RatingQuestion.DisplayType.values());
-        displayType.setValue(RatingQuestion.DisplayType.fromFormType(question.getFormType()));
+        displayType.setValue(RatingQuestion.DisplayType.fromBlockType(question.getBlockType()));
 
         initWidget(uiBinder.createAndBindUi(this));
         driver.initialize(this);
@@ -152,7 +152,7 @@ public class RatingQuestionConfigurator extends AbstractConfigurator<RatingQuest
                 question.setMaxLength(Integer.valueOf(maxLength.getSelectedValue()));
             }
 
-            question.setFormType(displayType.toFormType());
+            question.setBlockType(displayType.toBlockType());
             doneCallback.onSuccess(question);
 
             setEditedValue(question);
@@ -165,7 +165,7 @@ public class RatingQuestionConfigurator extends AbstractConfigurator<RatingQuest
 
         RatingQuestion editedValue = getEditedValue();
 
-        updateForDisplayType(RatingQuestion.DisplayType.fromFormType(editedValue.getFormType()));
+        updateForDisplayType(RatingQuestion.DisplayType.fromBlockType(editedValue.getBlockType()));
 
         boolean hasLabels = editedValue.withLabels();
         labelsCheckbox.setValue(hasLabels, true);

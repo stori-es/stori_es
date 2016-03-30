@@ -1,6 +1,5 @@
 package org.consumersunion.stories.dashboard.client.application.collection;
 
-import org.consumersunion.stories.dashboard.client.application.collection.popup.CollectionPopupModule;
 import org.consumersunion.stories.dashboard.client.application.collection.ui.AttachedCollectionCellFactory;
 import org.consumersunion.stories.dashboard.client.application.collection.widget.WidgetModule;
 import org.consumersunion.stories.dashboard.client.application.collection.widget.navbar.NavBarModule;
@@ -14,7 +13,6 @@ public class CollectionModule extends AbstractPresenterModule {
     protected void configure() {
         install(new NavBarModule());
         install(new WidgetModule());
-        install(new CollectionPopupModule());
 
         bindPresenter(CollectionPresenter.class, CollectionPresenter.MyView.class, CollectionView.class,
                 CollectionPresenter.MyProxy.class);

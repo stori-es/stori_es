@@ -54,7 +54,6 @@ public class BlockBuilderFactory {
             HasBlocks hasBlocks,
             BlockType type,
             boolean readOnly) {
-
         Block block;
         if (type == BlockType.SUBHEADER
                 || type == BlockType.COLLECTION
@@ -71,14 +70,20 @@ public class BlockBuilderFactory {
         } else if (type == BlockType.TEXT_IMAGE) {
             block = new TextImageBlock();
         } else {
-            Question question = new Question();
-            question.setRequired(BlockType.isRequired(type));
+            final Question question;
+            if (type == BlockType.RATING_STARS || type == BlockType.RATING_NUMBERS) {
+            	question = new RatingQuestion();
+            }
+            else {
+            	question = new Question();
+            }
+            question.setRequired(type.isRequired());
             question.setLabel(blockLabelHelper.getUniqueLabel(hasBlocks));
 
             block = question;
         }
 
-        block.setFormType(type);
+        block.setBlockType(type);
 
         return create(block, readOnly);
     }
@@ -87,21 +92,19 @@ public class BlockBuilderFactory {
             HasBlocks hasBlocks,
             Multimap<BlockType, BlockBuilder> standardElements,
             BlockType blockType,
-            BlockType formType,
             boolean readOnly) {
         Block block;
-        if (blockType == BlockType.EMAIL) {
+        if (blockType.isEmail()) {
             block = createNewContact(hasBlocks, standardElements, DataType.DATA_EMAIL, blockType,
                     BlockType.emailElements(), BlockType.EMAIL_OTHER);
-        } else if (blockType == BlockType.PHONE) {
+        } else if (blockType.isPhone()) {
             block = createNewContact(hasBlocks, standardElements, DataType.DATA_PHONE_NUMBER, blockType,
                     BlockType.phoneElements(), BlockType.PHONE_OTHER);
-        } else if (blockType == BlockType.RATING) {
+        } else if (blockType == BlockType.RATING_NUMBERS || blockType == BlockType.RATING_STARS) {
             block = new RatingQuestion();
-            block.setFormType(formType);
             ((RatingQuestion) block).setLabel(blockLabelHelper.getUniqueLabel(hasBlocks));
         } else {
-            block = questionFactory.createStandardQuestion(blockType, formType);
+            block = questionFactory.createStandardQuestion(blockType);
         }
 
         return create(block, readOnly);
@@ -109,82 +112,79 @@ public class BlockBuilderFactory {
 
     public BlockBuilder create(Block element, boolean readOnly) {
         BlockBuilder blockBuilder = null;
-        if (BlockType.STORY_ASK.equals(element.getStandardMeaning())
-                && BlockType.RICH_TEXT_AREA.equals(element.getFormType())) {
+        if (BlockType.RICH_TEXT_AREA.equals(element.getRenderType())) {
             QuestionElement<Question> questionElement = elementFactory.createRichTextQuestion((Question) element);
             blockBuilder = addTextQuestionBuilder((Question) element, questionElement, readOnly);
-        } else if (BlockType.STORY_ASK.equals(element.getStandardMeaning())) {
-            QuestionElement<Question> questionElement = elementFactory.createTextAreaQuestion((Question) element);
-            blockBuilder = addTextQuestionBuilder((Question) element, questionElement, readOnly);
-        } else if (BlockType.STORY_TITLE.equals(element.getStandardMeaning())) {
+        } else if (BlockType.STORY_TITLE.equals(element.getBlockType())) {
             QuestionElement<Question> questionElement = elementFactory.createTextQuestion((Question) element, true);
             blockBuilder = addTextQuestionBuilder((Question) element, questionElement, readOnly);
-        } else if (BlockType.TEXT_INPUT.equals(element.getFormType())) {
+        } else if (BlockType.TEXT_INPUT.equals(element.getRenderType())) {
             QuestionElement<Question> questionElement = elementFactory.createTextQuestion((Question) element, false);
             blockBuilder = addTextQuestionBuilder((Question) element, questionElement, readOnly);
-        } else if (BlockType.TEXT_AREA.equals(element.getFormType())) {
+        } else if (BlockType.TEXT_AREA.equals(element.getRenderType())) {
             QuestionElement<Question> questionElement = elementFactory.createTextAreaQuestion((Question) element);
             blockBuilder = addTextQuestionBuilder((Question) element, questionElement, readOnly);
-        } else if (BlockType.RICH_TEXT_AREA.equals(element.getFormType())) {
+        } else if (BlockType.RICH_TEXT_AREA.equals(element.getRenderType())) {
             QuestionElement<Question> questionElement = elementFactory.createRichTextQuestion((Question) element);
             blockBuilder = addTextQuestionBuilder((Question) element, questionElement, readOnly);
-        } else if (BlockType.SELECT.equals(element.getFormType())) {
+        } else if (BlockType.SELECT.equals(element.getRenderType())) {
             QuestionElement<Question> questionElement = elementFactory.createSelectQuestion((Question) element);
             blockBuilder = addMultipleChoiceQuestionBuilder((Question) element, questionElement, readOnly);
-        } else if (BlockType.RADIO.equals(element.getFormType())) {
+        } else if (BlockType.RADIO.equals(element.getRenderType())) {
             QuestionElement<Question> questionElement = elementFactory.createRadioQuestion((Question) element);
             blockBuilder = addMultipleChoiceQuestionBuilder((Question) element, questionElement, readOnly);
-        } else if (BlockType.CHECKBOX.equals(element.getFormType())) {
+        } else if (BlockType.CHECKBOX.equals(element.getRenderType())) {
             QuestionElement<Question> questionElement = elementFactory.createCheckBoxQuestion((Question) element);
             blockBuilder = addMultipleChoiceQuestionBuilder((Question) element, questionElement, readOnly);
-        } else if (BlockType.SUBHEADER.equals(element.getFormType())) {
+        } else if (BlockType.SUBHEADER.equals(element.getRenderType())) {
             ContentElement<Content> contentElement = elementFactory.createHeader((Content) element);
             blockBuilder = addContentBuilder((Content) element, contentElement, readOnly);
-        } else if (BlockType.TEXT_IMAGE.equals(element.getFormType())) {
+        } else if (BlockType.TEXT_IMAGE.equals(element.getRenderType())) {
             ContentElement<TextImageBlock> contentElement = elementFactory.createTextImage((TextImageBlock) element);
             blockBuilder = addTextImageBuilder((TextImageBlock) element, contentElement, readOnly);
-        } else if (BlockType.CONTENT.equals(element.getFormType())) {
+        } else if (BlockType.CONTENT.equals(element.getRenderType())) {
             ContentElement<Content> contentElement = elementFactory.createText((Content) element);
             blockBuilder = addContentBuilder((Content) element, contentElement, readOnly);
-        } else if (BlockType.CUSTOM_PERMISSIONS.equals(element.getStandardMeaning())) {
+        } else if (BlockType.CUSTOM_PERMISSIONS.equals(element.getBlockType())) {
             ContentElement<Content> contentElement = elementFactory.createText((Content) element);
             blockBuilder = addContentBuilder((Content) element, contentElement, readOnly);
-        } else if (BlockType.DATE.equals(element.getFormType())) {
+        } else if (BlockType.DATE.equals(element.getRenderType())) {
             QuestionElement<Question> questionElement = elementFactory.createDateQuestion((Question) element);
             blockBuilder = addDateQuestionBuilder((Question) element, questionElement, readOnly);
-        } else if (BlockType.IMAGE.equals(element.getFormType())) {
+        } else if (BlockType.IMAGE.equals(element.getRenderType())) {
             ContentElement<ImageBlock> contentElement = elementFactory.createImage((ImageBlock) element);
             blockBuilder = addImageBuilder((ImageBlock) element, contentElement, readOnly);
-        } else if (BlockType.VIDEO.equals(element.getFormType())) {
+        } else if (BlockType.VIDEO.equals(element.getRenderType())) {
             ContentElement<MediaBlock> contentElement = elementFactory.createVideo((MediaBlock) element);
             blockBuilder = addVideoBuilder((MediaBlock) element, contentElement, readOnly);
-        } else if (BlockType.AUDIO.equals(element.getFormType())) {
+        } else if (BlockType.AUDIO.equals(element.getRenderType())) {
             ContentElement<MediaBlock> contentElement = elementFactory.createAudio((MediaBlock) element);
             blockBuilder = addAudioBuilder((MediaBlock) element, contentElement, readOnly);
-        } else if (BlockType.DOCUMENT.equals(element.getFormType())) {
+        } else if (BlockType.DOCUMENT.equals(element.getRenderType())) {
             ContentElement<DocumentBlock> contentElement = elementFactory.createDocument((DocumentBlock) element);
             blockBuilder = addDocumentBuilder((DocumentBlock) element, contentElement, readOnly);
-        } else if (BlockType.CONTACT.equals(element.getFormType())) {
+        } else if (BlockType.CONTACT.equals(element.getRenderType())) {
             QuestionElement<ContactBlock> questionElement =
                     elementFactory.createContactQuestion((ContactBlock) element);
             blockBuilder = addContactQuestionBuilder((ContactBlock) element, questionElement, readOnly);
-        } else if (BlockType.COLLECTION.equals(element.getFormType())) {
+        } else if (BlockType.COLLECTION.equals(element.getRenderType())) {
             ContentElement<Content> questionElement = elementFactory.createCollection((Content) element);
             blockBuilder = addCollectionStoryBuilder((Content) element, questionElement, readOnly);
-        } else if (BlockType.STORY.equals(element.getFormType())) {
+        } else if (BlockType.STORY.equals(element.getRenderType())) {
             ContentElement<Content> questionElement = elementFactory.createStory((Content) element);
             blockBuilder = addCollectionStoryBuilder((Content) element, questionElement, readOnly);
-        } else if (BlockType.ATTACHMENTS.equals(element.getFormType())) {
+        } else if (BlockType.ATTACHMENTS.equals(element.getRenderType())) {
             QuestionElement<Question> questionElement = elementFactory.createAttachmentQuestion((Question) element);
             blockBuilder = addAttachmentQuestionBuilder((Question) element, questionElement, readOnly);
-        } else if (BlockType.SUBMIT.equals(element.getFormType())) {
+        } else if (BlockType.SUBMIT.equals(element.getRenderType())) {
             SubmitBlockWidget blockWidget = elementFactory.createSubmitButton((SubmitBlock) element);
             blockBuilder = addSubmitButton((SubmitBlock) element, blockWidget, readOnly);
-        } else if (BlockType.RATING.equals(element.getStandardMeaning())) {
+        } else if (BlockType.RATING_STARS.equals(element.getBlockType()) ||
+		   BlockType.RATING_NUMBERS.equals(element.getBlockType())) {
             RatingQuestionWidget blockWidget = elementFactory.createRatingQuestion((RatingQuestion) element);
             blockBuilder = addRatingQuestion((RatingQuestion) element, blockWidget, readOnly);
         }
-
+        
         return blockBuilder;
     }
 
@@ -251,8 +251,8 @@ public class BlockBuilderFactory {
             ContentElement<Content> contentElement,
             boolean readOnly) {
         boolean isEdit = Strings.isNullOrEmpty(content.getContent());
-        boolean canDuplicate = !BlockType.CUSTOM_PERMISSIONS.equals(content.getStandardMeaning());
-        boolean canRemove = !BlockType.CUSTOM_PERMISSIONS.equals(content.getStandardMeaning());
+        boolean canDuplicate = !BlockType.CUSTOM_PERMISSIONS.equals(content.getBlockType());
+        boolean canRemove = !BlockType.CUSTOM_PERMISSIONS.equals(content.getBlockType());
 
         BlockConfigurator<Content> configurator = configuratorFactory.createTextContent(content);
         return builderFactory.createContentBuilder(contentElement, configurator, isEdit,
@@ -264,8 +264,8 @@ public class BlockBuilderFactory {
             ContentElement<TextImageBlock> contentElement,
             boolean readOnly) {
         boolean isEdit = Strings.isNullOrEmpty(block.getText());
-        boolean canDuplicate = !BlockType.CUSTOM_PERMISSIONS.equals(block.getStandardMeaning());
-        boolean canRemove = !BlockType.CUSTOM_PERMISSIONS.equals(block.getStandardMeaning());
+        boolean canDuplicate = !BlockType.CUSTOM_PERMISSIONS.equals(block.getBlockType());
+        boolean canRemove = !BlockType.CUSTOM_PERMISSIONS.equals(block.getBlockType());
 
         BlockConfigurator<TextImageBlock> configurator = configuratorFactory.createTextImageConfigurator(block);
         return builderFactory.createTextImageBuilder(contentElement, configurator, isEdit,
@@ -342,8 +342,7 @@ public class BlockBuilderFactory {
             BlockType defaultType) {
         ContactBlock contactBlock = new ContactBlock();
         contactBlock.setDataType(dataType.code());
-        contactBlock.setFormType(BlockType.CONTACT);
-        contactBlock.setRequired(BlockType.isRequired(blockType));
+        contactBlock.setRequired(blockType.isRequired());
 
         BlockType standardType = defaultType;
         for (BlockType element : validElements) {
@@ -353,7 +352,7 @@ public class BlockBuilderFactory {
             }
         }
 
-        contactBlock.setStandardMeaning(standardType);
+        contactBlock.setBlockType(standardType);
         contactBlock.setLabel(dataType.code() + blockLabelHelper.getUniqueId(hasBlocks, dataType));
         contactBlock.setOption(ContactType.fromBlockType(standardType).code());
 

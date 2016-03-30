@@ -83,8 +83,7 @@ public class TextContentConfigurator extends AbstractConfigurator<Content> imple
         if (validate()) {
             Content content = driver.flush();
             Content oldContent = getEditedValue();
-            content.setFormType(oldContent.getFormType());
-            content.setStandardMeaning(oldContent.getStandardMeaning());
+            content.setBlockType(oldContent.getBlockType());
 
             setContentText(content);
 

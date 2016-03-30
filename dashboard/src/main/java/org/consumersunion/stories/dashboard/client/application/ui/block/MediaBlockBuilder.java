@@ -34,7 +34,7 @@ public class MediaBlockBuilder extends BlockBuilder {
         this.preview = contentElement;
         this.value = contentConfigurator.getEditedValue();
 
-        setShowDuplicate(value.getStandardMeaning() == null);
+        setShowDuplicate(value.getBlockType().isCustom());
 
         contentConfigurator.setDoneCallback(new Callback<MediaBlock>() {
             @Override

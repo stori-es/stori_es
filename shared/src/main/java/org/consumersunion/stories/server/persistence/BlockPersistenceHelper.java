@@ -118,8 +118,7 @@ public class BlockPersistenceHelper {
 
             PreparedStatement insertBlock = connection
                     .prepareStatement(
-                            "INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (?,?,?," +
-                                    "?,?)");
+                            "INSERT INTO block (document, version, idx, blockType) VALUES (?,?,?,?)");
 
             PreparedStatement insertQuestion = connection
                     .prepareStatement("INSERT INTO block_question (document, version, idx, dataType, "
@@ -164,12 +163,7 @@ public class BlockPersistenceHelper {
                 insertBlock.setInt(1, document);
                 insertBlock.setInt(2, version);
                 insertBlock.setInt(3, index);
-                insertBlock.setString(4, element.getFormType().code());
-                if (element.getStandardMeaning() == null) {
-                    insertBlock.setNull(5, Types.VARCHAR);
-                } else {
-                    insertBlock.setString(5, element.getStandardMeaning().code());
-                }
+                insertBlock.setString(4, element.getBlockType().code());
                 insertBlock.addBatch();
 
                 if (element instanceof Content) {
@@ -214,7 +208,7 @@ public class BlockPersistenceHelper {
     public ArrayList<Block> getBlocks(Document document, Connection conn) throws SQLException {
         PreparedStatement retrieveBlocks =
                 conn.prepareStatement(
-                        "SELECT b.document, b.version, b.idx, b.documentType, b.standardMeaning "
+                        "SELECT b.document, b.version, b.idx, b.blockType "
                                 + "FROM block b WHERE b.document=? AND b.version=? ORDER BY b.idx");
         retrieveBlocks.setInt(1, document.getId());
         retrieveBlocks.setInt(2, document.getVersion());
@@ -295,7 +289,6 @@ public class BlockPersistenceHelper {
             Connection conn)
             throws SQLException {
         String documentType = resultsBlocks.getString(4);
-        String stdMeaning = resultsBlocks.getString(5);
 
         // is it content?
         if (BlockType.COLLECTION.code().equals(documentType)
@@ -416,9 +409,10 @@ public class BlockPersistenceHelper {
             return createSubmitBlock(retrieveSubmitBlock, resultsBlocks, document, conn);
         } else {
             Question question;
-            if (BlockType.CONTACT.code().equals(documentType)) {
+            if (BlockType.isContact(documentType)) {
                 question = new ContactBlock();
-            } else if (BlockType.RATING.code().equals(stdMeaning)) {
+            } else if (BlockType.RATING_STARS.code().equals(documentType) ||
+		       BlockType.RATING_NUMBERS.code().equals(documentType)) {
                 question = new RatingQuestion();
             } else {
                 question = new Question();
@@ -470,7 +464,7 @@ public class BlockPersistenceHelper {
                 if (question instanceof ContactBlock) {
                     ContactBlock contactContent = (ContactBlock) question;
                     if (contactContent.getType() == null) {
-                        contactContent.setType(contactContent.getStandardMeaning().code().substring(0, 5));
+                        contactContent.setType(contactContent.getBlockType().code().substring(0, 5));
                     }
 
                     retrieveContactData.setInt(1, contactContent.getDocument());
@@ -556,15 +550,8 @@ public class BlockPersistenceHelper {
         block.setVersion(resultsFE.getInt(2));
         block.setIdx(resultsFE.getInt(3));
 
-        String formType = resultsFE.getString(4);
-        if (formType != null) {
-            block.setFormType(BlockType.valueOf(formType));
-        }
-
-        String standardMeaning = resultsFE.getString(5);
-        if (standardMeaning != null) {
-            block.setStandardMeaning(BlockType.valueOf(standardMeaning));
-        }
+        String blockType = resultsFE.getString(4);
+	block.setBlockType(BlockType.valueOf(blockType));
     }
 
     private void insertSubmitBlock(
@@ -717,7 +704,7 @@ public class BlockPersistenceHelper {
             Question rawQuestion) throws SQLException {
 
         Question question;
-        if (isStandardQuestion(rawQuestion)) {
+        if (rawQuestion.getBlockType().isStandard()) {
             question = cleanStandardQuestion(rawQuestion);
         } else {
             question = rawQuestion;
@@ -779,13 +766,9 @@ public class BlockPersistenceHelper {
         }
     }
 
-    private boolean isStandardQuestion(Question question) {
-        return question.getStandardMeaning() != null;
-    }
-
     private Question cleanStandardQuestion(Question question) {
         Question nQuestion =
-                stdQuestionFactory.createStandardQuestion(question.getStandardMeaning(), question.getFormType());
+	    stdQuestionFactory.createStandardQuestion(question.getBlockType());
         nQuestion.setLabel(question.getLabel());
         nQuestion.setRequired(question.isRequired());
         nQuestion.setDocument(question.getDocument());

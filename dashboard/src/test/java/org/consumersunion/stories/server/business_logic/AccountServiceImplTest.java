@@ -8,14 +8,15 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.commons.validator.routines.EmailValidator;
+import org.consumersunion.stories.common.server.model.Verification;
 import org.consumersunion.stories.common.shared.dto.ResetPasswordRequest;
 import org.consumersunion.stories.common.shared.model.CredentialedUser;
 import org.consumersunion.stories.common.shared.model.Profile;
 import org.consumersunion.stories.common.shared.model.ResetPassword;
 import org.consumersunion.stories.common.shared.model.User;
 import org.consumersunion.stories.common.shared.model.entity.Contact;
-import org.consumersunion.stories.common.shared.model.entity.ContactStatus;
 import org.consumersunion.stories.common.shared.service.GeneralException;
+import org.consumersunion.stories.server.email.ConfirmEmailAddressEmailGenerator;
 import org.consumersunion.stories.server.email.EmailData;
 import org.consumersunion.stories.server.email.PasswordChangedEmailGenerator;
 import org.consumersunion.stories.server.email.ResetPasswordEmailGenerator;
@@ -30,11 +31,11 @@ import org.jukito.JukitoRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.consumersunion.stories.common.shared.model.entity.ContactStatus.UNVERIFIED;
+import static org.consumersunion.stories.common.shared.model.entity.ContactStatus.VERIFIED;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -58,6 +59,7 @@ public class AccountServiceImplTest {
             forceMock(ProfilePersister.class);
             forceMock(ResetPasswordEmailGenerator.class);
             forceMock(PasswordChangedEmailGenerator.class);
+            forceMock(ConfirmEmailAddressEmailGenerator.class);
         }
     }
 
@@ -68,6 +70,8 @@ public class AccountServiceImplTest {
     private static final String VALID_PASSWORD = "abcdefg";
     private static final String INVALID_PASSWORD = "a";
     private static final String A_HANDLE = "A_HANDLE";
+    private static final int DEFAULT_PROFILE = 32;
+    private static final String FULL_NAME = "Full Name";
     private static final int USER_ID = 99;
 
     @Inject
@@ -87,6 +91,10 @@ public class AccountServiceImplTest {
     EmailService emailService;
     @Inject
     UserService userService;
+    @Inject
+    VerificationService verificationService;
+    @Inject
+    ConfirmEmailAddressEmailGenerator confirmEmailAddressEmailGenerator;
 
     @Test(expected = NotFoundException.class)
     public void generate_withInexistentEmail_throws() throws Exception {
@@ -248,11 +256,32 @@ public class AccountServiceImplTest {
     }
 
     @Test
+    public void setPrimaryEmail_withUnverifiedContact_sendsEmail() {
+        User user = new User(USER_ID, 1);
+        user.setDefaultProfile(DEFAULT_PROFILE);
+        String email = "email@email.com";
+        given(userService.getLoggedInUser(true)).willReturn(user);
+        Contact primaryEmail = new Contact(USER_ID, Contact.MediumType.EMAIL.name(), "Home", email, UNVERIFIED);
+
+        Verification verification = mock(Verification.class);
+        given(verificationService.create(eq(primaryEmail))).willReturn(verification);
+        Profile profile = mock(Profile.class);
+        given(profile.getFullName()).willReturn(FULL_NAME);
+        given(profilePersister.get(DEFAULT_PROFILE)).willReturn(profile);
+        EmailData emailData = mock(EmailData.class);
+        given(confirmEmailAddressEmailGenerator.generate(same(verification), eq(FULL_NAME))).willReturn(emailData);
+
+        accountService.setPrimaryEmail(primaryEmail);
+
+        verify(emailService).sendEmail(same(emailData));
+    }
+
+    @Test
     public void setPrimaryEmail_savesContact() {
         User user = new User(USER_ID, 1);
         String email = "email@email.com";
         given(userService.getLoggedInUser(true)).willReturn(user);
-        Contact primaryEmail = new Contact(USER_ID, Contact.MediumType.EMAIL.name(), "Home", email, UNVERIFIED);
+        Contact primaryEmail = new Contact(USER_ID, Contact.MediumType.EMAIL.name(), "Home", email, VERIFIED);
 
         accountService.setPrimaryEmail(primaryEmail);
 

@@ -70,8 +70,7 @@ public class Question extends QuestionBase {
         question.setMaxLength(getMaxLength());
         question.setStartDate(getStartDate());
         question.setDocument(getDocument());
-        question.setFormType(getFormType());
-        question.setStandardMeaning(getStandardMeaning());
+        question.setBlockType(getBlockType());
 
         for (Option option : options) {
             question.addOption(option.getDisplayValue(), option.getReportValue());

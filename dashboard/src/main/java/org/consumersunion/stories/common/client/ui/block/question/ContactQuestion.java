@@ -36,9 +36,9 @@ public class ContactQuestion extends QuestionWidget implements QuestionElement<C
             textBox.getElement().setAttribute("placeholder", contactBlock.getHelpText());
         }
 
-        if (contactBlock.getStandardMeaning().equals(BlockType.EMAIL)) {
+        if (contactBlock.getBlockType().isEmail()) {
             validators.add(new EmailValidator());
-        } else if (contactBlock.getStandardMeaning().equals(BlockType.PHONE)) {
+        } else if (contactBlock.getBlockType().isPhone()) {
             validators.add(new PhoneNumberValidator());
         }
     }

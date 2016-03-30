@@ -354,7 +354,7 @@ public class AuthorizationServiceGwtTest extends GWTTestCaseExposed {
                     @Override
                     public void onSuccess(DatumResponse<List<SystemEntity>> result) {
                         assertFalse("Unexpected errors.", result.isError());
-                        assertEquals("Unexpected principal count.", 19, result.getDatum().size());
+                        assertEquals("Unexpected principal count.", 20, result.getDatum().size());
                         getValidTargetsSuperUser();
                     }
                 });

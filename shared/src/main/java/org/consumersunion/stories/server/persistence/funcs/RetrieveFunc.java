@@ -24,7 +24,8 @@ public abstract class RetrieveFunc<Output> extends ProcessFunc<Integer, Output> 
                 PreparedStatement insert =
                         conn.prepareStatement(
                                 "SELECT se.id, se.created, se.lastModified, se.owner, se.version, se.public, " +
-                                        "e.profile, e.permalink FROM entity e JOIN systemEntity se ON e.id=se.id " +
+                                        "e.profile, e.permalink, se.creator FROM entity e " +
+                                        "JOIN systemEntity se ON e.id=se.id " +
                                         "WHERE se.id=?");
                 insert.setInt(1, input);
 
@@ -46,14 +47,15 @@ public abstract class RetrieveFunc<Output> extends ProcessFunc<Integer, Output> 
                     if (results.wasNull()) {
                         entity.setPermalink(null);
                     }
+                    entity.setCreator(results.getInt(9));
                 }
             }
 
             if (concreteItem instanceof SystemEntity && !isFullEntity) {
                 PreparedStatement insert =
                         conn.prepareStatement(
-                                "SELECT se.id, se.created, se.lastModified, se.owner, se.version, se.public " +
-                                        "FROM systemEntity se WHERE se.id=?");
+                                "SELECT se.id, se.created, se.lastModified, se.owner, se.version, se.public, se.creator"
+                                        + " FROM systemEntity se WHERE se.id=?");
                 insert.setInt(1, input);
 
                 ResultSet results = insert.executeQuery();
@@ -68,6 +70,7 @@ public abstract class RetrieveFunc<Output> extends ProcessFunc<Integer, Output> 
                 systemEntity.setOwner(results.getInt(4));
                 systemEntity.setVersion(results.getInt(5));
                 systemEntity.setPublic(results.getBoolean(6));
+                systemEntity.setCreator(results.getInt(7));
             }
 
             return concreteItem;

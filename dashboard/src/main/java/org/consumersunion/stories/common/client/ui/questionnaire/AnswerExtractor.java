@@ -11,13 +11,18 @@ public class AnswerExtractor {
     public List<Answer> extractAnswers(Collection<QuestionElement<?>> questions) throws QuestionnaireNotValidException {
         List<Answer> answers = new ArrayList<Answer>();
 
+        boolean isValid = true;
         for (QuestionElement<?> question : questions) {
             Answer answer = question.get();
             if (answer == null) {
-                throw new QuestionnaireNotValidException();
-            } else {
+                isValid = false;
+            } else if (isValid) {
                 answers.add(answer);
             }
+        }
+
+        if (!isValid) {
+            throw new QuestionnaireNotValidException();
         }
 
         return answers;

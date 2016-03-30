@@ -151,6 +151,7 @@ public class RpcQuestionnaireServiceImpl extends RpcBaseServiceImpl implements R
             newQuestionnaire.setTheme(sourceQuestionnaire.getTheme());
             Document bodyDocument = newQuestionnaire.getBodyDocument();
             bodyDocument.setTitle(newTitle);
+            bodyDocument.setSummary(summary);
             bodyDocument.addBlock(new Content(BlockType.CONTENT, summary, Content.TextType.PLAIN));
             bodyDocument.setLocale(locale);
 

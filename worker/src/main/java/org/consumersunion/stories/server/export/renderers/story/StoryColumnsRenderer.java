@@ -27,6 +27,7 @@ import static org.consumersunion.stories.server.export.StoryColumnsName.STORY_HR
 import static org.consumersunion.stories.server.export.StoryColumnsName.STORY_ID;
 import static org.consumersunion.stories.server.export.StoryColumnsName.STREET;
 import static org.consumersunion.stories.server.export.StoryColumnsName.SURNAME;
+import static org.consumersunion.stories.server.export.StoryColumnsName.TAGS;
 import static org.consumersunion.stories.server.export.StoryColumnsName.TEXT;
 import static org.consumersunion.stories.server.export.StoryColumnsName.TITLE;
 import static org.consumersunion.stories.server.export.StoryColumnsName.ZIPCODE;
@@ -54,6 +55,7 @@ public class StoryColumnsRenderer implements ColumnsRenderer<StoryCsv> {
         values.add(data.getId());
         values.add(getTitle(data));
         values.add(data.getText());
+        values.add(data.getTags());
         values.add(storyDateCreatedRenderer.render(data));
         values.add(storyDateModifiedRenderer.render(data));
         values.add(storyUrlRenderer.render(data));
@@ -63,8 +65,8 @@ public class StoryColumnsRenderer implements ColumnsRenderer<StoryCsv> {
 
     @Override
     public List<String> getColumns() {
-        return Lists.newArrayList(STORY_ID, GIVEN_NAME, SURNAME, STREET, CITY, STATE, ZIPCODE, TITLE, TEXT, CREATED_AT,
-                MODIFIED_AT, STORY_HREF);
+        return Lists.newArrayList(STORY_ID, GIVEN_NAME, SURNAME, STREET, CITY, STATE, ZIPCODE, TITLE, TEXT, TAGS,
+                CREATED_AT, MODIFIED_AT, STORY_HREF);
     }
 
     private String getTitle(StoryCsv data) {

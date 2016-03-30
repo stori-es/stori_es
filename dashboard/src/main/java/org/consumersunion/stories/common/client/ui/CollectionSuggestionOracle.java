@@ -24,6 +24,7 @@ public class CollectionSuggestionOracle extends EntitySuggestionOracle<Collectio
     private final RpcCollectionServiceAsync collectionService;
 
     private Predicate<CollectionData> filter;
+    private com.google.gwt.http.client.Request lastRequest;
 
     @Inject
     CollectionSuggestionOracle(RpcCollectionServiceAsync collectionService) {
@@ -36,8 +37,12 @@ public class CollectionSuggestionOracle extends EntitySuggestionOracle<Collectio
 
     @Override
     protected void sendRequest(final Request request, final Callback callback) {
+        if (lastRequest != null) {
+            lastRequest.cancel();
+        }
+
         // Because we're looking for 'owners', the permission mask really doesn't matter.
-        collectionService.getCollections(
+        lastRequest = collectionService.getCollections(
                 new RetrievePagedCollectionsParams.Builder()
                         .withStart(0)
                         .withLength(5)

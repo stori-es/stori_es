@@ -154,6 +154,8 @@ public class TimeDistributionView extends ViewImpl implements TimeDistributionPr
         hAxis.setTitle("Time of Day");
         hAxis.setMinValue(0);
         hAxis.setMaxValue(24.5);
+        hAxis.setShowTextEvery(3);
+
         createHAxisTicks(hAxis);
 
         return hAxis;
@@ -168,11 +170,11 @@ public class TimeDistributionView extends ViewImpl implements TimeDistributionPr
                 createTick(23, ""), createTick(24, ""));
     }
 
-    private Tick createTick(int v, String f) {
+    private Tick createTick(int value, String text) {
         Tick tick = Tick.create();
 
-        tick.setV(v);
-        tick.setF(f);
+        tick.setV(value);
+        tick.setF(text);
 
         return tick;
     }

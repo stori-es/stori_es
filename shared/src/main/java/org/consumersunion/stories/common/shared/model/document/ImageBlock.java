@@ -54,9 +54,8 @@ public class ImageBlock extends ContentBase implements Serializable {
         image.setCaption(this.getCaption());
         image.setAltText(this.getAltText());
         image.setDocument(getDocument());
-        image.setFormType(getFormType());
+        image.setBlockType(getBlockType());
         image.setKey(getKey());
-        image.setStandardMeaning(getStandardMeaning());
 
         return image;
     }

@@ -8,9 +8,8 @@ import org.consumersunion.stories.common.shared.model.NotificationTrigger;
 import org.consumersunion.stories.common.shared.service.datatransferobject.CollectionData;
 import org.consumersunion.stories.dashboard.client.BaseTestModule;
 import org.consumersunion.stories.dashboard.client.TestBase;
-import org.consumersunion.stories.dashboard.client.application.collection.popup.SourceOrTargetSelectPresenter;
-import org.consumersunion.stories.dashboard.client.application.collection.widget.collectionsbystory
-        .CollectionsByStoryPresenter;
+import org.consumersunion.stories.dashboard.client.application.collection.widget.collectionstoken
+        .CollectionsTokenByStoryPresenter;
 import org.consumersunion.stories.dashboard.client.application.questionnaire.widget.ListQuestionnairePresenter;
 import org.consumersunion.stories.dashboard.client.application.widget.TagsPresenter;
 import org.consumersunion.stories.dashboard.client.application.widget.TagsPresenterFactory;
@@ -37,9 +36,8 @@ public class CollectionItemPresenterTest extends TestBase {
             super.configureTest();
 
             forceMock(CollectionData.class);
-            forceMock(CollectionsByStoryPresenter.class);
+            forceMock(CollectionsTokenByStoryPresenter.class);
             forceMock(ListQuestionnairePresenter.class);
-            forceMock(SourceOrTargetSelectPresenter.class);
             forceMock(TagsPresenter.class);
 
             install(new FactoryModuleBuilder().build(CollectionItemPresenterFactory.class));

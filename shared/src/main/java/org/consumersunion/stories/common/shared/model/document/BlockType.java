@@ -14,8 +14,6 @@ public enum BlockType {
     CHECKBOX("CHECKBOX", "Question Block - Multiple Choice"),
     SUBHEADER("SUBHEADER", "Header"),
     PLAIN_TEXT("PLAIN_TEXT", "Text"),
-    STARS("STARS", "Stars"),
-    NUMBERS("NUMBERS", "Stars"),
     // content types
     TEXT_IMAGE("TEXT_IMAGE", "Content Block - Text"),
     CONTENT("CONTENT", "Content Block - Text"),
@@ -44,15 +42,28 @@ public enum BlockType {
     PHONE_OTHER("PHONE_OTHER", "Phone Other"),
     MAILING_OPT_IN("MAILING_OPT_IN", "Question Block - Subscription"),
     PREFERRED_EMAIL_FORMAT("PREFERRED_EMAIL_FORMAT", "Question Block - Email Format"),
-    STORY_ASK("STORY_ASK", "Question Block - Story Ask"),
+    STORY_ASK_RICH("STORY_ASK_RICH", "Question Block - Story Ask"),
+    STORY_ASK_PLAIN("STORY_ASK_PLAIN", "Question Block - Story Ask"),
     CUSTOM_PERMISSIONS("CUSTOM_PERMISSIONS", "Permissions Block"),
     UPDATES_OPT_IN("UPDATES_OPT_IN", "Question Block - Subscription"),
     STORY_TITLE("STORY_TITLE", "Question Block - Story Title"),
-    RATING("RATING", "Rating");
+    RATING_STARS("RATING_STARS", "Rating"),
+    RATING_NUMBERS("RATING_NUMBERS", "Rating");
 
-    private final static List<BlockType> customElements;
-    private final static List<BlockType> standardElements;
-    private final static List<BlockType> textTypes;
+    private static final List<BlockType> customElements;
+    private static final List<BlockType> standardElements;
+    private static final List<BlockType> textTypes;
+    private static final List<BlockType> emailElements = Arrays.asList(
+            EMAIL,
+            EMAIL_WORK,
+            EMAIL_OTHER
+    );
+    private static List<BlockType> phoneElements = Arrays.asList(
+            PHONE,
+            PHONE_MOBILE,
+            PHONE_WORK,
+            PHONE_OTHER
+    );
 
     static {
         BlockType[] customElementsType = new BlockType[]{
@@ -64,8 +75,6 @@ public enum BlockType {
                 CHECKBOX,
                 SUBHEADER,
                 PLAIN_TEXT,
-                STARS,
-                NUMBERS,
                 TEXT_IMAGE,
                 CONTENT,
                 DATE,
@@ -92,7 +101,8 @@ public enum BlockType {
                 PHONE,
                 MAILING_OPT_IN,
                 PREFERRED_EMAIL_FORMAT,
-                STORY_ASK,
+                STORY_ASK_RICH,
+                STORY_ASK_PLAIN,
                 CUSTOM_PERMISSIONS,
                 UPDATES_OPT_IN,
                 STORY_TITLE,
@@ -123,25 +133,12 @@ public enum BlockType {
         return customElements;
     }
 
-    public static List<BlockType> standardElements() {
-        return standardElements;
-    }
-
     public static List<BlockType> emailElements() {
-        return Arrays.asList(
-                EMAIL_WORK,
-                EMAIL,
-                EMAIL_OTHER
-        );
+        return emailElements;
     }
 
     public static List<BlockType> phoneElements() {
-        return Arrays.asList(
-                PHONE,
-                PHONE_MOBILE,
-                PHONE_WORK,
-                PHONE_OTHER
-        );
+        return phoneElements;
     }
 
     public static BlockType valueOfCode(String code) {
@@ -154,20 +151,71 @@ public enum BlockType {
         return null;
     }
 
-    public static Boolean isRequired(BlockType blockType) {
-        return !(blockType == BlockType.UPDATES_OPT_IN ||
-                blockType == BlockType.PREFERRED_EMAIL_FORMAT ||
-                blockType == BlockType.PHONE ||
-                blockType == BlockType.RADIO ||
-                blockType == BlockType.EMAIL);
+    public Boolean isRequired() {
+        return !(this == BlockType.UPDATES_OPT_IN ||
+                this == BlockType.PREFERRED_EMAIL_FORMAT ||
+                this == BlockType.PHONE ||
+                this == BlockType.RADIO ||
+                this == BlockType.EMAIL);
     }
 
-    public static boolean isText(BlockType formType) {
-        return formType != null && textTypes.contains(formType);
+    public boolean isText() {
+        return getRenderType() != null && textTypes.contains(getRenderType());
     }
 
     public String code() {
         return code;
+    }
+
+    public BlockType getRenderType() {
+        // The standard types all map to a standard 'render' type which is equivalent to a custom input type.
+        switch (this) {
+            case FIRST_NAME:
+            case LAST_NAME:
+            case STORY_TITLE:
+            case STREET_ADDRESS_1:
+            case CITY:
+            case ZIP_CODE:
+                return TEXT_INPUT;
+            case STORY_ASK_RICH:
+                return RICH_TEXT_AREA;
+            case STORY_ASK_PLAIN:
+                return TEXT_AREA;
+            case EMAIL:
+            case EMAIL_WORK:
+            case EMAIL_OTHER:
+            case PHONE:
+            case PHONE_MOBILE:
+            case PHONE_WORK:
+            case PHONE_OTHER:
+                return CONTACT;
+            case MAILING_OPT_IN:
+            case UPDATES_OPT_IN:
+                return CHECKBOX;
+            case PREFERRED_EMAIL_FORMAT:
+            case STATE:
+                return SELECT;
+            case CUSTOM_PERMISSIONS:
+                return CONTENT;
+            default: // it's not standard, therefore it is the render type.
+                return this;
+        }
+    }
+
+    public static boolean isContact(String documentType) {
+        for (BlockType blockType : emailElements()) {
+            if (blockType.code.equals(documentType)) {
+                return true;
+            }
+        }
+
+        for (BlockType blockType : phoneElements()) {
+            if (blockType.code.equals(documentType)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public String label() {
@@ -175,10 +223,23 @@ public enum BlockType {
     }
 
     public boolean isStandard() {
-        return standardElements().contains(this);
+        return standardElements.contains(this);
     }
 
     public boolean isCustom() {
         return customElements().contains(this);
+    }
+
+    public boolean isStoryAsk() {
+        return this == STORY_ASK_RICH ||
+                this == STORY_ASK_PLAIN;
+    }
+
+    public boolean isEmail() {
+        return emailElements.contains(this);
+    }
+
+    public boolean isPhone() {
+        return phoneElements.contains(this);
     }
 }

@@ -1,5 +1,6 @@
 package org.consumersunion.stories.dashboard.client.application.widget.card;
 
+import org.consumersunion.stories.common.client.event.ClearContentEvent;
 import org.consumersunion.stories.common.client.util.HtmlSanitizerUtil;
 import org.consumersunion.stories.common.client.util.URLUtils;
 import org.consumersunion.stories.common.client.widget.ContentKind;
@@ -12,15 +13,18 @@ import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.SpanElement;
-import com.google.gwt.query.client.Function;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.InlineHyperlink;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 
@@ -43,6 +47,7 @@ public class CardSummaryWidget extends Composite {
     @UiField
     SpanElement authorPrefix;
 
+    private final EventBus eventBus;
     private final PlaceManager placeManager;
     private final HtmlSanitizerUtil htmlSanitizerUtil;
 
@@ -52,8 +57,10 @@ public class CardSummaryWidget extends Composite {
     @Inject
     CardSummaryWidget(
             Binder uiBinder,
+            EventBus eventBus,
             PlaceManager placeManager,
             HtmlSanitizerUtil htmlSanitizerUtil) {
+        this.eventBus = eventBus;
         this.placeManager = placeManager;
         this.htmlSanitizerUtil = htmlSanitizerUtil;
 
@@ -107,6 +114,15 @@ public class CardSummaryWidget extends Composite {
         init(contentKind, document, author, city, ownerId, true);
     }
 
+    @Override
+    public void fireEvent(GwtEvent<?> event) {
+        if (event instanceof ClearContentEvent) {
+            eventBus.fireEventFromSource(event, this);
+        } else {
+            super.fireEvent(event);
+        }
+    }
+
     private void init(Document document, String author, String city, int ownerId) {
         ownerKind = NameTokens.profile;
 
@@ -151,17 +167,20 @@ public class CardSummaryWidget extends Composite {
         author.setTargetHistoryToken(placeManager.buildHistoryToken(place));
 
         $(author).unbind(BrowserEvents.CLICK);
-        $(author).click(new Function() {
+        author.addClickHandler(new ClickHandler() {
             @Override
-            public boolean f(Event e) {
-                goToAuthor(place);
-
-                return false;
+            public void onClick(ClickEvent event) {
+                event.stopPropagation();
+                if (event.getNativeButton() == NativeEvent.BUTTON_LEFT) {
+                    event.preventDefault();
+                    goToAuthor(place);
+                }
             }
         });
     }
 
-    private void goToAuthor(PlaceRequest place) {
+    private void goToAuthor(final PlaceRequest place) {
+        ClearContentEvent.fire(this);
         placeManager.revealPlace(place);
     }
 

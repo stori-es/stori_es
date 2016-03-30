@@ -38,6 +38,7 @@ import org.consumersunion.stories.common.shared.model.questionnaire.ContactBlock
 import org.consumersunion.stories.common.shared.model.questionnaire.Option;
 import org.consumersunion.stories.common.shared.model.questionnaire.Question;
 import org.consumersunion.stories.common.shared.model.questionnaire.RatingQuestion;
+import org.consumersunion.stories.common.shared.model.questionnaire.RatingQuestion.DisplayType;
 import org.consumersunion.stories.common.shared.model.questionnaire.RatingQuestion.StepType;
 import org.consumersunion.stories.common.shared.model.type.ContactType;
 import org.consumersunion.stories.common.shared.service.GeneralException;
@@ -74,6 +75,8 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
     @Override
     protected ApiBlock doBackward(Block block) {
         ApiBlock apiBlock = new ApiBlock();
+	BlockType blockType = block.getBlockType();
+	BlockType renderType = blockType.getRenderType();
 
         if (block instanceof Question) {
             Question question = (Question) block;
@@ -91,9 +94,9 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
             apiBlock.setConstraints(constraints);
         }
 
-        if (block.getFormType() == BlockType.ATTACHMENTS) {
+        if (blockType == BlockType.ATTACHMENTS) {
             apiBlock.setBlockType(ApiBlockType.ATTACHMENTS_QUESTION_BLOCK);
-        } else if (block.getFormType() == BlockType.AUDIO) {
+        } else if (blockType == BlockType.AUDIO) {
             // TODO: merge the audio and media; it's really just media. consider merging image as well. See TASK-1721
             apiBlock.setBlockType(ApiBlockType.AUDIO_CONTENT_BLOCK);
             apiBlock.setAudio(new ApiBlockAudio());
@@ -101,14 +104,14 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
             apiBlock.getAudio().setHref(((MediaBlock) block).getUrl());
             // TODO: get the field names to match TASK-1722
             apiBlock.getAudio().setCaption(((MediaBlock) block).getDescription());
-        } else if (block.getFormType() == BlockType.VIDEO) {
+        } else if (blockType == BlockType.VIDEO) {
             apiBlock.setBlockType(ApiBlockType.VIDEO_CONTENT_BLOCK);
             apiBlock.setVideo(new ApiBlockVideo());
             apiBlock.getVideo().setTitle(((MediaBlock) block).getTitle());
             apiBlock.getVideo().setHref(((MediaBlock) block).getUrl());
             // TODO: get field names to match TASK-1722
             apiBlock.getVideo().setCaption(((MediaBlock) block).getDescription());
-        } else if (block.getFormType() == BlockType.SUBMIT) {
+        } else if (blockType == BlockType.SUBMIT) {
             apiBlock.setBlockType(ApiBlockType.BUTTON_BLOCK);
             String nextUrl =
                     resourceLinksHelper.replaceId(endsWithId(DOCUMENTS),
@@ -119,110 +122,89 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
             apiBlock.setNextDocument(nextDocument);
 
             forwardStyleData(apiBlock, (SubmitBlock) block);
-        } else if (block.getFormType() == BlockType.TEXT_INPUT) {
+        } else if (renderType == BlockType.TEXT_INPUT) {
             // TODO: If we confirm the 'type' constants across the model POJOs and API DTOs, we can just use sets and
             // avoid all this. TASK-1723
-            if (block.getStandardMeaning() == BlockType.CITY) {
+            if (blockType == BlockType.CITY) {
                 forwardTextInputAttributes(apiBlock, (Question) block, ApiBlockFormat.SINGLE_LINE,
                         ApiBlockType.CITY_QUESTION_BLOCK);
-            } else if (block.getStandardMeaning() == BlockType.FIRST_NAME) {
+            } else if (blockType == BlockType.FIRST_NAME) {
                 forwardTextInputAttributes(apiBlock, (Question) block, ApiBlockFormat.SINGLE_LINE,
                         ApiBlockType.FIRST_NAME_QUESTION_BLOCK);
-            } else if (block.getStandardMeaning() == BlockType.LAST_NAME) {
+            } else if (blockType == BlockType.LAST_NAME) {
                 forwardTextInputAttributes(apiBlock, (Question) block, ApiBlockFormat.SINGLE_LINE,
                         ApiBlockType.LAST_NAME_QUESTION_BLOCK);
-            } else if (block.getStandardMeaning() == BlockType.STORY_TITLE) {
+            } else if (blockType == BlockType.STORY_TITLE) {
                 forwardTextInputAttributes(apiBlock, (Question) block, ApiBlockFormat.SINGLE_LINE,
                         ApiBlockType.STORY_TITLE_QUESTION_BLOCK);
-            } else if (block.getStandardMeaning() == BlockType.STREET_ADDRESS_1) {
+            } else if (blockType == BlockType.STREET_ADDRESS_1) {
                 forwardTextInputAttributes(apiBlock, (Question) block, ApiBlockFormat.SINGLE_LINE,
                         ApiBlockType.STREET_ADDRESS_QUESTION_BLOCK);
-            } else if (block.getStandardMeaning() == BlockType.ZIP_CODE) {
+            } else if (blockType == BlockType.ZIP_CODE) {
                 forwardTextInputAttributes(apiBlock, (Question) block, ApiBlockFormat.SINGLE_LINE,
                         ApiBlockType.ZIP_CODE_QUESTION_BLOCK);
-            } else if (block.getStandardMeaning() == null) { // generic text input
+            } else if (blockType.isCustom()) { // generic text input
                 forwardTextInputAttributes(apiBlock, (Question) block, ApiBlockFormat.SINGLE_LINE);
             } else {
                 throw new GeneralException(
-                        "Unknown standard meaning for 'text input' block: " + block.getStandardMeaning());
+                        "Unknown block type for 'text input' block: " + block.getBlockType());
             }
-        } else if (block.getFormType() == BlockType.TEXT_AREA) {
-            if (block.getStandardMeaning() == BlockType.STORY_ASK) {
-                forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_PLAIN_TEXT,
-                        ApiBlockType.STORY_ASK_QUESTION_BLOCK);
-            } else {
-                forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_PLAIN_TEXT);
-            }
-        } else if (block.getFormType() == BlockType.RICH_TEXT_AREA) {
-            if (block.getStandardMeaning() == BlockType.STORY_ASK) {
-                forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_RICH_TEXT,
-                        ApiBlockType.STORY_ASK_QUESTION_BLOCK);
-            } else {
-                forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_RICH_TEXT);
-            }
-        } else if (block.getFormType() == BlockType.COLLECTION || block.getFormType() == BlockType.STORY) {
-            // TODO: These are really 'reference blocks. We're shoe-horning the 'Collection Block' on top of the
-            // 'Content Block' and it's causing data type follishness up and down the stack; need to
-            // fix this, and get a DB table with an FK. See TASK-1724
-            // TODO: also, these should use the same 'ApiBlockReference' data structure. See TASK-1735
-            if (block.getFormType() == BlockType.STORY) {
-                apiBlock.setBlockType(ApiBlockType.STORY_CONTENT_BLOCK);
-                String href =
-                        resourceLinksHelper.replaceId(endsWithId(STORIES),
-                                Integer.parseInt(((Content) block).getContent())).getHref();
-                apiBlock.setStory(new ApiBlockStory());
-                apiBlock.getStory().setHref(href);
-            } else {
-                apiBlock.setBlockType(ApiBlockType.COLLECTION_CONTENT_BLOCK);
-                String href =
-                        resourceLinksHelper.replaceId(endsWithId(COLLECTIONS),
-                                Integer.parseInt(((Content) block).getContent())).getHref();
-                apiBlock.setCollection(new ApiBlockCollection());
-                apiBlock.getCollection().setHref(href);
-            }
-        } else if (block.getFormType() == BlockType.DATE) {
+        } else if (blockType == BlockType.TEXT_AREA) {
+	    forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_PLAIN_TEXT);
+        } else if (blockType == BlockType.STORY_ASK_RICH) {
+            forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_RICH_TEXT,
+                    ApiBlockType.STORY_ASK_QUESTION_BLOCK);
+        } else if (blockType == BlockType.STORY_ASK_PLAIN) {
+            forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_PLAIN_TEXT,
+                    ApiBlockType.STORY_ASK_QUESTION_BLOCK);
+        }
+        else if (blockType == BlockType.RICH_TEXT_AREA) {
+        	forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_RICH_TEXT);
+        } else if (blockType == BlockType.TEXT_AREA) {
+        	forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_PLAIN_TEXT);
+        } else if (blockType == BlockType.DATE) {
             apiBlock.setBlockType(ApiBlockType.DATE_QUESTION_BLOCK);
-        } else if (block.getFormType() == BlockType.DOCUMENT) {
+        } else if (blockType == BlockType.DOCUMENT) {
             apiBlock.setBlockType(ApiBlockType.DOCUMENT_CONTENT_BLOCK);
             ApiBlockDocument apiBlockDocument = new ApiBlockDocument();
             apiBlockDocument.setTitle(((DocumentBlock) block).getTitle());
             // TODO: settle on 'href'. TASK-1725
             apiBlockDocument.setHref(((DocumentBlock) block).getUrl());
             apiBlock.setDocument(apiBlockDocument);
-        } else if (block.getFormType() == BlockType.SELECT || block.getFormType() == BlockType.CHECKBOX
-                || block.getFormType() == BlockType.RADIO) {
-            if (block.getStandardMeaning() == BlockType.PREFERRED_EMAIL_FORMAT) {
+        } else if (renderType == BlockType.SELECT || renderType == BlockType.CHECKBOX
+                || renderType == BlockType.RADIO) {
+            if (blockType == BlockType.PREFERRED_EMAIL_FORMAT) {
                 apiBlock.setBlockType(ApiBlockType.EMAIL_FORMAT_QUESTION_BLOCK);
-            } else if (block.getStandardMeaning() == BlockType.STATE) {
+            } else if (blockType == BlockType.STATE) {
                 apiBlock.setBlockType(ApiBlockType.STATE_QUESTION_BLOCK);
-            } else if (block.getStandardMeaning() == BlockType.UPDATES_OPT_IN) {
+            } else if (blockType == BlockType.UPDATES_OPT_IN) {
                 apiBlock.setBlockType(ApiBlockType.SUBSCRIPTION_QUESTION_BLOCK);
-            } else if (block.getStandardMeaning() == null) {
+            } else if (blockType.isCustom()) {
                 apiBlock.setBlockType(ApiBlockType.MULTIPLE_CHOICE_QUESTION_BLOCK);
             } else {
                 throw new GeneralException(
-                        "Unknown standard meaning for 'select' block: " + block.getStandardMeaning());
+                        "Unknown block type for 'select' block: " + blockType);
             }
             forwardPopulateSelectData(apiBlock, (Question) block);
-        } else if (block.getFormType() == BlockType.CONTACT) {
+        } else if (renderType == BlockType.CONTACT) {
             ContactBlock contactBlock = (ContactBlock) block;
             // TODO: We'd like to set the API type off the ContactBlock#dataType, but it's not consistent and we may
             // end up reworking it all a bit. See TASK-1736, TASK-1737
-            if (BlockType.emailElements().contains(block.getStandardMeaning())) {
+            if (BlockType.emailElements().contains(blockType)) {
                 apiBlock.setBlockType(EMAIL_QUESTION_BLOCK);
-            } else if (BlockType.phoneElements().contains(block.getStandardMeaning())) {
+            } else if (BlockType.phoneElements().contains(blockType)) {
                 apiBlock.setBlockType(PHONE_QUESTION_BLOCK);
             }
 
-            ContactType contactType = ContactType.fromBlockType(block.getStandardMeaning());
+            ContactType contactType = ContactType.fromBlockType(block.getBlockType());
             apiBlock.getLabels().setValue(contactType.code());
-        } else if (block.getFormType() == BlockType.TEXT_IMAGE) {
+        } else if (blockType == BlockType.TEXT_IMAGE) {
             apiBlock.setBlockType(ApiBlockType.TEXT_CONTENT_BLOCK);
             TextImageBlock imageBlock = (TextImageBlock) block;
             apiBlock.setValue(imageBlock.getText());
             apiBlock.setFormat(MULTI_LINES_RICH_TEXT);
             setTextImageBlockData(apiBlock, imageBlock.getImage());
-        } else if (block.getFormType() == BlockType.IMAGE) {
+        } else if (blockType == BlockType.IMAGE) {
             apiBlock.setBlockType(ApiBlockType.IMAGE_CONTENT_BLOCK);
             ApiBlockImage apiImage = new ApiBlockImage();
             apiImage.setAltText(((ImageBlock) block).getAltText());
@@ -230,13 +212,13 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
             apiImage.setHref(((ImageBlock) block).getUrl());
             // TODO: the data model image has neither size nor position. TASK-1726
             apiBlock.setImage(apiImage);
-        } else if (block.getFormType() == BlockType.CONTENT) {
-            if (block.getStandardMeaning() == BlockType.CUSTOM_PERMISSIONS) {
+        } else if (renderType == BlockType.CONTENT) {
+            if (blockType == BlockType.CUSTOM_PERMISSIONS) {
                 apiBlock.setBlockType(ApiBlockType.PERMISSIONS_BLOCK);
-            } else if (block.getStandardMeaning() == null) {
+            } else if (blockType.isCustom()) {
                 apiBlock.setBlockType(ApiBlockType.TEXT_CONTENT_BLOCK);
             } else {
-                throw new GeneralException("Unexpected standard meaning '" + block.getStandardMeaning()
+                throw new GeneralException("Unexpected block type '" + block.getBlockType()
                         + "' for content block");
             }
 
@@ -248,15 +230,15 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
             } else {
                 apiBlock.setFormat(MULTI_LINES_PLAIN_TEXT);
             }
-        } else if (block.getStandardMeaning() == BlockType.RATING) {
+        } else if (blockType == BlockType.RATING_STARS || blockType == BlockType.RATING_NUMBERS) {
             RatingQuestion ratingQuestion = (RatingQuestion) block;
             apiBlock.setBlockType(ApiBlockType.RATING_QUESTION_BLOCK);
-            apiBlock.setFormat(BlockType.STARS.equals(ratingQuestion.getFormType()) ? STARS : NUMBERS);
+            apiBlock.setFormat(BlockType.RATING_STARS.equals(blockType) ? STARS : NUMBERS);
             apiBlock.getLabels().setLeft(ratingQuestion.getStartLabel());
             apiBlock.getLabels().setRight(ratingQuestion.getEndLabel());
             apiBlock.setInteraction(StepType.DISCRETE.equals(ratingQuestion.getStepType()) ? DISCRETE : HALF);
         } else {
-            throw new GeneralException("Unknown block type value: '" + block.getFormType() + "'.");
+            throw new GeneralException("Unknown block type value: '" + blockType + "'.");
         }
 
         return apiBlock;
@@ -304,25 +286,25 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
             // begin: story reference blocks
             case COLLECTION_CONTENT_BLOCK:
                 block = new Content();
-                block.setFormType(BlockType.COLLECTION);
+                block.setBlockType(BlockType.COLLECTION);
                 ((Content) block).setContent(
                         "" + ResourceLinksHelperImpl.extractId(apiBlock.getCollection().getHref()));
                 break;
             case STORY_CONTENT_BLOCK:
                 block = new Content();
-                block.setFormType(BlockType.STORY);
+                block.setBlockType(BlockType.STORY);
                 ((Content) block).setContent("" + ResourceLinksHelperImpl.extractId(apiBlock.getStory().getHref()));
                 break;
             // end: story reference blocks
             // begin: select questions
             case EMAIL_FORMAT_QUESTION_BLOCK:
-                block = backwardMultiChoice(apiBlock, BlockType.CHECKBOX, BlockType.PREFERRED_EMAIL_FORMAT, false);
+                block = backwardMultiChoice(apiBlock, BlockType.PREFERRED_EMAIL_FORMAT, false);
                 break;
             case STATE_QUESTION_BLOCK:
-                block = backwardMultiChoice(apiBlock, BlockType.SELECT, BlockType.STATE, false);
+                block = backwardMultiChoice(apiBlock, BlockType.STATE, false);
                 break;
             case SUBSCRIPTION_QUESTION_BLOCK:
-                block = backwardMultiChoice(apiBlock, BlockType.CHECKBOX, BlockType.UPDATES_OPT_IN, false);
+                block = backwardMultiChoice(apiBlock, BlockType.UPDATES_OPT_IN, false);
                 break;
             case MULTIPLE_CHOICE_QUESTION_BLOCK:
                 BlockType formType;
@@ -345,7 +327,7 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
                         formType = BlockType.SELECT;
                         break;
                 }
-                block = backwardMultiChoice(apiBlock, formType, null, isMultiselect);
+                block = backwardMultiChoice(apiBlock, formType, isMultiselect);
                 break;
             // end: select questions
             // begin: contact blocks
@@ -357,14 +339,14 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
             // begin: media blocks
             case AUDIO_CONTENT_BLOCK:
                 block = new MediaBlock();
-                block.setFormType(BlockType.AUDIO);
+                block.setBlockType(BlockType.AUDIO);
                 ((MediaBlock) block).setTitle(apiBlock.getAudio().getTitle());
                 ((MediaBlock) block).setUrl(apiBlock.getAudio().getHref());
                 ((MediaBlock) block).setDescription(apiBlock.getAudio().getCaption());
                 break;
             case VIDEO_CONTENT_BLOCK:
                 block = new MediaBlock();
-                block.setFormType(BlockType.AUDIO);
+                block.setBlockType(BlockType.AUDIO);
                 ((MediaBlock) block).setTitle(apiBlock.getVideo().getTitle());
                 ((MediaBlock) block).setUrl(apiBlock.getVideo().getHref());
                 ((MediaBlock) block).setDescription(apiBlock.getVideo().getCaption());
@@ -381,49 +363,47 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
             // others
             case ATTACHMENTS_QUESTION_BLOCK:
                 block = new Question();
-                block.setFormType(BlockType.ATTACHMENTS);
+                block.setBlockType(BlockType.ATTACHMENTS);
                 break;
             case BUTTON_BLOCK:
                 if (apiBlock.getNextDocument() == null) {
                     throw new BadRequestException("'ButtonBlock' types must define 'nextDocument' property.");
                 }
                 block = new SubmitBlock();
-                block.setFormType(BlockType.SUBMIT);
+                block.setBlockType(BlockType.SUBMIT);
                 SubmitBlock.NextDocument nextDocument = new SubmitBlock.NextDocument();
                 nextDocument.setDocumentId(ResourceLinksHelperImpl.extractId(apiBlock.getNextDocument().getHref()));
                 backwardStyleData((SubmitBlock) block, apiBlock);
                 break;
             case DATE_QUESTION_BLOCK:
                 block = new Question();
-                block.setFormType(BlockType.DATE);
+                block.setBlockType(BlockType.DATE);
                 break;
             case DOCUMENT_CONTENT_BLOCK:
                 if (apiBlock.getDocument() == null) {
                     throw new BadRequestException("'DoumentContentBlock' types must define 'document' property.");
                 }
                 block = new DocumentBlock();
-                block.setFormType(BlockType.DOCUMENT);
+                block.setBlockType(BlockType.DOCUMENT);
                 ((DocumentBlock) block).setTitle(apiBlock.getDocument().getTitle());
                 ((DocumentBlock) block).setUrl(apiBlock.getDocument().getHref());
                 break;
             case IMAGE_CONTENT_BLOCK:
                 block = new ImageBlock();
-                block.setFormType(BlockType.IMAGE);
+                block.setBlockType(BlockType.IMAGE);
                 ((ImageBlock) block).setAltText(apiBlock.getImage().getAltText());
                 ((ImageBlock) block).setCaption(apiBlock.getImage().getCaption());
                 ((ImageBlock) block).setUrl(apiBlock.getImage().getHref());
                 break;
             case RATING_QUESTION_BLOCK:
                 block = new RatingQuestion();
-                // TODO: see TASK-1764
-                block.setFormType(BlockType.RATING);
-                block.setStandardMeaning(NUMBERS.equals(apiBlock.getFormat()) ? BlockType.NUMBERS : BlockType.STARS);
+                block.setBlockType(DisplayType.NUMBERS.equals(apiBlock.getFormat()) 
+				   ? BlockType.RATING_NUMBERS : BlockType.RATING_STARS);
                 break;
             case STORY_ASK_QUESTION_BLOCK:
                 block = new Question();
-                block.setFormType(apiBlock.getFormat() == MULTI_LINES_PLAIN_TEXT ?
-                        BlockType.PLAIN_TEXT : BlockType.RICH_TEXT_AREA);
-                block.setStandardMeaning(BlockType.STORY_ASK);
+                block.setBlockType(ApiBlockFormat.MULTI_LINES_PLAIN_TEXT.equals(apiBlock.getFormat())
+				   ? BlockType.STORY_ASK_PLAIN : BlockType.STORY_ASK_RICH);
                 break;
             default:
                 throw new GeneralException("Unknown block type '" + apiBlock.getBlockType() + "'.");
@@ -547,13 +527,13 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
             options.add(apiOption);
         }
 
-        BlockType formType = select.getFormType();
+        BlockType renderType = select.getBlockType().getRenderType();
         ApiBlockFormat format = null;
-        if (BlockType.RADIO.equals(formType)) {
+        if (BlockType.RADIO.equals(renderType)) {
             format = ApiBlockFormat.SINGLE_SELECT_RADIO;
-        } else if (BlockType.CHECKBOX.equals(formType)) {
+        } else if (BlockType.CHECKBOX.equals(renderType)) {
             format = ApiBlockFormat.MULTI_SELECT_CHECKBOX;
-        } else if (BlockType.SELECT.equals(formType)) {
+        } else if (BlockType.SELECT.equals(renderType)) {
             if (select.isMultiselect()) {
                 format = ApiBlockFormat.MULTI_SELECT_LIST;
             } else {
@@ -566,8 +546,7 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
     // backward helpers
     private Question backwardTextInputAttributes(ApiBlock blockResponse, BlockType blockType) {
         Question block = new Question();
-        block.setFormType(BlockType.TEXT_INPUT);
-        block.setStandardMeaning(blockType);
+        block.setBlockType(blockType);
         block.setText(blockResponse.getValue());
 
         return block;
@@ -575,51 +554,49 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
 
     private Question backwardContactBlock(ApiBlock apiBlock) {
         ContactBlock block = new ContactBlock();
-        block.setFormType(BlockType.CONTACT);
 
         ContactType contactType = ContactType.valueOfCode(apiBlock.getLabels().getValue());
         block.setType(contactType.name());
 
-        BlockType standardMeaning = null;
+        BlockType blockType = null;
         if (EMAIL_QUESTION_BLOCK.equals(apiBlock.getBlockType())) {
             switch (contactType) {
                 case HOME:
-                    standardMeaning = BlockType.EMAIL;
+                    blockType = BlockType.EMAIL;
                     break;
                 case OTHER:
-                    standardMeaning = BlockType.EMAIL_OTHER;
+                    blockType = BlockType.EMAIL_OTHER;
                     break;
                 case WORK:
-                    standardMeaning = BlockType.EMAIL_WORK;
+                    blockType = BlockType.EMAIL_WORK;
                     break;
             }
         } else if (PHONE_QUESTION_BLOCK.equals(apiBlock.getBlockType())) {
             switch (contactType) {
                 case HOME:
-                    standardMeaning = BlockType.PHONE;
+                    blockType = BlockType.PHONE;
                     break;
                 case MOBILE:
-                    standardMeaning = BlockType.PHONE_MOBILE;
+                    blockType = BlockType.PHONE_MOBILE;
                     break;
                 case OTHER:
-                    standardMeaning = BlockType.PHONE_OTHER;
+                    blockType = BlockType.PHONE_OTHER;
                     break;
                 case WORK:
-                    standardMeaning = BlockType.PHONE_WORK;
+                    blockType = BlockType.PHONE_WORK;
                     break;
             }
         }
 
-        block.setStandardMeaning(standardMeaning);
+        block.setBlockType(blockType);
         block.setType(apiBlock.getLabels().getValue());
 
         return block;
     }
 
-    private Content backwardContentBlock(ApiBlock apiBlock, BlockType standardMeaning) {
+    private Content backwardContentBlock(ApiBlock apiBlock, BlockType blockType) {
         Content block = new Content();
-        block.setFormType(BlockType.CONTENT);
-        block.setStandardMeaning(standardMeaning);
+        block.setBlockType(blockType);
         block.setContent(apiBlock.getValue());
 
         TextType textType = null;
@@ -635,14 +612,12 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
 
     private Question backwardMultiChoice(
             ApiBlock apiBlock,
-            BlockType formType,
-            BlockType standardMeaning,
+            BlockType blockType,
             boolean isMultiselect) {
 
         Question block = new Question();
         block.setMultiselect(isMultiselect);
-        block.setFormType(formType);
-        block.setStandardMeaning(standardMeaning);
+        block.setBlockType(blockType);
         List<Option> options = new ArrayList<Option>();
         for (ApiBlockOption apiOption : apiBlock.getOptions().getOptions()) {
             Option option = new Option();

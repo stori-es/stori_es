@@ -40,6 +40,8 @@
             top: 50%;
 
             margin-top: -4px;
+
+            pointer-events: all;
         }
 
         .textContent {

@@ -27,7 +27,7 @@ public class StandardQuestionFactoryTest {
 
         // When
         Question standardQuestion =
-                standardQuestionFactory.createStandardQuestion(BlockType.STORY_TITLE, anyFormType);
+                standardQuestionFactory.createStandardQuestion(BlockType.STORY_TITLE);
 
         // Then
         assertThat(standardQuestion.getHelpText()).isEmpty();
@@ -41,7 +41,7 @@ public class StandardQuestionFactoryTest {
 
         // When
         Question standardQuestion =
-                standardQuestionFactory.createStandardQuestion(BlockType.STORY_TITLE, anyFormType);
+                standardQuestionFactory.createStandardQuestion(BlockType.STORY_TITLE);
 
         // Then
         assertThat(standardQuestion.getText()).isEqualTo("some string");

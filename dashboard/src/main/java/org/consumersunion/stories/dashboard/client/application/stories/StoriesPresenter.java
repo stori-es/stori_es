@@ -1,6 +1,5 @@
 package org.consumersunion.stories.dashboard.client.application.stories;
 
-import org.consumersunion.stories.common.client.event.SearchEvent;
 import org.consumersunion.stories.common.client.event.SortChangedEvent;
 import org.consumersunion.stories.common.client.model.StorySortFieldDropDownItem;
 import org.consumersunion.stories.common.client.place.ClientPlaceManager;
@@ -68,7 +67,7 @@ public class StoriesPresenter extends AbstractStoriesPresenter<StoriesPresenter.
     private final ListStoriesPresenter listStoriesPresenter;
     private final ClientPlaceManager placeManager;
 
-    private String searchToken;
+    private String searchToken = "";
 
     @Inject
     StoriesPresenter(
@@ -155,16 +154,18 @@ public class StoriesPresenter extends AbstractStoriesPresenter<StoriesPresenter.
     protected void onReveal() {
         super.onReveal();
 
-        searchCurrentToken();
+        handleSearch();
     }
 
     @Override
     protected void onReset(PlaceRequest placeRequest) {
-        String newSearchToken = placeRequest.getParameter(ParameterTokens.search, "");
-        if (!newSearchToken.equals(searchToken)) {
-            searchCurrentToken();
+        if (NameTokens.stories.equals(placeRequest.getNameToken())) {
+            handleSearch();
         }
+    }
 
+    private void handleSearch() {
+        String newSearchToken = placeManager.getCurrentPlaceRequest().getParameter(ParameterTokens.search, "");
         searchToken = newSearchToken;
         getView().setSearchToken(searchToken);
     }
@@ -174,14 +175,5 @@ public class StoriesPresenter extends AbstractStoriesPresenter<StoriesPresenter.
         super.onHide();
 
         listStoriesPresenter.clear();
-    }
-
-    private void searchCurrentToken() {
-        schedulerProvider.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                SearchEvent.fire(StoriesPresenter.this, searchToken, getView().getSort());
-            }
-        });
     }
 }

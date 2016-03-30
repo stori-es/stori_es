@@ -1,10 +1,9 @@
-package org.consumersunion.stories.dashboard.client.application.collection.widget.collectionsbyquestionnaire;
+package org.consumersunion.stories.dashboard.client.application.collection.widget.collectionstoken;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.consumersunion.stories.common.client.event.CollectionChangedEvent;
 import org.consumersunion.stories.common.client.event.RedrawEvent;
 import org.consumersunion.stories.common.client.service.RpcCollectionServiceAsync;
 import org.consumersunion.stories.common.client.service.response.ActionResponse;
@@ -25,25 +24,14 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
-import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 
-public class CollectionsByQuestionnairePresenter extends PresenterWidget<CollectionsByQuestionnairePresenter.MyView>
-        implements ReloadCollectionsEvent.ReloadCollectionsHandler, CollectionsByQuestionnaireUiHandlers,
-        CollectionChangedEvent.CollectionChangedHandler {
-    interface MyView extends View, HasUiHandlers<CollectionsByQuestionnaireUiHandlers> {
-        void setData(List<CollectionSummary> data);
-
-        void clear();
-
-        void onTargetCollectionRemoved(CollectionSummary collection);
-
-        void updateCollection(Collection collection);
-    }
-
+public class CollectionsTokenByQuestionnairePresenter
+        extends PresenterWidget<CollectionsTokenView<CollectionSummary, Collection, CollectionData>>
+        implements ReloadCollectionsEvent.ReloadCollectionsHandler,
+        CollectionsTokenUiHandlers<CollectionSummary, Collection, CollectionData> {
     private final RpcCollectionServiceAsync collectionService;
     private final PlaceManager placeManager;
     private final CollectionIdsUtil collectionIdsUtil;
@@ -51,9 +39,9 @@ public class CollectionsByQuestionnairePresenter extends PresenterWidget<Collect
     private Collection currentCollection;
 
     @Inject
-    CollectionsByQuestionnairePresenter(
+    CollectionsTokenByQuestionnairePresenter(
             EventBus eventBus,
-            MyView myView,
+            CollectionsTokenView<CollectionSummary, Collection, CollectionData> myView,
             RpcCollectionServiceAsync collectionService,
             PlaceManager placeManager,
             CollectionIdsUtil collectionIdsUtil) {
@@ -72,35 +60,18 @@ public class CollectionsByQuestionnairePresenter extends PresenterWidget<Collect
     }
 
     @Override
-    public void onCollectionChanged(CollectionChangedEvent event) {
-        if (collectionIdsUtil.isRelatedCollection(currentCollection, event.getCollection())) {
-            getView().updateCollection(event.getCollection());
-        }
+    public boolean apply(CollectionData input) {
+        return !currentCollection.getTargetCollections().contains(input.getId());
     }
 
     @Override
-    public void onReloadCollections(ReloadCollectionsEvent event) {
-        if (currentCollection != null && collectionIdsUtil.isSameCollection(currentCollection, event)) {
-            collectionService.getCollection(currentCollection.getId(), AuthConstants.ROLE_READER,
-                    new ResponseHandlerLoader<DatumResponse<CollectionData>>() {
-                        @Override
-                        public void handleSuccess(DatumResponse<CollectionData> result) {
-                            currentCollection = result.getDatum().getCollection();
-                            loadLinkedCollections();
-                        }
-                    });
-        }
-    }
-
-    @Override
-    public void removeTargetCollection(final CollectionSummary collection) {
+    public void removeCollection(final CollectionSummary collection) {
         collectionService.removeFromCollectionSources(collection.getId(), currentCollection.getId(),
                 new ResponseHandlerLoader<ActionResponse>() {
                     @Override
                     public void handleSuccess(ActionResponse result) {
                         currentCollection.getTargetCollections().remove(collection.getId());
-                        getView().onTargetCollectionRemoved(collection);
-                        ReloadCollectionsEvent.fire(CollectionsByQuestionnairePresenter.this, currentCollection,
+                        ReloadCollectionsEvent.fire(CollectionsTokenByQuestionnairePresenter.this, currentCollection,
                                 Lists.newArrayList(collection.getId()));
                         loadLinkedCollections();
                     }
@@ -109,7 +80,32 @@ public class CollectionsByQuestionnairePresenter extends PresenterWidget<Collect
     }
 
     @Override
-    public void collectionDetails(Integer collectionId) {
+    public void onCollectionSelected(Collection collection) {
+        int collectionId = collection.getId();
+
+        collectionService.getCollection(collectionId, AuthConstants.ROLE_CURATOR,
+                new ResponseHandlerLoader<DatumResponse<CollectionData>>() {
+                    @Override
+                    public void handleSuccess(DatumResponse<CollectionData> result) {
+                        addTargetCollection(result);
+                    }
+                });
+    }
+
+    @Override
+    public void redraw() {
+    }
+
+    @Override
+    public void onReloadCollections(ReloadCollectionsEvent event) {
+        if (currentCollection != null && collectionIdsUtil.isSameCollection(currentCollection, event)) {
+            reloadCollection();
+        }
+    }
+
+    @Override
+    public void collectionDetails(CollectionSummary collectionSummary) {
+        int collectionId = collectionSummary.getId();
         PlaceRequest place = new PlaceRequest.Builder()
                 .nameToken(NameTokens.collection)
                 .with(ParameterTokens.id, String.valueOf(collectionId))
@@ -127,7 +123,29 @@ public class CollectionsByQuestionnairePresenter extends PresenterWidget<Collect
         super.onBind();
 
         addVisibleHandler(ReloadCollectionsEvent.TYPE, this);
-        addVisibleHandler(CollectionChangedEvent.TYPE, this);
+    }
+
+    private void addTargetCollection(DatumResponse<CollectionData> result) {
+        Collection targetCollection = result.getDatum().getCollection();
+        targetCollection.getCollectionSources().add(currentCollection.getId());
+        collectionService.updateCollection(targetCollection,
+                new ResponseHandlerLoader<DatumResponse<Collection>>() {
+                    @Override
+                    public void handleSuccess(DatumResponse<Collection> result) {
+                        reloadCollection();
+                    }
+                });
+    }
+
+    private void reloadCollection() {
+        collectionService.getCollection(currentCollection.getId(), AuthConstants.ROLE_READER,
+                new ResponseHandlerLoader<DatumResponse<CollectionData>>() {
+                    @Override
+                    public void handleSuccess(DatumResponse<CollectionData> result) {
+                        currentCollection = result.getDatum().getCollection();
+                        loadLinkedCollections();
+                    }
+                });
     }
 
     private void setData(List<CollectionSummary> data) {

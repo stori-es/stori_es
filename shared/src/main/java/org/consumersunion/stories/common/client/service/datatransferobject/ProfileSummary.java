@@ -7,11 +7,13 @@ import java.util.Set;
 import org.consumersunion.stories.common.shared.model.Profile;
 import org.consumersunion.stories.common.shared.model.entity.Contact;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * Encapsulates a {@link Profile} and related data. Any particular profile may contain contact plus address
  * information, the related organization name, or both depending on the calling context.
  */
-public class ProfileSummary implements Serializable {
+public class ProfileSummary implements Serializable, IsSerializable {
     private Profile profile;
     private String organizationName;
     private Boolean adminOverOrg;

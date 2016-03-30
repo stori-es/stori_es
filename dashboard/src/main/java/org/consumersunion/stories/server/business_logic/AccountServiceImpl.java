@@ -16,6 +16,7 @@ import org.consumersunion.stories.common.shared.model.Profile;
 import org.consumersunion.stories.common.shared.model.ResetPassword;
 import org.consumersunion.stories.common.shared.model.User;
 import org.consumersunion.stories.common.shared.model.entity.Contact;
+import org.consumersunion.stories.common.shared.model.entity.ContactStatus;
 import org.consumersunion.stories.common.shared.service.GeneralException;
 import org.consumersunion.stories.server.email.ConfirmEmailAddressEmailGenerator;
 import org.consumersunion.stories.server.email.EmailData;
@@ -151,7 +152,7 @@ public class AccountServiceImpl implements AccountService {
         Contact primaryEmail =
                 new Contact(user.getId(), EMAIL.name(), TYPE_HOME, contact.getValue(), contact.getStatus());
 
-        if (contact.getEntityId() == 0) {
+        if (contact.getEntityId() == 0 || !ContactStatus.VERIFIED.equals(contact.getStatus())) {
             Verification verification = verificationService.create(primaryEmail);
 
             Profile profile = profilePersister.get(user.getDefaultProfile());

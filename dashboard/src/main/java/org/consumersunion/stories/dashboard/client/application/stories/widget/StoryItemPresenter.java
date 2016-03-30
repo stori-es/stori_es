@@ -18,8 +18,7 @@ import org.consumersunion.stories.common.shared.model.document.SystemEntityRelat
 import org.consumersunion.stories.common.shared.place.ParameterTokens;
 import org.consumersunion.stories.common.shared.service.datatransferobject.StorySummary;
 import org.consumersunion.stories.dashboard.client.application.StoriesDashboardPresenter;
-import org.consumersunion.stories.dashboard.client.application.collection.widget.collectionsbystory
-        .CollectionsByStoryPresenter;
+import org.consumersunion.stories.dashboard.client.application.collection.widget.collectionstoken.CollectionsTokenByStoryPresenter;
 import org.consumersunion.stories.dashboard.client.application.widget.TagsPresenter;
 import org.consumersunion.stories.dashboard.client.application.widget.TagsPresenterFactory;
 import org.consumersunion.stories.dashboard.client.event.AddNewDocumentEvent;
@@ -71,7 +70,7 @@ public class StoryItemPresenter extends PresenterWidget<StoryItemPresenter.MyVie
     private final StoryTellerDashboardI18nLabels labels;
     private final PresenterWidget handler;
     private final TagsPresenter tagsPresenter;
-    private final CollectionsByStoryPresenter collectionsByStoryPresenter;
+    private final CollectionsTokenByStoryPresenter collectionsTokenByStoryPresenter;
     private final RpcStoryServiceAsync storyService;
 
     private StorySummary storySummary;
@@ -87,7 +86,7 @@ public class StoryItemPresenter extends PresenterWidget<StoryItemPresenter.MyVie
             StoriesJsonEncoderDecoder jsonEncoderDecoder,
             TagsPresenterFactory tagsPresenterFactory,
             CachingService cachingService,
-            CollectionsByStoryPresenter collectionsByStoryPresenter,
+            CollectionsTokenByStoryPresenter collectionsTokenByStoryPresenter,
             RpcStoryServiceAsync storyService,
             StoryTellerDashboardI18nLabels labels,
             @Assisted PresenterWidget handler,
@@ -100,13 +99,13 @@ public class StoryItemPresenter extends PresenterWidget<StoryItemPresenter.MyVie
         this.labels = labels;
         this.handler = handler;
         this.tagsPresenter = tagsPresenterFactory.create(this);
-        this.collectionsByStoryPresenter = collectionsByStoryPresenter;
+        this.collectionsTokenByStoryPresenter = collectionsTokenByStoryPresenter;
         this.storyService = storyService;
         this.storySummary = storySummary;
 
         getView().setUiHandlers(this);
 
-        this.collectionsByStoryPresenter.initPresenter(storySummary);
+        this.collectionsTokenByStoryPresenter.initPresenter(storySummary);
         onStorySummaryFetched();
     }
 
@@ -311,7 +310,7 @@ public class StoryItemPresenter extends PresenterWidget<StoryItemPresenter.MyVie
     protected void onBind() {
         super.onBind();
 
-        setInSlot(SLOT_COLLECTIONS, collectionsByStoryPresenter);
+        setInSlot(SLOT_COLLECTIONS, collectionsTokenByStoryPresenter);
         setInSlot(SLOT_TAGS, tagsPresenter);
 
         addVisibleHandler(SavedDocumentEvent.TYPE, this);

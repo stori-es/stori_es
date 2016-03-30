@@ -10,24 +10,24 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.codehaus.jackson.annotate.JsonTypeName("rating")
 public class RatingQuestion extends Question {
     public enum DisplayType implements Serializable {
-        NUMBERS,
-        STARS;
+	NUMBERS,
+	STARS;
 
-        public BlockType toFormType() {
+        public BlockType toBlockType() {
             switch (this) {
-                case NUMBERS:
-                    return BlockType.NUMBERS;
-                case STARS:
-                    return BlockType.STARS;
+	    case NUMBERS:
+		return BlockType.RATING_NUMBERS;
+	    case STARS:
+		return BlockType.RATING_STARS;
             }
             return null;
         }
 
-        public static DisplayType fromFormType(BlockType formType) {
-            if (BlockType.NUMBERS.equals(formType)) {
-                return NUMBERS;
+        public static DisplayType fromBlockType(BlockType blockType) {
+            if (BlockType.RATING_NUMBERS.equals(blockType)) {
+                return DisplayType.NUMBERS;
             } else {
-                return STARS;
+                return DisplayType.STARS;
             }
         }
     }
@@ -62,20 +62,19 @@ public class RatingQuestion extends Question {
     private String endLabel;
 
     public RatingQuestion(
-            BlockType formType,
+            BlockType blockType,
             StepType stepType) {
         this.stepType = stepType;
 
-        setStandardMeaning(BlockType.RATING);
-        setFormType(formType);
+        setBlockType(blockType);
     }
 
     public RatingQuestion() {
-        this(BlockType.STARS, StepType.DISCRETE);
+        this(BlockType.RATING_STARS, StepType.DISCRETE);
     }
 
     public boolean withStars() {
-        return BlockType.STARS.equals(getFormType());
+        return BlockType.RATING_STARS.equals(getBlockType());
     }
 
     public boolean withLabels() {

@@ -4,8 +4,8 @@ import javax.inject.Provider;
 
 import org.consumersunion.stories.common.client.api.TaskService;
 import org.consumersunion.stories.common.client.i18n.CommonI18nMessages;
-import org.consumersunion.stories.common.client.widget.CollectionListItem;
 import org.consumersunion.stories.common.client.widget.CollectionListItemFactory;
+import org.consumersunion.stories.common.client.widget.ListItemHandler;
 import org.consumersunion.stories.common.shared.dto.tasks.ExportTask;
 import org.consumersunion.stories.common.shared.dto.tasks.Task;
 import org.consumersunion.stories.common.shared.i18n.CommonI18nLabels;
@@ -38,7 +38,7 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import static com.google.gwt.query.client.GQuery.$;
 
 public class ExportMessage extends ProgressMessage
-        implements CollectionListItem.ListItemHandler, AttachEvent.Handler, HasHandlers {
+        implements ListItemHandler<CollectionSummary>, AttachEvent.Handler, HasHandlers {
     interface Binder extends UiBinder<Widget, ExportMessage> {
     }
 

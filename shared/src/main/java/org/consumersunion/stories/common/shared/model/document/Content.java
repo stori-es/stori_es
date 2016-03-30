@@ -45,8 +45,7 @@ public class Content extends ContentBase {
         content.setContent(getContent());
         content.setTextType(getTextType());
         content.setDocument(getDocument());
-        content.setFormType(getFormType());
-        content.setStandardMeaning(getStandardMeaning());
+        content.setBlockType(getBlockType());
 
         return content;
     }

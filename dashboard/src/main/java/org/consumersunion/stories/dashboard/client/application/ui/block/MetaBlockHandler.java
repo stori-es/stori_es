@@ -9,5 +9,5 @@ public interface MetaBlockHandler {
 
     void setupMetaBlock(MetaBlock metaBlock);
 
-    void createBlockAndReplace(BlockType blockType, BlockType formType, MetaBlock metaBlock);
+    void createBlockAndReplace(BlockType blockType, MetaBlock metaBlock);
 }

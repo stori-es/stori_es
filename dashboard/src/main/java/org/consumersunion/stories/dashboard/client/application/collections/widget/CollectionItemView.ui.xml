@@ -57,14 +57,8 @@
             <g:CheckBox ui:field="watching" text="Watching"
                         styleName="{resource.generalStyleCss.imageToggle} {resource.generalStyleCss.watch}"/>
             <d:TimeMetadataWidget ui:field="timeContainer" addStyleNames="{resource.generalStyleCss.w100}"/>
-            <div class="{resource.cards.collections}" ui:field="collections">
-                <div ui:field="sourceOrTargetLabel" class="{style.subTitle} {style.sourceLabel}"/>
-                <div class="{style.plusButton}">
-                    <div ui:field="addSourceOrTargetWrapper" class="simptip-position-top simptip-fade">
-                        <g:Label ui:field="addSourceOrTarget" styleName="icon-plus-sign-alt  icon-2x"/>
-                    </div>
-                </div>
-                <g:SimplePanel ui:field="sourceOrTarget"/>
+            <div ui:field="collectionsWrapper" class="{resource.cards.collections}">
+                <g:SimplePanel ui:field="collections"/>
             </div>
         </div>
         <div class="{resource.cards.leftColumn}">

@@ -32,7 +32,7 @@ public class RatingQuestionWidget extends QuestionWidget implements QuestionElem
 
     @Override
     public void display(RatingQuestion question) {
-        if (!this.question.getFormType().equals(question.getFormType())) {
+        if (!this.question.getBlockType().equals(question.getBlockType())) {
             ratingWidget.asWidget().removeFromParent();
             createAndAddRatingWidget(question);
         } else {
@@ -82,7 +82,7 @@ public class RatingQuestionWidget extends QuestionWidget implements QuestionElem
     }
 
     private AbstractRatingWidget createRatingWidget(RatingQuestion question) {
-        if (BlockType.STARS.equals(question.getFormType())) {
+        if (BlockType.RATING_STARS.equals(question.getBlockType())) {
             return new StarsRatingWidget(question);
         } else {
             return new NumbersRatingWidget(question);

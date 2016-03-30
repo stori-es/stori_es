@@ -89,7 +89,7 @@ public class SubmitBlock extends Block {
         this.size = size;
         this.position = position;
 
-        setFormType(BlockType.SUBMIT);
+        setBlockType(BlockType.SUBMIT);
         nextDocuments = new ArrayList<NextDocument>();
     }
 

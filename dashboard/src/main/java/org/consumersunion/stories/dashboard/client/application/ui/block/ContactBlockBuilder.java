@@ -32,7 +32,7 @@ public class ContactBlockBuilder extends BlockBuilder {
         this.value = questionConfigurator.getEditedValue();
         this.contactConfigurator = (ContactConfigurator) questionConfigurator;
 
-        setShowDuplicate(value.getStandardMeaning() == null);
+        setShowDuplicate(value.getBlockType().isCustom());
 
         questionConfigurator.setDoneCallback(new Callback<ContactBlock>() {
             @Override

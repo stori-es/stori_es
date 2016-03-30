@@ -62,7 +62,7 @@ public class QuestionnaireServiceTest extends GWTTestCase {
         final Question question = new Question();
         question.setText("Favorite color?");
         question.setLabel("favoriteColor");
-        question.setFormType(BlockType.TEXT_INPUT);
+        question.setBlockType(BlockType.TEXT_INPUT);
         question.setMinLength(3);
         question.setMaxLength(16);
         question.setRequired(true);
@@ -106,7 +106,7 @@ public class QuestionnaireServiceTest extends GWTTestCase {
         question.setLabel("favoriteColor");
         question.setText("foo");
         question.setHelpText("FOO");
-        question.setFormType(BlockType.TEXT_INPUT);
+        question.setBlockType(BlockType.TEXT_INPUT);
         question.setMinLength(3);
         question.setMaxLength(16);
         question.setRequired(true);

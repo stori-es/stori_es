@@ -116,7 +116,7 @@ public class ContentTabView extends ViewWithUiHandlers<ContentTabUiHandlers>
             }
         }
 
-        selectedTheme.setText(themeList.getItemText(themeList.getSelectedIndex()));
+        setSelectedThemeText();
     }
 
     @Override
@@ -127,6 +127,7 @@ public class ContentTabView extends ViewWithUiHandlers<ContentTabUiHandlers>
 
         themeList.setVisible(!readOnly);
         selectedTheme.setVisible(readOnly);
+        setSelectedThemeText();
 
         publishedState.setText(readOnly ? storyLabels.published() : storyLabels.draft());
         GQuery.$(publishedState).toggleClass(generalStyle.draftState(), !readOnly);
@@ -147,6 +148,12 @@ public class ContentTabView extends ViewWithUiHandlers<ContentTabUiHandlers>
     @UiHandler("preview")
     void onPreviewClicked(ClickEvent event) {
         permalinkUtil.openPermalink(permalinkUrl, isQuestionnaire);
+    }
+
+    private void setSelectedThemeText() {
+        if (themeList.getSelectedIndex() >= 0) {
+            selectedTheme.setText(themeList.getItemText(themeList.getSelectedIndex()));
+        }
     }
 
     private boolean isQuestionnaire(Collection collection) {

@@ -46,6 +46,8 @@ public class CollectionStoryLinkPersistenceHelper {
             result.add(sId);
         }
 
+        rs.close();
+
         return result;
     }
 
@@ -73,6 +75,7 @@ public class CollectionStoryLinkPersistenceHelper {
         if (updateCount != 1) {
             throw new GeneralException("Unexpected update count: " + updateCount);
         }
+        update.close();
     }
 
     private static void insertStoryLink(final Collection collection, final StoryLink link, final Connection conn)
@@ -88,6 +91,7 @@ public class CollectionStoryLinkPersistenceHelper {
         if (insertCount != 1) {
             throw new GeneralException("Unexpected insert count: " + insertCount);
         }
+        insert.close();
     }
 
     protected static void deleteStoryLink(final int collectionId, final int unlinkedStoryId, final Connection conn)
@@ -101,6 +105,7 @@ public class CollectionStoryLinkPersistenceHelper {
         if (updateCount != 1) {
             throw new GeneralException("Unexpected insert count: " + updateCount);
         }
+        delete.close();
     }
 
     public static void loadAllStoryLinks(final Collection collection, final Connection conn) throws SQLException {
@@ -119,6 +124,7 @@ public class CollectionStoryLinkPersistenceHelper {
         final Set<StoryLink> links = instantiateLinks(rs);
 
         collection.setStories(links);
+        ps.close();
     }
 
     private static Set<StoryLink> instantiateLinks(final ResultSet rs) throws SQLException {
@@ -128,6 +134,7 @@ public class CollectionStoryLinkPersistenceHelper {
             final StoryLink link = instantiateLink(rs);
             links.add(link);
         }
+        rs.close();
 
         return links;
     }
@@ -146,5 +153,6 @@ public class CollectionStoryLinkPersistenceHelper {
         final PreparedStatement delete = connection.prepareStatement("DELETE FROM collection_story WHERE collection=?");
         delete.setInt(1, collection.getId());
         delete.executeUpdate();
+        delete.close();
     }
 }

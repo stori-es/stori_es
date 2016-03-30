@@ -151,25 +151,6 @@ public class FormGwtTest extends GWTTestCase {
     }
 
     /**
-     * Verify name format checking.
-     */
-    public void testSetTypeName() {
-        Form form = new Form();
-
-        form.add(new TextInput("foo", "foo", false));
-
-        form.setValue("foo", "aouest");
-        assertTrue("Expected validation to succeed.", form.validate());
-        form.setValue("foo", "Mr. Robinson");
-        assertTrue("Expected validation to succeed.", form.validate());
-        form.setValue("foo", "Mac-Man");
-        assertTrue("Expected validation to succeed.", form.validate());
-
-        form.setValue("foo", "1238");
-        assertFalse("Expected validation to fail.", form.validate());
-    }
-
-    /**
      * Get the key of a row in a doubleClickEvent for the Flextable
      */
     public void testGetKeyForEvent() {

@@ -24,7 +24,6 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -73,13 +72,7 @@ public class CollectionItemView extends ViewWithUiHandlers<CollectionItemUiHandl
     @UiField
     DivElement tagsHeader;
     @UiField
-    SimplePanel sourceOrTarget;
-    @UiField
-    DivElement sourceOrTargetLabel;
-    @UiField
-    DivElement addSourceOrTargetWrapper;
-    @UiField
-    DivElement collections;
+    DivElement collectionsWrapper;
     @UiField
     CheckBox watching;
     @UiField
@@ -90,6 +83,8 @@ public class CollectionItemView extends ViewWithUiHandlers<CollectionItemUiHandl
     Resources resource;
     @UiField
     DivElement actionPanel;
+    @UiField
+    SimplePanel collections;
 
     private final CommonI18nLabels labels;
     private final CardToolbarButtonFactory buttonFactory;
@@ -128,8 +123,6 @@ public class CollectionItemView extends ViewWithUiHandlers<CollectionItemUiHandl
 
         initWidget(uiBinder.createAndBindUi(this));
 
-        addSourceOrTargetWrapper.setAttribute("data-tooltip", labels.clickToAdd());
-
         bindTagsHeaderClick();
 
         updateTagsPosition();
@@ -143,13 +136,10 @@ public class CollectionItemView extends ViewWithUiHandlers<CollectionItemUiHandl
         boolean questionnaire = collection.isQuestionnaire();
 
         ContentKind contentKind;
-        String sourceOrTarget;
         if (questionnaire) {
             contentKind = ContentKind.QUESTIONNAIRE;
-            sourceOrTarget = labels.targetCollections();
         } else {
             contentKind = ContentKind.COLLECTION;
-            sourceOrTarget = labels.sourceQuestionnaires();
         }
 
         cardTitle.init(messages.collectionTitleWithCount(collectionData.getTitle(), collectionData.getStoriesCount()),
@@ -164,8 +154,6 @@ public class CollectionItemView extends ViewWithUiHandlers<CollectionItemUiHandl
 
         toolbar.setButtons(createButtons(questionnaire));
 
-        sourceOrTargetLabel.setInnerText(sourceOrTarget);
-
         timeContainer.init(collection);
 
         initTooltips();
@@ -179,7 +167,7 @@ public class CollectionItemView extends ViewWithUiHandlers<CollectionItemUiHandl
         if (slot == CollectionItemPresenter.SLOT_TAGS) {
             tags.setWidget(content);
         } else if (slot == CollectionItemPresenter.SLOT_SOURCE_OR_TARGET) {
-            sourceOrTarget.setWidget(content);
+            collections.setWidget(content);
         }
     }
 
@@ -188,7 +176,7 @@ public class CollectionItemView extends ViewWithUiHandlers<CollectionItemUiHandl
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
             public void execute() {
-                Integer margin = $(collections).height() - $(tagsContainer).outerHeight() + 50;
+                Integer margin = $(collectionsWrapper).height() - $(tagsContainer).outerHeight() + 50;
                 margin = margin < 0 ? 0 : margin;
                 $(CollectionItemView.this.tagsContainer).css("margin-top", margin + "px");
             }
@@ -235,7 +223,7 @@ public class CollectionItemView extends ViewWithUiHandlers<CollectionItemUiHandl
         cardTitle.switchToViewMode();
 
         $(tagsContainer)
-                .add($(collections))
+                .add($(collectionsWrapper))
                 .add($(timeContainer))
                 .add($(watching))
                 .show();
@@ -289,11 +277,6 @@ public class CollectionItemView extends ViewWithUiHandlers<CollectionItemUiHandl
         }
     }
 
-    @UiHandler("addSourceOrTarget")
-    void onCreateQuestionnaireClikced(ClickEvent event) {
-        getUiHandlers().addSourceOrTarget();
-    }
-
     @UiHandler("watching")
     void onWatchChanged(ValueChangeEvent<Boolean> event) {
         getUiHandlers().watchCollection(event.getValue());
@@ -314,7 +297,7 @@ public class CollectionItemView extends ViewWithUiHandlers<CollectionItemUiHandl
 
         if (actionWidget != editPanel) {
             $(tagsContainer)
-                    .add($(collections))
+                    .add($(collectionsWrapper))
                     .add($(watching))
                     .hide();
             cardTitle.switchToActionMode();

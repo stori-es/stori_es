@@ -2,6 +2,7 @@ package org.consumersunion.stories.dashboard.client.application;
 
 import java.util.Map;
 
+import org.consumersunion.stories.common.client.event.ClearContentEvent;
 import org.consumersunion.stories.common.client.service.RpcProfileServiceAsync;
 import org.consumersunion.stories.common.client.service.datatransferobject.ProfileSummary;
 import org.consumersunion.stories.common.client.service.response.DatumResponse;
@@ -31,7 +32,8 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 
 public class StoriesDashboardPresenter
         extends Presenter<StoriesDashboardPresenter.MyView, StoriesDashboardPresenter.MyProxy>
-        implements ReloadProfileEvent.ProfileHandler, CloseCardEvent.CloseCardHandler, NavigationHandler {
+        implements ReloadProfileEvent.ProfileHandler, CloseCardEvent.CloseCardHandler, NavigationHandler,
+        ClearContentEvent.ClearContentHandler {
 
     interface MyView extends View {
     }
@@ -138,6 +140,11 @@ public class StoriesDashboardPresenter
     }
 
     @Override
+    public void onClearContent(ClearContentEvent event) {
+        clearSlot(SLOT_MAIN_CONTENT);
+    }
+
+    @Override
     protected void onBind() {
         super.onBind();
 
@@ -146,6 +153,7 @@ public class StoriesDashboardPresenter
         addRegisteredHandler(ReloadProfileEvent.TYPE, this);
         addRegisteredHandler(CloseCardEvent.TYPE, this);
         addRegisteredHandler(NavigationEvent.getType(), this);
+        addRegisteredHandler(ClearContentEvent.TYPE, this);
     }
 
     private void handleAddToSlot(Object slot, PresenterWidget<?> child) {

@@ -36,8 +36,7 @@ public class ContactBlock extends Question {
         contactBlock.setDataType(getDataType());
         contactBlock.setRequired(isRequired());
         contactBlock.setDocument(getDocument());
-        contactBlock.setFormType(getFormType());
-        contactBlock.setStandardMeaning(getStandardMeaning());
+        contactBlock.setBlockType(getBlockType());
 
         return contactBlock;
     }

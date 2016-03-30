@@ -106,7 +106,7 @@ public class NewStoryIndexer implements Indexer {
             // we extract 'opt in' and 'preferred email format' from the questionnaire and anwser set
             if (questionnaire != null && answerSet != null) {
                 for (QuestionBase question : questionnaire.getQuestions()) {
-                    if (BlockType.UPDATES_OPT_IN.equals(question.getStandardMeaning())) {
+                    if (BlockType.UPDATES_OPT_IN.equals(question.getBlockType())) {
                         Answer answer = answerSet.getAnswerByLabel(question.getLabel());
                         if (answer == null || answer.getFirstReportValue() == null) {
                             // if the question is asked, but there's no data, then that means it's unchecked, or false
@@ -115,7 +115,7 @@ public class NewStoryIndexer implements Indexer {
                             profileDocument.setUpdateOptIn(
                                     answer.getFirstReportValue().toLowerCase().startsWith("yes"));
                         }
-                    } else if (BlockType.PREFERRED_EMAIL_FORMAT.equals(question.getStandardMeaning())) {
+                    } else if (BlockType.PREFERRED_EMAIL_FORMAT.equals(question.getBlockType())) {
                         Answer answer = answerSet.getAnswerByLabel(question.getLabel());
                         profileDocument.setEmailFormat(answer.getFirstReportValue());
                     }

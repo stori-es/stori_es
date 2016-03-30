@@ -259,7 +259,7 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
                                     new Predicate<QuestionBase>() {
                                         @Override
                                         public boolean apply(QuestionBase input) {
-                                            return BlockType.STORY_TITLE.equals(input.getStandardMeaning());
+                                            return BlockType.STORY_TITLE.equals(input.getBlockType());
                                         }
                                     }).orNull();
 
@@ -383,7 +383,7 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
             tDoc.setTitle(storyTitle);
             tDoc.setLocale(answerSet.getLocale());
             if (storyContent.getKey() != null) {
-                if (BlockType.RICH_TEXT_AREA.equals(storyContent.getKey().getFormType())) {
+                if (BlockType.RICH_TEXT_AREA.equals(storyContent.getKey().getBlockType().getRenderType())) {
                     tDoc.addBlock(new TextImageBlock(storyContent.getValue()));
                 } else {
                     Content block = new Content(BlockType.CONTENT, storyContent.getValue(), TextType.PLAIN);
@@ -460,13 +460,13 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
         List<BlockType> phoneElements = BlockType.phoneElements();
 
         for (QuestionBase q : questionnaire.getQuestions()) {
-            if (emailElements.contains(q.getStandardMeaning())) {
+            if (emailElements.contains(q.getBlockType())) {
                 emailLabels.add(q.getLabel());
-            } else if (phoneElements.contains(q.getStandardMeaning())) {
+            } else if (phoneElements.contains(q.getBlockType())) {
                 phoneLabels.add(q.getLabel());
-            } else if (BlockType.FIRST_NAME.equals(q.getStandardMeaning())) {
+            } else if (BlockType.FIRST_NAME.equals(q.getBlockType())) {
                 labelFName = q.getLabel();
-            } else if (BlockType.LAST_NAME.equals(q.getStandardMeaning())) {
+            } else if (BlockType.LAST_NAME.equals(q.getBlockType())) {
                 labelLName = q.getLabel();
             }
         }
@@ -481,11 +481,11 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
             String label = answer.getLabel();
             Block question = questionnaire.getQuestionByLabel(label);
             if (question != null) {
-                typeMap.put(label, question.getStandardMeaning());
+                typeMap.put(label, question.getBlockType());
                 if (emailLabels.contains(answer.getLabel())) {
-                    emails.put(question.getStandardMeaning(), answer.getFirstReportValue());
+                    emails.put(question.getBlockType(), answer.getFirstReportValue());
                 } else if (phoneLabels.contains(answer.getLabel())) {
-                    phones.put(question.getStandardMeaning(), answer.getFirstReportValue());
+                    phones.put(question.getBlockType(), answer.getFirstReportValue());
                 } else if (labelFName != null && labelFName.equals(answer.getLabel())) {
                     firstName = answer.getFirstReportValue();
                 } else if (labelLName != null && labelLName.equals(answer.getLabel())) {
@@ -545,13 +545,13 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
         String labelState = null;
         String labelZipCode = null;
         for (QuestionBase q : questionnaire.getQuestions()) {
-            if (BlockType.STREET_ADDRESS_1.equals(q.getStandardMeaning())) {
+            if (BlockType.STREET_ADDRESS_1.equals(q.getBlockType())) {
                 labelAddress1 = q.getLabel();
-            } else if (BlockType.CITY.equals(q.getStandardMeaning())) {
+            } else if (BlockType.CITY.equals(q.getBlockType())) {
                 labelCity = q.getLabel();
-            } else if (BlockType.STATE.equals(q.getStandardMeaning())) {
+            } else if (BlockType.STATE.equals(q.getBlockType())) {
                 labelState = q.getLabel();
-            } else if (BlockType.ZIP_CODE.equals(q.getStandardMeaning())) {
+            } else if (BlockType.ZIP_CODE.equals(q.getBlockType())) {
                 labelZipCode = q.getLabel();
             }
         }
@@ -627,9 +627,9 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
 
         List<Contact> newContacts = new ArrayList<Contact>();
         for (QuestionBase question : questionnaire.getQuestions()) {
-            if (question.getStandardMeaning() != null &&
-                    (question.getStandardMeaning().code().startsWith("PHONE") ||
-                            question.getStandardMeaning().code().startsWith("EMAIL"))) {
+            if (question.getBlockType().isStandard() &&
+                    (question.getBlockType().code().startsWith("PHONE") ||
+                            question.getBlockType().code().startsWith("EMAIL"))) {
 
                 for (Answer answer : answersSet.getAnswers()) {
                     if (question.getLabel().equals(answer.getLabel())) {
@@ -640,9 +640,9 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
                             // See TASK-336
                             String option = question instanceof ContactBlock ?
                                     ((ContactBlock) question).getOption() : "Home";
-                            if (question.getStandardMeaning().code().startsWith("PHONE")) {
+                            if (question.getBlockType().code().startsWith("PHONE")) {
                                 newContact = new Contact(profileId, Contact.MediumType.PHONE.name(), option, contact);
-                            } else if (question.getStandardMeaning().code().startsWith("EMAIL")) {
+                            } else if (question.getBlockType().code().startsWith("EMAIL")) {
                                 newContact = new Contact(profileId, Contact.MediumType.EMAIL.name(), option, contact);
                             }
 
@@ -678,7 +678,7 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
             Connection conn) {
         String labelAttachement;
         for (QuestionBase question : questionnaire.getQuestions()) {
-            if (BlockType.ATTACHMENTS.equals(question.getFormType())) {
+            if (BlockType.ATTACHMENTS.equals(question.getBlockType())) {
                 labelAttachement = question.getLabel();
                 for (Answer answer : answersSet.getAnswers()) {
                     if (labelAttachement.equals(answer.getLabel())) {
@@ -767,15 +767,20 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
             profileToSave = profilePersister.createProfile(profileToSave);
 
             List<Contact> contacts = new LinkedList<Contact>();
-            if (emailEntry != null && emailEntry.getValue() != null && emailEntry.getValue().trim().length() > 0) {
-                Contact contact = new Contact(profileToSave.getId(), Contact.MediumType.EMAIL.name(),
-                        getContactType(emailEntry.getKey()), emailEntry.getValue());
-                contacts.add(contact);
+            for (Map.Entry<BlockType, String> entry : emails.entrySet()) {
+                if (entry != null && entry.getValue() != null && entry.getValue().trim().length() > 0) {
+                    Contact contact = new Contact(profileToSave.getId(), Contact.MediumType.EMAIL.name(),
+                            getContactType(entry.getKey()), entry.getValue());
+                    contacts.add(contact);
+                }
             }
-            if (phoneEntry != null && phoneEntry.getValue() != null && phoneEntry.getValue().trim().length() > 0) {
-                Contact contact = new Contact(profileToSave.getId(), Contact.MediumType.PHONE.name(),
-                        getContactType(phoneEntry.getKey()), phoneEntry.getValue());
-                contacts.add(contact);
+
+            for (Map.Entry<BlockType, String> entry : phones.entrySet()) {
+                if (entry != null && entry.getValue() != null && entry.getValue().trim().length() > 0) {
+                    Contact contact = new Contact(profileToSave.getId(), Contact.MediumType.PHONE.name(),
+                            getContactType(entry.getKey()), entry.getValue());
+                    contacts.add(contact);
+                }
             }
 
             if (!contacts.isEmpty()) {
@@ -839,7 +844,7 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
             AnswerSet answersSet) {
         QuestionBase question = null;
         for (QuestionBase q : questionnaire.getQuestions()) {
-            if (BlockType.STORY_ASK.equals(q.getStandardMeaning())) {
+            if (q.getBlockType().isStoryAsk()) {
                 question = q;
                 break;
             }

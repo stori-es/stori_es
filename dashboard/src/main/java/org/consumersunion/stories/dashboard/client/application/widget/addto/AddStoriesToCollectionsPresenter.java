@@ -8,7 +8,6 @@ import org.consumersunion.stories.common.client.i18n.CommonI18nMessages;
 import org.consumersunion.stories.common.client.service.RpcCollectionServiceAsync;
 import org.consumersunion.stories.common.client.service.response.ActionResponse;
 import org.consumersunion.stories.common.client.ui.stories.StoriesListContainer;
-import org.consumersunion.stories.common.client.util.CachingService;
 import org.consumersunion.stories.common.client.util.CurrentUser;
 import org.consumersunion.stories.common.client.widget.messages.MessageFactory;
 import org.consumersunion.stories.common.shared.dto.tasks.AddStoriesToCollectionTask;
@@ -44,7 +43,6 @@ class AddStoriesToCollectionsPresenter
     private final CurrentUser currentUser;
     private final ResourceDelegate<TaskService> taskServiceDelegate;
     private final MessageFactory messageFactory;
-    private final CachingService cachingService;
     private final Set<Integer> collectionIds;
     private final Set<CollectionSummary> collectionSummaries;
 
@@ -59,7 +57,6 @@ class AddStoriesToCollectionsPresenter
             StorySummarySelectionHelper storySummarySelectionHelper,
             CommonI18nMessages messages,
             MessageFactory messageFactory,
-            CachingService cachingService,
             @Assisted AddToMenuHandler addToMenuHandler,
             @Assisted StoriesListContainer storiesListContainer) {
         super(eventBus, view, storySummarySelectionHelper, addToMenuHandler, storiesListContainer, messages);
@@ -69,7 +66,6 @@ class AddStoriesToCollectionsPresenter
         this.currentUser = currentUser;
         this.taskServiceDelegate = taskServiceDelegate;
         this.messageFactory = messageFactory;
-        this.cachingService = cachingService;
         collectionIds = Sets.newLinkedHashSet();
         collectionSummaries = Sets.newLinkedHashSet();
     }
@@ -89,7 +85,7 @@ class AddStoriesToCollectionsPresenter
                 storySearchParameters.getQuestionnaireId());
 
         final Set<CollectionSummary> collectionSummaries = Sets.newLinkedHashSet(this.collectionSummaries);
-        taskServiceDelegate.withCallback(this.<AddStoriesToCollectionTask>createNoLoaderCallback(null,
+        taskServiceDelegate.withCallback(createNoLoaderCallback(null,
                 new AsyncCallback<AddStoriesToCollectionTask>() {
                     @Override
                     public void onFailure(Throwable caught) {

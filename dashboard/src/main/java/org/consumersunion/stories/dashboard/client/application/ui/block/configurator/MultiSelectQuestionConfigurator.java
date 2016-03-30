@@ -1,13 +1,16 @@
 package org.consumersunion.stories.dashboard.client.application.ui.block.configurator;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.consumersunion.stories.common.client.i18n.MultipleChoiceFormatLabels;
 import org.consumersunion.stories.common.shared.model.document.BlockType;
 import org.consumersunion.stories.common.shared.model.questionnaire.Question;
 import org.consumersunion.stories.common.shared.service.GeneralException;
 
+import com.google.common.base.Function;
 import com.google.common.base.Strings;
+import com.google.common.collect.FluentIterable;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.text.shared.AbstractRenderer;
@@ -39,13 +42,13 @@ public class MultiSelectQuestionConfigurator extends AbstractConfigurator<Questi
         private final boolean isMultiSelect;
 
         MultipleChoiceFormat(
-                BlockType formType,
+                BlockType blockType,
                 boolean isMultiSelect) {
-            this.code = formType;
+            this.code = blockType;
             this.isMultiSelect = isMultiSelect;
         }
 
-        public BlockType getFormType() {
+        public BlockType getBlockType() {
             return code;
         }
 
@@ -54,7 +57,7 @@ public class MultiSelectQuestionConfigurator extends AbstractConfigurator<Questi
         }
 
         public static MultipleChoiceFormat fromQuestion(Question question) {
-            BlockType formType = question.getFormType();
+            BlockType formType = question.getRenderType();
             if (BlockType.RADIO.equals(formType)) {
                 return RADIO_BUTTONS;
             } else if (BlockType.CHECKBOX.equals(formType)) {
@@ -68,6 +71,16 @@ public class MultiSelectQuestionConfigurator extends AbstractConfigurator<Questi
             }
 
             throw new GeneralException("Unexpected form type");
+        }
+
+        public static List<BlockType> blockTypes() {
+            return FluentIterable.of(values())
+                    .transform(new Function<MultipleChoiceFormat, BlockType>() {
+                        @Override
+                        public BlockType apply(MultipleChoiceFormat input) {
+                            return input.getBlockType();
+                        }
+                    }).toList();
         }
     }
 
@@ -120,7 +133,7 @@ public class MultiSelectQuestionConfigurator extends AbstractConfigurator<Questi
         setErrorLabels(textError, optionsError);
         init();
 
-        boolean allowEdit = !BlockType.STATE.equals(question.getStandardMeaning());
+        boolean allowEdit = !BlockType.STATE.equals(question.getBlockType());
         options.allowEdit(allowEdit);
 
         if (!allowEdit || hideFormatSelection(question)) {
@@ -128,7 +141,7 @@ public class MultiSelectQuestionConfigurator extends AbstractConfigurator<Questi
         }
 
         boolean hideRequiredCheckbox =
-                BlockType.UPDATES_OPT_IN.equals(question.getStandardMeaning());
+                BlockType.UPDATES_OPT_IN.equals(question.getBlockType());
 
         if (hideRequiredCheckbox) {
             requiredContainer.removeFromParent();
@@ -162,9 +175,11 @@ public class MultiSelectQuestionConfigurator extends AbstractConfigurator<Questi
     protected void onDone() {
         Question question = driver.flush();
         if (validate()) {
-            MultipleChoiceFormat choiceFormat = format.getValue();
-            question.setFormType(choiceFormat.getFormType());
-            question.setMultiselect(choiceFormat.isMultiSelect());
+            if (MultipleChoiceFormat.blockTypes().contains(getEditedValue().getBlockType())) {
+                MultipleChoiceFormat choiceFormat = format.getValue();
+                question.setBlockType(choiceFormat.getBlockType());
+                question.setMultiselect(choiceFormat.isMultiSelect());
+            }
 
             doneCallback.onSuccess(question);
 
@@ -173,9 +188,9 @@ public class MultiSelectQuestionConfigurator extends AbstractConfigurator<Questi
     }
 
     private boolean hideFormatSelection(Question question) {
-        BlockType standardMeaning = question.getStandardMeaning();
+        BlockType blockType = question.getBlockType();
 
-        return BlockType.PREFERRED_EMAIL_FORMAT.equals(standardMeaning)
-                || BlockType.UPDATES_OPT_IN.equals(standardMeaning);
+        return BlockType.PREFERRED_EMAIL_FORMAT.equals(blockType)
+                || BlockType.UPDATES_OPT_IN.equals(blockType);
     }
 }

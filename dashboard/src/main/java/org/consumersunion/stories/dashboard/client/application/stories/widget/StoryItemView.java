@@ -72,8 +72,6 @@ public class StoryItemView extends ViewWithUiHandlers<StoryItemUiHandlers>
     @UiField
     Resources resource;
     @UiField
-    DivElement collectionsWrapper;
-    @UiField
     HTMLPanel main;
     @UiField
     DivElement content;

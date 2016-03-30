@@ -152,7 +152,7 @@ public class ContactConfigurator extends AbstractConfigurator<ContactBlock> impl
         }
 
         if (standardType != null) {
-            contactBlock.setStandardMeaning(standardType);
+            contactBlock.setBlockType(standardType);
         }
     }
 }

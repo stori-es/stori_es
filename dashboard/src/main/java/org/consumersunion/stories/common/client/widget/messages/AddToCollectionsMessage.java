@@ -5,8 +5,8 @@ import java.util.Set;
 import javax.inject.Provider;
 
 import org.consumersunion.stories.common.client.api.TaskService;
-import org.consumersunion.stories.common.client.widget.CollectionListItem;
 import org.consumersunion.stories.common.client.widget.CollectionListItemFactory;
+import org.consumersunion.stories.common.client.widget.ListItemHandler;
 import org.consumersunion.stories.common.shared.dto.tasks.Task;
 import org.consumersunion.stories.common.shared.i18n.CommonI18nLabels;
 import org.consumersunion.stories.common.shared.service.datatransferobject.CollectionSummary;
@@ -31,7 +31,7 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import static com.google.gwt.query.client.GQuery.$;
 
 public class AddToCollectionsMessage extends ProgressMessage
-        implements CollectionListItem.ListItemHandler, AttachEvent.Handler {
+        implements ListItemHandler<CollectionSummary>, AttachEvent.Handler {
     interface Binder extends UiBinder<Widget, AddToCollectionsMessage> {
     }
 

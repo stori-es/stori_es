@@ -2,6 +2,8 @@ package org.consumersunion.stories.common.shared.model.document;
 
 import java.io.Serializable;
 
+import com.google.common.base.Preconditions;
+
 import org.consumersunion.stories.common.shared.model.questionnaire.ContactBlock;
 import org.consumersunion.stories.common.shared.model.questionnaire.Question;
 import org.consumersunion.stories.common.shared.model.questionnaire.RatingQuestion;
@@ -60,12 +62,7 @@ public class Block implements Serializable, Cloneable {
      */
     private int version;
 
-    /**
-     * @see #getFormType()
-     */
-    private BlockType formType;
-
-    private BlockType standardMeaning;
+    private BlockType blockType;
 
     private String key;
 
@@ -73,69 +70,27 @@ public class Block implements Serializable, Cloneable {
     }
 
     public Block(BlockType blockType) {
-        this.formType = blockType;
+        this.blockType = blockType;
     }
 
     /**
-     * Defines the question form representation, e.g. text, select list, etc.
+     * @return blockType
      */
-    public BlockType getFormType() {
-        return formType;
+    public BlockType getBlockType() {
+        return blockType;
+    }
+    
+    public BlockType getRenderType() {
+    	return blockType.getRenderType();
     }
 
     /**
-     * @see #getFormType
+     * @param blockType
      */
-    public void setFormType(final BlockType formType) {
-        if (formType != null) {
-            boolean exists = false;
-            for (BlockType blockType : BlockType.customElements()) {
-                exists |= blockType.equals(formType);
-            }
-
-            if (!exists) {
-                throw new GeneralException("Invalid form type: " + formType);
-            }
-        }
-        this.formType = formType;
-    }
-
-    /**
-     * @return standardMeaning
-     */
-    public BlockType getStandardMeaning() {
-        return standardMeaning;
-    }
-
-    /**
-     * @param standardMeaning
-     */
-    public void setStandardMeaning(final BlockType standardMeaning) {
-        if (standardMeaning != null
-                && !(BlockType.FIRST_NAME.equals(standardMeaning)
-                || BlockType.LAST_NAME.equals(standardMeaning)
-                || BlockType.SUBMIT.equals(standardMeaning)
-                || BlockType.RATING.equals(standardMeaning)
-                || BlockType.EMAIL.equals(standardMeaning)
-                || BlockType.STREET_ADDRESS_1.equals(standardMeaning)
-                || BlockType.CITY.equals(standardMeaning)
-                || BlockType.STATE.equals(standardMeaning)
-                || BlockType.ZIP_CODE.equals(standardMeaning)
-                || BlockType.PHONE.equals(standardMeaning)
-                || BlockType.MAILING_OPT_IN.equals(standardMeaning)
-                || BlockType.PREFERRED_EMAIL_FORMAT.equals(standardMeaning)
-                || BlockType.STORY_ASK.equals(standardMeaning)
-                || BlockType.CUSTOM_PERMISSIONS.equals(standardMeaning)
-                || BlockType.STORY_TITLE.equals(standardMeaning)
-                || BlockType.UPDATES_OPT_IN.equals(standardMeaning)
-                || BlockType.EMAIL_WORK.equals(standardMeaning)
-                || BlockType.EMAIL_OTHER.equals(standardMeaning)
-                || BlockType.PHONE_MOBILE.equals(standardMeaning)
-                || BlockType.PHONE_WORK.equals(standardMeaning)
-                || BlockType.PHONE_OTHER.equals(standardMeaning))) {
-            throw new GeneralException("Invalid Standard Meaning type: " + standardMeaning);
-        }
-        this.standardMeaning = standardMeaning;
+    public void setBlockType(final BlockType blockType) {
+        Preconditions.checkNotNull(blockType);
+        
+        this.blockType = blockType;
     }
 
     public int getDocument() {

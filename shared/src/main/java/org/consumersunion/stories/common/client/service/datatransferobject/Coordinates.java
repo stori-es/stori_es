@@ -2,7 +2,9 @@ package org.consumersunion.stories.common.client.service.datatransferobject;
 
 import java.io.Serializable;
 
-public class Coordinates implements Serializable {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class Coordinates implements Serializable, IsSerializable {
     private double latitude;
     private double longitude;
 

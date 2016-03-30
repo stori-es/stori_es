@@ -3,8 +3,9 @@ package org.consumersunion.stories.common.shared.model;
 import java.io.Serializable;
 
 import com.google.common.base.Strings;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-public enum Locale implements Serializable {
+public enum Locale implements Serializable, IsSerializable {
     UNKNOWN(""),
     ENGLISH("en"),
     SPANISH("es");

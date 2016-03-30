@@ -22,7 +22,7 @@ public abstract class CreateFunc<Input> extends ProcessFunc<Input, Input> {
             if (input instanceof SystemEntity) {
                 SystemEntity systemEntity = (SystemEntity) this.input;
                 PreparedStatement insert = conn.prepareStatement(
-                        "INSERT INTO systemEntity (version, public, owner) VALUES (1, ?, ?)",
+                        "INSERT INTO systemEntity (version, public, owner, creator) VALUES (1, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
 
                 insert.setBoolean(1, systemEntity.isPublic());
@@ -30,6 +30,12 @@ public abstract class CreateFunc<Input> extends ProcessFunc<Input, Input> {
                     insert.setNull(2, Types.INTEGER);
                 } else {
                     insert.setInt(2, systemEntity.getOwner());
+                }
+
+                if (systemEntity.getCreator() == null) {
+                    insert.setNull(3, Types.INTEGER);
+                } else {
+                    insert.setInt(3, systemEntity.getOwner());
                 }
 
                 insert.executeUpdate();

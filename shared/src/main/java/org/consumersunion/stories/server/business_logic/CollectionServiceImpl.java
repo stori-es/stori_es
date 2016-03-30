@@ -34,18 +34,19 @@ import org.consumersunion.stories.server.persistence.StoryPersister;
 import org.consumersunion.stories.server.persistence.SubscriptionPersister;
 import org.consumersunion.stories.server.persistence.TaskPersister;
 import org.consumersunion.stories.server.solr.IndexerFactory;
-import org.consumersunion.stories.server.util.StringUtil;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.consumersunion.stories.common.shared.AuthConstants.ACCESS_MODE_EXPLICIT;
 import static org.consumersunion.stories.common.shared.AuthConstants.ROLE_ADMIN;
 import static org.consumersunion.stories.common.shared.AuthConstants.ROLE_READER;
 import static org.consumersunion.stories.common.shared.model.StorySortField.CREATED_NEW;
+import static org.consumersunion.stories.server.util.StringUtil.generateSlug;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 @Service
 public class CollectionServiceImpl implements CollectionService {
@@ -128,12 +129,8 @@ public class CollectionServiceImpl implements CollectionService {
         validateCreateCollection(collection);
 
         Document bodyDocument = collection.getBodyDocument();
-        collection.setPermalink("/collections/" + StringUtil.generateSlug(collection.getTitle()));
-
-        boolean availableLink = checkPermalinkAvailability(collection.getPermalink());
-        if (!availableLink) {
-            throw new PermalinkAlreadyExistsException();
-        }
+        String availablePermalink = collectionPersister.getAvailablePermalink(generateSlug(collection.getTitle()));
+        collection.setPermalink(availablePermalink);
 
         collection.setOwner(userService.getContextOrganizationId());
         setTheme(collection);
@@ -234,12 +231,7 @@ public class CollectionServiceImpl implements CollectionService {
             if (authService.canWrite(story)) {
                 stories.add(story);
 
-                if (!collection.isAssociatedToStory(storyId)) {
-                    final StoryLink storyLink = new StoryLink(storyId, false);
-                    collection.addStory(storyLink);
-                } else if (collection.getDeleted()) {
-                    collection.getStories().remove(new StoryLink(storyId, false));
-                }
+                addOrRemoveStoryLink(collection, storyId);
             }
         }
 
@@ -256,6 +248,15 @@ public class CollectionServiceImpl implements CollectionService {
         }
 
         return collection;
+    }
+
+    private void addOrRemoveStoryLink(Collection collection, Integer storyId) {
+        if (!collection.isAssociatedToStory(storyId)) {
+            final StoryLink storyLink = new StoryLink(storyId, false);
+            collection.addStory(storyLink);
+        } else if (collection.getDeleted()) {
+            collection.getStories().remove(new StoryLink(storyId, false));
+        }
     }
 
     @Override
@@ -320,12 +321,7 @@ public class CollectionServiceImpl implements CollectionService {
             }
 
             int storyId = story.getId();
-            if (!collection.isAssociatedToStory(storyId)) {
-                StoryLink storyLink = new StoryLink(storyId, false);
-                collection.addStory(storyLink);
-            } else if (collection.getDeleted()) {
-                collection.getStories().remove(new StoryLink(storyId, false));
-            }
+            addOrRemoveStoryLink(collection, storyId);
         }
 
         updateCollection(collection);
@@ -335,10 +331,6 @@ public class CollectionServiceImpl implements CollectionService {
         }
 
         return collection;
-    }
-
-    private boolean checkPermalinkAvailability(String permalink) throws NotLoggedInException {
-        return getCollectionByPermalink(permalink) == null;
     }
 
     private void addSubscriptionsData(List<CollectionData> collections) {

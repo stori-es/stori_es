@@ -86,6 +86,7 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
     private final DocumentPersister documentPersister;
     private final TagsPersistenceHelper tagsPersistenceHelper;
     private final SolrServer solrCollectionServer;
+    private final AvailablePermalinkExtractor availablePermalinkExtractor;
     private final Provider<QuestionnaireI15dPersister> questionnaireI15dPersisterProvider;
     private final AuthorizationPersistenceHelper authorizationPersistenceHelper;
 
@@ -95,18 +96,20 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
             DocumentPersister documentPersister,
             TagsPersistenceHelper tagsPersistenceHelper,
             SolrServer solrCollectionServer,
+            AvailablePermalinkExtractor availablePermalinkExtractor,
             Provider<QuestionnaireI15dPersister> questionnaireI15dPersisterProvider,
             AuthorizationPersistenceHelper authorizationPersistenceHelper) {
         this.persistenceService = persistenceService;
         this.documentPersister = documentPersister;
         this.tagsPersistenceHelper = tagsPersistenceHelper;
         this.solrCollectionServer = solrCollectionServer;
+        this.availablePermalinkExtractor = availablePermalinkExtractor;
         this.questionnaireI15dPersisterProvider = questionnaireI15dPersisterProvider;
         this.authorizationPersistenceHelper = authorizationPersistenceHelper;
     }
 
     private CollectionPersister() {
-        this(null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null);
     }
 
     @Override
@@ -176,6 +179,28 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
 
     public CountCollectionsResult countCollections(RetrievePagedCollectionsParams params) {
         return persistenceService.process(new CountCollections(params, this));
+    }
+
+    public String getAvailablePermalink(String slug) {
+        return persistenceService.process(new ProcessFunc<String, String>("/collections/" + slug) {
+            @Override
+            public String process() {
+                try {
+                    PreparedStatement select = conn.prepareStatement(
+                            "SELECT e.permalink FROM collection c " +
+                                    "JOIN entity e ON c.id = e.id " +
+                                    "WHERE e.permalink LIKE ?");
+
+                    select.setString(1, input + "%");
+
+                    ResultSet rs = select.executeQuery();
+
+                    return availablePermalinkExtractor.extractPermalink(rs, input);
+                } catch (SQLException e) {
+                    throw new GeneralException(e);
+                }
+            }
+        });
     }
 
     static class CreateCollectionFunc<T extends Collection> extends CreateFunc<T> {
@@ -949,7 +974,8 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
         };
     }
 
-    protected Collection instantiateCollection(ResultSet results, Connection conn, boolean partial) throws SQLException {
+    protected Collection instantiateCollection(ResultSet results, Connection conn, boolean partial)
+            throws SQLException {
         int id = results.getInt(1);
         int version = results.getInt(2);
         Collection collection = new Collection(id, version);
@@ -988,7 +1014,7 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
         }
 
         List<Document> bodyDocuments = documentPersister.retrieveDocumentsByEntityAndRelation(
-                new DocumentPersister.EntityAndRelationParams(collection.getId(), BODY, 0));
+                new DocumentPersister.EntityAndRelationParams(collection.getId(), BODY, 0), conn);
         if (bodyDocuments.size() > 1) {
             throw new GeneralException("Unexpectedly found multiple 'BODY' documents.");
         } else if (bodyDocuments.size() == 1) {

@@ -25,7 +25,7 @@ public interface RpcCollectionServiceAsync {
 
     void saveAnswersAndStory(AnswerSet answerSet, AsyncCallback<QuestionnaireSurveyResponse> callback);
 
-    void getCollections(RetrievePagedCollectionsParams params, AsyncCallback<CollectionDataPagedResponse> callback);
+    Request getCollections(RetrievePagedCollectionsParams params, AsyncCallback<CollectionDataPagedResponse> callback);
 
     void updateCollection(Collection collection, AsyncCallback<DatumResponse<Collection>> callback);
 

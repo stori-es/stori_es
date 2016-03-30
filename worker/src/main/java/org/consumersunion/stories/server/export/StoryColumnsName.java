@@ -22,4 +22,6 @@ public class StoryColumnsName {
     public static final String SUBSCRIPTION = "subscription";
     public static final String EMAIL_FORMAT = "email_format";
     public static final String PROFILE_HREF = "profile_href";
+
+    public static final String TAGS = "tags";
 }

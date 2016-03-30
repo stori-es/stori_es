@@ -117,7 +117,7 @@ public class BlockBuilderHandler implements BlockBuilder.Handler {
     @Override
     public void onBlockAdded(BlockBuilder blockBuilder) {
         Block block = blockBuilder.getValue();
-        if (block.getStandardMeaning() != null) {
+        if (block.getBlockType().isStandard()) {
             saveOrUpdate(blockBuilder);
         } else {
             updateDrawers(blockBuilder);

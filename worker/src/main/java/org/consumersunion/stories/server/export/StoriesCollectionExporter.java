@@ -123,8 +123,8 @@ public class StoriesCollectionExporter extends CsvExporter<StoryAnswerSetCsvWrit
     protected Map<BlockType, String> getBlockKeyMap(QuestionnaireI15d questionnaireI15d) {
         Map<BlockType, String> blockLabels = Maps.newHashMap();
         for (Block block : questionnaireI15d.getBlocks()) {
-            if (STD_BLOCK_TYPES.contains(block.getStandardMeaning())) {
-                blockLabels.put(block.getStandardMeaning(), ((Question) block).getLabel());
+            if (STD_BLOCK_TYPES.contains(block.getBlockType())) {
+                blockLabels.put(block.getBlockType(), ((Question) block).getLabel());
             }
         }
 

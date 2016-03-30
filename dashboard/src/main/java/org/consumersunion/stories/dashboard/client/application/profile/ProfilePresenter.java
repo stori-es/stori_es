@@ -14,11 +14,11 @@ import org.consumersunion.stories.common.client.util.ResponseHandler;
 import org.consumersunion.stories.common.client.util.ResponseHandlerLoader;
 import org.consumersunion.stories.common.client.widget.MessageStyle;
 import org.consumersunion.stories.common.shared.model.Profile;
-import org.consumersunion.stories.common.shared.model.SortDropDownItem;
 import org.consumersunion.stories.common.shared.model.StorySortField;
 import org.consumersunion.stories.common.shared.model.entity.SortField;
 import org.consumersunion.stories.common.shared.place.ParameterTokens;
 import org.consumersunion.stories.common.shared.service.datatransferobject.StorySearchParameters;
+import org.consumersunion.stories.dashboard.client.application.AbstractStoriesPresenter;
 import org.consumersunion.stories.dashboard.client.application.StoriesDashboardPresenter;
 import org.consumersunion.stories.dashboard.client.application.profile.widget.ContactsPresenter;
 import org.consumersunion.stories.dashboard.client.application.profile.widget.NotesManagerPresenter;
@@ -31,7 +31,6 @@ import com.google.gwt.view.client.RowCountChangeEvent;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
-import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
@@ -41,7 +40,7 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 
 import static org.consumersunion.stories.common.shared.AuthConstants.ACCESS_MODE_EXPLICIT;
 
-public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, ProfilePresenter.MyProxy>
+public class ProfilePresenter extends AbstractStoriesPresenter<ProfilePresenter.MyView, ProfilePresenter.MyProxy>
         implements ProfileUiHandlers, StoriesListHandler {
     interface MyView extends View, HasUiHandlers<ProfileUiHandlers> {
         void displayProfile(Profile profile);
@@ -148,7 +147,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
 
         this.searchToken = searchText;
 
-        SearchEvent.fire(this, searchText, (SortDropDownItem) getView().getSort());
+        SearchEvent.fire(this, searchText, getView().getSort());
     }
 
     @Override
