@@ -57,6 +57,8 @@ public class TokenInput extends FocusPanel implements LeafValueEditor<String> {
     public static final int COMMA_CODE = 188;
     public static final int MAX_SIZE = 45;
 
+    private static final int SUGGESTIONS_LIMIT = 7;
+
     @UiField(provided = true)
     final CellList<String> tokenList;
     @UiField(provided = true)
@@ -85,6 +87,7 @@ public class TokenInput extends FocusPanel implements LeafValueEditor<String> {
         this.itemBox = new SuggestBox(new MultiWordSuggestOracle());
         this.tokenList = new CellList<String>(tokenCellFactory.create(setupRemoveAction()), tokenListStyle);
         tokenList.setPageSize(Integer.MAX_VALUE);
+        itemBox.setLimit(SUGGESTIONS_LIMIT);
 
         setWidget(uiBinder.createAndBindUi(this));
         setEnabled(true);
@@ -117,7 +120,9 @@ public class TokenInput extends FocusPanel implements LeafValueEditor<String> {
 
                         if (!targetIsPopup) {
                             String value = itemBox.getValueBox().getText().trim().toLowerCase();
-                            if (!Strings.isNullOrEmpty(value) && value.length() < MAX_SIZE) {
+                            if (!Strings.isNullOrEmpty(value)
+                                    && value.length() < MAX_SIZE
+                                    && !dataProvider.getList().contains(value)) {
                                 dataProvider.getList().add(value);
                                 dataProvider.refresh();
                                 itemBox.setText("");
