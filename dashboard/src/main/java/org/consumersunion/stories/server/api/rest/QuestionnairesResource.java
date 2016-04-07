@@ -24,6 +24,7 @@ import org.consumersunion.stories.common.shared.dto.QuestionnairesApiResponse;
 import org.consumersunion.stories.common.shared.dto.post.QuestionnairePost;
 import org.consumersunion.stories.common.shared.dto.post.QuestionnairePut;
 import org.consumersunion.stories.common.shared.model.StoryLink;
+import org.consumersunion.stories.common.shared.model.document.Document;
 import org.consumersunion.stories.common.shared.model.questionnaire.Questionnaire;
 import org.consumersunion.stories.common.shared.model.questionnaire.QuestionnaireBase;
 import org.consumersunion.stories.common.shared.model.questionnaire.QuestionnaireI15d;
@@ -31,6 +32,7 @@ import org.consumersunion.stories.common.shared.service.datatransferobject.Quest
 import org.consumersunion.stories.server.api.rest.converters.QuestionnaireConverter;
 import org.consumersunion.stories.server.api.rest.merger.QuestionnairePutMerger;
 import org.consumersunion.stories.server.api.rest.util.ResourceLinksHelper;
+import org.consumersunion.stories.server.business_logic.DocumentService;
 import org.consumersunion.stories.server.business_logic.QuestionnaireService;
 import org.consumersunion.stories.server.business_logic.TagsService;
 import org.springframework.stereotype.Component;
@@ -46,11 +48,12 @@ import static org.consumersunion.stories.common.shared.api.EndPoints.STORIES;
 import static org.consumersunion.stories.common.shared.api.EndPoints.endsWithId;
 
 @Component
-@Path(EndPoints.QUESTIONNAIRES)
+@Path(QUESTIONNAIRES)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class QuestionnairesResource {
     private final TagsService tagsService;
+    private final DocumentService documentService;
     private final QuestionnaireService questionnaireService;
     private final QuestionnaireConverter questionnaireConverter;
     private final QuestionnairePutMerger questionnairePutMerger;
@@ -59,11 +62,13 @@ public class QuestionnairesResource {
     @Inject
     QuestionnairesResource(
             TagsService tagsService,
+            DocumentService documentService,
             QuestionnaireService questionnaireService,
             QuestionnaireConverter questionnaireConverter,
             QuestionnairePutMerger questionnairePutMerger,
             ResourceLinksHelper resourceLinksHelper) {
         this.tagsService = tagsService;
+        this.documentService = documentService;
         this.questionnaireService = questionnaireService;
         this.questionnaireConverter = questionnaireConverter;
         this.questionnairePutMerger = questionnairePutMerger;
@@ -75,7 +80,10 @@ public class QuestionnairesResource {
     public Response getQuestionnaire(@PathParam(UrlParameters.ID) int id) {
         Questionnaire questionnaire = questionnaireService.getQuestionnaire(id);
 
-        QuestionnairesApiResponse apiResponse = createQuestionnairesResponse(new QuestionnaireData(questionnaire));
+        Set<String> tags = tagsService.getTags(questionnaire);
+        Set<String> autoTags = tagsService.getAutoTags(questionnaire);
+        QuestionnairesApiResponse apiResponse = createQuestionnairesResponse(
+                new QuestionnaireData(questionnaire, tags, autoTags));
 
         return Response.ok(apiResponse).build();
     }
@@ -170,6 +178,7 @@ public class QuestionnairesResource {
                 resourceLinksHelper.replaceId(endsWithId(DOCUMENTS), questionnaire.getSurvey().getId()));
         questionnairesResourceLinks.setForms(
                 resourceLinksHelper.replaceIds(endsWithId(DOCUMENTS), Lists.newArrayList(questionnaire.getSurvey())));
+        setOtherDocumentsLinks(questionnaire, questionnairesResourceLinks);
 
         Set<StoryLink> stories = questionnaire.getStories();
         if (stories != null) {
@@ -178,6 +187,32 @@ public class QuestionnairesResource {
         }
 
         return questionnairesResourceLinks;
+    }
+
+    public void setOtherDocumentsLinks(QuestionnaireBase questionnaire,
+            QuestionnaireResourceLinks questionnairesResourceLinks) {
+        List<Document> documents = documentService.getDocuments(questionnaire);
+
+        List<Document> notes = Lists.newArrayList();
+        List<Document> attachments = Lists.newArrayList();
+        List<Document> contents = Lists.newArrayList();
+        for (Document document : documents) {
+            switch (document.getSystemEntityRelation()) {
+                case NOTE:
+                    notes.add(document);
+                    break;
+                case ATTACHMENT:
+                    attachments.add(document);
+                    break;
+                case CONTENT:
+                    contents.add(document);
+                    break;
+            }
+        }
+
+        questionnairesResourceLinks.setContents(resourceLinksHelper.replaceIds(endsWithId(DOCUMENTS), contents));
+        questionnairesResourceLinks.setAttachments(resourceLinksHelper.replaceIds(endsWithId(DOCUMENTS), attachments));
+        questionnairesResourceLinks.setNotes(resourceLinksHelper.replaceIds(endsWithId(DOCUMENTS), notes));
     }
 
     private Iterable<Integer> convertStoryLinks(Set<StoryLink> stories) {
