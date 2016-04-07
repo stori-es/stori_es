@@ -1,0 +1,32 @@
+<ul class="global-header-sub-franchise-menu">
+    {% if (typeof children !== 'undefined') { children.forEach(function(step) { %}
+    <li data-cfaid="{%=step.productGroupId%}" class="global-header-nav-menu-item-sub-franchise">
+        <a href="{%=step.link%}" class="global-header-sub-franchise-item">{%=step.title%}</a>
+    </li>
+
+    {% });
+    }%}
+    <li class="global-header-social-wrap">
+        <div class="socialContainer">
+            <a href="https://www.facebook.com/consumerreports" title="Facebook" target="_blank"
+               data-trackPageLink="['facebook fanpage', 'header', null, 'social']"
+               class="facebook">Facebook</a>
+            <a href="https://twitter.com/consumerreports" title="Twitter" target="_blank"
+               data-trackPageLink="['twitter cr handle', 'header', null, 'social']"
+               class="twitter">Twitter</a>
+            <a href="https://www.youtube.com/user/consumerreports" title="youtube" target="_blank"
+               data-trackPageLink="['youtube cr page', 'header', null, 'social']"
+               class="youtube">Youtube</a>
+            <a href="https://instagram.com/consumerreports" target="_blank" title="Instagram"
+               data-trackPageLink="['instagram cr page', 'header', null, 'social']"
+               class="instagram">Instagram</a>
+            <a class="more-icons" href="javascript:{}" title="More">More</a>
+            <a class="hiddenIcons google" href="https://plus.google.com/u/0/106084461720436231771/posts" target="_blank"
+               title="Google Plus" data-trackPageLink="['google plus cr page', 'header', null, 'social']">Google
+                Plus</a>
+            <a class="hiddenIcons pinterest" href="https://www.pinterest.com/consumerreports/" target="_blank"
+               title="Pinterest"
+               data-trackPageLink="['pinterest cr page', 'header', null, 'social']">Pinterest</a>
+        </div>
+    </li>
+</ul>
