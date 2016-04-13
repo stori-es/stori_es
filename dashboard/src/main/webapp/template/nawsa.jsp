@@ -3,6 +3,7 @@
         "UTF-8"); // the charset stuff should set this on the Tomcat Connectors config, but for backup... except it seems ineffective %>
 <% final String context = request.getContextPath().replace("^\\s*https://", "http://").trim(); %>
 <% final String realContext = request.getContextPath().trim(); %>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" dir="ltr" lang="en-US"/>
