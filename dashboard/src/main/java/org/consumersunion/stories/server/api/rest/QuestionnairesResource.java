@@ -41,6 +41,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import static org.consumersunion.stories.common.shared.api.EndPoints.COLLECTIONS;
 import static org.consumersunion.stories.common.shared.api.EndPoints.DOCUMENTS;
 import static org.consumersunion.stories.common.shared.api.EndPoints.ORGANIZATIONS;
 import static org.consumersunion.stories.common.shared.api.EndPoints.QUESTIONNAIRES;
@@ -171,7 +172,7 @@ public class QuestionnairesResource {
 
         // TODO : Add missing links
         questionnairesResourceLinks.setCollections(
-                resourceLinksHelper.replaceIntIds(endsWithId(QUESTIONNAIRES), questionnaire.getTargetCollections()));
+                resourceLinksHelper.replaceIntIds(endsWithId(COLLECTIONS), questionnaire.getTargetCollections()));
         questionnairesResourceLinks.setOwner(
                 resourceLinksHelper.replaceId(endsWithId(ORGANIZATIONS), questionnaire.getOwner()));
         questionnairesResourceLinks.setDefaultForm(
