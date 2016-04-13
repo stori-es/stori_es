@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="58px" height="48px" viewBox="0 0 58 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: sketchtool 3.4 (381) - http://www.bohemiancoding.com/sketch -->
+    <title>magazine_icon</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="Footer" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Footer_Desktop" sketch:type="MSArtboardGroup" transform="translate(-1209.000000, -46.000000)" fill="#FFFFFF">
+            <g id="Footer" sketch:type="MSLayerGroup" transform="translate(-6.000000, 0.000000)">
+                <g id="Magazine-Copy" transform="translate(1163.000000, 42.000000)" sketch:type="MSShapeGroup">
+                    <path d="M108.388889,4 L87.4444444,4 C84.8022222,4 82.4822222,5.28 81,7.2 C79.5177778,5.28 77.1977778,4 74.5555556,4 L53.6111111,4 C52.7088889,4 52,4.704 52,5.6 L52,44 C52,44.896 52.7088889,45.6 53.6111111,45.6 L74.5555556,45.6 C77.1977778,45.6 79.3888889,47.776 79.3888889,50.4 C79.3888889,51.296 80.0977778,52 81,52 C81.9022222,52 82.6111111,51.296 82.6111111,50.4 C82.6111111,47.776 84.8022222,45.6 87.4444444,45.6 L108.388889,45.6 C109.291111,45.6 110,44.896 110,44 L110,5.6 C110,4.704 109.291111,4 108.388889,4 L108.388889,4 Z M79.3888889,44 C78.0355556,42.976 76.36,42.4 74.5555556,42.4 L55.2222222,42.4 L55.2222222,7.2 L74.5555556,7.2 C77.1977778,7.2 79.3888889,9.376 79.3888889,12 L79.3888889,44 L79.3888889,44 Z M106.777778,42.4 L87.4444444,42.4 C85.64,42.4 83.9644444,42.976 82.6111111,44 L82.6111111,12 C82.6111111,9.376 84.8022222,7.2 87.4444444,7.2 L106.777778,7.2 L106.777778,42.4 L106.777778,42.4 Z" id="magazine_icon"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

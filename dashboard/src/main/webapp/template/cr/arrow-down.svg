@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="20px" height="12px" viewBox="0 0 20 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: sketchtool 3.4 (356) - http://www.bohemiancoding.com/sketch -->
+    <title>arrow_down</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="Nav_Exploration-5" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="CFA_Money_Nav_Open" sketch:type="MSArtboardGroup" transform="translate(-1301.000000, -18.000000)" stroke-width="2" stroke="#6D6E71">
+            <g id="HEADER" sketch:type="MSLayerGroup" transform="translate(0.000000, -1.000000)">
+                <g id="SIGNIN-SUB-Copy-+-LOGO-AND-NAVIGATION-Copy-+-SOCIAL-Copy-3" transform="translate(1090.000000, 0.000000)" sketch:type="MSShapeGroup">
+                    <g id="LOG-OUT-DONATE-SUBSCRIBE-Copy">
+                        <g id="SIGNED-IN-" transform="translate(0.000000, 5.000000)">
+                            <path d="M230,15 L221.531564,24 L212,15.5592144" id="arrow_down"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
