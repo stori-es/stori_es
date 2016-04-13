@@ -12,6 +12,7 @@ public class QuestionnaireResourceLinks extends BaseCollectionResourceLinks {
     private List<ResourceLink> forms;
     @JsonProperty("default_form")
     private ResourceLink defaultForm;
+    private List<ResourceLink> contents;
 
     public List<ResourceLink> getCollections() {
         return collections;
@@ -59,5 +60,13 @@ public class QuestionnaireResourceLinks extends BaseCollectionResourceLinks {
 
     public void setDefaultForm(ResourceLink defaultForm) {
         this.defaultForm = defaultForm;
+    }
+
+    public void setContents(List<ResourceLink> contents) {
+        this.contents = contents;
+    }
+
+    public List<ResourceLink> getContents() {
+        return contents;
     }
 }
