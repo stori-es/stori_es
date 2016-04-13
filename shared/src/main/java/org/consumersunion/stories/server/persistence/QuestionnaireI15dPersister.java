@@ -526,8 +526,9 @@ public class QuestionnaireI15dPersister implements Persister<QuestionnaireI15d> 
         questionnaire.setSurvey(surveyDocument);
 
         if (fullRetrieve) {
-            NextDocument nextDocument = questionnaire.getSubmitBlock().getNextDocument();
+            CollectionStoryLinkPersistenceHelper.loadAllStoryLinks(questionnaire, conn);
 
+            NextDocument nextDocument = questionnaire.getSubmitBlock().getNextDocument();
             if (nextDocument != null) {
                 Document confirmation = documentPersister.get(nextDocument.getDocumentId(), conn);
                 questionnaire.setConfirmationDocument(confirmation);
