@@ -19,6 +19,7 @@
     <script type="text/javascript" src="/template/cr/jquery.js"></script>
     <link type="text/css" rel="stylesheet"
           href="http://fast.fonts.net/cssapi/c05bbfa2-a62a-4505-9231-09b9957a01e9.css"/>
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
 
     <%-- SYS global variables --%>
     <script type="text/javascript">
