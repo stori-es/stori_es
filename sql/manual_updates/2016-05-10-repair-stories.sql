@@ -66,6 +66,8 @@ BEGIN
   CLOSE cur;
 END //
 
+DELIMITER ;
+
 CALL rebuildStoryBody();
 DROP PROCEDURE rebuildStoryBody;
 
@@ -133,6 +135,8 @@ BEGIN
   UNTIL done END REPEAT;
   CLOSE cur;
 END //
+
+DELIMITER ;
 
 CALL rebuildDocBlocks();
 DROP PROCEDURE rebuildDocBlocks;
