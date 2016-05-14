@@ -112,6 +112,7 @@ public class StoriesResource {
         story.setDefaultContent(storyPost.getDefaultContentId());
 
         storyService.updateStory(story);
+        tagsService.setTags(story, storyPost.getTags());
 
         StorySummary storySummary = storyService.getStorySummary(id);
 
