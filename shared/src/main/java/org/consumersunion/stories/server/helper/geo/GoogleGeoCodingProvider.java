@@ -2,6 +2,7 @@ package org.consumersunion.stories.server.helper.geo;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -19,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriUtils;
 
 import com.google.common.base.Strings;
 
@@ -67,7 +67,7 @@ public class GoogleGeoCodingProvider implements GeoCodingService {
 
         if (!Strings.isNullOrEmpty(extractedAddress.trim())) {
             Map<String, String> params = new HashMap<String, String>();
-            params.put(ADDRESS_PARAM, extractedAddress);
+            params.put(ADDRESS_PARAM, URLEncoder.encode(extractedAddress, "UTF-8"));
             params.put(SENSOR_PARAM, String.valueOf(sensor));
 
             if (isProductionMode()) {
@@ -78,12 +78,12 @@ public class GoogleGeoCodingProvider implements GeoCodingService {
             String requestUrl;
             if (isProductionMode()) {
                 logger.log(Level.INFO, "Sigining the URL...");
-                requestUrl = prepareUrl(params, true);
+                requestUrl = prepareUrl(params);
                 URL url = new URL(requestUrl);
                 String signature = urlSigner.signRequest(url.getPath(), url.getQuery());
-                requestUrl = prepareUrl(params, false) + prepareUrlParam(SIGNATURE_PARAM, signature, false);
+                requestUrl = prepareUrl(params) + prepareUrlParam(SIGNATURE_PARAM, signature, false);
             } else {
-                requestUrl = prepareUrl(params, false);
+                requestUrl = prepareUrl(params);
             }
 
             ResponseEntity<String> response;
@@ -165,16 +165,11 @@ public class GoogleGeoCodingProvider implements GeoCodingService {
         }
     }
 
-    private String prepareUrl(Map<String, String> params, Boolean encode) throws Exception {
+    private String prepareUrl(Map<String, String> params) throws Exception {
         StringBuilder completeUrl = new StringBuilder();
         completeUrl.append(GOOGLE_MAP_URL);
 
-        if (encode) {
-            completeUrl.append(prepareUrlParam(ADDRESS_PARAM, encodeParameter(params.get(ADDRESS_PARAM)), true));
-        } else {
-            completeUrl.append(prepareUrlParam(ADDRESS_PARAM, params.get(ADDRESS_PARAM), true));
-        }
-
+        completeUrl.append(prepareUrlParam(ADDRESS_PARAM, params.get(ADDRESS_PARAM), true));
         completeUrl.append(prepareUrlParam(SENSOR_PARAM, params.get(SENSOR_PARAM), false));
 
         if (isProductionMode()) {
@@ -226,7 +221,7 @@ public class GoogleGeoCodingProvider implements GeoCodingService {
         }
 
         if (!Strings.isNullOrEmpty(address.getPostalCode())) {
-            extractedAddress.append(", ");
+            extractedAddress.append(" ");
             extractedAddress.append(address.getPostalCode());
         }
 
@@ -236,9 +231,5 @@ public class GoogleGeoCodingProvider implements GeoCodingService {
         }
 
         return extractedAddress.toString().trim();
-    }
-
-    private String encodeParameter(String value) throws Exception {
-        return UriUtils.encodeQueryParam(value, "UTF-8");
     }
 }
