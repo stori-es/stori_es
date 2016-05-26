@@ -61,9 +61,5 @@
                 <a href="http://www.stori.es/support">Support</a>
             </li>
         </ul>
-
-        <div>
-            © 2015 Consumers Union of United States, Inc.
-        </div>
     </g:HTMLPanel>
 </ui:UiBinder>

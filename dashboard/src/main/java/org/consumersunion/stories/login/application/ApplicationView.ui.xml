@@ -5,9 +5,6 @@
     <ui:with field="res" type="org.consumersunion.stories.login.resource.LoginResources"/>
 
     <g:HTMLPanel styleName="{res.loginStyle.main}">
-        <div class="cu-logo">
-            <a href="http://www.consumersunion.org"></a>
-        </div>
         <header>
             <div id="header" class="container">
                 <div id="header-image">
