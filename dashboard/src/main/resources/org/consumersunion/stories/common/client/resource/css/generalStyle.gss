@@ -253,7 +253,6 @@ input[type=text].disabled {
 
 .stories-content ul {
     list-style: disc outside none;
-    display: list-item;
     margin-left: 1em;
 }
 
