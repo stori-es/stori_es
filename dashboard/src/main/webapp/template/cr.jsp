@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="/template/cr/globalNavigationStandalone.css">
     <link rel="stylesheet" type="text/css" href="/template/cr/homepage.css">
 
+    <jsp:include page="./../WEB-INF/jsp/Analytics.jsp"/>
     <script type="text/javascript" src="/template/cr/jquery.js"></script>
     <link type="text/css" rel="stylesheet"
           href="//fast.fonts.net/cssapi/c05bbfa2-a62a-4505-9231-09b9957a01e9.css"/>
