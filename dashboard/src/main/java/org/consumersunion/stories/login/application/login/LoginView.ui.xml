@@ -14,7 +14,7 @@
         <p ui:field="helpSection">
             <a href="#{forgot}">Forgot password?</a>
             <br/>
-            <a href="https://www.stori.es/support">Contact support</a>
+            <a href="mailto:stories@cr.consumer.org">Contact support</a>
         </p>
     </g:HTMLPanel>
 </ui:UiBinder>
