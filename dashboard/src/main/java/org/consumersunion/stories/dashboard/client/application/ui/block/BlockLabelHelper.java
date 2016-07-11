@@ -52,7 +52,7 @@ public class BlockLabelHelper {
     }
 
     private String retrieveQuestionId(Question input) {
-        return input.getLabel().replaceAll("\\D*", "");
+        return input.getLabel() == null ? "" : input.getLabel().replaceAll("\\D*", "");
     }
 
     private Integer getIntegerValue(String number) {
