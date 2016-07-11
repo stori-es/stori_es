@@ -563,7 +563,7 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
         public Collection process() {
             try {
                 String authBit = input.getUser() == null ? "e.public=TRUE" : "(e.public=TRUE OR (class.class = '"
-                        + Collection.class.getCanonicalName() + "' AND acl.granting=TRUE AND acl.sid="
+                        + Collection.class.getCanonicalName() + "' AND acl.sid="
                         + input.getUser().getId() + " AND acl.mask IN (" + BasePermission.READ.getMask() + ","
                         + BasePermission.ADMINISTRATION.getMask() + ")))";
 
@@ -573,7 +573,7 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
                                 + (input.getUser() != null ? "LEFT OUTER JOIN acl_object_identity o ON o" +
                                 ".object_id_identity=e.id LEFT OUTER JOIN acl_class class ON o.object_id_class = " +
                                 "class.id LEFT OUTER JOIN acl_entry acl ON o.id = acl.acl_object_identity "
-                                : "") + "WHERE (LOWER(n.permalink)=? OR LOWER(n.permalink)=?) AND " + authBit + " " +
+                                : "") + "WHERE (LOWER(n.permalink)=? OR LOWER(n.permalink)=?) AND " + authBit + " AND de.id IS NOT NULL " +
                                 "GROUP BY de.id");
 
                 select.setString(1, "/collections/" + input.getPermalink());
