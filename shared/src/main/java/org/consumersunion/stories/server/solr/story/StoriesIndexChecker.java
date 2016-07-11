@@ -42,11 +42,15 @@ public class StoriesIndexChecker implements IndexChecker {
         Connection connection = null;
         try {
             connection = PersistenceUtil.getConnection();
-            PreparedStatement countStmt = connection.prepareStatement("SELECT count(s.id) FROM document d "
-                    + "JOIN profile p ON p.id=d.primaryAuthor " + "JOIN documentText t ON d.id=t.documentId "
-                    + "JOIN story s ON d.systemEntity = s.id " + "JOIN systemEntity e ON s.id=e.id "
-                    + "LEFT OUTER JOIN documentText dt2 ON (t.documentId=dt2.documentId AND dt2.version > t.version) "
-                    + "WHERE d.systemEntityRelation='BODY' AND dt2.documentId IS NULL");
+            PreparedStatement countStmt = connection.prepareStatement("SELECT COUNT(*)" +
+                    " FROM (SELECT DISTINCT s.id" +
+                    "      FROM document d" +
+                    "        JOIN profile p ON p.id = d.primaryAuthor" +
+                    "        JOIN document t ON d.id = t.id" +
+                    "        JOIN story s ON d.systemEntity = s.id" +
+                    "        JOIN systemEntity e ON s.id = e.id" +
+                    "        LEFT OUTER JOIN document dt2 ON (t.id = dt2.id AND dt2.version > t.version)" +
+                    "      WHERE d.systemEntityRelation = 'BODY' AND dt2.id IS NULL) A");
             ResultSet resultSet = countStmt.executeQuery();
             resultSet.next();
 
