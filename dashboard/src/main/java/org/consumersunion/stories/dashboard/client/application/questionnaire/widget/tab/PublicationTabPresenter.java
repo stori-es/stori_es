@@ -104,6 +104,7 @@ public class PublicationTabPresenter extends PresenterWidget<PublicationTabPrese
                     new AbstractAsyncCallback<DatumResponse<Collection>>() {
                         @Override
                         public void onSuccess(final DatumResponse<Collection> result) {
+                            lastRequest = null;
                             getView().setLinkDisponibility(result.getDatum() == null);
                             result.getGlobalErrorMessages().clear();
                         }
