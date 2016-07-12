@@ -49,16 +49,16 @@
     <g:HTMLPanel styleName="{style.footerWrapper}">
         <ul class="{style.footerMenu}">
             <li>
-                <a href="http://www.stori.es/privacy-policy">Privacy Policy</a>
+                <a href="https://github.com/stori-es/stori_es-policy/blob/master/stori_es-privacy_policy.md">Privacy Policy</a>
             </li>
             <li>
-                <a href="http://www.stori.es/terms-of-service">Terms of Service</a>
+                <a href="https://github.com/stori-es/stori_es-policy/blob/master/stori_es-terms_of_service.md">Terms of Service</a>
             </li>
             <li>
-                <a href="http://www.stori.es/software-as-a-service-agreement">Software as a Service Agreement</a>
+                <a href="https://github.com/stori-es/stori_es-policy/blob/master/stori_es-software_as_a_service_agreement.md">Software as a Service Agreement</a>
             </li>
             <li>
-                <a href="http://www.stori.es/support">Support</a>
+                <a href="mailto:stories@cr.consumer.org">Support</a>
             </li>
         </ul>
     </g:HTMLPanel>
