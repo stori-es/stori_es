@@ -282,6 +282,8 @@ public class ListStoriesPresenter extends PresenterWidget<ListStoriesPresenter.M
     }
 
     private void onStoriesLoaded(PagedDataResponse<StorySummary> result) {
+        lastRequest = null;
+
         clearSlot(SLOT_STORIES);
 
         nbStoriesLoaded = 0;

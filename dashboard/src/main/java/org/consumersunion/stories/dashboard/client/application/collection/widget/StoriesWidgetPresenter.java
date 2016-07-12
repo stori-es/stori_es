@@ -148,8 +148,6 @@ public class StoriesWidgetPresenter extends PresenterWidget<StoriesWidgetPresent
         listStoriesPresenter.initPresenter(this);
 
         searchPresenter.onSortChanged();
-
-        loadAllStoriesPosition(event.get().getId());
     }
 
     @Override
@@ -239,6 +237,8 @@ public class StoriesWidgetPresenter extends PresenterWidget<StoriesWidgetPresent
 
         setInSlot(SLOT_MAP, storiesMapPresenter);
         MapBoundariesChangeEvent.fire(this, northEast, southWest);
+
+        loadAllStoriesPosition(collectionId);
     }
 
     @Override
