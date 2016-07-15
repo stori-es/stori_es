@@ -1365,9 +1365,3 @@ div.cu-collection-submit-thank-you button {
     left: 310px;
     position: absolute;
 }
-
-.stories-content ul {
-    list-style: disc outside none;
-    display: list-item;
-    margin-left: 35px;
-}
