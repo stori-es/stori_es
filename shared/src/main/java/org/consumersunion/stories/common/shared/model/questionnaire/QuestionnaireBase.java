@@ -18,6 +18,7 @@ import com.google.common.collect.Maps;
 public class QuestionnaireBase extends Collection {
     private Document survey;
     private Document confirmationDocument;
+    private Document nextDocument;
     private Set<Integer> targetCollections;
 
     private transient Map<String, QuestionBase> questionsMap;
@@ -148,5 +149,13 @@ public class QuestionnaireBase extends Collection {
                 }
             }
         }
+    }
+
+    public void setNextDocument(Document nextDocument) {
+        this.nextDocument = nextDocument;
+    }
+
+    public Document getNextDocument() {
+        return nextDocument;
     }
 }

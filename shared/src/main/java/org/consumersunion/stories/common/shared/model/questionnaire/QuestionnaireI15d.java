@@ -46,6 +46,7 @@ public class QuestionnaireI15d extends QuestionnaireBase {
         questionnaire.setSurvey(getSurvey());
         questionnaire.setBodyDocument(getBodyDocument());
         questionnaire.setConfirmationDocument(getConfirmationDocument());
+        questionnaire.setNextDocument(getNextDocument());
 
         return questionnaire;
     }

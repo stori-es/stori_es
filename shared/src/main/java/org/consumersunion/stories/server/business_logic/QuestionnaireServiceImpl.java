@@ -17,7 +17,6 @@ import org.consumersunion.stories.i18n.CommonI18nMessages;
 import org.consumersunion.stories.server.exception.NotAuthorizedException;
 import org.consumersunion.stories.server.exception.NotFoundException;
 import org.consumersunion.stories.server.exception.NotLoggedInException;
-import org.consumersunion.stories.server.exception.PermalinkAlreadyExistsException;
 import org.consumersunion.stories.server.persistence.AuthPersister;
 import org.consumersunion.stories.server.persistence.QuestionnaireI15dPersister;
 import org.consumersunion.stories.server.persistence.QuestionnaireI15dPersister.SearchByCollectionPagedParams;

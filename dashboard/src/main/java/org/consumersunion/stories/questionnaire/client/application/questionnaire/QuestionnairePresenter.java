@@ -127,7 +127,7 @@ public class QuestionnairePresenter extends Presenter<QuestionnairePresenter.MyV
 
     private void goToNextDocument() {
         Questionnaire questionnaire = (Questionnaire) collectionHolder.getCollection();
-        Document confirmationDocument = questionnaire.getConfirmationDocument();
+        Document confirmationDocument = questionnaire.getNextDocument();
 
         if (SystemEntityRelation.ATTACHMENT.equals(confirmationDocument.getSystemEntityRelation())) {
             Window.Location.assign(URLUtils.appendDefaultProtocol(confirmationDocument.getPermalink()));

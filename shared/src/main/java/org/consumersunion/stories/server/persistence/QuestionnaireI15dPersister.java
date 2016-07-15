@@ -185,8 +185,17 @@ public class QuestionnaireI15dPersister implements Persister<QuestionnaireI15d> 
             Document redirect = createRedirect(documentPersister);
 
             SubmitBlock submitBlock = input.getSubmitBlock();
-            submitBlock.setNextDocument(NextDocument.fromDocument(confirmation));
-            submitBlock.setNextDocuments(NextDocument.fromDocuments(confirmation, redirect));
+            NextDocument currentNextDocument = submitBlock.getNextDocument();
+
+            List<NextDocument> nextDocuments = NextDocument.fromDocuments(confirmation, redirect);
+            for (NextDocument nextDocument : nextDocuments) {
+                if (currentNextDocument.matches(nextDocument)) {
+                    currentNextDocument.setDocumentId(nextDocument.getDocumentId());
+                    break;
+                }
+            }
+
+            submitBlock.setNextDocuments(nextDocuments);
 
             super.createConcrete();
 
@@ -531,7 +540,7 @@ public class QuestionnaireI15dPersister implements Persister<QuestionnaireI15d> 
             NextDocument nextDocument = questionnaire.getSubmitBlock().getNextDocument();
             if (nextDocument != null) {
                 Document confirmation = documentPersister.get(nextDocument.getDocumentId(), conn);
-                questionnaire.setConfirmationDocument(confirmation);
+                questionnaire.setNextDocument(confirmation);
             }
         }
 
