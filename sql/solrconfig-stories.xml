@@ -483,8 +483,8 @@
      <str name="f.zip.qf">authorPostalCode</str>
      <str name="f.zipcode.qf">authorPostalCode</str>
      <str name="f.zipcodes.qf">authorPostalCode</str>
-     <!-- str name="f.note.qf">authorNotes^.5 storyNotes^1 collectionNotes^.2</str>
-     <str name="f.notes.qf">authorNotes^.5 storyNotes collectionNotes^.2</str -->
+     <str name="f.note.qf">authorNotes^.5 storyNotes^1 collectionNotes^.2</str>
+     <str name="f.notes.qf">authorNotes^.5 storyNotes collectionNotes^.2</str>
      <str name="f.story.qf">primaryText</str>
      <str name="f.modified.qf">lastModified</str>
      <str name="f.owner.qf">storyOwner</str>
