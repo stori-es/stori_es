@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.common.base.Objects;
 
 @JsonTypeName("submit")
 @org.codehaus.jackson.annotate.JsonTypeName("submit")
@@ -62,6 +63,12 @@ public class SubmitBlock extends Block {
 
         public void setRelation(SystemEntityRelation relation) {
             this.relation = relation;
+        }
+
+        public boolean matches(NextDocument nextDocument) {
+            return nextDocument != null
+                    && Objects.equal(nextDocument.title, title)
+                    && Objects.equal(nextDocument.relation, relation);
         }
     }
 

@@ -157,6 +157,7 @@ public class RpcQuestionnaireServiceImpl extends RpcBaseServiceImpl implements R
 
             newQuestionnaire.setConfirmationDocument(sourceQuestionnaire.getConfirmationDocument().cloneContent());
             newQuestionnaire.setSurvey(sourceQuestionnaire.getSurvey().cloneContent());
+            newQuestionnaire.setNextDocument(sourceQuestionnaire.getNextDocument().cloneContent());
 
             QuestionnaireI15d dbQuestionnaire = saveQuestionnaire(response, newQuestionnaire);
 
