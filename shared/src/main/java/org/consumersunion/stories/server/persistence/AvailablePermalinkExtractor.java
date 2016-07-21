@@ -12,11 +12,14 @@ public class AvailablePermalinkExtractor {
     public String extractPermalink(ResultSet rs, String basePermalink) throws SQLException {
         int max = -1;
         while (rs.next()) {
-            String permalink = rs.getString(1).replace(basePermalink, "");
-            if (!Strings.isNullOrEmpty(permalink)) {
-                int value = Integer.valueOf(permalink);
-                if (value >= max) {
-                    max = value + 1;
+            String suffix = rs.getString(1).replace(basePermalink, "").replace("-", "");
+            if (!Strings.isNullOrEmpty(suffix)) {
+                try {
+                    int value = Integer.valueOf(suffix);
+                    if (value >= max) {
+                        max = value + 1;
+                    }
+                } catch (NumberFormatException ignored) {
                 }
             } else {
                 if (max < 0) {
