@@ -188,10 +188,12 @@ public class QuestionnaireI15dPersister implements Persister<QuestionnaireI15d> 
             NextDocument currentNextDocument = submitBlock.getNextDocument();
 
             List<NextDocument> nextDocuments = NextDocument.fromDocuments(confirmation, redirect);
-            for (NextDocument nextDocument : nextDocuments) {
-                if (currentNextDocument.matches(nextDocument)) {
-                    currentNextDocument.setDocumentId(nextDocument.getDocumentId());
-                    break;
+            if (currentNextDocument != null) {
+                for (NextDocument nextDocument : nextDocuments) {
+                    if (currentNextDocument.matches(nextDocument)) {
+                        currentNextDocument.setDocumentId(nextDocument.getDocumentId());
+                        break;
+                    }
                 }
             }
 
