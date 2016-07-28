@@ -3,6 +3,7 @@ package org.consumersunion.stories.common.client.util;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 
 public class URLUtils {
     private static final String GWT_DEV_MOD = "?gwt.codesvr=127.0.0.1:9997";
@@ -27,7 +28,7 @@ public class URLUtils {
 
     public static String appendDefaultProtocol(String urlPart) {
         if (!urlPart.matches("[a-zA-Z]+://.+")) { // If no protocol indicated on the permalink, default to http://
-            return "http://" + urlPart;
+            return Window.Location.getProtocol() + "//" + urlPart;
         } else {
             return urlPart;
         }
