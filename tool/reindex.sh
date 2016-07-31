@@ -47,7 +47,7 @@ if [[ $UPDATE_AND_RESTART == 'true' ]]; then
     if [[ $TARGET == "localdev" ]]; then
 	$SOLR_CTL stop
     else
-	ssh -oStrictHostKeyChecking=no -i $PRODUCTION_SSH_KEY $BITNAMI_NAME 'sudo /opt/bitnami/apache-solr/scripts/ctl.sh stop' || (echo "Remote shutdown failed. MANUAL REPAIR REQUIRED." 2>&1; exit 1)
+	ssh -oStrictHostKeyChecking=no -i $PRODUCTION_SSH_KEY $BITNAMI_NAME 'sudo /opt/bitnami/ctlscript.sh stop solr' || (echo "Remote shutdown failed. MANUAL REPAIR REQUIRED." 2>&1; exit 1)
     fi
     # Update the configeration files.
     if [[ $TARGET == "localdev" ]]; then
@@ -73,7 +73,7 @@ if [[ $UPDATE_AND_RESTART == 'true' ]]; then
     if [[ $TARGET == 'localdev' ]]; then
 	$SOLR_CTL start
     else
-	ssh -oStrictHostKeyChecking=no -i $PRODUCTION_SSH_KEY $BITNAMI_NAME 'sudo /opt/bitnami/apache-solr/scripts/ctl.sh start' || (echo "Remote restart failed. MANUAL REPAIR REQUIRED." 2>&1; exit 1)
+	ssh -oStrictHostKeyChecking=no -i $PRODUCTION_SSH_KEY $BITNAMI_NAME 'sudo /opt/bitnami/ctlscript.sh start solr' || (echo "Remote restart failed. MANUAL REPAIR REQUIRED." 2>&1; exit 1)
     fi
     PING_URL=${CURL_BASE}stories/admin/ping
     echo "Pausing to allow time for Solr to spin up; using test URL: $PING_URL"
