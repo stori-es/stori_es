@@ -36,6 +36,7 @@ import org.consumersunion.stories.server.api.rest.util.ResourceLinksHelper;
 import org.consumersunion.stories.server.business_logic.CollectionService;
 import org.consumersunion.stories.server.business_logic.TagsService;
 import org.consumersunion.stories.server.business_logic.UserService;
+import org.consumersunion.stories.server.exception.NotFoundException;
 import org.jboss.resteasy.plugins.validation.hibernate.ValidateRequest;
 import org.springframework.stereotype.Component;
 
@@ -102,7 +103,7 @@ public class CollectionsResource {
     @PUT
     @Path(EndPoints.ID)
     public Response updateCollection(@PathParam(UrlParameters.ID) int id, @Valid CollectionPut collectionPut) {
-        CollectionData collectionData = collectionService.getCollectionData(id);
+        CollectionData collectionData = getCollectionData(id);
         Collection collection = collectionData.getCollection();
 
         collectionPutMerger.merge(collection, collectionPut);
@@ -120,7 +121,7 @@ public class CollectionsResource {
     @GET
     @Path(EndPoints.ID)
     public Response getCollection(@PathParam(UrlParameters.ID) int id) {
-        CollectionData collection = collectionService.getCollectionData(id);
+        CollectionData collection = getCollectionData(id);
 
         CollectionsApiResponse apiResponse = createCollectionsResponse(collection);
 
@@ -133,6 +134,16 @@ public class CollectionsResource {
         collectionService.deleteCollection(id);
 
         return Response.noContent().build();
+    }
+
+    private CollectionData getCollectionData(@PathParam(UrlParameters.ID) int id) {
+        CollectionData collection = collectionService.getCollectionData(id);
+
+        if (collection.getCollection().isQuestionnaire()) {
+            throw new NotFoundException();
+        }
+
+        return collection;
     }
 
     private void handleNotAuthorizedStories(
