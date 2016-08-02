@@ -41,6 +41,10 @@
             margin-bottom: 10px;
         }
 
+        .personProfileWrapper div {
+            outline: none;
+        }
+
         .filterWrapper {
             margin-top: 15px;
         }
