@@ -2,6 +2,7 @@ package org.consumersunion.stories.dashboard.client.application.ui.block.configu
 
 import org.consumersunion.stories.common.client.i18n.CommonI18nErrorMessages;
 import org.consumersunion.stories.common.client.service.RpcResourceCheckerServiceAsync;
+import org.consumersunion.stories.common.client.util.URLUtils;
 import org.consumersunion.stories.common.shared.model.document.DocumentBlock;
 
 import com.google.common.base.Strings;
@@ -74,6 +75,7 @@ public class DocumentConfigurator extends AbstractConfigurator<DocumentBlock>
     protected void onDone() {
         DocumentBlock document = driver.flush();
         if (validate()) {
+            document.setUrl(URLUtils.appendDefaultProtocol(document.getUrl()));
             verifyUrlValidity(document);
         }
     }
