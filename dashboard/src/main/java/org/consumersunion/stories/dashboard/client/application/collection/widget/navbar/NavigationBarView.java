@@ -78,8 +78,6 @@ public class NavigationBarView extends ViewWithUiHandlers<NavigationBarUiHandler
             initTooltip();
 
             $(Document.get().getBody()).click(documentClickHandler);
-
-            onButtonClicked(summaryButton, NavigationBarElement.SUMMARY);
         } else {
             tooltip.destroy();
             $(addDocument).unbind(BrowserEvents.CLICK);
