@@ -8,6 +8,7 @@
     <import file="./ant-common.xml"/>
 
     <property file="./aws-settings.prop" />
+    <property file="/mnt/bamboo-ebs/aws-settings.prop" />
 
     <target name="test.dev" depends="testFunctional.dev-immediate, testI18nEs.dev-immediate"/>
 
