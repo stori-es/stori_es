@@ -17,19 +17,31 @@ function ensure-production-key() {
 }
 
 function ensure-db-password() {
-    if [ ! -f $HOME/production-creds.sh ]; then
-	echo "No production credentials file found at '$HOME/production-creds.sh'." >&2
-	exit 1
-    fi
-    source $HOME/production-creds.sh
+    if [ -f /mnt/bamboo-ebs/production-creds.sh ]; then
+	    source /mnt/bamboo-ebs/production-creds.sh
+	else
+        if [ ! -f $HOME/production-creds.sh ]; then
+            echo "No production credentials file found at '$HOME/production-creds.sh'." >&2
+            exit 1
+        else
+            source $HOME/production-creds.sh
+        fi
+	fi
+
     echo $PRODUCTION_DB_PASSWORD
 }
 
 function ensure-solr-host() {
-    if [ ! -f $HOME/production-creds.sh ]; then
-	echo "No production credentials file found at '$HOME/production-creds.sh'." >&2
-	exit 1
+    if [ -f /mnt/bamboo-ebs/production-creds.sh ]; then
+    	    source /mnt/bamboo-ebs/production-creds.sh
+    else
+        if [ ! -f $HOME/production-creds.sh ]; then
+	        echo "No production credentials file found at '$HOME/production-creds.sh'." >&2
+            exit 1
+        else
+            source $HOME/production-creds.sh
+        fi
     fi
-    source $HOME/production-creds.sh
+
     echo $PRODUCTION_SOLR_HOST
 }
