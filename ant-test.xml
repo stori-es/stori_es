@@ -216,9 +216,11 @@
     </target>
     <target name="loadTestDb" depends="-test-index-local,-test-index-verify, condition-debug" unless="skipDb"/>
     <target name="-test-index-local" depends="-test-sql" unless="env.aws.environment">
+        <chmod file="tool/reindex.sh" perm="a+x" type="file"/>
         <exec executable="tool/reindex.sh" os="Linux" failonerror="true" resultproperty="return.code"/>
     </target>
     <target name="-test-index-verify" depends="-test-sql" if="env.aws.environment">
+        <chmod file="tool/reindex.sh" perm="a+x" type="file"/>
         <exec executable="tool/reindex.sh" os="Linux" failonerror="true" resultproperty="return.code">
             <arg value="verify"/>
         </exec>
