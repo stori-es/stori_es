@@ -199,6 +199,12 @@
             <artifactId>guava</artifactId>
         </dependency>
 
+        <!-- -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+        </dependency>
+
         <!-- RestEasy -->
         <dependency>
             <groupId>javax.enterprise</groupId>

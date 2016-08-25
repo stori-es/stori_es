@@ -13,7 +13,7 @@ MYSQLDUMP=mysqldump
 # and reading it in here
 # DB_PASS=`cat $PROP_FILE | grep '^jdbc.password' | awk -F= '{print $2}'`
 
-MAIN_PATH=`dirname $0`/..
+MAIN_PATH=`dirname $0`/
 
 # determine the file to load; default to the initialization file
 if [ -z "$1" ]; then
