@@ -10,7 +10,7 @@
     <property file="./aws-settings.prop" />
     <property file="/mnt/bamboo-ebs/aws-settings.prop" />
 
-    <target name="test.dev" depends="testFunctional.dev-immediate, testI18nEs.dev-immediate"/>
+    <target name="test.dev" depends="testFunctional.dev-immediate, testI18nEs.dev-immediate, test-worker"/>
 
     <!-- Runs the non-i18n unit tests. -->
     <!-- internal target -->
@@ -77,7 +77,7 @@
                 <pathelement location="lib/junit-4.10.jar"/>
             </classpath>
             <batchtest todir="reports/htmlunit.dev">
-                <fileset dir="test">
+                <fileset dir="dashboard/src/test/java">
                     <include name="**/I18n*Test.java"/>
                 </fileset>
             </batchtest>
@@ -114,7 +114,7 @@
                 <pathelement location="lib/junit-4.10.jar"/>
             </classpath>
             <batchtest todir="reports/htmlunit.prod">
-                <fileset dir="test">
+                <fileset dir="dashboard/src/test/java">
                     <include name="**/*Test.java"/>
                     <include name="**/*TestSuite.java"/>
                     <!-- exclude all the GWT test cases; they are run in suites in order to improve efficiency -->
