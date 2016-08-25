@@ -15,7 +15,7 @@ public class ConnectionApiTest extends ApiTestCase {
     }
 
     public void testRestQuestionnaire() {
-        Response response = given().get("/rest/questionnaire/some-perma-link");
+        Response response = given().get("/rest/questionnaire/title-questionnaire-5");
         int statusCode = response.getStatusCode();
         assertThat(statusCode).isNotEqualTo(Status.NOT_FOUND.getStatusCode());
     }
@@ -39,7 +39,7 @@ public class ConnectionApiTest extends ApiTestCase {
     }
 
     public void testQuestionnaireNotFound() {
-        Response response = given().get("/questionnaire/some-perma-link");
+        Response response = given().get("/rest/questionnaire/some-perma-link");
         int statusCode = response.getStatusCode();
         assertThat(statusCode).isEqualTo(Status.NOT_FOUND.getStatusCode());
     }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.consumersunion.stories.common.shared.api.EndPoints;
 import org.consumersunion.stories.common.shared.dto.ApiBlock;
 import org.consumersunion.stories.common.shared.dto.blocks.ApiBlockAudio;
 import org.consumersunion.stories.common.shared.dto.blocks.ApiBlockCollection;
@@ -75,8 +76,8 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
     @Override
     protected ApiBlock doBackward(Block block) {
         ApiBlock apiBlock = new ApiBlock();
-	BlockType blockType = block.getBlockType();
-	BlockType renderType = blockType.getRenderType();
+        BlockType blockType = block.getBlockType();
+        BlockType renderType = blockType.getRenderType();
 
         if (block instanceof Question) {
             Question question = (Question) block;
@@ -149,19 +150,22 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
                 throw new GeneralException(
                         "Unknown block type for 'text input' block: " + block.getBlockType());
             }
+        } else if (blockType == BlockType.COLLECTION) {
+            backwardCollection(apiBlock, block);
+        } else if (blockType == BlockType.STORY) {
+            backwardStory(apiBlock, block);
         } else if (blockType == BlockType.TEXT_AREA) {
-	    forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_PLAIN_TEXT);
+            forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_PLAIN_TEXT);
         } else if (blockType == BlockType.STORY_ASK_RICH) {
             forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_RICH_TEXT,
                     ApiBlockType.STORY_ASK_QUESTION_BLOCK);
         } else if (blockType == BlockType.STORY_ASK_PLAIN) {
             forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_PLAIN_TEXT,
                     ApiBlockType.STORY_ASK_QUESTION_BLOCK);
-        }
-        else if (blockType == BlockType.RICH_TEXT_AREA) {
-        	forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_RICH_TEXT);
+        } else if (blockType == BlockType.RICH_TEXT_AREA) {
+            forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_RICH_TEXT);
         } else if (blockType == BlockType.TEXT_AREA) {
-        	forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_PLAIN_TEXT);
+            forwardTextInputAttributes(apiBlock, (Question) block, MULTI_LINES_PLAIN_TEXT);
         } else if (blockType == BlockType.DATE) {
             apiBlock.setBlockType(ApiBlockType.DATE_QUESTION_BLOCK);
         } else if (blockType == BlockType.DOCUMENT) {
@@ -357,7 +361,7 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
                 block = backwardContentBlock(apiBlock, BlockType.CUSTOM_PERMISSIONS);
                 break;
             case TEXT_CONTENT_BLOCK:
-                block = backwardContentBlock(apiBlock, null);
+                block = backwardContentBlock(apiBlock, BlockType.CONTENT);
                 break;
             // end: content blocks
             // others
@@ -397,13 +401,13 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
                 break;
             case RATING_QUESTION_BLOCK:
                 block = new RatingQuestion();
-                block.setBlockType(DisplayType.NUMBERS.equals(apiBlock.getFormat()) 
-				   ? BlockType.RATING_NUMBERS : BlockType.RATING_STARS);
+                block.setBlockType(DisplayType.NUMBERS.equals(apiBlock.getFormat())
+                        ? BlockType.RATING_NUMBERS : BlockType.RATING_STARS);
                 break;
             case STORY_ASK_QUESTION_BLOCK:
                 block = new Question();
                 block.setBlockType(ApiBlockFormat.MULTI_LINES_PLAIN_TEXT.equals(apiBlock.getFormat())
-				   ? BlockType.STORY_ASK_PLAIN : BlockType.STORY_ASK_RICH);
+                        ? BlockType.STORY_ASK_PLAIN : BlockType.STORY_ASK_RICH);
                 break;
             default:
                 throw new GeneralException("Unknown block type '" + apiBlock.getBlockType() + "'.");
@@ -427,6 +431,22 @@ public class ApiBlockConverter extends Converter<ApiBlock, Block> {
         }
 
         return block;
+    }
+
+    private void backwardStory(ApiBlock apiBlock, Block block) {
+        apiBlock.setBlockType(ApiBlockType.STORY_CONTENT_BLOCK);
+        ApiBlockStory story = new ApiBlockStory();
+        apiBlock.setStory(story);
+        story.setHref(resourceLinksHelper.replaceId(EndPoints.endsWithId(STORIES),
+                ((Content) block).getContent()).getHref());
+    }
+
+    private void backwardCollection(ApiBlock apiBlock, Block block) {
+        apiBlock.setBlockType(ApiBlockType.COLLECTION_CONTENT_BLOCK);
+        ApiBlockCollection collection = new ApiBlockCollection();
+        apiBlock.setCollection(collection);
+        collection.setHref(resourceLinksHelper.replaceId(EndPoints.endsWithId(COLLECTIONS),
+                ((Content) block).getContent()).getHref());
     }
 
     // forward helpers

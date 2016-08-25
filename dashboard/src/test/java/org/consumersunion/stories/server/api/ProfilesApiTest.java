@@ -40,7 +40,7 @@ public class ProfilesApiTest extends ApiTestCase {
     }
 
     public void test_deleteProfileWithoutData_notAdmin_returnsUnauthorized() {
-        delete(withUser1Login(), 10000, Status.UNAUTHORIZED, EndPoints.PROFILES);
+        delete(withUser53Login(), 10000, Status.UNAUTHORIZED, EndPoints.PROFILES);
     }
 
     public void test_deleteProfileWithoutData_returnsNoContent() {
@@ -52,7 +52,7 @@ public class ProfilesApiTest extends ApiTestCase {
     }
 
     public void test_getUnauthorizedProfile_returnsUnauthorized() {
-        get(withUser1Login(), 1053, Status.UNAUTHORIZED, ErrorApiResponse.class, PROFILES);
+        get(withUser53Login(), 1038, Status.UNAUTHORIZED, ErrorApiResponse.class, PROFILES);
     }
 
     public void test_getOwnerProfile_returnsProfile() {

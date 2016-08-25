@@ -7,8 +7,8 @@
 <project name="stories-test" default="smoke-test-full-immediate" basedir=".">
     <import file="./ant-common.xml"/>
 
-    <property file="./aws-settings.prop" />
-    <property file="/mnt/bamboo-ebs/aws-settings.prop" />
+    <property file="./aws-settings.prop"/>
+    <property file="/mnt/bamboo-ebs/aws-settings.prop"/>
 
     <target name="test.dev" depends="testFunctional.dev-immediate, testI18nEs.dev-immediate, test-worker"/>
 
@@ -42,6 +42,7 @@
                     <!-- exclude all the GWT test cases; they are run in suites in order to improve efficiency -->
                     <exclude name="**/ui/widget/**/*.java"/>
                     <exclude name="**/service/client/**/*.java"/>
+                    <exclude name="**/*GwtTest.java"/>
                     <!-- exclude the i18n tests; these are run seperately for each locale -->
                     <exclude name="**/I18n*Test.java"/>
                     <exclude name="**/server/api/*Test.java"/>
@@ -53,10 +54,10 @@
     </target>
 
     <!-- internal target -->
-    <target name="testI18nEs.dev-immediate">
+    <target name="testI18nEs.dev-immediate" depends="loadTestDb">
         <mkdir dir="reports/htmlunit.dev"/>
         <junit fork="yes" printsummary="yes" haltonfailure="no">
-            <jvmarg line="-Xmx384m"/>
+            <jvmarg line="-Xmx512m"/>
             <sysproperty key="gwt.args" value="-logLevel WARN"/>
             <sysproperty key="java.awt.headless" value="true"/>
             <sysproperty key="org.consumersunion.testMode" value="true"/>
@@ -69,12 +70,10 @@
             <sysproperty key="aws.secretKey" value="${AWS_TEST_SECRET_KEY}"/>
             <sysproperty key="SMTP_FROM" value="${SMTP_FROM}"/>
             <classpath>
-                <pathelement location="src"/>
-                <pathelement location="src/META-INF"/>
-                <pathelement location="conf"/>
-                <pathelement location="test"/>
+                <pathelement location="dashboard/target/classes"/>
+                <pathelement location="dashboard/target/test-classes"/>
+                <path refid="dashboard.gwt.tests"/>
                 <path refid="test.classpath"/>
-                <pathelement location="lib/junit-4.10.jar"/>
             </classpath>
             <batchtest todir="reports/htmlunit.dev">
                 <fileset dir="dashboard/src/test/java">
@@ -93,7 +92,7 @@
     <target name="test.prod-immediate" depends="loadTestDb">
         <mkdir dir="reports/htmlunit.prod"/>
         <junit fork="yes" printsummary="yes" haltonfailure="no">
-            <jvmarg line="-Xmx384m"/>
+            <jvmarg line="-Xmx512m"/>
             <sysproperty key="gwt.args" value="-logLevel WARN"/>
             <sysproperty key="java.awt.headless" value="true"/>
             <sysproperty key="org.consumersunion.testMode" value="true"/>
@@ -106,12 +105,10 @@
             <sysproperty key="aws.secretKey" value="${AWS_TEST_SECRET_KEY}"/>
             <sysproperty key="SMTP_FROM" value="${SMTP_FROM}"/>
             <classpath>
-                <pathelement location="src"/>
-                <pathelement location="src/META-INF"/>
-                <pathelement location="conf"/>
-                <pathelement location="test"/>
+                <pathelement location="dashboard/target/classes"/>
+                <pathelement location="dashboard/target/test-classes"/>
+                <path refid="dashboard.gwt.tests"/>
                 <path refid="test.classpath"/>
-                <pathelement location="lib/junit-4.10.jar"/>
             </classpath>
             <batchtest todir="reports/htmlunit.prod">
                 <fileset dir="dashboard/src/test/java">
@@ -121,6 +118,7 @@
                     <exclude name="**/ui/widget/**/*.java"/>
                     <exclude name="**/service/client/**/*.java"/>
                     <exclude name="**/server/api/*Test.java"/>
+                    <exclude name="**/*GwtTest.java"/>
                 </fileset>
             </batchtest>
             <formatter type="plain"/>
@@ -212,8 +210,8 @@
     <target name="condition-debug">
         <echo message="${aws.environment}"/>
         <echo message="${env.aws.environment}"/>
-    	<echoproperties regex="aws.*" />
-    	<echoproperties regex="env.*" />
+        <echoproperties regex="aws.*"/>
+        <echoproperties regex="env.*"/>
     </target>
     <target name="loadTestDb" depends="-test-index-local,-test-index-verify, condition-debug" unless="skipDb"/>
     <target name="-test-index-local" depends="-test-sql" unless="env.aws.environment">
