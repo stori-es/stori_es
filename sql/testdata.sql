@@ -33,7 +33,7 @@ UPDATE organization SET defaultTheme=90 WHERE id=2;
 INSERT INTO systemEntity (id, version) VALUES (20002, 1);
 INSERT INTO entity (id) VALUES (20002);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (20002, 1, 'EN', 'permissions', 2, 'DEFAULT_PERMISSIONS', 0);
-INSERT INTO block (document, version, idx, documentType) VALUES (20002, 1, 0, 'CONTENT');
+INSERT INTO block (document, version, idx, blockType) VALUES (20002, 1, 0, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (20002, 1, 0, 'permissions', 'PLAIN');
 
 -- SystemEntity 1
@@ -46,10 +46,6 @@ INSERT INTO profile (id, givenName, surname, user, organization) VALUES (1001, '
 SET foreign_key_checks=1;
 INSERT INTO api_keys(user, uuid) VALUES(1, 'abcdef0123456789');
 
-INSERT INTO systemEntity (id, version, public,owner) VALUES (10000,1,1,null);
-INSERT INTO entity (id, profile, permalink) VALUES (10000, null, 'personToDeleteFail');
-INSERT INTO profile (id, givenName, surname, user, organization) VALUES (10000, 'Person', 'To Delete', null, 2);
-
 INSERT INTO systemEntity (id, version, public,owner) VALUES (10001,1,1,null);
 INSERT INTO entity (id, profile, permalink) VALUES (10001, null, 'personToDeleteSuccess');
 INSERT INTO profile (id, givenName, surname, user, organization) VALUES (10001, 'Person', 'To Delete', null, 2);
@@ -61,7 +57,7 @@ INSERT INTO collection (id) VALUES (4);
 INSERT INTO systemEntity (id, version) VALUES (804, 1);
 INSERT INTO entity (id) VALUES (804);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (804, 1, 'EN', 'Easy Questionnaire', 4, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (804, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (804, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (804, 1, 1, 'test-collection', 'PLAIN');
 
 -- SystemEntity 5
@@ -71,7 +67,7 @@ INSERT INTO collection (id) VALUES (5);
 INSERT INTO systemEntity (id, version) VALUES (805, 1);
 INSERT INTO entity (id) VALUES (805);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (805, 1, 'EN', 'Easy Questionnaire1', 5, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (805, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (805, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (805, 1, 1, 'test-collection1', 'PLAIN');
 
 -- SystemEntity 1090
@@ -89,43 +85,43 @@ INSERT INTO collection_sources (targetCollection, sourceQuestionnaire) VALUES (4
 INSERT INTO systemEntity (id, version) VALUES (8003, 1);
 INSERT INTO entity (id) VALUES (8003);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (8003, 1, 'EN', 'title questionnaire 5', 33, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType) VALUES (8003, 1, 0, 'CONTENT');
+INSERT INTO block (document, version, idx, blockType) VALUES (8003, 1, 0, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (8003, 1, 0, 'title questionnaire 5', 'PLAIN');
 
 INSERT INTO systemEntity (id, version, public, owner) VALUES (3300, 1, 1, 2);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (3300, 1, 'en', 'The Survey', 33, 'SURVEY', 1001);
-INSERT INTO block (document, version, idx, documentType) VALUES (3300, 1, 0, 'TEXT_INPUT');
+INSERT INTO block (document, version, idx, blockType) VALUES (3300, 1, 0, 'TEXT_INPUT');
 INSERT INTO block_question (document, version, idx, dataType, label, required, minLength, maxLength, text, helpText) VALUES (3300, 1, 0, 'EMAIL', 'Email', 1, NULL, NULL, 'Email', 'Enter your email address.');
 
-INSERT INTO block (document, version, idx, documentType) VALUES (3300, 1, 1, 'RADIO');
+INSERT INTO block (document, version, idx, blockType) VALUES (3300, 1, 1, 'RADIO');
 
 INSERT INTO block_question (document, version, idx, dataType, label, required, minLength, maxLength, text, helpText) VALUES (3300, 1, 1, null, 'Gender', 1, NULL, NULL, 'Gender', 'Gender');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES(3300, 1, 1, 0, 'male', 'male');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES(3300, 1, 1, 1, 'female', 'female');
 
-INSERT INTO block (document, version, idx, documentType) VALUES (3300, 1, 2, 'SELECT');
+INSERT INTO block (document, version, idx, blockType) VALUES (3300, 1, 2, 'SELECT');
 INSERT INTO block_question (document, version, idx, dataType, label, required, minLength, maxLength, text, helpText) VALUES (3300, 1, 2, null, 'favoriteMovie', 1, NULL, NULL, 'Favorite movie?', 'Cinema experiences and films also acceptable.');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES(3300, 1, 2, 0, 'lastVacation', 'northern hemisphere');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES(3300, 1, 2, 1, 'baz', 'southern hemisphere');
 
-INSERT INTO block (document, version, idx, documentType) VALUES (3300, 1, 3, 'CHECKBOX');
+INSERT INTO block (document, version, idx, blockType) VALUES (3300, 1, 3, 'CHECKBOX');
 INSERT INTO block_question (document, version, idx, dataType, label, required, minLength, maxLength, text, helpText) VALUES (3300, 1, 3, null, 'starWars', 1, NULL, NULL, 'Which hand do you write with?', 'If you can''t remember, try picking up a pen.');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES(3300, 1, 3, 0, 'left', 'left');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES(3300, 1, 3, 1, 'right', 'right');
 
-INSERT INTO block (document, version, idx, documentType) VALUES (3300, 1, 4, 'TEXT_AREA');
+INSERT INTO block (document, version, idx, blockType) VALUES (3300, 1, 4, 'TEXT_AREA');
 INSERT INTO block_question (document, version, idx, dataType, label, required, minLength, maxLength, text, helpText) VALUES (3300, 1, 4, null, 'more', 1, NULL, NULL, 'Tell me more.', 'Please share anything else you''d like share.');
 
-INSERT INTO block (document, version, idx, documentType) VALUES (3300, 1, 5, 'RICH_TEXT_AREA');
+INSERT INTO block (document, version, idx, blockType) VALUES (3300, 1, 5, 'RICH_TEXT_AREA');
 INSERT INTO block_question (document, version, idx, dataType, label, required, minLength, maxLength, text, helpText) VALUES (3300, 1, 5, null, 'Free Text', 1, NULL, NULL, 'Free text area', 'Please be free to share anything else you''d like share.');
 
-INSERT INTO block (document, version, idx, documentType) VALUES (3300, 1, 6, 'CONTENT');
+INSERT INTO block (document, version, idx, blockType) VALUES (3300, 1, 6, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content) VALUES (3300, 1, 6, 'Content');
 
-INSERT INTO block (document, version, idx, documentType) VALUES (3300, 1, 7, 'SUBHEADER');
+INSERT INTO block (document, version, idx, blockType) VALUES (3300, 1, 7, 'SUBHEADER');
 INSERT INTO block_content (document, version, idx, content) VALUES (3300, 1, 7, 'Section Header');
 
-INSERT INTO block (document, version, idx, documentType) VALUES (3300, 1, 8, 'SUBMIT');
+INSERT INTO block (document, version, idx, blockType) VALUES (3300, 1, 8, 'SUBMIT');
 INSERT INTO block_submit (document, version, idx, position, size, prompt, nextDocument) VALUES (3300, 1, 8, 'CENTER', 'MEDIUM', 'SUBMIT', null);
 
 -- SystemEntity 52
@@ -135,7 +131,7 @@ INSERT INTO collection (id) VALUES (52);
 INSERT INTO systemEntity (id, version) VALUES (8052, 1);
 INSERT INTO entity (id) VALUES (8052);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (8052, 1, 'EN', 'Sample collection', 52, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (8052, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (8052, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (8052, 1, 1, 'aLink', 'PLAIN');
 
 -- SystemEntity 958
@@ -145,7 +141,7 @@ INSERT INTO collection (id) VALUES (958);
 INSERT INTO systemEntity (id, version) VALUES (80958, 1);
 INSERT INTO entity (id) VALUES (80958);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (80958, 1, 'EN', 'Sample collection 2', 958, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (80958, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (80958, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (80958, 1, 1, 'aLink2', 'PLAIN');
 
 -- SystemEntity 959
@@ -155,7 +151,7 @@ INSERT INTO collection (id) VALUES (959);
 INSERT INTO systemEntity (id, version) VALUES (80959, 1);
 INSERT INTO entity (id) VALUES (80959);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (80959, 1, 'EN', 'Public collection', 959, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (80959, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (80959, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (80959, 1, 1, 'aLink3', 'PLAIN');
 
 -- SystemEntity 960
@@ -166,13 +162,13 @@ INSERT INTO questionnaire (id) VALUES (960);
 INSERT INTO systemEntity (id, version) VALUES (80960, 1);
 INSERT INTO entity (id) VALUES (80960);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (80960, 1, 'EN', 'title questionnaire 7', 960, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (80960, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (80960, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (80960, 1, 1, '', 'PLAIN');
 
 INSERT INTO systemEntity (id, version) VALUES (90960, 1);
 INSERT INTO entity (id) VALUES (90960);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (90960, 1, 'EN', 'title questionnaire 7 SURVEY', 960, 'SURVEY', 1001);
-INSERT INTO block (document, version, idx, documentType) VALUES (90960, 1, 1, 'SUBMIT');
+INSERT INTO block (document, version, idx, blockType) VALUES (90960, 1, 1, 'SUBMIT');
 INSERT INTO block_submit (document, version, idx, position, size, prompt, nextDocument) VALUES (90960, 1, 1, 'CENTER', 'MEDIUM', 'SUBMIT', null);
 
 -- SystemEntity 961
@@ -183,13 +179,13 @@ INSERT INTO questionnaire (id) VALUES (961);
 INSERT INTO systemEntity (id, version) VALUES (80961, 1);
 INSERT INTO entity (id) VALUES (80961);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (80961, 1, 'EN', 'title questionnaire 8', 961, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (80961, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (80961, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (80961, 1, 1, '', 'PLAIN');
 
 INSERT INTO systemEntity (id, version) VALUES (90961, 1);
 INSERT INTO entity (id) VALUES (90961);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (90961, 1, 'EN', 'title questionnaire 8 SURVEY', 961, 'SURVEY', 1001);
-INSERT INTO block (document, version, idx, documentType) VALUES (90961, 1, 1, 'SUBMIT');
+INSERT INTO block (document, version, idx, blockType) VALUES (90961, 1, 1, 'SUBMIT');
 INSERT INTO block_submit (document, version, idx, position, size, prompt, nextDocument) VALUES (90961, 1, 1, 'CENTER', 'MEDIUM', 'SUBMIT', null);
 
 
@@ -201,13 +197,13 @@ INSERT INTO questionnaire (id) VALUES (962);
 INSERT INTO systemEntity (id, version) VALUES (80962, 1);
 INSERT INTO entity (id) VALUES (80962);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (80962, 1, 'EN', 'title questionnaire 9', 962, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (80962, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (80962, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (80962, 1, 1, '', 'PLAIN');
 
 INSERT INTO systemEntity (id, version) VALUES (90962, 1);
 INSERT INTO entity (id) VALUES (90962);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (90962, 1, 'EN', 'title questionnaire 9 SURVEY', 962, 'SURVEY', 1001);
-INSERT INTO block (document, version, idx, documentType) VALUES (90962, 1, 1, 'SUBMIT');
+INSERT INTO block (document, version, idx, blockType) VALUES (90962, 1, 1, 'SUBMIT');
 INSERT INTO block_submit (document, version, idx, position, size, prompt, nextDocument) VALUES (90962, 1, 1, 'CENTER', 'MEDIUM', 'SUBMIT', null);
 
 -- SystemEntity 963
@@ -218,13 +214,13 @@ INSERT INTO questionnaire (id) VALUES (963);
 INSERT INTO systemEntity (id, version) VALUES (80963, 1);
 INSERT INTO entity (id) VALUES (80963);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (80963, 1, 'EN', 'title questionnaire 10', 963, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (80963, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (80963, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (80963, 1, 1, '', 'PLAIN');
 
 INSERT INTO systemEntity (id, version) VALUES (90963, 1);
 INSERT INTO entity (id) VALUES (90963);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (90963, 1, 'EN', 'title questionnaire 10 SURVEY', 963, 'SURVEY', 1001);
-INSERT INTO block (document, version, idx, documentType) VALUES (90963, 1, 1, 'SUBMIT');
+INSERT INTO block (document, version, idx, blockType) VALUES (90963, 1, 1, 'SUBMIT');
 INSERT INTO block_submit (document, version, idx, position, size, prompt, nextDocument) VALUES (90963, 1, 1, 'CENTER', 'MEDIUM', 'SUBMIT', null);
 
 -- SystemEntity 51
@@ -236,17 +232,17 @@ INSERT INTO collection_sources (targetCollection, sourceQuestionnaire) VALUES (5
 INSERT INTO systemEntity (id, version) VALUES (8051, 1);
 INSERT INTO entity (id) VALUES (8051);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (8051, 1, 'EN', 'title questionnaire 6', 51, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (8051, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (8051, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (8051, 1, 1, '/questionnaires/share2', 'PLAIN');
 
 INSERT INTO systemEntity (id, version) VALUES (98051, 1);
 INSERT INTO entity (id) VALUES (98051);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (98051, 1, 'EN', 'title questionnaire 6 SURVEY', 51, 'SURVEY', 1001);
-INSERT INTO block (document, version, idx, documentType) VALUES (98051, 1, 0, 'SUBMIT');
+INSERT INTO block (document, version, idx, blockType) VALUES (98051, 1, 0, 'SUBMIT');
 INSERT INTO block_submit (document, version, idx, position, size, prompt, nextDocument) VALUES (98051, 1, 0, 'CENTER', 'MEDIUM', 'SUBMIT', null);
-INSERT INTO block (document, version, idx, documentType) VALUES (98051, 1, 2, 'TEXT_INPUT');
+INSERT INTO block (document, version, idx, blockType) VALUES (98051, 1, 2, 'TEXT_INPUT');
 INSERT INTO block_question (document, version, idx, dataType, label, required, minLength, maxLength, text, helpText) VALUES (98051, 1, 2, null, 'Gender1', 1, NULL, NULL, 'Email', 'Email');
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (98051, 1, 3, 'TEXT_AREA', 'STORY_ASK');
+INSERT INTO block (document, version, idx, blockType) VALUES (98051, 1, 3, 'STORY_ASK_PLAIN');
 INSERT INTO block_question (document, version, idx, dataType, label, required, minLength, maxLength, text, helpText) VALUES (98051, 1, 3, null, 'Gender2', 1, NULL, NULL, 'Email', 'Email');
 
 -- SystemEntity 53
@@ -326,7 +322,7 @@ INSERT INTO collection_story (collection, clearedForPublicInclusion, story) VALU
 INSERT INTO systemEntity (id, version,public) VALUES (57,1,1);
 INSERT INTO document (`id`,`version`,`systemEntity`,`systemEntityRelation`,`primaryAuthor`,`permalink`,locale, title) VALUES
 	(57,1,15,'BODY',1001,'','en', 'doc57');
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (57, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (57, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (57, 1, 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed placerat ligula easy sit amet lectus tempus consequat. Cras turpis massa, placerat sit amet consequat in, auctor ac ipsum. Donec metus risus, sodales at mollis et, vehicula vitae dui. Ut vitae turpis metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse consectetur nisl vitae metus volutpat vel placerat justo aliquet. Sed non erat ligula. Phasellus posuere leo neque, vel suscipit nisi. Duis eu odio mi, vitae tristique urna.
 
 Donec eu elit ac turpis placerat congue. Suspendisse potenti. Nullam sit amet odio a est fermentum tempus eu sit amet sem. Suspendisse ornare feugiat lectus aliquet imperdiet. In commodo placerat odio, eget posuere odio rutrum mollis. Quisque volutpat suscipit augue, laoreet laoreet ipsum vulputate sit amet. Integer leo nisi, adipiscing quis bibendum ut, sollicitudin vel nunc. Integer dolor arcu, mattis nec tempor eget, fringilla non lacus. Etiam mattis libero a tortor pellentesque ac ultricies erat faucibus. Ut rutrum est et nisi varius sagittis. Cras et velit arcu. Nulla vel turpis in est lobortis vestibulum. Aenean metus lectus, porta ornare dictum blandit, bibendum quis lectus.', 'PLAIN');
@@ -334,7 +330,7 @@ Donec eu elit ac turpis placerat congue. Suspendisse potenti. Nullam sit amet od
 INSERT INTO systemEntity (id, version,public) VALUES (58,1,1);
 INSERT INTO document (`id`,version,`systemEntity`,`systemEntityRelation`,`primaryAuthor`,`permalink`,locale, title) VALUES
 	(58,1,16,'BODY',1001,'','en', 'doc58');
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (58, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (58, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (58, 1, 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed placerat ligula sit amet lectus tempus consequat. Cras turpis massa, placerat sit amet consequat in, auctor ac ipsum. Donec metus risus, sodales at mollis et, vehicula vitae dui. Ut vitae turpis metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse consectetur nisl vitae metus volutpat vel placerat justo aliquet. Sed non erat ligula. Phasellus posuere leo neque, vel suscipit nisi. Duis eu odio mi, vitae tristique urna.
 
 Donec eu elit ac turpis placerat congue. Suspendisse potenti. Nullam sit amet odio a est fermentum tempus eu sit amet sem. Suspendisse ornare feugiat lectus aliquet imperdiet. In commodo placerat odio, eget posuere odio rutrum mollis. Quisque volutpat suscipit augue, laoreet laoreet ipsum vulputate sit amet. Integer leo nisi, adipiscing quis bibendum ut, sollicitudin vel nunc. Integer dolor arcu, mattis nec tempor eget, fringilla non lacus. Etiam mattis libero a tortor pellentesque ac ultricies erat faucibus. Ut rutrum est et nisi varius sagittis. Cras et velit arcu. Nulla vel turpis in est lobortis vestibulum. Aenean metus lectus, porta ornare dictum blandit, bibendum quis lectus.', 'PLAIN');
@@ -342,7 +338,7 @@ Donec eu elit ac turpis placerat congue. Suspendisse potenti. Nullam sit amet od
 INSERT INTO systemEntity (id, version,public) VALUES (59,1,1);
 INSERT INTO document (`id`,version,`systemEntity`,`systemEntityRelation`,`primaryAuthor`,`permalink`,locale, title) VALUES
 	(59,1,17,'BODY',1001,'','en', 'doc59');
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (59, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (59, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (59, 1, 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed placerat ligula easy sit amet lectus tempus consequat. Cras turpis massa, placerat sit amet consequat in, auctor ac ipsum. Donec metus risus, sodales at mollis et, vehicula vitae dui. Ut vitae turpis metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse consectetur nisl vitae metus volutpat vel placerat justo aliquet. Sed non erat ligula. Phasellus posuere leo neque, vel suscipit nisi. Duis eu odio mi, vitae tristique urna.
 
 Donec eu elit ac turpis placerat congue. Suspendisse potenti. Nullam sit amet odio a est fermentum tempus eu sit amet sem. Suspendisse ornare feugiat lectus aliquet imperdiet. In commodo placerat odio, eget posuere odio rutrum mollis. Quisque volutpat suscipit augue, laoreet laoreet ipsum vulputate sit amet. Integer leo nisi, adipiscing quis bibendum ut, sollicitudin vel nunc. Integer dolor arcu, mattis nec tempor eget, fringilla non lacus. Etiam mattis libero a tortor pellentesque ac ultricies erat faucibus. Ut rutrum est et nisi varius sagittis. Cras et velit arcu. Nulla vel turpis in est lobortis vestibulum. Aenean metus lectus, porta ornare dictum blandit, bibendum quis lectus.', 'PLAIN');
@@ -363,9 +359,9 @@ INSERT INTO document (`id`,version,`systemEntity`,`systemEntityRelation`,`primar
 INSERT INTO document (`id`,version,`systemEntity`,`systemEntityRelation`,`primaryAuthor`,`permalink`,locale, title) VALUES
 (25,1,16,'STYLE',1001,'css2','en','css25');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (24, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (24, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (24, 1, 1, 'body { color: blue; background-color: #F0F8FF; }', 'CSS');
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (25, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (25, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (25, 1, 1, 'body { color: black; background-color: #F0F8FF; }', 'CSS');
 
 --
@@ -459,7 +455,7 @@ INSERT INTO acl_entry (acl_object_identity, sid, mask) VALUES (36,1035,100), (36
 INSERT INTO systemEntity (id, version) VALUES (8036, 1);
 INSERT INTO entity (id) VALUES (8036);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (8036, 1, 'EN', 'acl-collection #36', 36, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (8036, 1, 0, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (8036, 1, 0, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (8036, 1, 0, 'acl-collection #36', 'PLAIN');
 
 INSERT INTO systemEntity (id, version) VALUES (37,1);
@@ -469,7 +465,7 @@ INSERT INTO acl_entry (acl_object_identity, sid, mask) VALUES (37,1035,200);
 INSERT INTO systemEntity (id, version) VALUES (8037, 1);
 INSERT INTO entity (id) VALUES (8037);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (8037, 1, 'EN', 'acl-collection #37', 37, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (8037, 1, 0, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (8037, 1, 0, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (8037, 1, 0, 'acl-collection #37', 'PLAIN');
 
 INSERT INTO systemEntity (id, version) VALUES (40,1);
@@ -478,7 +474,7 @@ INSERT INTO collection (id) VALUES (40);
 INSERT INTO systemEntity (id, version) VALUES (8040, 1);
 INSERT INTO entity (id) VALUES (8040);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (8040, 1, 'EN', 'acl-collection #40', 40, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (8040, 1, 0, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (8040, 1, 0, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (8040, 1, 0, 'acl-collection #40', 'PLAIN');
 
 INSERT INTO systemEntity (id, version) VALUES (43,1);
@@ -487,7 +483,7 @@ INSERT INTO collection (id) VALUES (43);
 INSERT INTO systemEntity (id, version) VALUES (8043, 1);
 INSERT INTO entity (id) VALUES (8043);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (8043, 1, 'EN', 'acl-collection #43', 43, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (8043, 1, 0, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (8043, 1, 0, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (8043, 1, 0, 'acl-collection #43', 'PLAIN');
 
 INSERT INTO systemEntity (id, version) VALUES (44,1);
@@ -496,7 +492,7 @@ INSERT INTO collection (id) VALUES (44);
 INSERT INTO systemEntity (id, version) VALUES (8044, 1);
 INSERT INTO entity (id) VALUES (8044);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (8044, 1, 'EN', 'acl-collection #44', 44, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (8044, 1, 0, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (8044, 1, 0, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (8044, 1, 0, 'acl-collection #44', 'PLAIN');
 
 INSERT INTO systemEntity (id, version) VALUES (46,1);
@@ -507,12 +503,12 @@ INSERT INTO collection_sources (targetCollection, sourceQuestionnaire) VALUES (3
 INSERT INTO systemEntity (id, version) VALUES (8046, 1);
 INSERT INTO entity (id) VALUES (8046);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (8046, 1, 'EN', 'title questionnaire 1', 46, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (8046, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (8046, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (8046, 1, 1, '', 'PLAIN');
 INSERT INTO systemEntity (id, version) VALUES (98046, 1);
 INSERT INTO entity (id) VALUES (98046);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (98046, 1, 'EN', 'title questionnaire 1 SURVEY', 46, 'SURVEY', 1001);
-INSERT INTO block (document, version, idx, documentType) VALUES (98046, 1, 0, 'SUBMIT');
+INSERT INTO block (document, version, idx, blockType) VALUES (98046, 1, 0, 'SUBMIT');
 INSERT INTO block_submit (document, version, idx, position, size, prompt, nextDocument) VALUES (98046, 1, 0, 'CENTER', 'MEDIUM', 'SUBMIT', null);
 
 INSERT INTO systemEntity (id, version) VALUES (47,1);
@@ -523,12 +519,12 @@ INSERT INTO collection_sources (targetCollection, sourceQuestionnaire) VALUES (3
 INSERT INTO systemEntity (id, version) VALUES (8047, 1);
 INSERT INTO entity (id) VALUES (8047);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (8047, 1, 'EN', 'title questionnaire 2', 47, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (8047, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (8047, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (8047, 1, 1, '', 'PLAIN');
 INSERT INTO systemEntity (id, version) VALUES (98047, 1);
 INSERT INTO entity (id) VALUES (98047);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (98047, 1, 'EN', 'title questionnaire 2 SURVEY', 47, 'SURVEY', 1001);
-INSERT INTO block (document, version, idx, documentType) VALUES (98047, 1, 0, 'SUBMIT');
+INSERT INTO block (document, version, idx, blockType) VALUES (98047, 1, 0, 'SUBMIT');
 INSERT INTO block_submit (document, version, idx, position, size, prompt, nextDocument) VALUES (98047, 1, 0, 'CENTER', 'MEDIUM', 'SUBMIT', null);
 
 INSERT INTO systemEntity (id, version) VALUES (49,1);
@@ -539,12 +535,12 @@ INSERT INTO collection_sources (targetCollection, sourceQuestionnaire) VALUES (4
 INSERT INTO systemEntity (id, version) VALUES (8049, 1);
 INSERT INTO entity (id) VALUES (8049);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (8049, 1, 'EN', 'title questionnaire 3', 49, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (8049, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (8049, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (8049, 1, 1, '', 'PLAIN');
 INSERT INTO systemEntity (id, version) VALUES (98049, 1);
 INSERT INTO entity (id) VALUES (98049);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (98049, 1, 'EN', 'title questionnaire 3 SURVEY', 49, 'SURVEY', 1001);
-INSERT INTO block (document, version, idx, documentType) VALUES (98049, 1, 0, 'SUBMIT');
+INSERT INTO block (document, version, idx, blockType) VALUES (98049, 1, 0, 'SUBMIT');
 INSERT INTO block_submit (document, version, idx, position, size, prompt, nextDocument) VALUES (98049, 1, 0, 'CENTER', 'MEDIUM', 'SUBMIT', null);
 
 INSERT INTO systemEntity (id, version) VALUES (48,1);
@@ -555,12 +551,12 @@ INSERT INTO collection_sources (targetCollection, sourceQuestionnaire) VALUES (4
 INSERT INTO systemEntity (id, version) VALUES (8048, 1);
 INSERT INTO entity (id) VALUES (8048);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (8048, 1, 'EN', 'title questionnaire 4', 48, 'BODY', 1001);
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (8048, 1, 1, 'CONTENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (8048, 1, 1, 'CONTENT');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (8048, 1, 1, '', 'PLAIN');
 INSERT INTO systemEntity (id, version) VALUES (98048, 1);
 INSERT INTO entity (id) VALUES (98048);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (98048, 1, 'EN', 'title questionnaire 4 SURVEY', 48, 'SURVEY', 1001);
-INSERT INTO block (document, version, idx, documentType) VALUES (98048, 1, 0, 'SUBMIT');
+INSERT INTO block (document, version, idx, blockType) VALUES (98048, 1, 0, 'SUBMIT');
 INSERT INTO block_submit (document, version, idx, position, size, prompt, nextDocument) VALUES (98048, 1, 0, 'CENTER', 'MEDIUM', 'SUBMIT', null);
 
 -- Collection Story data
@@ -573,6 +569,10 @@ INSERT INTO collection_story (collection, story, clearedForPublicInclusion) VALU
 INSERT INTO systemEntity (id, version) VALUES (60,1);
 INSERT INTO entity (id, profile, permalink) VALUES (60, null, 'http://domain.org');
 INSERT INTO organization (id, name, defaultTheme) VALUES (60, 'Organization name', 90);
+
+INSERT INTO systemEntity (id, version, public,owner) VALUES (10000,1,1,null);
+INSERT INTO entity (id, profile, permalink) VALUES (10000, null, 'personToDeleteFail');
+INSERT INTO profile (id, givenName, surname, user, organization) VALUES (10000, 'Person', 'To Delete', null, 60);
 
 -- SystemEntity 28
 INSERT INTO systemEntity (id, version) VALUES (28,1);
@@ -741,58 +741,58 @@ INSERT INTO systemEntity (id, version) VALUES (110, 1);
 INSERT INTO entity (id) VALUES (110);
 INSERT INTO document (id, version, locale, title, systemEntity, systemEntityRelation, primaryAuthor) VALUES (110, 1, 'EN', 'Block Test Questionnaire', 109, 'BODY', 1001);
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 1, 'ATTACHMENTS', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 1, 'ATTACHMENTS');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 1, 'question1', 0, 'Attachments');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 2, 'AUDIO', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 2, 'AUDIO');
 INSERT INTO block_image (document, version, idx, url, caption, alttext, position, size) VALUES (110, 1, 2, 'http://foo.com/song.ogg', 'a cool song', 'this song is six words long', NULL, NULL);
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 3, 'SUBMIT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 3, 'SUBMIT');
 -- Note, the 'nextDocument' is a loop; as good as any for our current use of the object but we should improve.
 INSERT INTO block_submit (document, version, idx, nextDocument, size, position) VALUES (110, 1, 3, 8003, 'MEDIUM', 'CENTER');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 4, 'TEXT_INPUT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 4, 'TEXT_INPUT');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 4, 'question2', 0, 'Single Line Text');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 5, 'TEXT_AREA', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 5, 'TEXT_AREA');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 5, 'question3', 0, 'Multi Line Plain Text');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 6, 'RICH_TEXT_AREA', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 6, 'RICH_TEXT_AREA');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 6, 'question4', 0, 'Multi Line Rich Text');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 7, 'TEXT_INPUT', 'CITY');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 7, 'CITY');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 7, 'question5', 0, 'City');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 8, 'TEXT_INPUT', 'FIRST_NAME');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 8, 'FIRST_NAME');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 8, 'question6', 0, 'First Name');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 9, 'TEXT_INPUT', 'LAST_NAME');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 9, 'LAST_NAME');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 9, 'question7', 0, 'Last Name');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 10, 'COLLECTION', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 10, 'COLLECTION');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (110, 1, 10, '4', NULL);
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 11, 'DATE', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 11, 'DATE');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 11, 'question8', 0, 'Date');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 12, 'RICH_TEXT_AREA', 'STORY_ASK');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 12, 'STORY_ASK_RICH');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 12, 'question9', 0, 'Story Ask');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 13, 'TEXT_INPUT', 'STORY_TITLE');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 13, 'STORY_TITLE');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 13, 'question10', 0, 'Story Title');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 14, 'TEXT_INPUT', 'STREET_ADDRESS_1');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 14, 'STREET_ADDRESS_1');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 14, 'question11', 0, 'Street Address');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 15, 'DOCUMENT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 15, 'DOCUMENT');
 INSERT INTO block_link (document, version, idx, title, url) VALUES (110, 1, 15, 'a document', 'http://foo.bar/doc.pdf');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 16, 'SELECT', 'PREFERRED_EMAIL_FORMAT');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 16, 'PREFERRED_EMAIL_FORMAT');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 16, 'question12', 0, 'Preferred Email Format');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES (110, 1, 16, 0, 'Yes', 'Yes');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES (110, 1, 16, 1, 'No', 'No');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 17, 'SELECT', 'STATE');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 17, 'STATE');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 17, 'question13', 0, 'State');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES (110, 1, 17, 0, 'AL', 'Alalbama');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES (110, 1, 17, 1, 'OK', 'Oklahoma');
@@ -802,68 +802,68 @@ INSERT INTO question_options (document, version, questionIdx, idx, reportValue, 
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES (110, 1, 17, 5, 'WI', 'Wisconsin');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES (110, 1, 17, 6, 'WY', 'Wyoming');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 18, 'SELECT', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 18, 'SELECT');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 18, 'question14', 0, 'Select');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES (110, 1, 18, 0, 'A', 'A');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES (110, 1, 18, 1, 'B', 'B');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES (110, 1, 18, 2, 'C', 'C');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 19, 'CONTACT', 'EMAIL');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 19, 'EMAIL');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 19, 'question15', 0, 'Email - Home');
 INSERT INTO question_contact (document, version, idx, type, opt) VALUES (110, 1, 19, 'EMAIL', 'Home');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 20, 'CONTACT', 'EMAIL_WORK');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 20, 'EMAIL_WORK');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 20, 'question16', 0, 'Email - Work');
 INSERT INTO question_contact (document, version, idx, type, opt) VALUES (110, 1, 20, 'EMAIL', 'Work');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 21, 'CONTACT', 'EMAIL_OTHER');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 21, 'EMAIL_OTHER');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 21, 'question17', 0, 'Email - Other');
 INSERT INTO question_contact (document, version, idx, type, opt) VALUES (110, 1, 21, 'EMAIL', 'Other');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 22, 'CONTACT', 'PHONE');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 22, 'PHONE');
 INSERT INTO block_question (document, version, idx, label, required, dataType, text) VALUES (110, 1, 22, 'question18', 0, 'PHONE_NUMBER', 'Phone - Home');
 INSERT INTO question_contact (document, version, idx, type, opt) VALUES (110, 1, 22, 'PHONE', 'Home');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 23, 'CONTACT', 'PHONE_WORK');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 23, 'PHONE_WORK');
 INSERT INTO block_question (document, version, idx, label, required, dataType, text) VALUES (110, 1, 23, 'question19', 0, 'PHONE_NUMBER', 'Phone - Work');
 INSERT INTO question_contact (document, version, idx, type, opt) VALUES (110, 1, 23, 'PHONE', 'Work');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 24, 'CONTACT', 'PHONE_MOBILE');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 24, 'PHONE_MOBILE');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 24, 'question20', 0, 'Phone - Mobile');
 INSERT INTO question_contact (document, version, idx, type, opt) VALUES (110, 1, 24, 'PHONE', 'Work');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 25, 'CONTACT', 'PHONE_OTHER');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 25, 'PHONE_OTHER');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 25, 'question21', 0, 'Phone - Other');
 INSERT INTO question_contact (document, version, idx, type, opt) VALUES (110, 1, 25, 'PHONE', 'Work');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 26, 'IMAGE', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 26, 'IMAGE');
 INSERT INTO block_image (document, version, idx, url, caption, alttext, position, size) VALUES (110, 1, 26, 'http://foo.bar/image.png', 'an image', 'image', 'LEFT', 'SMALL');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 27, 'TEXT_IMAGE', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 27, 'TEXT_IMAGE');
 INSERT INTO block_image (document, version, idx, url, caption, alttext, position, size) VALUES (110, 1, 27, 'http://bar.baz/image.png', 'another image', 'image2', 'RIGHT', 'LARGE');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (110, 1, 27, 'Some text', NULL);
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 28, 'CONTENT', 'CUSTOM_PERMISSIONS');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 28, 'CUSTOM_PERMISSIONS');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (110, 1, 28, 'All rights reserved.', NULL);
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 29, 'STARS', 'RATING');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 29, 'RATING_STARS');
 -- TODO: shouldn't start/end/steps be numbers? See TASK-1719
 INSERT INTO block_rating (document, version, idx, start, end, steps) VALUES (110, 1, 29, '1', '5', '1');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 30, 'NUMBERS', 'RATING');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 30, 'RATING_NUMBERS');
 INSERT INTO block_rating (document, version, idx, start, end, steps) VALUES (110, 1, 30, '1', '10', '0.5');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 31, 'STORY', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 31, 'STORY');
 INSERT INTO block_content (document, version, idx, content, textType) VALUES (110, 1, 31, '6', NULL);
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 32, 'CHECKBOX', 'UPDATES_OPT_IN');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 32, 'UPDATES_OPT_IN');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 32, 'question22', 0, 'Opt In');
 INSERT INTO question_options (document, version, questionIdx, idx, reportValue, displayValue) VALUES (110, 1, 32, 0, 'Yes', 'Y');
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 33, 'VIDEO', NULL);
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 33, 'VIDEO');
 INSERT INTO block_image (document, version, idx, url, caption, alttext, position, size) VALUES (110, 1, 33, 'http://foo.com/video.mp4', 'a cool video', 'vid vid', NULL, NULL);
 
-INSERT INTO block (document, version, idx, documentType, standardMeaning) VALUES (110, 1, 34, 'TEXT_INPUT', 'ZIP_CODE');
+INSERT INTO block (document, version, idx, blockType) VALUES (110, 1, 34, 'ZIP_CODE');
 INSERT INTO block_question (document, version, idx, label, required, text) VALUES (110, 1, 34, 'question23', 0, 'Zip Code');
 
 INSERT INTO dbUpdate VALUES

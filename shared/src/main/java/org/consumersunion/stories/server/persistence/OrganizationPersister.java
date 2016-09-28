@@ -215,6 +215,7 @@ public class OrganizationPersister implements Persister<Organization>, MineCallb
         public Organization process() {
             checkVersion();
             try {
+                conn.createStatement().execute("SET FOREIGN_KEY_CHECKS = 0");
                 PreparedStatement delete = conn.prepareStatement("DELETE FROM organization WHERE id=?");
                 delete.setInt(1, input.getId());
 
@@ -224,6 +225,7 @@ public class OrganizationPersister implements Persister<Organization>, MineCallb
                 }
 
                 deleteEntityRecordAndUpdateInput();
+                conn.createStatement().execute("SET FOREIGN_KEY_CHECKS = 1");
 
                 return input;
             } catch (final SQLException e) {

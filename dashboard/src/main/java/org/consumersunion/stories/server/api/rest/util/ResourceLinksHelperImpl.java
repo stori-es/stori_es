@@ -77,6 +77,11 @@ public class ResourceLinksHelperImpl implements ResourceLinksHelper {
         }
     }
 
+    @Override
+    public ResourceLink replaceId(String baseUrl, String id) {
+        return replaceId(baseUrl, Integer.valueOf(id));
+    }
+
     private ResourceLink replaceId(String host, String baseUrl, int id) {
         return replaceId(host, baseUrl, String.valueOf(id));
     }

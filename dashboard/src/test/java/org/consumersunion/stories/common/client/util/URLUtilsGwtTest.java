@@ -2,12 +2,18 @@ package org.consumersunion.stories.common.client.util;
 
 import org.junit.Test;
 
+import com.google.gwt.junit.client.GWTTestCase;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class URLUtilsTest {
-    @Test
-    public void verifyNoProtocolOverride() {
+public class URLUtilsGwtTest extends GWTTestCase {
+    @Override
+    public String getModuleName() {
+        return "org.consumersunion.stories.storiesJUnit";
+    }
+
+    public void testVerifyNoProtocolOverride() {
         String[] urls = {"http://google.com", "https://google.com", "ftp://googlel.com"};
 
         for (String url : urls) {
@@ -15,8 +21,7 @@ public class URLUtilsTest {
         }
     }
 
-    @Test
-    public void verifyDefaultProtocolAdded() {
+    public void testVerifyDefaultProtocolAdded() {
         String[] urls = {"google.com", "www.google.com"};
 
         for (String url : urls) {

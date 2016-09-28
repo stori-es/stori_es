@@ -19,8 +19,10 @@ import static javax.ws.rs.core.Response.Status;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.consumersunion.stories.common.shared.api.EndPoints.ORGANIZATIONS;
+import static org.consumersunion.stories.server.api.rest.util.ResourceLinksHelperImpl.extractId;
 
 public class OrganizationsApiTest extends ApiTestCase {
     private static final int WRONG_ORGANIZATION_ID = 1;
@@ -159,7 +161,7 @@ public class OrganizationsApiTest extends ApiTestCase {
 
     public void testNoAuth_deleteOrganization_unauthorized() {
         Metadata metadata =
-                delete(withUser1Login(), PRIVATE_ORGANIZATION_ID, UNAUTHORIZED, ORGANIZATIONS, ErrorApiResponse.class)
+                delete(withUser53Login(), PRIVATE_ORGANIZATION_ID, UNAUTHORIZED, ORGANIZATIONS, ErrorApiResponse.class)
                         .getMetadata();
 
         assertEquals(UNAUTHORIZED.getStatusCode(), metadata.getHttpCode());

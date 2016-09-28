@@ -2,7 +2,6 @@ package org.consumersunion.stories.server.helper.geo;
 
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -20,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.google.common.base.Strings;
 
@@ -67,7 +67,7 @@ public class GoogleGeoCodingProvider implements GeoCodingService {
 
         if (!Strings.isNullOrEmpty(extractedAddress.trim())) {
             Map<String, String> params = new HashMap<String, String>();
-            params.put(ADDRESS_PARAM, URLEncoder.encode(extractedAddress, "UTF-8"));
+            params.put(ADDRESS_PARAM, extractedAddress);
             params.put(SENSOR_PARAM, String.valueOf(sensor));
 
             if (isProductionMode()) {
@@ -75,15 +75,16 @@ public class GoogleGeoCodingProvider implements GeoCodingService {
                 params.put(CLIENT_PARAM, clientId);
             }
 
-            String requestUrl;
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(GOOGLE_MAP_URL);
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                builder.queryParam(entry.getKey(), entry.getValue());
+            }
+
             if (isProductionMode()) {
                 logger.log(Level.INFO, "Sigining the URL...");
-                requestUrl = prepareUrl(params);
-                URL url = new URL(requestUrl);
+                URL url = builder.build().toUri().toURL();
                 String signature = urlSigner.signRequest(url.getPath(), url.getQuery());
-                requestUrl = prepareUrl(params) + prepareUrlParam(SIGNATURE_PARAM, signature, false);
-            } else {
-                requestUrl = prepareUrl(params);
+                builder.queryParam(SIGNATURE_PARAM, signature);
             }
 
             ResponseEntity<String> response;
@@ -91,7 +92,7 @@ public class GoogleGeoCodingProvider implements GeoCodingService {
             localisation.setGeoCodeProvider(Address.GeoCodeProvider.GOOGLE);
 
             try {
-                response = restTemplate.getForEntity(requestUrl, String.class);
+                response = restTemplate.getForEntity(builder.build().toUri(), String.class);
             } catch (Exception ignored) {
                 localisation.setGeoCodeStatus(GeoCodeStatus.FAILED);
                 return localisation;

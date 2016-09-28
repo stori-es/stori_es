@@ -35,17 +35,17 @@ public class UsersApiTest extends ApiTestCase {
     }
 
     public void testGetSelf_withLogin_ok() {
-        UsersApiResponse apiResponse = getSelfUser(withUser1Login(), Status.OK, UsersApiResponse.class);
+        UsersApiResponse apiResponse = getSelfUser(withUser53Login(), Status.OK, UsersApiResponse.class);
 
         UserResponse userResponse = apiResponse.getData().get(0);
 
-        assertEquals(1, (int) userResponse.getId());
-        assertEquals("testUser", userResponse.getHandle());
+        assertEquals(53, (int) userResponse.getId());
+        assertEquals("test", userResponse.getHandle());
         assertEquals(2, userResponse.getContacts().size());
         List<ResourceLink> profileLinks = userResponse.getLinks().getProfiles();
         assertEquals(1, profileLinks.size());
         assertEquals("Unexpected Profile link 'href' value.",
-                "http://localhost:" + RestAssured.port + EndPoints.PROFILES + "1001",
+                "http://localhost:" + RestAssured.port + EndPoints.PROFILES + "1053",
                 profileLinks.get(0).getHref());
     }
 

@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.61, for redhat-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.73, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: stories
 -- ------------------------------------------------------
--- Server version	5.1.61
+-- Server version	5.1.73
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -133,8 +133,9 @@ CREATE TABLE `addStoriesTask` (
   `searchToken` varchar(255) DEFAULT NULL,
   `collectionId` int(11) DEFAULT NULL,
   `questionnaireId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_addStoriesTask_id` FOREIGN KEY (`id`) REFERENCES `task` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -243,7 +244,7 @@ DROP TABLE IF EXISTS `api_keys`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `api_keys` (
   `user` int(11) NOT NULL DEFAULT '0',
-  `uuid` varchar(32) NOT NULL DEFAULT '',
+  `uuid` varchar(36) NOT NULL DEFAULT '',
   `uuid_bin` binary(16) DEFAULT NULL,
   PRIMARY KEY (`user`,`uuid`),
   UNIQUE KEY `api_hex_index` (`uuid_bin`),
@@ -277,8 +278,7 @@ DROP TABLE IF EXISTS `block`;
 CREATE TABLE `block` (
   `document` int(11) NOT NULL DEFAULT '0',
   `idx` int(11) NOT NULL,
-  `documentType` varchar(16) NOT NULL,
-  `standardMeaning` varchar(32) DEFAULT NULL,
+  `blockType` varchar(32) NOT NULL,
   `version` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`document`,`version`,`idx`),
   CONSTRAINT `fk_block_document` FOREIGN KEY (`document`, `version`) REFERENCES `document` (`id`, `version`)
@@ -382,7 +382,8 @@ CREATE TABLE `block_rating` (
   `end` varchar(25) DEFAULT NULL,
   `steps` varchar(16) DEFAULT NULL,
   `version` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`document`,`version`,`idx`)
+  PRIMARY KEY (`document`,`version`,`idx`),
+  CONSTRAINT `fk_block_rating_block` FOREIGN KEY (`document`, `version`, `idx`) REFERENCES `block` (`document`, `version`, `idx`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -653,8 +654,10 @@ CREATE TABLE `exportTask` (
   `url` varchar(255) DEFAULT NULL,
   `expires` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_exportTask_collection` (`objectId`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  KEY `fk_exportTask_collection` (`objectId`),
+  CONSTRAINT `fk_exportTask_collection` FOREIGN KEY (`objectId`) REFERENCES `collection` (`id`),
+  CONSTRAINT `fk_exportTask_id` FOREIGN KEY (`id`) REFERENCES `task` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -847,7 +850,6 @@ DROP TABLE IF EXISTS `questionnaire`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `questionnaire` (
   `id` int(11) NOT NULL,
-  `confirmation2` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_questionarie_systemEntity` FOREIGN KEY (`id`) REFERENCES `systemEntity` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -967,7 +969,7 @@ CREATE TABLE `systemEntity` (
   `creator` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `systemEntity_owner_index` (`owner`)
-) ENGINE=InnoDB AUTO_INCREMENT=779635 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=873464 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1002,8 +1004,9 @@ CREATE TABLE `task` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lastModified` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_task_user` (`profile`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+  KEY `fk_task_user` (`profile`),
+  CONSTRAINT `fk_task_user` FOREIGN KEY (`profile`) REFERENCES `profile` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=243 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1020,6 +1023,21 @@ CREATE TABLE `theme` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_theme_systementity` FOREIGN KEY (`id`) REFERENCES `systemEntity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tmpTextType`
+--
+
+DROP TABLE IF EXISTS `tmpTextType`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tmpTextType` (
+  `document` int(11) NOT NULL DEFAULT '0',
+  `idx` int(11) NOT NULL DEFAULT '0',
+  `version` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`document`,`idx`,`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1091,9 +1109,7 @@ CREATE TABLE `white_list` (
   `max_role` varchar(16) NOT NULL,
   `member` int(11) NOT NULL,
   PRIMARY KEY (`organization`,`member`),
-  KEY `fk_white_list_member_entity` (`member`),
-  CONSTRAINT `fk_white_list_organization` FOREIGN KEY (`organization`) REFERENCES `organization` (`id`),
-  CONSTRAINT `fk_white_list_member_entity` FOREIGN KEY (`member`) REFERENCES `entity` (`id`)
+  KEY `fk_white_list_member_entity` (`member`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1106,4 +1122,4 @@ CREATE TABLE `white_list` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-15 15:05:07
+-- Dump completed on 2016-08-05 14:44:46
