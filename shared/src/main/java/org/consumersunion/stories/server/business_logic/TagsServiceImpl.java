@@ -99,7 +99,7 @@ public class TagsServiceImpl implements TagsService {
     public Set<String> getTags(SystemEntity entity) {
         SystemEntity targetObj = systemEntityService.getSystemEntity(entity.getId());
 
-        if (authService.isUserAuthorized(AuthConstants.ROLE_CURATOR, targetObj)) {
+        if (authService.isUserAuthorized(AuthConstants.ROLE_READER, targetObj)) {
             try {
                 TagsParams params = new TagsParams(entity, null);
                 return tagsPersister.getTags(params);

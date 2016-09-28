@@ -1,6 +1,7 @@
 package org.consumersunion.stories;
 
 import org.consumersunion.stories.common.client.ui.form.FormGwtTest;
+import org.consumersunion.stories.common.client.util.URLUtilsGwtTest;
 import org.consumersunion.stories.service.client.AuthorizationServiceGwtTest;
 import org.consumersunion.stories.service.client.CollectionServiceGwtTest2;
 import org.consumersunion.stories.service.client.DocumentServiceGwtTest;
@@ -32,6 +33,7 @@ public class StoriesGwtTestSuite extends GWTTestSuite {
         suite.addTestSuite(DocumentServiceGwtTest.class);
         suite.addTestSuite(EntityServiceGwtTest.class);
         suite.addTestSuite(AuthorizationServiceGwtTest.class);
+        suite.addTestSuite(URLUtilsGwtTest.class);
         // TODO : TASK-1384
 //        suite.addTestSuite(UserServiceTest.class);
 

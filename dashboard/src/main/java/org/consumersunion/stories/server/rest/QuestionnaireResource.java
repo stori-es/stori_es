@@ -33,6 +33,10 @@ public class QuestionnaireResource extends QuestionnaireCors {
         QuestionnaireSurveyResponse questionnaireSurvey =
                 questionnaireService.getQuestionnaireSurvey("/questionnaires/" + permLink);
 
+        if (questionnaireSurvey.isError()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
         if (!questionnaireSurvey.getQuestionnaire().isPublished()) {
             questionnaireSurvey.setQuestionnaire(null);
         }

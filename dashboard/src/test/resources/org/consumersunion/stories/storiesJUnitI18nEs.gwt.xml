@@ -6,7 +6,10 @@
     <inherits name="gwtquery.plugins.droppable.Droppable"/>
     <inherits name="com.google.common.collect.Collect"/>
 
-    <set-property-fallback name="locale" value="es"/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
+
+    <extend-property name="locale" values="es"/>
+    <set-property name="locale" value="es"/>
 
     <!-- TODO: see RTTWO-205 -->
     <servlet path='/service/authorization'

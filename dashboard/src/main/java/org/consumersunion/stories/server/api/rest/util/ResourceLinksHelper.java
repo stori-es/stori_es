@@ -13,4 +13,6 @@ public interface ResourceLinksHelper {
     List<ResourceLink> replaceStringIds(String baseUrl, Iterable<String> ids);
 
     ResourceLink replaceId(String baseUrl, Integer id);
+
+    ResourceLink replaceId(String baseUrl, String id);
 }
