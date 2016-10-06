@@ -107,10 +107,13 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
             questionnaire.getConfirmationDocument().setPrimaryAuthor(activeProfileId);
             questionnaire.setOwner(contextOrganizationId);
 
-            collectionService.setTheme(questionnaire);
+            if (questionnaire.getTheme() == 0) {
+                collectionService.setTheme(questionnaire);
+            }
             setDefaultBlocks(questionnaire);
 
-            String availablePermalink = questionnaireI15dPersister.getAvailablePermalink(generateSlug(questionnaire.getTitle()));
+            String availablePermalink = questionnaireI15dPersister.getAvailablePermalink(
+                    generateSlug(questionnaire.getTitle()));
             questionnaire.setPermalink(availablePermalink);
 
             QuestionnaireI15d dbQuestionnaire = questionnaireI15dPersister.createQuestionnaire(questionnaire);
