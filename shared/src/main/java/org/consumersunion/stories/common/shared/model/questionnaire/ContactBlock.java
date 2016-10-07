@@ -31,6 +31,7 @@ public class ContactBlock extends Question {
     @Override
     public Object clone() {
         ContactBlock contactBlock = new ContactBlock();
+        contactBlock.setLabel(getLabel());
         contactBlock.setText(getText());
         contactBlock.setOption(option);
         contactBlock.setType(type);
