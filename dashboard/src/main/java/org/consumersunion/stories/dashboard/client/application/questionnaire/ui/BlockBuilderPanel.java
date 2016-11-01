@@ -221,10 +221,6 @@ public class BlockBuilderPanel extends DroppableWidget<FlowPanel>
         moveTo(blockBuilder, innerPanel.getWidgetCount() - 2);
     }
 
-    public String getUniqueLabel() {
-        return null;
-    }
-
     public void updateElements() {
         standardElements = LinkedListMultimap.create();
         emailOptions = new LinkedHashSet<ContactType>();
