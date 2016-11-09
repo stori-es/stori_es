@@ -21,6 +21,7 @@ public class BlockBuilderHandler implements BlockBuilder.Handler {
     }
 
     private final Resources resources;
+    private final BlockLabelHelper blockLabelHelper;
     private final SaveHandler saveHandler;
 
     private boolean isQuestionnaire;
@@ -29,8 +30,10 @@ public class BlockBuilderHandler implements BlockBuilder.Handler {
     @Inject
     BlockBuilderHandler(
             Resources resources,
+            BlockLabelHelper blockLabelHelper,
             @Assisted SaveHandler saveHandler) {
         this.resources = resources;
+        this.blockLabelHelper = blockLabelHelper;
         this.saveHandler = saveHandler;
     }
 
@@ -81,7 +84,7 @@ public class BlockBuilderHandler implements BlockBuilder.Handler {
 
         if (element instanceof Question) {
             duplicatedElement = (Question) element.clone();
-            ((Question) duplicatedElement).setLabel(blockBuilderPanel.getUniqueLabel());
+            ((Question) duplicatedElement).setLabel(blockLabelHelper.getUniqueLabel(blockBuilderPanel));
         } else if (element instanceof ContentBase) {
             duplicatedElement = (ContentBase) element.clone();
         }
