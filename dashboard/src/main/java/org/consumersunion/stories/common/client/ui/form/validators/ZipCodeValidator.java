@@ -11,7 +11,7 @@ public class ZipCodeValidator implements Validator {
 
     @Override
     public void validate(final String value) {
-        if (!value.matches("^\\s*\\d{5}([ _.,-]*\\d{4})?\\s*$")) {
+        if (value != null && !value.matches("^\\s*\\d{5}([ _.,-]*\\d{4})?\\s*$")) {
             throw new InputValidationException(messages.zipFormat());
         }
     }
