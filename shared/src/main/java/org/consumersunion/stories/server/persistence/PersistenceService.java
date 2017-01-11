@@ -15,4 +15,6 @@ public interface PersistenceService {
     <T extends SystemEntity> Persister<T> getPersister(Class<T> clazz);
 
     <I, O> O process(Connection conn, ProcessFunc<I, O> func);
+
+    <I, O> O  process(Connection conn, ProcessFunc<I, O>[] funcs);
 }

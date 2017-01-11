@@ -96,6 +96,10 @@ public class ProfilePersister implements Persister<Profile>, MineCallbackProvide
         return persistenceService.process(new CreateProfileFunc(profile, this));
     }
 
+    public Profile createProfile(Profile profile, Connection conn) {
+        return persistenceService.process(conn ,new CreateProfileFunc(profile, this));
+    }
+
     public void delete(int id) {
         persistenceService.process(new DeleteProfileByIdFunc(id));
     }

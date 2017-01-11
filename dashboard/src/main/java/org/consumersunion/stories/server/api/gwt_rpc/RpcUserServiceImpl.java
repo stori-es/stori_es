@@ -1,5 +1,7 @@
 package org.consumersunion.stories.server.api.gwt_rpc;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -17,6 +19,7 @@ import org.consumersunion.stories.common.shared.model.Profile;
 import org.consumersunion.stories.common.shared.model.User;
 import org.consumersunion.stories.common.shared.model.entity.SortField;
 import org.consumersunion.stories.i18n.CommonI18nErrorMessages;
+import org.consumersunion.stories.server.business_logic.AuthorizationService;
 import org.consumersunion.stories.server.exception.NotLoggedInException;
 import org.consumersunion.stories.server.persistence.CredentialedUserPersister;
 import org.consumersunion.stories.server.persistence.CredentialedUserPersister.UserProfileStruct;
@@ -136,51 +139,65 @@ public class RpcUserServiceImpl extends RpcBaseServiceImpl implements RpcUserSer
         ActionResponse response = new ActionResponse();
 
         try {
-            final Integer organizationId = Integer.valueOf(defaultOrg);
-            Organization targetObj = persistenceService.process(
-                    new OrganizationPersister.RetrieveOrganizationFunc(organizationId));
+            Connection[] connection = new Connection[1];
+            try {
+                final Connection conn = persistenceService.getConnection();
+                connection[0] = conn;
 
-            if (!authService.isUserAuthorized(ROLE_ADMIN, targetObj)) {
-                String message = LocaleFactory.get(CommonI18nErrorMessages.class)
-                        .noAdministrativeRights() + " for those organizations";
-                response.addGlobalErrorMessage(message);
-                return response;
-            }
+                final AuthorizationService authService = this.authService.withConnection(conn);
+                final Integer organizationId = Integer.valueOf(defaultOrg);
+                Organization targetObj = persistenceService.process(conn,
+                        new OrganizationPersister.RetrieveOrganizationFunc(organizationId));
 
-            if (newUser != null) {
-                Runnable backgroundTask = new Runnable() {
-                    @Override
-                    public void run() {
-                        // The default org is granted in the create, so we remove that from our list of 'other orgs'.
-                        stringOrganizationIds.remove(defaultOrg);
-                        List<Integer> organizationIds = FluentIterable.from(stringOrganizationIds)
-                                .transform(Ints.stringConverter()).toList();
+                if (!authService.isUserAuthorized(ROLE_ADMIN, targetObj)) {
+                    String message = LocaleFactory.get(CommonI18nErrorMessages.class)
+                            .noAdministrativeRights() + " for those organizations";
+                    response.addGlobalErrorMessage(message);
+                    return response;
+                }
 
-                        newUser.setActive(false);
-                        UserProfileStruct savedUser = createAccountInternal(newUser, password, resetQuestion,
-                                resetAnswer, givenName, surname, organizationId);
-                        for (Integer orgId : organizationIds) {
-                            Profile profile = new Profile();
-                            profile.setGivenName(givenName);
-                            profile.setSurname(surname);
-                            profile.setOrganizationId(orgId);
-                            profile.setUserId(savedUser.credentialedUser.getId());
-                            profile = profilePersister.createProfile(profile);
+                if (newUser != null) {
+                    Runnable backgroundTask = new Runnable() {
+                        @Override
+                        public void run() {
+                            // The default org is granted in the create, so we remove that from our list of 'other orgs'.
+                            try {
+                                stringOrganizationIds.remove(defaultOrg);
+                                List<Integer> organizationIds = FluentIterable.from(stringOrganizationIds)
+                                        .transform(Ints.stringConverter()).toList();
 
-                            authService.grantAtLeast(profile.getId(), ROLE_READER, orgId);
-                            authService.grantAtLeast(orgId, ROLE_ADMIN, profile.getId());
+                                newUser.setActive(false);
+                                UserProfileStruct savedUser = createAccountInternal(conn, newUser, password, resetQuestion,
+                                        resetAnswer, givenName, surname, organizationId);
+                                for (Integer orgId : organizationIds) {
+                                    Profile profile = new Profile();
+                                    profile.setGivenName(givenName);
+                                    profile.setSurname(surname);
+                                    profile.setOrganizationId(orgId);
+                                    profile.setUserId(savedUser.credentialedUser.getId());
+                                    profile = profilePersister.createProfile(profile, conn);
+
+                                    authService.grantAtLeast(profile.getId(), ROLE_READER, orgId);
+                                    authService.grantAtLeast(orgId, ROLE_ADMIN, profile.getId());
+                                }
+
+                                User user = savedUser.credentialedUser.getUser();
+                                user.setActive(true);
+                                persistenceService.process(conn, new UserPersister.UpdateUserFunc(user));
+                                conn.commit();
+                            } catch (Exception e) {
+                                closeConnection(conn);
+                            }
                         }
+                    };
 
-                        User user = savedUser.credentialedUser.getUser();
-                        user.setActive(true);
-                        persistenceService.process(new UserPersister.UpdateUserFunc(user));
-                    }
-                };
-
-                threadPoolTaskExecutor.execute(backgroundTask);
-            } else {
-                response.addGlobalErrorMessage(
-                        LocaleFactory.get(CommonI18nErrorMessages.class).invalidParameters());
+                    threadPoolTaskExecutor.execute(backgroundTask);
+                } else {
+                    response.addGlobalErrorMessage(
+                            LocaleFactory.get(CommonI18nErrorMessages.class).invalidParameters());
+                }
+            } catch (Exception e) {
+                closeConnection(connection[0]);
             }
         } catch (NotLoggedInException e) {
             response.addGlobalErrorMessage(LocaleFactory.get(CommonI18nErrorMessages.class).notLoggedIn());
@@ -189,7 +206,21 @@ public class RpcUserServiceImpl extends RpcBaseServiceImpl implements RpcUserSer
         return response;
     }
 
+    private void closeConnection(Connection connection) {
+        if (connection != null) {
+            try {
+                if (!connection.isClosed()) {
+                    connection.rollback();
+                    connection.close();
+                }
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
     public UserProfileStruct createAccountInternal(
+            Connection connection,
             User newUser,
             String password,
             String resetQuestion,
@@ -209,10 +240,10 @@ public class RpcUserServiceImpl extends RpcBaseServiceImpl implements RpcUserSer
 
         // This next call takes a really long time.
         UserProfileStruct userProfile =
-                credentialedUserPersister.createUserProfile(new UserProfileStruct(user, initialProfile));
+                credentialedUserPersister.createUserProfile(connection, new UserProfileStruct(user, initialProfile));
         initialProfile = userProfile.initialProfile;
 
-        grantNewProfilePermissions(orgId, initialProfile.getId());
+        grantNewProfilePermissions(orgId, initialProfile.getId(), connection);
 
         return userProfile;
     }
@@ -363,41 +394,54 @@ public class RpcUserServiceImpl extends RpcBaseServiceImpl implements RpcUserSer
             final String defaultOrg) {
         ActionResponse response = new ActionResponse();
         try {
-            User targetUser = persistenceService.process(new UserPersister.UpdateUserFunc(user.getUser()));
-            if (!authService.isUserAuthorized(ROLE_ADMIN, targetUser)) {
-                response.addGlobalErrorMessage(LocaleFactory.get(CommonI18nErrorMessages.class).invalidParameters());
-                return response;
-            }
+            Connection[] connection = new Connection[1];
+            try {
+                final Connection conn = persistenceService.getConnection();
+                connection[0] = conn;
 
-            if (!Strings.isNullOrEmpty(newPassword)) {
-                user.setPasswordClearText(newPassword);
-            } else {
-                user.setPasswordClearText("");
-            }
-
-            Runnable backgroundTask = new Runnable() {
-                @Override
-                public void run() {
-                    int userId = user.getId();
-                    List<Integer> organizationIds = Lists.transform(organizations, Ints.stringConverter());
-
-                    removeOldProfiles(userId, organizationIds);
-
-                    Integer defaultOrgId = Integer.valueOf(defaultOrg);
-                    organizationIds.remove(defaultOrgId);
-
-                    for (Integer orgId : organizationIds) {
-                        createProfileIfNotExist(givenName, surname, userId, orgId);
-                    }
-
-                    int defaultProfileId = createProfileIfNotExist(givenName, surname, userId, defaultOrgId);
-                    user.getUser().setDefaultProfile(defaultProfileId);
-
-                    persistenceService.process(new CredentialedUserPersister.UpdateCredentialedUserFunc(user));
+                AuthorizationService authService = this.authService.withConnection(conn);
+                User targetUser = persistenceService.process(conn, new UserPersister.UpdateUserFunc(user.getUser()));
+                if (!authService.isUserAuthorized(ROLE_ADMIN, targetUser)) {
+                    response.addGlobalErrorMessage(LocaleFactory.get(CommonI18nErrorMessages.class).invalidParameters());
+                    return response;
                 }
-            };
 
-            threadPoolTaskExecutor.execute(backgroundTask);
+                if (!Strings.isNullOrEmpty(newPassword)) {
+                    user.setPasswordClearText(newPassword);
+                } else {
+                    user.setPasswordClearText("");
+                }
+
+                Runnable backgroundTask = new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            int userId = user.getId();
+                            List<Integer> organizationIds = Lists.transform(organizations, Ints.stringConverter());
+
+                            removeOldProfiles(userId, organizationIds, conn);
+
+                            Integer defaultOrgId = Integer.valueOf(defaultOrg);
+                            organizationIds.remove(defaultOrgId);
+
+                            for (Integer orgId : organizationIds) {
+                                createProfileIfNotExist(conn, givenName, surname, userId, orgId);
+                            }
+
+                            int defaultProfileId = createProfileIfNotExist(conn, givenName, surname, userId, defaultOrgId);
+                            user.getUser().setDefaultProfile(defaultProfileId);
+
+                            persistenceService.process(conn, new CredentialedUserPersister.UpdateCredentialedUserFunc(user));
+                        } catch (Exception e) {
+                            closeConnection(conn);
+                        }
+                    }
+                };
+
+                threadPoolTaskExecutor.execute(backgroundTask);
+            } catch (Exception e) {
+                closeConnection(connection[0]);
+            }
         } catch (NotLoggedInException e) {
             response.addGlobalErrorMessage(e.getMessage());
             response.setLoggedIn(false);
@@ -406,10 +450,10 @@ public class RpcUserServiceImpl extends RpcBaseServiceImpl implements RpcUserSer
         return response;
     }
 
-    private int createProfileIfNotExist(String givenName, String surname, int userId, Integer orgId) {
+    private int createProfileIfNotExist(Connection conn, String givenName, String surname, int userId, Integer orgId) {
         Profile profile;
         ProfileSummary profileSummary =
-                persistenceService.process(new RetrieveProfileForOrganizationFunc(orgId, userId));
+                persistenceService.process(conn, new RetrieveProfileForOrganizationFunc(orgId, userId));
         if (profileSummary == null) {
             profile = new Profile();
             profile.setGivenName(givenName);
@@ -418,7 +462,7 @@ public class RpcUserServiceImpl extends RpcBaseServiceImpl implements RpcUserSer
             profile.setUserId(userId);
             profile = profilePersister.createProfile(profile);
 
-            grantNewProfilePermissions(orgId, profile.getId());
+            grantNewProfilePermissions(orgId, profile.getId(), conn);
         } else {
             profile = profileSummary.getProfile();
         }
@@ -494,8 +538,8 @@ public class RpcUserServiceImpl extends RpcBaseServiceImpl implements RpcUserSer
         return response;
     }
 
-    private void removeOldProfiles(int userId, Iterable<Integer> organizationIds) {
-        List<ProfileSummary> profiles = persistenceService.process(
+    private void removeOldProfiles(int userId, Iterable<Integer> organizationIds, Connection conn) {
+        List<ProfileSummary> profiles = persistenceService.process(conn,
                 new ProfilePersister.RetrieveProfilesFunc(userId));
 
         Set<Integer> oldOrganizationIds = FluentIterable.from(profiles)
@@ -521,10 +565,11 @@ public class RpcUserServiceImpl extends RpcBaseServiceImpl implements RpcUserSer
                     }
                 }).toArray(ProfilePersister.DeleteProfileFunc.class);
 
-        persistenceService.process(profilesToRemove);
+        persistenceService.process(conn, profilesToRemove);
     }
 
-    private void grantNewProfilePermissions(int orgId, int profileId) {
+    private void grantNewProfilePermissions(int orgId, int profileId, Connection connection) {
+        AuthorizationService authService = this.authService.withConnection(connection);
         authService.grantAtLeast(profileId, ROLE_CURATOR, orgId);
         authService.grantAtLeast(orgId, ROLE_ADMIN, profileId);
     }
