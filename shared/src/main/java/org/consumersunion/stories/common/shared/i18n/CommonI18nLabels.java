@@ -358,4 +358,7 @@ public interface CommonI18nLabels extends Constants {
 
     @DefaultStringValue("Could not recognize email address")
     String couldNotRecognizeEmail();
+
+    @DefaultStringValue("This account is still being prepared. You cannot modify it at this time.")
+    String accountNotReady();
 }

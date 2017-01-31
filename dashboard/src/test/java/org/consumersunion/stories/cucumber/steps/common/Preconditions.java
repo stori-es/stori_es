@@ -122,7 +122,7 @@ public class Preconditions {
         }
 
         final RpcUserServiceImpl userService = getApplicationContext().getBean(RpcUserServiceImpl.class);
-        userService.createAccountInternal(newUser, password, "What color is the sky?", "blue", "John", "Doe", orgId);
+        userService.createAccountInternal(null, newUser, password, "What color is the sky?", "blue", "John", "Doe", orgId);
     }
 
     @Given("^a pre-existing Story '([^']+)' sourced from Questionnaire '([^']+)'")

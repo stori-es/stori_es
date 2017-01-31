@@ -38,6 +38,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.ColumnSortList;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
@@ -246,6 +247,10 @@ public class UpdateAccountView extends ViewWithUiHandlers<AdminManagerUiHandlers
         organizationInput.resetValues();
         usernameAvailable = true;
         changeStatus.setText(labels.disableOrEnable());
+
+        submit.setEnabled(true);
+        cancel.setEnabled(true);
+        changeStatus.setEnabled(true);
     }
 
     private void setupForm() {
@@ -405,6 +410,12 @@ public class UpdateAccountView extends ViewWithUiHandlers<AdminManagerUiHandlers
             defaultOrgInput.setValue(String.valueOf(profile.getOrganizationId()));
             form.setValue(FIRST_NAME_FIELD_NAME, profile.getGivenName());
             form.setValue(LAST_NAME_FIELD_NAME, profile.getSurname());
+        }
+
+        if (profileSummary == null && !selectedOrganizations.isEmpty()) {
+            Window.alert(labels.accountNotReady());
+            submit.setEnabled(false);
+            changeStatus.setEnabled(false);
         }
     }
 
