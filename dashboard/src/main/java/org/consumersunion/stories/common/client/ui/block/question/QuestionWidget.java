@@ -7,7 +7,6 @@ import org.consumersunion.stories.common.client.ui.form.InputValidationException
 import org.consumersunion.stories.common.client.ui.form.Validator;
 import org.consumersunion.stories.common.client.ui.form.validators.MaxLengthValidator;
 import org.consumersunion.stories.common.client.ui.form.validators.MinLengthValidator;
-import org.consumersunion.stories.common.client.ui.form.validators.RequiredValidator;
 import org.consumersunion.stories.common.shared.model.questionnaire.Question;
 
 import com.google.common.base.Strings;
@@ -19,9 +18,14 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import javax.inject.Inject;
+
 public class QuestionWidget extends Composite {
     interface Binder extends UiBinder<Widget, QuestionWidget> {
     }
+
+    @Inject
+    private static ValidatorsFactory VALIDATORS_FACTORY;
 
     @UiField
     protected HTMLPanel questionPanel;
@@ -74,6 +78,9 @@ public class QuestionWidget extends Composite {
     protected void initQuestion(Question question, boolean validateLength, String style) {
         initQuestion(question.getText(), question.getHelpText(), question.isRequired(), style);
 
+        validators = new ArrayList<>();
+        validators.addAll(VALIDATORS_FACTORY.create(question));
+
         if (validateLength) {
             if (question.getMinLength() != null) {
                 validators.add(new MinLengthValidator(question.getMinLength()));
@@ -94,11 +101,6 @@ public class QuestionWidget extends Composite {
             helpText.setVisible(true);
         } else {
             helpText.setVisible(false);
-        }
-
-        validators = new ArrayList<Validator>();
-        if (isRequired) {
-            validators.add(new RequiredValidator());
         }
     }
 }

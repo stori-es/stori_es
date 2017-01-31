@@ -3,6 +3,8 @@ package org.consumersunion.stories.common.client.ui;
 import org.consumersunion.stories.common.client.ui.block.ElementFactory;
 import org.consumersunion.stories.common.client.ui.block.content.CollectionContentPresenter;
 import org.consumersunion.stories.common.client.ui.block.content.CollectionContentView;
+import org.consumersunion.stories.common.client.ui.block.question.QuestionWidget;
+import org.consumersunion.stories.common.client.ui.block.question.ValidatorsFactory;
 import org.consumersunion.stories.common.client.ui.questionnaire.QuestionnaireModule;
 import org.consumersunion.stories.common.shared.model.Collection;
 import org.consumersunion.stories.common.shared.model.HasTitle;
@@ -29,6 +31,8 @@ public class UiModule extends AbstractPresenterModule {
                 .implement(HasTitle.class, StorySummary.class)
                 .build(new TypeLiteral<EntitySuggestFactory<StorySummary>>() {
                 }));
+
+        requestStaticInjection(QuestionWidget.class);
     }
 
     @Provides
