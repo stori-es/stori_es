@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ValidatorsFactory {
     public List<Validator> create(Question question) {
-        List<Validator> validators = new ArrayList<>();
+        List<Validator> validators = new ArrayList<Validator>();
 
         if (question.isRequired()) {
             validators.add(new RequiredValidator());

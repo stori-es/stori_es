@@ -78,7 +78,7 @@ public class QuestionWidget extends Composite {
     protected void initQuestion(Question question, boolean validateLength, String style) {
         initQuestion(question.getText(), question.getHelpText(), question.isRequired(), style);
 
-        validators = new ArrayList<>();
+        validators = new ArrayList<Validator>();
         validators.addAll(VALIDATORS_FACTORY.create(question));
 
         if (validateLength) {
