@@ -16,10 +16,17 @@ import org.consumersunion.stories.common.shared.model.document.TextImageBlock;
 import org.consumersunion.stories.dashboard.client.resource.Resources;
 
 import com.google.common.base.Strings;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.logical.shared.AttachEvent;
+import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -34,6 +41,8 @@ import static com.google.gwt.query.client.GQuery.$;
 public class CardContentEditWidget extends Composite {
     interface Binder extends UiBinder<Widget, CardContentEditWidget> {
     }
+
+    private static final int MAX_LENGTH = 500;
 
     @UiField
     Resources resource;
@@ -70,6 +79,7 @@ public class CardContentEditWidget extends Composite {
         initWidget(uiBinder.createAndBindUi(this));
 
         summary = new TextArea();
+        summary.getElement().setAttribute("maxlength", String.valueOf(MAX_LENGTH));
         summaryContainer.setWidget(summary);
 
         clearErrors();
@@ -185,6 +195,7 @@ public class CardContentEditWidget extends Composite {
 
     private void switchToTextbox() {
         TextBox textBox = new TextBox();
+        textBox.setMaxLength(MAX_LENGTH);
         summaryContainer.setWidget(textBox);
         summary = textBox;
     }
@@ -196,6 +207,7 @@ public class CardContentEditWidget extends Composite {
                     || TextType.HTML.equals(((Content) textBlock).getTextType()))) {
                 RichTextEditor richTextEditor = richTextAreaProvider.get();
                 RichTextToolbar toolbar = richTextToolbarProvider.get();
+                bindRichTextEvents(richTextEditor);
 
                 HTMLPanel htmlPanel = new HTMLPanel("");
                 htmlPanel.add(toolbar);
@@ -209,6 +221,65 @@ public class CardContentEditWidget extends Composite {
             }
         }
     }
+
+    private void bindRichTextEvents(final RichTextEditor richTextEditor) {
+        richTextEditor.addKeyDownHandler(new KeyDownHandler() {
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
+                int keyCode = event.getNativeKeyCode();
+
+                boolean valid = (keyCode > 47 && keyCode < 58) || // number keys
+                        keyCode == 32 || keyCode == 13 || // spacebar & return key(s)
+                        (keyCode > 64 && keyCode < 91) || // letter keys
+                        (keyCode > 95 && keyCode < 112) || // numpad keys
+                        (keyCode > 185 && keyCode < 193) || // ;=,-./` (in order)
+                        (keyCode > 218 && keyCode < 223);   // [\]' (in order)
+
+                if (!event.isAnyModifierKeyDown() && valid
+                        && getSelectionLength(richTextEditor.getElement()) == 0
+                        && richTextEditor.getValue().length() >= MAX_LENGTH) {
+                    event.preventDefault();
+                }
+            }
+        });
+        richTextEditor.addAttachHandler(new AttachEvent.Handler() {
+            @Override
+            public void onAttachOrDetach(AttachEvent event) {
+                if (event.isAttached()) {
+                    $(richTextEditor).contents().find("body")
+                            .on("paste", new Function() {
+                                @Override
+                                public boolean f(Event e) {
+                                    maybeTruncateRichText(richTextEditor);
+                                    return richTextEditor.getValue().length() < MAX_LENGTH;
+                                }
+                            });
+                } else {
+                    $(richTextEditor).off("paste");
+                }
+            }
+        });
+    }
+
+    private void maybeTruncateRichText(final RichTextEditor richTextEditor) {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                if (richTextEditor.getValue().length() >= MAX_LENGTH) {
+                    richTextEditor.setValue(richTextEditor.getValue().substring(0, MAX_LENGTH));
+                }
+            }
+        });
+    }
+
+    private native int getSelectionLength(Element e)/*-{
+        if (e.contentWindow.document.selection) {
+            return e.contentWindow.document.selection.createRange().text.length;
+        }
+        else {
+            return e.contentWindow.document.getSelection().toString().length;
+        }
+    }-*/;
 
     private void setSummaryText(String contentText) {
         if (summary instanceof TextBoxBase) {
