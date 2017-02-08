@@ -57,7 +57,7 @@
         </div>
         <div class="{style.summary}">
             <span class="{style.label}">
-                <div ui:field="summaryTitle">Summary
+                <div ui:field="summaryTitle">Summary <small>(max. 500 characters)</small>
                     <sup>*</sup>
                 </div>
                 <div ui:field="summaryError" class="{resource.generalStyleCss.red}">is required</div>
