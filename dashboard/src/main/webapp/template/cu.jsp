@@ -16,9 +16,9 @@
 
     <link type="text/css" rel="stylesheet"
           href="//fast.fonts.net/cssapi/c05bbfa2-a62a-4505-9231-09b9957a01e9.css"/>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
     <link href="/template/cu/bootstrap.css" rel="stylesheet">
     <link href="/template/cu/bootstrap-responsive.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
     <link href="/template/cu/style.css" rel="stylesheet">
 
     <%-- SYS global variables --%>
