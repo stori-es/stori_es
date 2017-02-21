@@ -152,12 +152,13 @@ hr {
 
 /*////////// HEADER //////////*/
 .cu-logo {
-    margin: 0 auto;
+    margin: 0 auto 4px;
     border: none;
     padding: 0;
     background: url("./../share/consumers_union_logo.png") no-repeat left top;
-    height: 40px;
+    height: 42px;
     width: 1000px;
+    background-size: contain;
 }
 
 .cu-logo a {

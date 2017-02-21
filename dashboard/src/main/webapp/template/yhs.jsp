@@ -47,8 +47,6 @@
     <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <link rel="stylesheet" type="text/css" media="all" href="<%=realContext %>/template/yhs/style1.css"/>
-
     <script type="text/javascript">
         var TB_pluginPath = 'http://yourhealthsecurity.org/wordpress/wp-content/plugins/tweet-blender';
         var TB_config = {

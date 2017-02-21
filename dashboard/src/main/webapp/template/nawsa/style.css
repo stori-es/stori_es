@@ -156,12 +156,13 @@ blockquote {
 
 /*////////// HEADER //////////*/
 .cu-logo {
-    margin: 0 auto;
+    margin: 0 auto 6px;
     border: none;
     padding: 0;
     background: url("./../share/consumers_union_logo.png") no-repeat left top;
     height: 42px;
     width: 1000px;
+    background-size: contain;
 }
 
 .cu-logo a {
@@ -192,7 +193,7 @@ header {
 }
 
 #header-image {
-    margin: -20px 0 0;
+    margin: -10px 0 0;
     padding: 0;
     width: 563px;
     height: 119px;
