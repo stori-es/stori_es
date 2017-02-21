@@ -65,7 +65,7 @@ public class EndQuestionnairePresenter
     }
 
     private void onQuestionnaireFetched(QuestionnaireSurveyResponse result) {
-        Document confirmationDocument = result.getQuestionnaire().getConfirmationDocument();
+        Document confirmationDocument = result.getQuestionnaire().getNextDocument();
         if (confirmationDocument.isNew()) {
             getView().setConfirmation(labels.defaultConfirmation());
         } else {
