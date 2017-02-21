@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -44,6 +46,29 @@ public class UserPersister implements Persister<User> {
 
     public boolean exists(String handle) {
         return persistenceService.process(new CheckHandle(handle));
+    }
+
+    public void updateLastLogin(String username) {
+        persistenceService.process(new ProcessFunc<String, Void>(username) {
+            @Override
+            public Void process() {
+                try {
+                    PreparedStatement updateUser =
+                            conn.prepareStatement("UPDATE user SET lastLogon=? WHERE handleLowerCase=?");
+                    updateUser.setTimestamp(1, new Timestamp(new Date().getTime()));
+                    updateUser.setString(2, input);
+
+                    int updatedCount = updateUser.executeUpdate();
+                    if (updatedCount != 1) {
+                        throw new GeneralException("Unexpected update (user) count: " + updatedCount);
+                    }
+
+                    return null;
+                } catch (SQLException e) {
+                    throw new GeneralException(e);
+                }
+            }
+        });
     }
 
     public static class RetrieveUserFunc extends RetrieveFunc<User> {
