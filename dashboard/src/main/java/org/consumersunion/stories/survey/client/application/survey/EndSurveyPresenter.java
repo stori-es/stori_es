@@ -53,7 +53,7 @@ public class EndSurveyPresenter extends Presenter<EndSurveyPresenter.MyView, End
     public void prepareFromRequest(PlaceRequest request) {
         Questionnaire questionnaire = (Questionnaire) bootStrapper.getCollection();
 
-        Document confirmationDocument = questionnaire.getConfirmationDocument();
+        Document confirmationDocument = questionnaire.getNextDocument();
         if (confirmationDocument.isNew()) {
             getView().setConfirmation(labels.defaultConfirmation());
         } else {
