@@ -213,6 +213,7 @@ public class FullStoryIndexer implements Indexer {
                                     "WHERE d.systemEntity=?");
                 }
                 PreparedStatement storiesStmt = conn.prepareStatement(storySql);
+                storiesStmt.setFetchSize(BATCH_SIZE);
                 storiesStmt.setInt(1, BATCH_SIZE * cycleCount);
                 stories = new ArrayList<SolrInputDocument>();
 
@@ -293,8 +294,9 @@ public class FullStoryIndexer implements Indexer {
                         String aText = "";
                         String previousLabel = null;
                         while (aTextRs.next()) {
-                            if (previousLabel == null || !previousLabel.equals(aTextRs.getString(1))) {
-                                aText += " " + aTextRs.getString(1) + ":";
+                            String newLabel = aTextRs.getString(1);
+                            if (previousLabel == null || !previousLabel.equals(newLabel)) {
+                                aText += " " + newLabel + ":";
                             }
                             aText += " " + aTextRs.getString(2);
                         }
@@ -361,6 +363,16 @@ public class FullStoryIndexer implements Indexer {
                     solrStoryServer.commit();
                     stories = new ArrayList<SolrInputDocument>();
 
+                    if (output != null) {
+                        try {
+                            output.getWriter().print(".");
+                            output.flushBuffer();
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+                cycleCount += 1;
+                if (cycleCount % 10 == 0) {
                     storyDocStmt.close();
                     answerSetOnlyStmt.close();
                     tagsStmt.close();
@@ -371,16 +383,7 @@ public class FullStoryIndexer implements Indexer {
                     documentIdStmt.close();
                     storyTextStmt.close();
                     documentsSelect.close();
-
-                    if (output != null) {
-                        try {
-                            output.getWriter().print(".");
-                            output.flushBuffer();
-                        } catch (Exception e) {
-                        }
-                    }
                 }
-                cycleCount += 1;
 
                 if (docCount < BATCH_SIZE) { // then there are no more Stories to process
                     break; // exit the while loop
