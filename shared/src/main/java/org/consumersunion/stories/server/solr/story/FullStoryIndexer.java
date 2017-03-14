@@ -360,6 +360,18 @@ public class FullStoryIndexer implements Indexer {
                     solrStoryServer.add(stories);
                     solrStoryServer.commit();
                     stories = new ArrayList<SolrInputDocument>();
+
+                    storyDocStmt.close();
+                    answerSetOnlyStmt.close();
+                    tagsStmt.close();
+                    collectionsStmt.close();
+                    selectAddress.close();
+                    answerSetStmt.close();
+                    ownerNameStmt.close();
+                    documentIdStmt.close();
+                    storyTextStmt.close();
+                    documentsSelect.close();
+
                     if (output != null) {
                         try {
                             output.getWriter().print(".");
