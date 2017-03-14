@@ -360,7 +360,6 @@ public class FullStoryIndexer implements Indexer {
 
                 if (stories.size() > 0) {
                     solrStoryServer.add(stories);
-                    solrStoryServer.commit(false, false);
                     stories = new ArrayList<SolrInputDocument>();
 
                     if (output != null) {
@@ -373,6 +372,7 @@ public class FullStoryIndexer implements Indexer {
                 }
                 cycleCount += 1;
                 if (cycleCount % 10 == 0) {
+                    solrStoryServer.commit(false, false);
                     storyDocStmt.close();
                     answerSetOnlyStmt.close();
                     tagsStmt.close();
