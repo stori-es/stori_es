@@ -360,7 +360,7 @@ public class FullStoryIndexer implements Indexer {
 
                 if (stories.size() > 0) {
                     solrStoryServer.add(stories);
-                    solrStoryServer.commit();
+                    solrStoryServer.commit(false, false);
                     stories = new ArrayList<SolrInputDocument>();
 
                     if (output != null) {
