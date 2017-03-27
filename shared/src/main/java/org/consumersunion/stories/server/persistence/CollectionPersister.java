@@ -19,7 +19,6 @@ import javax.inject.Provider;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -44,6 +43,7 @@ import org.consumersunion.stories.server.persistence.funcs.RetrieveFunc;
 import org.consumersunion.stories.server.persistence.funcs.RetrieveListFunc;
 import org.consumersunion.stories.server.persistence.funcs.UpdateFunc;
 import org.consumersunion.stories.server.security.RelationalAuthorizationQueryUtil;
+import org.consumersunion.stories.server.solr.SolrServer;
 import org.consumersunion.stories.server.util.StringUtil;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.stereotype.Component;

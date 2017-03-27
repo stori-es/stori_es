@@ -2,9 +2,9 @@ package org.consumersunion.stories.server.solr.collection;
 
 import java.util.Set;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.consumersunion.stories.common.shared.model.Collection;
 import org.consumersunion.stories.server.solr.Indexer;
+import org.consumersunion.stories.server.solr.SolrServer;
 
 public class NewCollectionIndexer implements Indexer {
     private final Collection collection;

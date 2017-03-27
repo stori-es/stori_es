@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.consumersunion.stories.server.solr.AuthIndexer;
+import org.consumersunion.stories.server.solr.SolrServer;
 import org.consumersunion.stories.server.solr.SupportDataUtils;
 import org.consumersunion.stories.server.solr.SupportDataUtilsFactory;
 import org.consumersunion.stories.server.solr.story.documents.IndexedStoryDocument;

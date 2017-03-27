@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.consumersunion.stories.common.client.service.datatransferobject.ProfileSummary;
 import org.consumersunion.stories.common.shared.model.Address;
@@ -17,6 +16,7 @@ import org.consumersunion.stories.common.shared.model.questionnaire.AnswerSet;
 import org.consumersunion.stories.common.shared.model.questionnaire.QuestionBase;
 import org.consumersunion.stories.common.shared.model.questionnaire.QuestionnaireI15d;
 import org.consumersunion.stories.server.solr.Indexer;
+import org.consumersunion.stories.server.solr.SolrServer;
 import org.consumersunion.stories.server.solr.person.ProfileDocument;
 import org.consumersunion.stories.server.solr.story.documents.IndexedStoryDocument;
 

@@ -5,10 +5,10 @@ import java.util.Date;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.consumersunion.stories.common.shared.model.Story;
 import org.consumersunion.stories.server.solr.Indexer;
+import org.consumersunion.stories.server.solr.SolrServer;
 import org.consumersunion.stories.server.solr.story.documents.IndexedStoryDocument;
 
 import com.google.common.collect.Sets;

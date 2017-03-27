@@ -6,7 +6,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +28,9 @@ public class CoreIndexer {
     @Inject
     public CoreIndexer(List<IndexChecker> checkers) {
         this.checkers = checkers;
+    }
+
+    protected CoreIndexer() {
     }
 
     public void process(Indexer indexer) {

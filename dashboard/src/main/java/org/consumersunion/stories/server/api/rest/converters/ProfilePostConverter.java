@@ -1,16 +1,11 @@
 package org.consumersunion.stories.server.api.rest.converters;
 
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-
 import javax.inject.Inject;
 
 import org.consumersunion.stories.common.client.service.datatransferobject.ProfileSummary;
 import org.consumersunion.stories.common.shared.dto.post.ProfilePost;
 import org.consumersunion.stories.common.shared.model.Profile;
-import org.consumersunion.stories.common.shared.model.entity.Contact;
-import org.consumersunion.stories.server.api.rest.converters.ContactConverter;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ProfilePostConverter extends AbstractConverter<ProfilePost, ProfileSummary> {

@@ -14,7 +14,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.consumersunion.stories.common.client.service.datatransferobject.ProfileSummary;
 import org.consumersunion.stories.common.shared.dto.AuthParam;
@@ -32,6 +31,7 @@ import org.consumersunion.stories.server.persistence.funcs.RetrieveFunc;
 import org.consumersunion.stories.server.persistence.funcs.UpdateFunc;
 import org.consumersunion.stories.server.persistence.params.PagedRetrieveParams;
 import org.consumersunion.stories.server.security.RelationalAuthorizationQueryUtil;
+import org.consumersunion.stories.server.solr.SolrServer;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;

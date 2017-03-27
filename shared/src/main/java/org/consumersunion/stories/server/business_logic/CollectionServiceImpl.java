@@ -26,7 +26,6 @@ import org.consumersunion.stories.common.shared.service.datatransferobject.Story
 import org.consumersunion.stories.common.shared.service.datatransferobject.StorySummary;
 import org.consumersunion.stories.server.business_logic.interceptor.RequiresLoggedUser;
 import org.consumersunion.stories.server.exception.NotAuthorizedException;
-import org.consumersunion.stories.server.exception.NotLoggedInException;
 import org.consumersunion.stories.server.exception.PermalinkAlreadyExistsException;
 import org.consumersunion.stories.server.notification_channel.StoriesAddedEvent;
 import org.consumersunion.stories.server.persistence.CollectionPersister;

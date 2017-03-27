@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.consumersunion.stories.common.client.service.datatransferobject.ProfileSummary;
@@ -26,6 +25,7 @@ import org.consumersunion.stories.server.export.StoryExport;
 import org.consumersunion.stories.server.export.StoryTellerCsv;
 import org.consumersunion.stories.server.persistence.ProfilePersister;
 import org.consumersunion.stories.server.persistence.StoryTellersParams;
+import org.consumersunion.stories.server.solr.SolrServer;
 import org.consumersunion.stories.server.solr.person.ProfileDocument;
 import org.springframework.stereotype.Service;
 

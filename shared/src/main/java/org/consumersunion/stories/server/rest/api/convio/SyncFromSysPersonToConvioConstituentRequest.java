@@ -24,11 +24,6 @@ import org.consumersunion.stories.server.business_logic.AuthorizationService;
 import org.consumersunion.stories.server.persistence.PersistenceService;
 import org.consumersunion.stories.server.persistence.PersistenceUtil;
 import org.consumersunion.stories.server.persistence.ProfilePersister;
-import org.consumersunion.stories.server.rest.api.convio.ConvioDataSynchronizationWorker;
-import org.consumersunion.stories.server.rest.api.convio.ConvioPersonWrapper;
-import org.consumersunion.stories.server.rest.api.convio.ConvioSyncTask;
-import org.consumersunion.stories.server.rest.api.convio.PollConvioAndProcessResult;
-import org.consumersunion.stories.server.rest.api.convio.SyncFromSysPersonToConvioConstituentRequestFactory;
 import org.consumersunion.stories.server.solr.SupportDataUtils;
 import org.consumersunion.stories.server.solr.SupportDataUtilsFactory;
 
