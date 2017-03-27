@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.consumersunion.stories.common.shared.AuthConstants;
@@ -21,6 +20,7 @@ import org.consumersunion.stories.server.exception.NotLoggedInException;
 import org.consumersunion.stories.server.persistence.AuthorizationPersistenceHelper;
 import org.consumersunion.stories.server.persistence.PersistenceService;
 import org.consumersunion.stories.server.persistence.funcs.ProcessFunc;
+import org.consumersunion.stories.server.solr.SolrServer;
 import org.consumersunion.stories.server.solr.story.documents.IndexedStoryDocument;
 import org.springframework.security.acls.domain.EhCacheBasedAclCache;
 import org.springframework.stereotype.Service;

@@ -3,10 +3,10 @@ package org.consumersunion.stories.server.solr.person;
 import java.util.Collection;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.consumersunion.stories.common.shared.model.Profile;
 import org.consumersunion.stories.server.solr.Indexer;
+import org.consumersunion.stories.server.solr.SolrServer;
 
 public class UpdatePersonIndexer implements Indexer {
     private final boolean updateContacts;

@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.consumersunion.stories.server.persistence.PersistenceUtil;
 import org.consumersunion.stories.server.persistence.ResultSetExtractor;
 import org.consumersunion.stories.server.solr.Indexer;
+import org.consumersunion.stories.server.solr.SolrServer;
 import org.consumersunion.stories.server.solr.SupportDataUtils;
 import org.consumersunion.stories.server.solr.SupportDataUtilsFactory;
 import org.consumersunion.stories.server.solr.person.ProfileDocument;

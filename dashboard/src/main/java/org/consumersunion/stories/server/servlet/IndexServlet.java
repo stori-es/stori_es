@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.consumersunion.stories.common.shared.model.User;
 import org.consumersunion.stories.server.business_logic.AuthorizationService;
 import org.consumersunion.stories.server.business_logic.IndexerService;
@@ -20,6 +19,7 @@ import org.consumersunion.stories.server.business_logic.UserService;
 import org.consumersunion.stories.server.persistence.AnswerSetPersister;
 import org.consumersunion.stories.server.persistence.CollectionPersister;
 import org.consumersunion.stories.server.persistence.DocumentPersister;
+import org.consumersunion.stories.server.solr.SolrServer;
 import org.consumersunion.stories.server.solr.SupportDataUtilsFactory;
 import org.consumersunion.stories.server.solr.collection.FullCollectionIndexer;
 import org.consumersunion.stories.server.solr.person.FullPersonIndexer;

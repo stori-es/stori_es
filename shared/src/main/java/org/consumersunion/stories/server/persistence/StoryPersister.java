@@ -22,7 +22,6 @@ import javax.inject.Named;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -52,6 +51,7 @@ import org.consumersunion.stories.server.persistence.funcs.DeleteFunc;
 import org.consumersunion.stories.server.persistence.funcs.ProcessFunc;
 import org.consumersunion.stories.server.persistence.funcs.RetrieveFunc;
 import org.consumersunion.stories.server.persistence.funcs.UpdateFunc;
+import org.consumersunion.stories.server.solr.SolrServer;
 import org.consumersunion.stories.server.solr.story.documents.UpdateStoryAuthorDocument;
 import org.consumersunion.stories.server.util.StringUtil;
 import org.springframework.stereotype.Component;

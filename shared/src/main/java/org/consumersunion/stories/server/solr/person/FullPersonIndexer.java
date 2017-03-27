@@ -16,11 +16,11 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.common.SolrInputDocument;
 import org.consumersunion.stories.common.shared.model.Address;
 import org.consumersunion.stories.server.persistence.PersistenceUtil;
 import org.consumersunion.stories.server.solr.Indexer;
+import org.consumersunion.stories.server.solr.SolrServer;
 import org.consumersunion.stories.server.solr.SupportDataUtils;
 import org.consumersunion.stories.server.solr.SupportDataUtilsFactory;
 import org.springframework.stereotype.Component;

@@ -3,9 +3,9 @@ package org.consumersunion.stories.server.solr.person;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrServer;
 import org.consumersunion.stories.common.shared.model.Profile;
 import org.consumersunion.stories.server.solr.Indexer;
+import org.consumersunion.stories.server.solr.SolrServer;
 
 public class NewPersonIndexer implements Indexer {
     private final Profile profile;

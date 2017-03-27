@@ -8,10 +8,10 @@ import java.sql.SQLException;
 import javax.inject.Inject;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.consumersunion.stories.server.persistence.PersistenceUtil;
 import org.consumersunion.stories.server.solr.IndexChecker;
+import org.consumersunion.stories.server.solr.SolrServer;
 import org.consumersunion.stories.server.solr.story.documents.IndexedStoryDocument;
 import org.springframework.stereotype.Component;
 
