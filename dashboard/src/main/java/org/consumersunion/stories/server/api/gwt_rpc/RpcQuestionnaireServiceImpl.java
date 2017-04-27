@@ -34,6 +34,7 @@ import org.consumersunion.stories.server.business_logic.ThemeService;
 import org.consumersunion.stories.server.exception.NotAuthorizedException;
 import org.consumersunion.stories.server.exception.NotFoundException;
 import org.consumersunion.stories.server.exception.NotLoggedInException;
+import org.consumersunion.stories.server.index.collection.UpdatedCollectionIndexer;
 import org.consumersunion.stories.server.persistence.AnswerSetPersister;
 import org.consumersunion.stories.server.persistence.PersistenceUtil;
 import org.consumersunion.stories.server.persistence.QuestionnaireI15dPersister;
@@ -62,6 +63,8 @@ public class RpcQuestionnaireServiceImpl extends RpcBaseServiceImpl implements R
     private TagsService tagsService;
     @Inject
     private CollectionService collectionService;
+    @Inject
+    private UpdatedCollectionIndexer updatedCollectionIndexer;
 
     @Override
     public QuestionnaireSurveyResponse getQuestionnaireSurvey(String permalink) {
@@ -218,7 +221,7 @@ public class RpcQuestionnaireServiceImpl extends RpcBaseServiceImpl implements R
 
             dbQuestionnaire = persistenceService.process(
                     questionnaireI15dPersister.updateQuestionnaireFunc(questionnaire));
-            indexerService.process(indexerFactory.createUpdatedCollection(dbQuestionnaire));
+            updatedCollectionIndexer.index(dbQuestionnaire);
         }
 
         response.setQuestionnaire(dbQuestionnaire);

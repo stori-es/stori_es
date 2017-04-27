@@ -18,23 +18,18 @@ public interface ContactService {
      * Retrieves contacts associated to an {@link SystemEntity}. Effective operator must have READ privileges over the
      * target Entity. Contact data is not accessible via PUBLIC access.
      * <p/>
-     * TODO: once ownership is made a basic attribute, ownership of the Entity will confer authorizations as well.
      */
     List<Contact> getAllContacts(SystemEntity systemEntity);
 
     /**
      * Saves contacts associated to an {@link SystemEntity}. Effective operator must have WRITE privileges oven the
      * target Entity.
-     * <p/>
-     * TODO: once ownership is made a basic attribute, ownership of the Entity will confer authorizations as well.
      */
     List<Contact> saveContacts(int entityId, List<Contact> contacts);
 
     /**
      * Saves contacts associated to an {@link SystemEntity}. Effective operator must have WRITE privileges oven the
      * target Entity.
-     * <p/>
-     * TODO: once ownership is made a basic attribute, ownership of the Entity will confer authorizations as well.
      */
     List<Contact> saveContacts(SystemEntity systemEntity, List<Contact> contacts);
 
@@ -48,8 +43,6 @@ public interface ContactService {
     /**
      * Retrieves contacts associated to an {@link SystemEntity}. Effective operator must have READ privileges over the
      * target Entity. Contact data is not accessible via PUBLIC access.
-     * <p/>
-     * TODO: once ownership is made a basic attribute, ownership of the Entity will confer authorizations as well.
      */
     List<Contact> getSocialContacts(SystemEntity systemEntity);
 
@@ -72,8 +65,6 @@ public interface ContactService {
     /**
      * Updates addresses associated to an {@link SystemEntity}. Effective operator must have WRITE privileges over the
      * target Entity.
-     * <p/>
-     * TODO: once ownership is made a basic attribute, ownership of the Entity will confer authorizations as well.
      */
     List<Address> saveAddresses(SystemEntity systemEntity, List<Address> addresses);
 

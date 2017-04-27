@@ -24,8 +24,8 @@ import org.consumersunion.stories.server.business_logic.AuthorizationService;
 import org.consumersunion.stories.server.persistence.PersistenceService;
 import org.consumersunion.stories.server.persistence.PersistenceUtil;
 import org.consumersunion.stories.server.persistence.ProfilePersister;
-import org.consumersunion.stories.server.solr.SupportDataUtils;
-import org.consumersunion.stories.server.solr.SupportDataUtilsFactory;
+import org.consumersunion.stories.server.persistence.SupportDataUtils;
+import org.consumersunion.stories.server.persistence.SupportDataUtilsFactory;
 
 import static org.consumersunion.stories.common.shared.AuthConstants.ROLE_READER;
 

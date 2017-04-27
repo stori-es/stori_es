@@ -6,35 +6,41 @@ import org.consumersunion.stories.server.annotations.Amazon;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.base.Strings;
 
+import static com.amazonaws.regions.Regions.DEFAULT_REGION;
+
 @Configuration
 public class AmazonConfigurator {
     public static final int SQS_HELPER_PORT = 9324;
-    public static final String LOCAL_SQS_SERVICE = "sqs";
     public static final String WORKER_QUEUE_SUFFIX = "worker-queue";
 
     @Bean
     public AmazonSQS amazonSqs() {
         if (isLocalWorker()) {
-            AmazonSQSClient client = new AmazonSQSClient(new BasicAWSCredentials("x", "x"));
-            client.setEndpoint("http://localhost:" + SQS_HELPER_PORT, LOCAL_SQS_SERVICE, "");
+            BasicAWSCredentials credentials = new BasicAWSCredentials("x", "x");
 
-            return client;
+            return AmazonSQSClientBuilder.standard()
+                    .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                    .withEndpointConfiguration(
+                            new EndpointConfiguration("http://localhost:" + SQS_HELPER_PORT, DEFAULT_REGION.getName()))
+                    .build();
         }
 
-        return new AmazonSQSClient();
+        return AmazonSQSClientBuilder.standard().build();
     }
 
     @Bean
@@ -83,9 +89,8 @@ public class AmazonConfigurator {
     public String amazonSqsWorkerQueue() {
         if (isLocalWorker()) {
             return "http://localhost:" + SQS_HELPER_PORT + "/queue/" + WORKER_QUEUE_SUFFIX;
-        }
-        else {
-        	return getEnvironment() + "-" + WORKER_QUEUE_SUFFIX;
+        } else {
+            return getEnvironment() + "-" + WORKER_QUEUE_SUFFIX;
         }
     }
 

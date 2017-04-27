@@ -1,0 +1,101 @@
+/* Counter container styles, you probably don't need to change these */
+.jcw, .jellyfish-counter {
+  width: auto;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.jcw-left, .jcw-center, .jcw-right {
+  display: block;
+}
+
+.jcw-left {
+  text-align: left;
+}
+
+.jcw-right {
+  text-align: right;
+}
+
+.jcw-center {
+  text-align: center;
+}
+
+.jcw-inline {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.jcw-odometer-div, .jcw-digit-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.jcw-odometer-div {
+  margin: 0 auto;
+  height: auto;
+  width: auto;
+  text-align: inherit;
+}
+
+/* 3d effect high/lowlights */
+
+.jcw-highlight, .jcw-lowlight {
+  position: absolute;
+  opacity: 0.25;
+  filter: alpha(opacity=25);
+  width: 100%;
+  left:0px;
+}
+
+.jcw-highlight {
+  background: white;
+}
+
+.jcw-lowlight {
+  background: black;
+}
+
+.jcw-sidehighlight, .jcw-sidelowlight {
+  position: absolute;
+  opacity: 0.50;
+  filter: alpha(opacity=50);
+  height: 100%;
+  top: 0px;
+}
+
+.jcw-sidehighlight {
+  background: white;
+}
+
+.jcw-sidelowlight {
+  background: black;
+}
+
+.jcw-highlight-1 { top: 20%; height: 32%; }
+.jcw-highlight-2 { top: 27.5%; height: 16%; }
+.jcw-highlight-3 { top: 32.5%; height: 6%; }
+.jcw-highlight-4 { right: 0%; width: 6%; }
+.jcw-highlight-5 { left: 0%; width: 4%; }
+.jcw-highlight-6 { top: 0%; height: 14%; }
+.jcw-highlight-7 { bottom: 0%; height: 25%; }
+.jcw-highlight-8 { bottom: 0%; height: 8%; }
+
+/* Base styles for digits, can be overridden by settings */
+
+.jcw-digit, .jcw-tenth {
+  position: absolute;
+  background: black;
+  color: white;
+  text-align: center;
+  font-family: Courier New, Courier, monospace;
+  font-weight: 900;
+}
+
+.jcw-tenth {
+  background: #cccccc;
+  color: black;
+}

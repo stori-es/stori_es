@@ -6,8 +6,6 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.consumersunion.stories.server.persistence.funcs.RetrieveFunc;
-import org.consumersunion.stories.server.solr.SupportDataUtils;
-import org.consumersunion.stories.server.solr.SupportDataUtilsFactory;
 import org.springframework.stereotype.Component;
 
 @Component

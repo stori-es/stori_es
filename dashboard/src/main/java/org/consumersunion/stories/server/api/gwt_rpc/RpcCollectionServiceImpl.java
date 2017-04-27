@@ -59,6 +59,14 @@ import org.consumersunion.stories.server.exception.NotLoggedInException;
 import org.consumersunion.stories.server.exception.PermalinkAlreadyExistsException;
 import org.consumersunion.stories.server.helper.geo.GeoCodingService;
 import org.consumersunion.stories.server.helper.geo.Localisation;
+import org.consumersunion.stories.server.index.IndexerFactory;
+import org.consumersunion.stories.server.index.UpdateEntityReadIndex;
+import org.consumersunion.stories.server.index.profile.NewPersonIndexer;
+import org.consumersunion.stories.server.index.profile.UpdatePersonAddressIndexer;
+import org.consumersunion.stories.server.index.profile.UpdatePersonIndexer;
+import org.consumersunion.stories.server.index.story.NewStoryIndexer;
+import org.consumersunion.stories.server.index.story.UpdateStoryAddressIndexer;
+import org.consumersunion.stories.server.index.story.UpdatedStoryCollectionIndexer;
 import org.consumersunion.stories.server.notification_channel.StoriesAddedEvent;
 import org.consumersunion.stories.server.persistence.AnswerSetPersister;
 import org.consumersunion.stories.server.persistence.CollectionPersister;
@@ -69,18 +77,11 @@ import org.consumersunion.stories.server.persistence.PersistenceUtil;
 import org.consumersunion.stories.server.persistence.ProfilePersister;
 import org.consumersunion.stories.server.persistence.QuestionnaireI15dPersister;
 import org.consumersunion.stories.server.persistence.StoryPersister;
+import org.consumersunion.stories.server.persistence.SupportDataUtils;
+import org.consumersunion.stories.server.persistence.SupportDataUtilsFactory;
 import org.consumersunion.stories.server.persistence.TagsPersister;
 import org.consumersunion.stories.server.persistence.funcs.ProcessFunc;
 import org.consumersunion.stories.server.rest.api.convio.SyncFromSysPersonToConvioConstituentRequestFactory;
-import org.consumersunion.stories.server.solr.IndexerFactory;
-import org.consumersunion.stories.server.solr.SupportDataUtils;
-import org.consumersunion.stories.server.solr.SupportDataUtilsFactory;
-import org.consumersunion.stories.server.solr.UpdateEntityReadIndex;
-import org.consumersunion.stories.server.solr.person.NewPersonIndexer;
-import org.consumersunion.stories.server.solr.person.UpdatePersonAddressIndexer;
-import org.consumersunion.stories.server.solr.person.UpdatePersonIndexer;
-import org.consumersunion.stories.server.solr.story.NewStoryIndexer;
-import org.consumersunion.stories.server.solr.story.UpdateStoryAddressIndexer;
 import org.consumersunion.stories.server.util.StringUtil;
 import org.springframework.stereotype.Service;
 
@@ -145,6 +146,20 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
     private ProfilePersister profilePersister;
     @Inject
     private IndexerFactory indexerFactory;
+    @Inject
+    private UpdateStoryAddressIndexer updateStoryAddressIndexer;
+    @Inject
+    private UpdatePersonAddressIndexer updatePersonAddressIndexer;
+    @Inject
+    private UpdatePersonIndexer updatePersonIndexer;
+    @Inject
+    private UpdatedStoryCollectionIndexer updatedStoryCollectionIndexer;
+    @Inject
+    private UpdateEntityReadIndex updateEntityReadIndex;
+    @Inject
+    private NewStoryIndexer newStoryIndexer;
+    @Inject
+    private NewPersonIndexer newPersonIndexer;
 
     @Override
     public DatumResponse<Collection> createCollection(Collection collection) {
@@ -369,8 +384,7 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
 
         if (profile != null) {
             authorizationService.grantAtLeast(orgId, ROLE_ADMIN, profile.getId());
-            indexerService.process(
-                    new UpdateEntityReadIndex(profile.getId(), UpdateEntityReadIndex.PERSON_CORE, orgId));
+            updateEntityReadIndex.indexPerson(profile.getId(), orgId);
         }
 
         Questionnaire questionnaireEn = questionnaire.toQuestionnaire();
@@ -430,10 +444,9 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
         Set<String> admins = Sets.newLinkedHashSet(); // Ref TASK-814
 
         // this will also update the data associated to the Person document
-        NewStoryIndexer newStoryIndexer = new NewStoryIndexer(story, answerSet, questionnaire, profileSummary, address,
-                tDoc, answerSetId, targetCollections, tDoc != null && tDoc.isPublic() || tDoc == null, readAuths,
+        newStoryIndexer.index(story, profileSummary, answerSet, questionnaire, address, tDoc, answerSetId,
+                targetCollections, tDoc != null && tDoc.isPublic() || tDoc == null, readAuths,
                 admins, attachedTags);
-        indexerService.process(newStoryIndexer);
 
         eventBus.post(new StoriesAddedEvent(questionnaire, Lists.newArrayList(story), profile,
                 getOrCreateProfile.getPrimaryEmail()));
@@ -502,8 +515,8 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
 
         if (address != null) {
             // the basic profile document index is created or updated in the 'getPersonIdWithEmail' method
-            indexerService.process(new UpdatePersonAddressIndexer(address));
-            indexerService.process(new UpdateStoryAddressIndexer(address));
+            updatePersonAddressIndexer.index(address);
+            updateStoryAddressIndexer.index(address);
         }
 
         return getOrCreateProfileResult;
@@ -747,8 +760,7 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
             profileWithEmail.setGivenName(getValidValue(profileWithEmail.getGivenName(), firstName));
             profileWithEmail.setSurname(getValidValue(profileWithEmail.getSurname(), lastName));
             persistenceService.process(conn, new ProfilePersister.UpdateProfileFunc(profileWithEmail));
-            indexerService.process(new UpdatePersonIndexer(profileWithEmail, primaryEmail, primaryPhone));
-
+            updatePersonIndexer.index(profileWithEmail, primaryEmail, primaryPhone);
             profileSummary = new ProfileSummary(profileWithEmail, primaryEmail,
                     Sets.newHashSet(emails.values()), primaryPhone, Sets.newHashSet(phones.values()));
         } else {
@@ -787,8 +799,7 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
                 persistenceService.process(conn, new ContactPersister.SaveContactsFunc(contacts));
             }
 
-            indexerService.process(new NewPersonIndexer(profileToSave, primaryEmail, primaryPhone));
-
+            newPersonIndexer.index(profileToSave, primaryEmail, primaryPhone);
             profileSummary = new ProfileSummary(profileToSave, primaryEmail,
                     Sets.newHashSet(emails.values()), primaryPhone, Sets.newHashSet(phones.values()));
         }
@@ -866,32 +877,28 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
 
     @Override
     public CollectionDataPagedResponse getCollections(RetrievePagedCollectionsParams params) {
-        try {
-            CollectionDataPagedResponse response = new CollectionDataPagedResponse();
+        CollectionDataPagedResponse response = new CollectionDataPagedResponse();
 
-            User user = userService.getLoggedInUser();
-            if (user != null) {
-                if (params.getEffectiveId() == null) {
-                    params.setEffectiveId(getEffectiveSubject());
-                }
-
-                response.setStart(params.getStart());
-
-                CountCollectionsResult collectionsCount = getCollectionsCount(params);
-                response.setCollectionsCount(collectionsCount.getNbCollections());
-                response.setQuestionnairesCount(collectionsCount.getNbQuestionnaires());
-                if (response.getTotalCount() == 0) {
-                    response.setData(new ArrayList<CollectionData>(0));
-                } else {
-                    response.setData(getPagedCollections(params));
-                }
-            } else {
-                response.addGlobalErrorMessage(LocaleFactory.get(CommonI18nErrorMessages.class).notLoggedIn());
+        User user = userService.getLoggedInUser();
+        if (user != null) {
+            if (params.getEffectiveId() == null) {
+                params.setEffectiveId(getEffectiveSubject());
             }
-            return response;
-        } catch (GeneralException e) {
-            throw e;
+
+            response.setStart(params.getStart());
+
+            CountCollectionsResult collectionsCount = getCollectionsCount(params);
+            response.setCollectionsCount(collectionsCount.getNbCollections());
+            response.setQuestionnairesCount(collectionsCount.getNbQuestionnaires());
+            if (response.getTotalCount() == 0) {
+                response.setData(new ArrayList<CollectionData>(0));
+            } else {
+                response.setData(getPagedCollections(params));
+            }
+        } else {
+            response.addGlobalErrorMessage(LocaleFactory.get(CommonI18nErrorMessages.class).notLoggedIn());
         }
+        return response;
     }
 
     @Override
@@ -1128,7 +1135,7 @@ public class RpcCollectionServiceImpl extends RpcBaseServiceImpl implements RpcC
 
                 int result = persistenceService.process(new RemoveStoryFromCollectionFunc(params));
                 if (result > 0) {
-                    indexerService.process(indexerFactory.createUpdatedStory(storyId));
+                    updatedStoryCollectionIndexer.index(storyId);
                 } else {
                     CommonI18nErrorMessages messages = LocaleFactory.get(CommonI18nErrorMessages.class);
                     response.addGlobalErrorMessage(messages.notPermissionsToRemove());

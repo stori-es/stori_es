@@ -53,8 +53,6 @@ public interface AuthorizationService {
      * with themselves as principal. To call this method with an entity other than the authenticated user, the user must
      * have admin privileges over the system or the principal. The 'joinTable' is used to limit the results to a single
      * type and should be the name of the appropriate SQL table.
-     * TODO: nice to uses class instead, but this would require an intervening mapping mechanism we don't have time to
-     * worry about it right now.
      */
     List<SystemEntity> getValidTargets(int subject, int operation, String joinTable);
 

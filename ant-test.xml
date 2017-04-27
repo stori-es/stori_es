@@ -29,6 +29,7 @@
             <sysproperty key="aws.accessKeyId" value="${AWS_TEST_ACCESS_KEY}"/>
             <sysproperty key="aws.secretKey" value="${AWS_TEST_SECRET_KEY}"/>
             <sysproperty key="SMTP_FROM" value="${SMTP_FROM}"/>
+            <sysproperty key="sys.noS3" value="TRUE"/>
             <classpath>
                 <pathelement location="dashboard/target/classes"/>
                 <pathelement location="dashboard/target/test-classes"/>

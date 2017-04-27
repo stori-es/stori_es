@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import org.consumersunion.stories.common.shared.dto.tasks.ExportTask;
 import org.consumersunion.stories.server.business_logic.ProfileService;
 import org.consumersunion.stories.server.export.renderers.storyteller.StoryTellerColumnsRenderer;
 import org.consumersunion.stories.server.persistence.TaskPersister;
-import org.consumersunion.stories.common.shared.dto.tasks.ExportTask;
 import org.jukito.JukitoModule;
 import org.jukito.JukitoRunner;
 import org.jukito.TestSingleton;
@@ -32,6 +32,8 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+
+//import org.consumersunion.stories.server.export.renderers.storyteller.StoryTellerColumnsRenderer;
 
 @RunWith(JukitoRunner.class)
 public class AuthorsExporterTest {
@@ -82,15 +84,16 @@ public class AuthorsExporterTest {
             ProfileService profileService,
             ExportTask task) throws Exception {
         // given
-        given(profileService.exportStoryTellers(anyInt(), anyInt(), anyInt(), anyInt())).willAnswer(new Answer<StoryExport>() {
-            @Override
-            public StoryExport answer(InvocationOnMock invocation) throws Throwable {
-                int page = (Integer) invocation.getArguments()[3];
-                int pageSize = Math.min(100, TOTAL_COUNT - page * 100);
+        given(profileService.exportStoryTellers(anyInt(), anyInt(), anyInt(), anyInt()))
+                .willAnswer(new Answer<StoryExport>() {
+                    @Override
+                    public StoryExport answer(InvocationOnMock invocation) throws Throwable {
+                        int page = (Integer) invocation.getArguments()[3];
+                        int pageSize = Math.min(100, TOTAL_COUNT - page * 100);
 
-                return new StoryExport<StoryTellerCsv>(createStoryTellers(pageSize), TOTAL_COUNT);
-            }
-        });
+                        return new StoryExport<StoryTellerCsv>(createStoryTellers(pageSize), TOTAL_COUNT);
+                    }
+                });
 
         // when
         authorsExporter.export();

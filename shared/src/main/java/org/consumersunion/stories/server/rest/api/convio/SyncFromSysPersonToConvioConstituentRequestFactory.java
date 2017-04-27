@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import org.consumersunion.stories.common.shared.model.Profile;
 import org.consumersunion.stories.server.business_logic.AuthorizationService;
 import org.consumersunion.stories.server.persistence.PersistenceService;
-import org.consumersunion.stories.server.solr.SupportDataUtilsFactory;
+import org.consumersunion.stories.server.persistence.SupportDataUtilsFactory;
 import org.springframework.stereotype.Component;
 
 @Component

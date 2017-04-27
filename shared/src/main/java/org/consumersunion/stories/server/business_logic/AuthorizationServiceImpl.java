@@ -1,15 +1,10 @@
 package org.consumersunion.stories.server.business_logic;
 
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
 import org.consumersunion.stories.common.shared.AuthConstants;
 import org.consumersunion.stories.common.shared.model.Profile;
 import org.consumersunion.stories.common.shared.model.Story;
@@ -17,15 +12,20 @@ import org.consumersunion.stories.common.shared.model.SystemEntity;
 import org.consumersunion.stories.common.shared.model.User;
 import org.consumersunion.stories.common.shared.service.GeneralException;
 import org.consumersunion.stories.server.exception.NotLoggedInException;
+import org.consumersunion.stories.server.index.Indexer;
+import org.consumersunion.stories.server.index.collection.CollectionDocument;
+import org.consumersunion.stories.server.index.elasticsearch.query.Ids;
+import org.consumersunion.stories.server.index.elasticsearch.query.QueryBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.query.bool.BoolBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.query.bool.FilterBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.search.Search;
+import org.consumersunion.stories.server.index.elasticsearch.search.SearchBuilder;
+import org.consumersunion.stories.server.index.story.StoryDocument;
 import org.consumersunion.stories.server.persistence.AuthorizationPersistenceHelper;
 import org.consumersunion.stories.server.persistence.PersistenceService;
 import org.consumersunion.stories.server.persistence.funcs.ProcessFunc;
-import org.consumersunion.stories.server.solr.SolrServer;
-import org.consumersunion.stories.server.solr.story.documents.IndexedStoryDocument;
 import org.springframework.security.acls.domain.EhCacheBasedAclCache;
 import org.springframework.stereotype.Service;
-
-import com.google.common.base.Joiner;
 
 import static org.consumersunion.stories.common.shared.AuthConstants.ROLE_ADMIN;
 import static org.consumersunion.stories.common.shared.AuthConstants.ROLE_CURATOR;
@@ -37,35 +37,35 @@ import static org.consumersunion.stories.server.persistence.AuthorizationPersist
 public class AuthorizationServiceImpl implements AuthorizationService {
     private static final boolean THROW_IF_NULL = true;
 
+    private final Indexer<StoryDocument> storyIndexer;
+    private final Indexer<CollectionDocument> collectionIndexer;
     private final UserService userService;
     private final SystemEntityService systemEntityService;
     private final PersistenceService persistenceService;
     private final EhCacheBasedAclCache cache;
-    private final SolrServer storySolrServer;
-    private final SolrServer collectionSolrServer;
 
     private Connection connection;
 
     @Inject
     AuthorizationServiceImpl(
+            Indexer<StoryDocument> storyIndexer,
+            Indexer<CollectionDocument> collectionIndexer,
             UserService userService,
             SystemEntityService systemEntityService,
             PersistenceService persistenceService,
-            EhCacheBasedAclCache cache,
-            @Named("solrStoryServer") SolrServer storySolrServer,
-            @Named("solrCollectionServer") SolrServer collectionSolrServer) {
+            EhCacheBasedAclCache cache) {
+        this.storyIndexer = storyIndexer;
+        this.collectionIndexer = collectionIndexer;
         this.userService = userService;
         this.systemEntityService = systemEntityService;
         this.persistenceService = persistenceService;
         this.cache = cache;
-        this.storySolrServer = storySolrServer;
-        this.collectionSolrServer = collectionSolrServer;
     }
 
     @Override
     public AuthorizationService withConnection(Connection connection) {
-        AuthorizationServiceImpl service = new AuthorizationServiceImpl(userService, systemEntityService,
-                persistenceService, cache, storySolrServer, collectionSolrServer);
+        AuthorizationServiceImpl service = new AuthorizationServiceImpl(storyIndexer, collectionIndexer, userService,
+                systemEntityService, persistenceService, cache);
 
         service.setConnection(connection);
 
@@ -214,38 +214,30 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     @Override
     public boolean hasMinRoleOnStory(int profileId, int minRole, int targetId) {
         try {
-            SolrQuery sQuery = new SolrQuery("id:" + targetId);
-            sQuery.setRows(1);
-            sQuery.setStart(0);
+            StoryDocument doc = storyIndexer.get(targetId);
 
-            QueryResponse result = storySolrServer.query(sQuery);
-
-            Iterator<SolrDocument> iterator = result.getResults().iterator();
-            if (iterator.hasNext()) {
-                IndexedStoryDocument doc = new IndexedStoryDocument(iterator.next());
+            if (doc != null) {
                 if (!doc.getCollectionsId().isEmpty()) {
-                    String collectionQueryString = "id:(" + Joiner.on(" OR ").join(doc.getCollectionsId()) + ") AND ";
+                    FilterBuilder builder = BoolBuilder.newBuilder()
+                            .filter().withIds(Ids.fromInts(doc.getCollectionsId()));
 
                     if (minRole == ROLE_READER) {
-                        collectionQueryString += "readAuths:" + profileId;
+                        builder.addTerm("readAuths", profileId);
                     } else if (minRole == ROLE_CURATOR) {
-                        collectionQueryString += "writeAuths:" + profileId;
+                        builder.addTerm("writeAuths", profileId);
                     } else if (minRole == ROLE_ADMIN) {
-                        collectionQueryString += "adminAuths:" + profileId;
+                        builder.addTerm("adminAuths", profileId);
                     } else {
                         return false;
                     }
 
-                    sQuery = new SolrQuery(collectionQueryString);
-                    result = collectionSolrServer.query(sQuery);
+                    Search search = SearchBuilder.ofQuery(QueryBuilder.ofBool(builder.build()));
 
-                    return result.getResults().getNumFound() > 0;
+                    return collectionIndexer.count(search) > 0;
                 }
-
-                return false;
-            } else {
-                return false;
             }
+
+            return false;
         } catch (Exception e) {
             throw new GeneralException(e);
         }

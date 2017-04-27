@@ -147,7 +147,6 @@ public class DocumentsApiTest extends ApiTestCase {
         assertEquals("Unexpected attachment type",
                 ApiBlockType.BUTTON_BLOCK,
                 submitBlock.getBlockType());
-        // TODO: This is incorrect, the 'href' is embedded in another data structure. See TASK-1733
         assertEquals("Unexpected 'next_document' value.",
                 "http://localhost:" + RestAssured.port + DOCUMENTS + "8003",
                 submitBlock.getNextDocument().getHref());
@@ -299,6 +298,5 @@ public class DocumentsApiTest extends ApiTestCase {
 
     private void checkRating(ApiBlock block) {
         assertEquals("Unexpected attachment type", ApiBlockType.RATING_QUESTION_BLOCK, block.getBlockType());
-        // TODO: spec not defined for additional rating elements. See TASK-1718 and TASK-1728
     }
 }

@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
 import org.consumersunion.stories.common.client.service.datatransferobject.ProfileSummary;
 import org.consumersunion.stories.common.shared.AuthConstants;
 import org.consumersunion.stories.common.shared.model.CredentialedUser;
@@ -23,10 +19,14 @@ import org.consumersunion.stories.server.exception.NotFoundException;
 import org.consumersunion.stories.server.exception.NotLoggedInException;
 import org.consumersunion.stories.server.export.StoryExport;
 import org.consumersunion.stories.server.export.StoryTellerCsv;
+import org.consumersunion.stories.server.index.Indexer;
+import org.consumersunion.stories.server.index.elasticsearch.SortOrder;
+import org.consumersunion.stories.server.index.elasticsearch.query.QueryBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.search.Search;
+import org.consumersunion.stories.server.index.elasticsearch.search.SearchBuilder;
+import org.consumersunion.stories.server.index.profile.ProfileDocument;
 import org.consumersunion.stories.server.persistence.ProfilePersister;
 import org.consumersunion.stories.server.persistence.StoryTellersParams;
-import org.consumersunion.stories.server.solr.SolrServer;
-import org.consumersunion.stories.server.solr.person.ProfileDocument;
 import org.springframework.stereotype.Service;
 
 import static org.consumersunion.stories.common.shared.AuthConstants.ACCESS_MODE_PRIVILEGED;
@@ -37,24 +37,24 @@ import static org.consumersunion.stories.common.shared.AuthConstants.ROLE_READER
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
+    private final Indexer<ProfileDocument> profileIndexer;
     private final AuthorizationService authService;
     private final UserService userService;
     private final StoryService storyService;
     private final ProfilePersister profilePersister;
-    private final SolrServer solrPersonServer;
 
     @Inject
     ProfileServiceImpl(
+            Indexer<ProfileDocument> profileIndexer,
             AuthorizationService authService,
             UserService userService,
             StoryService storyService,
-            ProfilePersister profilePersister,
-            @Named("solrPersonServer") SolrServer solrPersonServer) {
+            ProfilePersister profilePersister) {
+        this.profileIndexer = profileIndexer;
         this.authService = authService;
         this.userService = userService;
         this.storyService = storyService;
         this.profilePersister = profilePersister;
-        this.solrPersonServer = solrPersonServer;
     }
 
     @Override
@@ -117,29 +117,32 @@ public class ProfileServiceImpl implements ProfileService {
                 }
 
                 try {
-                    SolrQuery sQuery = new SolrQuery("*:*");
+                    SearchBuilder searchBuilder = SearchBuilder.newBuilder();
+                    QueryBuilder queryBuilder = QueryBuilder.newBuilder();
                     if (collectionId != null) {
-                        sQuery.addFilterQuery("collections:" + collectionId);
-                        sQuery.setSort("lastStoryDateByCollection_" + collectionId, SolrQuery.ORDER.desc);
+                        queryBuilder.withTerm("collections", collectionId);
+                        searchBuilder.withSort("lastStoryDateByCollection." + collectionId, SortOrder.DESC);
                     }
 
                     if (questionnaireId != null) {
-                        sQuery.addFilterQuery("questionnaires:" + questionnaireId);
-                        sQuery.setSort("lastStoryDateByCollection_" + questionnaireId, SolrQuery.ORDER.desc);
+                        queryBuilder.withTerm("questionnaires", questionnaireId);
+                        searchBuilder.withSort("lastStoryDateByCollection." + questionnaireId, SortOrder.DESC);
                     }
 
                     if (!authService.isSuperUser(user)) {
-                        sQuery.addFilterQuery("readAuths:" + organizationContext);
+                        queryBuilder.withTerm("readAuths", organizationContext);
                     }
 
-                    sQuery.setRows(windowSize);
-                    sQuery.setStart(window * windowSize);
+                    Search search = searchBuilder
+                            .withQuery(queryBuilder.build())
+                            .withSize(windowSize)
+                            .withFrom(window * windowSize)
+                            .build();
 
-                    QueryResponse result = solrPersonServer.query(sQuery);
+                    List<ProfileDocument> profileDocuments = profileIndexer.search(search);
 
-                    if (result.getResults().getNumFound() > 0) {
-                        for (SolrDocument entries : result.getResults()) {
-                            ProfileDocument doc = new ProfileDocument(entries);
+                    if (!profileDocuments.isEmpty()) {
+                        for (ProfileDocument doc : profileDocuments) {
                             Profile profile = profilePersister.get(doc.getId());
                             StoryTellerCsv storyTellerCsv = new StoryTellerCsv(doc, profile);
 

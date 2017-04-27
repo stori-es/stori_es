@@ -27,12 +27,13 @@ import org.consumersunion.stories.common.shared.service.datatransferobject.Story
 import org.consumersunion.stories.server.business_logic.interceptor.RequiresLoggedUser;
 import org.consumersunion.stories.server.exception.NotAuthorizedException;
 import org.consumersunion.stories.server.exception.PermalinkAlreadyExistsException;
+import org.consumersunion.stories.server.index.collection.UpdatedCollectionIndexer;
+import org.consumersunion.stories.server.index.story.UpdatedStoryCollectionIndexer;
 import org.consumersunion.stories.server.notification_channel.StoriesAddedEvent;
 import org.consumersunion.stories.server.persistence.CollectionPersister;
 import org.consumersunion.stories.server.persistence.StoryPersister;
 import org.consumersunion.stories.server.persistence.SubscriptionPersister;
 import org.consumersunion.stories.server.persistence.TaskPersister;
-import org.consumersunion.stories.server.solr.IndexerFactory;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Function;
@@ -55,14 +56,14 @@ public class CollectionServiceImpl implements CollectionService {
     private final DocumentService documentService;
     private final OrganizationService organizationService;
     private final StoryService storyService;
-    private final IndexerService indexerService;
+    private final UpdatedStoryCollectionIndexer updatedStoryCollectionIndexer;
+    private final UpdatedCollectionIndexer updatedCollectionIndexer;
     private final TaskPersister taskPersister;
     private final CollectionPersister collectionPersister;
     private final SubscriptionPersister subscriptionPersister;
     private final StoryPersister storyPersister;
     private final DefaultBlocksSetter defaultBlocksSetter;
     private final CollectionIndexerService collectionIndexerService;
-    private final IndexerFactory indexerFactory;
     private final EventBus eventBus;
 
     @Inject
@@ -73,14 +74,14 @@ public class CollectionServiceImpl implements CollectionService {
             DocumentService documentService,
             OrganizationService organizationService,
             StoryService storyService,
-            IndexerService indexerService,
             TaskPersister taskPersister,
             CollectionPersister collectionPersister,
             SubscriptionPersister subscriptionPersister,
             StoryPersister storyPersister,
             DefaultBlocksSetter defaultBlocksSetter,
             CollectionIndexerService collectionIndexerService,
-            IndexerFactory indexerFactory,
+            UpdatedStoryCollectionIndexer updatedStoryCollectionIndexer,
+            UpdatedCollectionIndexer updatedCollectionIndexer,
             EventBus eventBus) {
         this.authService = authService;
         this.userService = userService;
@@ -88,14 +89,14 @@ public class CollectionServiceImpl implements CollectionService {
         this.documentService = documentService;
         this.organizationService = organizationService;
         this.storyService = storyService;
-        this.indexerService = indexerService;
+        this.updatedStoryCollectionIndexer = updatedStoryCollectionIndexer;
+        this.updatedCollectionIndexer = updatedCollectionIndexer;
         this.taskPersister = taskPersister;
         this.collectionPersister = collectionPersister;
         this.subscriptionPersister = subscriptionPersister;
         this.storyPersister = storyPersister;
         this.defaultBlocksSetter = defaultBlocksSetter;
         this.collectionIndexerService = collectionIndexerService;
-        this.indexerFactory = indexerFactory;
         this.eventBus = eventBus;
     }
 
@@ -166,7 +167,7 @@ public class CollectionServiceImpl implements CollectionService {
 
             Collection updatedCollection = collectionPersister.updateCollection(dbCollection);
 
-            indexerService.process(indexerFactory.createUpdatedCollection(updatedCollection));
+            updatedCollectionIndexer.index(updatedCollection);
         } else {
             throw new NotAuthorizedException();
         }
@@ -215,7 +216,7 @@ public class CollectionServiceImpl implements CollectionService {
     public Collection updateCollection(Collection collection) {
         Collection updatedCollection = collectionPersister.updateCollection(collection);
 
-        indexerService.process(indexerFactory.createUpdatedCollection(updatedCollection));
+        updatedCollectionIndexer.index(updatedCollection);
 
         return updatedCollection;
     }
@@ -243,7 +244,7 @@ public class CollectionServiceImpl implements CollectionService {
         eventBus.post(new StoriesAddedEvent(collection, stories));
 
         for (Integer storyId : storyIds) {
-            indexerService.process(indexerFactory.createUpdatedStory(storyId));
+            updatedStoryCollectionIndexer.index(storyId);
         }
 
         return collection;
@@ -326,7 +327,7 @@ public class CollectionServiceImpl implements CollectionService {
         updateCollection(collection);
 
         for (Story story : stories) {
-            indexerService.process(indexerFactory.createUpdatedStory(story.getId()));
+            updatedStoryCollectionIndexer.index(story.getId());
         }
 
         return collection;

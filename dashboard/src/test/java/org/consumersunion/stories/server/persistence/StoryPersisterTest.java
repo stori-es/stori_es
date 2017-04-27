@@ -42,7 +42,7 @@ public class StoryPersisterTest extends SpringTestCase {
             final Story template = createTemplate();
             template.setByLine(byLine);
 
-            final Story storyResult = (Story) PersistenceUtil.process(new StoryPersister.CreateStoryFunc(template));
+            final Story storyResult = PersistenceUtil.process(new StoryPersister.CreateStoryFunc(template));
 
             results = conn.createStatement().executeQuery("SELECT COUNT(*) FROM story");
             if (!results.next()) {
@@ -68,8 +68,7 @@ public class StoryPersisterTest extends SpringTestCase {
         final Story template = createTemplate();
         PersistenceUtil.process(new StoryPersister.CreateStoryFunc(template));
 
-        final Story retrieved = (Story)
-                PersistenceUtil.process(new StoryPersister.RetrieveStoryFunc(template.getId()));
+        final Story retrieved = PersistenceUtil.process(new StoryPersister.RetrieveStoryFunc(template.getId()));
 
         assertEquals("Unexpected ID.", template.getId(), retrieved.getId());
         assertEquals("Unexpected version.", template.getVersion(), retrieved.getVersion());
@@ -97,8 +96,7 @@ public class StoryPersisterTest extends SpringTestCase {
         PersistenceUtil.process(new StoryPersister.UpdateStoryFunc(template));
         assertEquals("Unexpected version.", 2, template.getVersion());
 
-        final Story retrieved = (Story)
-                PersistenceUtil.process(new StoryPersister.RetrieveStoryFunc(template.getId()));
+        final Story retrieved = PersistenceUtil.process(new StoryPersister.RetrieveStoryFunc(template.getId()));
 
         assertEquals("Unexpected ID.", template.getId(), retrieved.getId());
         assertEquals("Unexpected version.", template.getVersion(), retrieved.getVersion());
@@ -151,51 +149,6 @@ public class StoryPersisterTest extends SpringTestCase {
         assertEquals("Unexpected story title.", "Story Title6", stories.get(0).getTitle());
     }
 
-    /*Recent search is not used anywhere in the application; the function has been commented out in the service; I'm
-    leaving this in because I'm not sure if the non-use is intentional or not
-    public void testGetRecent() {
-        final StoryPersister persister = (StoryPersister) PersistenceService.getPersisterFor(Story.class);
-        final RecentStoriesSearchParams params = new RecentStoriesSearchParams(36, 10);
-
-        @SuppressWarnings("unchecked")
-        final List<StorySummary> summaries = (List<StorySummary>) PersistenceService.process(persister
-                .retrieveRecentFunc(params));
-
-        @SuppressWarnings("unchecked")
-        final RetrieveFunc<Collection> collectionGetter = (RetrieveFunc<Collection>) PersistenceService.retrieve(
-                Collection.class, 36);
-        final Collection collection = (Collection) PersistenceService.process(collectionGetter);
-
-        final List<Integer> approved = getApprovedStoriesIds(collection.getStories());
-        final List<Integer> unApproved = getUnApprovedStoriesIds(collection.getStories());
-
-        assertEquals("", 1, summaries.size());
-        for (final StorySummary summ : summaries) {
-            assertTrue("Story not found in approved list", approved.contains(new Integer(summ.getStory().getId())));
-            assertFalse("Story found in unapproved list", unApproved.contains(new Integer(summ.getStory().getId())));
-        }
-    }
-
-    private List<Integer> getApprovedStoriesIds(final Set<StoryLink> stories) {
-        final List<Integer> r = new ArrayList<Integer>();
-
-        for (final StoryLink link : stories) {
-            if (link.getIsClearedForPublicInclusion())
-                r.add(link.getStory());
-        }
-        return r;
-    }
-
-    private List<Integer> getUnApprovedStoriesIds(final Set<StoryLink> stories) {
-        final List<Integer> r = new ArrayList<Integer>();
-
-        for (final StoryLink link : stories) {
-            if (link.getIsClearedForPublicInclusion() == false)
-                r.add(link.getStory());
-        }
-        return r;
-    }
-    */
     private Story createTemplate() {
         final Story s = new Story(-1, -1);
         s.setDefaultContent(55);
@@ -224,247 +177,4 @@ public class StoryPersisterTest extends SpringTestCase {
         final String result4 = persister.limitCharacters(testString, 16);
         assertEquals("Hey my name is Zane...", result4);
     }
-
-	/*
-     * SYSTWO-
-	 * 
-	 * @SuppressWarnings("unchecked") public void
-	 * testGetStoriesSearchNotResults(){ //search for a string with no results
-	 * (like 'xxxxxxxxxxxxxxxxxxxx' or something) final User user = new User();
-	 * user.setId(1); final StoryPagedRetrieveParams searchParams = new
-	 * StoryPagedRetrieveParams
-	 * (0,10,StorySortField.STORYTELLER,true,"xxxxxxxxx",
-	 * MineCallbackProvider.MINE,user,null); final StoryPersister persister =
-	 * (StoryPersister) PersistenceService.getPersisterFor(Story.class); final
-	 * List<StorySummary> stories = (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * assertTrue("No results for search expected",(stories.size()==0)); }
-	 */
-
-    // @SuppressWarnings("unchecked")
-    public void testGetStoriesSearchForString() {
-        // search for a string where there would be results, but the access
-        // limitations prevent it (create or uses a non-public story which the
-        // testUser has no rights to in the DB, then test MINE, PUBLIC,
-        // AUTHORIZED, and ANY limitations, enusre that the story is not
-        // returned)
-		/*
-		 * final User user = new User(); user.setId(38);
-		 * StoryPagedRetrieveParams searchParams = new
-		 * StoryPagedRetrieveParams(0
-		 * ,10,StorySortField.STORYTELLER,true,"title",
-		 * MineCallbackProvider.MINE,user,null); StoryPersister persister =
-		 * (StoryPersister) PersistenceService.getPersisterFor(Story.class);
-		 * List<StorySummary> stories = (List<StorySummary>)
-		 * PersistenceService.process
-		 * (persister.getStoriesPagedFunc(searchParams));
-		 * assertTrue("No results expected for MINE",(stories.size()==0));
-		 * 
-		 * user.setId(38); searchParams = new
-		 * StoryPagedRetrieveParams(0,10,StorySortField
-		 * .STORYTELLER,true,"title",MineCallbackProvider.AUTHORIZED,user,null);
-		 * persister = (StoryPersister)
-		 * PersistenceService.getPersisterFor(Story.class); stories =
-		 * (List<StorySummary>)
-		 * PersistenceService.process(persister.getStoriesPagedFunc
-		 * (searchParams));
-		 * assertTrue("No results expected for AUTHORIZED",(stories.size()==0));
-		 */
-
-        // TODO : This test uses now Solr and have to be updated.
-    }
-
-	/*
-	 * SYSTWO-
-	 * 
-	 * @SuppressWarnings("unchecked") public void
-	 * testGetStoriesSearchNonPublicStoryMineAny(){ //create or use a non-public
-	 * story owned by the user; this is determined by the story.owner field;
-	 * ensure that this is returned with the 'MINE' and 'ANY', but NOT with
-	 * PUBLIC or AUTHORIZED final User user = new User(); user.setId(1);
-	 * StoryPagedRetrieveParams searchParams = new
-	 * StoryPagedRetrieveParams(0,10,
-	 * StorySortField.STORYTELLER,true,"title",MineCallbackProvider
-	 * .MINE,user,null); StoryPersister persister = (StoryPersister)
-	 * PersistenceService.getPersisterFor(Story.class); List<StorySummary>
-	 * stories = (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * boolean result=false; for (final StorySummary story : stories) {
-	 * if(story.getStory().getId()==8 || story.getStory().getId()==10){
-	 * result=true; break; } }
-	 * assertTrue("non-public story results expected for MINE",result);
-	 * 
-	 * user.setId(1); searchParams = new
-	 * StoryPagedRetrieveParams(0,10,StorySortField
-	 * .STORYTELLER,true,"",MineCallbackProvider.ANY,user,null); persister =
-	 * (StoryPersister) PersistenceService.getPersisterFor(Story.class); stories
-	 * = (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * assertTrue
-	 * ("non-public story results expected for ANY",(stories.size()>0));
-	 * 
-	 * user.setId(2); searchParams = new
-	 * StoryPagedRetrieveParams(0,10,StorySortField
-	 * .STORYTELLER,true,"title",MineCallbackProvider.PUBLIC,user,null);
-	 * persister = (StoryPersister)
-	 * PersistenceService.getPersisterFor(Story.class); stories =
-	 * (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * result=false; for (final StorySummary story : stories) {
-	 * if(story.getStory().getId()==8 || story.getStory().getId()==10){
-	 * result=true; break; } }
-	 * assertFalse("non-public story results expected for PUBLIC",result);
-	 * 
-	 * user.setId(2); searchParams = new
-	 * StoryPagedRetrieveParams(0,10,StorySortField
-	 * .STORYTELLER,true,"title",MineCallbackProvider.AUTHORIZED,user,null);
-	 * persister = (StoryPersister)
-	 * PersistenceService.getPersisterFor(Story.class); stories =
-	 * (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * result=false; for (final StorySummary story : stories) {
-	 * if(story.getStory().getId()==8 || story.getStory().getId()==10){
-	 * result=true; break; } }
-	 * assertFalse("non-public story results expected for AUTHORIZED",result); }
-	 */
-
-	/*
-	 * SYSTWO-
-	 * 
-	 * @SuppressWarnings("unchecked") public void
-	 * testGetStoriesSearchPublicStoryMinePublic(){ // create or use a public
-	 * story owned by the user; this is determined by the story.owner field;
-	 * ensure that this is returned with the 'MINE', 'PUBLIC', and 'ANY', but
-	 * NOT with AUTHORIZED final User user = new User(); user.setId(1);
-	 * StoryPagedRetrieveParams searchParams = new
-	 * StoryPagedRetrieveParams(0,10,
-	 * StorySortField.STORYTELLER,true,"title",MineCallbackProvider
-	 * .MINE,user,null); StoryPersister persister = (StoryPersister)
-	 * PersistenceService.getPersisterFor(Story.class); List<StorySummary>
-	 * stories = (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * assertTrue("public story results expected for MINE",(stories.size()>0));
-	 * 
-	 * user.setId(38); searchParams = new
-	 * StoryPagedRetrieveParams(0,10,StorySortField
-	 * .STORYTELLER,true,"title",MineCallbackProvider.PUBLIC,user,null);
-	 * persister = (StoryPersister)
-	 * PersistenceService.getPersisterFor(Story.class); stories =
-	 * (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * assertTrue
-	 * ("public story results expected for PUBLIC",(stories.size()>0));
-	 * 
-	 * user.setId(1); searchParams = new
-	 * StoryPagedRetrieveParams(0,10,StorySortField
-	 * .STORYTELLER,true,"",MineCallbackProvider.ANY,user,null); persister =
-	 * (StoryPersister) PersistenceService.getPersisterFor(Story.class); stories
-	 * = (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * assertTrue("public story results expected for ANY",(stories.size()>0));
-	 * 
-	 * user.setId(38); searchParams = new
-	 * StoryPagedRetrieveParams(0,10,StorySortField
-	 * .STORYTELLER,true,"title",MineCallbackProvider.AUTHORIZED,user,null);
-	 * persister = (StoryPersister)
-	 * PersistenceService.getPersisterFor(Story.class); stories =
-	 * (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * assertTrue
-	 * ("public story results expected for AUTHORIZED",(stories.size()==0)); }
-	 * 
-	 * @SuppressWarnings("unchecked") public void
-	 * testGetStoriesSearchPublicStoryAnyPublic(){ //create a public story not
-	 * owned by the user, this should be returned with 'PUBLIC' or 'ANY', but
-	 * not MINE or AUTHORIZED final User user = new User(); user.setId(38);
-	 * StoryPagedRetrieveParams searchParams = new
-	 * StoryPagedRetrieveParams(0,10,
-	 * StorySortField.STORYTELLER,true,"title",MineCallbackProvider
-	 * .PUBLIC,user,null); StoryPersister persister = (StoryPersister)
-	 * PersistenceService.getPersisterFor(Story.class); List<StorySummary>
-	 * stories = (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * assertTrue
-	 * ("public story results expected for PUBLIC",(stories.size()>0));
-	 * 
-	 * user.setId(38); searchParams = new
-	 * StoryPagedRetrieveParams(0,10,StorySortField
-	 * .STORYTELLER,true,"",MineCallbackProvider.ANY,user,null); persister =
-	 * (StoryPersister) PersistenceService.getPersisterFor(Story.class); stories
-	 * = (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * assertTrue("public story results expected for ANY",(stories.size()>0));
-	 * 
-	 * user.setId(38); searchParams = new
-	 * StoryPagedRetrieveParams(0,10,StorySortField
-	 * .STORYTELLER,true,"title",MineCallbackProvider.MINE,user,null); persister
-	 * = (StoryPersister) PersistenceService.getPersisterFor(Story.class);
-	 * stories = (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * boolean result=false; for (final StorySummary story : stories) {
-	 * if(story.getStory().getId()==8 || story.getStory().getId()==10 ||
-	 * story.getStory().getId()==12){ result=true; break; } }
-	 * assertFalse("public story results expected for MINE",result);
-	 * 
-	 * user.setId(38); searchParams = new
-	 * StoryPagedRetrieveParams(0,10,StorySortField
-	 * .STORYTELLER,true,"title",MineCallbackProvider.AUTHORIZED,user,null);
-	 * persister = (StoryPersister)
-	 * PersistenceService.getPersisterFor(Story.class); stories =
-	 * (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * result=false; for (final StorySummary story : stories) {
-	 * if(story.getStory().getId()==8 || story.getStory().getId()==10 ||
-	 * story.getStory().getId()==12){ result=true; break; } }
-	 * assertFalse("public story results expected for AUTHORIZED",result); }
-	 */
-	/*
-	 * SYSTWO-
-	 * 
-	 * @SuppressWarnings("unchecked") public void
-	 * testGetStoriesSearchNotResultsAuthorizedStory() throws SQLException {
-	 * //create or use a story which the user is authorized to READ but which is
-	 * not their story; this should be returned with 'AUTHORIZED' or 'ANY', but
-	 * not 'MINE' or 'PUBLIC' final User user = new User(); user.setId(53);
-	 * 
-	 * StoryPagedRetrieveParams searchParams = new
-	 * StoryPagedRetrieveParams(0,10,
-	 * StorySortField.STORYTELLER,true,"title",MineCallbackProvider
-	 * .AUTHORIZED,user,null); StoryPersister persister = (StoryPersister)
-	 * PersistenceService.getPersisterFor(Story.class); List<StorySummary>
-	 * stories = (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * boolean result=false; for (final StorySummary story : stories) {
-	 * if(story.getStory().getId()==8){ result=true; break; } }
-	 * assertTrue("public story results expected for AUTHORIZED",result);
-	 * 
-	 * user.setId(2); searchParams = new
-	 * StoryPagedRetrieveParams(0,10,StorySortField
-	 * .STORYTELLER,true,"title",MineCallbackProvider.MINE,user,null); persister
-	 * = (StoryPersister) PersistenceService.getPersisterFor(Story.class);
-	 * stories = (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * result=false; for (final StorySummary story : stories) {
-	 * if(story.getStory().getId()==8){ result=true; break; } }
-	 * assertFalse("public story results expected for MINE",result);
-	 * 
-	 * user.setId(2); searchParams = new
-	 * StoryPagedRetrieveParams(0,10,StorySortField
-	 * .STORYTELLER,true,"title",MineCallbackProvider.PUBLIC,user,null);
-	 * persister = (StoryPersister)
-	 * PersistenceService.getPersisterFor(Story.class); stories =
-	 * (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * result=false; for (final StorySummary story : stories) {
-	 * if(story.getStory().getId()==8){ result=true; break; } }
-	 * assertFalse("public story results expected for PUBLIC",result);
-	 * 
-	 * user.setId(2); searchParams = new
-	 * StoryPagedRetrieveParams(0,10,StorySortField
-	 * .STORYTELLER,true,"",MineCallbackProvider.ANY,user,null); persister =
-	 * (StoryPersister) PersistenceService.getPersisterFor(Story.class); stories
-	 * = (List<StorySummary>)
-	 * PersistenceService.process(persister.getStoriesPagedFunc(searchParams));
-	 * assertTrue("public story results expected for ANY",(stories.size()>0)); }
-	 */
 }

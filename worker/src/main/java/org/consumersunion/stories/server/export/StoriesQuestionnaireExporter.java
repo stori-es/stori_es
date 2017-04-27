@@ -39,7 +39,6 @@ public class StoriesQuestionnaireExporter extends StoriesCollectionExporter {
             StoryColumnsRenderer storyColumnsRenderer) throws IOException {
         super(storyService, csvWriterFactory, taskPersister, questionnaireI15dPersister, amazonS3ExportService,
                 exportTask, storyColumnsRenderer);
-
         questionnaireI15d = questionnairePersister.get(objectId);
         blockLabels = getBlockKeyMap();
         questionHeaders = getQuestionHeaders();

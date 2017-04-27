@@ -16,6 +16,8 @@ import org.consumersunion.stories.server.persistence.QuestionnaireI15dPersister;
 import org.consumersunion.stories.server.persistence.TaskPersister;
 import org.springframework.stereotype.Component;
 
+//import org.consumersunion.stories.server.export.renderers.storyteller.StoryTellerColumnsRenderer;
+
 @Component
 public class CsvExporterFactory {
     private final Provider<StoryService> storyServiceProvider;
@@ -53,11 +55,13 @@ public class CsvExporterFactory {
             case STORIES:
                 StoryService storyService = storyServiceProvider.get();
                 if (isCollection) {
-                    return new StoriesCollectionExporter(storyService, csvWriterFactory, taskPersisterProvider.get(),
+                    return new StoriesCollectionExporter(storyService, csvWriterFactory,
+                            taskPersisterProvider.get(),
                             questionnaireI15dPersisterProvider.get(), amazonS3ExportServiceProvider.get(), exportTask,
                             storyColumnsRenderer);
                 } else {
-                    return new StoriesQuestionnaireExporter(storyService, csvWriterFactory, taskPersisterProvider.get(),
+                    return new StoriesQuestionnaireExporter(storyService, csvWriterFactory,
+                            taskPersisterProvider.get(),
                             questionnaireI15dPersisterProvider.get(), amazonS3ExportServiceProvider.get(),
                             questionnaireI15dPersisterProvider.get(), exportTask, storyColumnsRenderer);
                 }

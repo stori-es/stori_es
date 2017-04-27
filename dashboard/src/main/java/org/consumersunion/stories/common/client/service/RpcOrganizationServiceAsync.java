@@ -26,8 +26,6 @@ public interface RpcOrganizationServiceAsync {
 
     void checkOrganizationAvailability(final String name, AsyncCallback<ActionResponse> callback);
 
-    void createOrganization(Organization organization, AsyncCallback<ActionResponse> callback);
-
     void createOrganization(Organization organization, List<Contact> contacts, List<Address> addresses,
             List<String> adminUsers, List<Integer> themes, AsyncCallback<ActionResponse> callback);
 

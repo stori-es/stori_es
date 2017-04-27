@@ -13,11 +13,10 @@ import javax.inject.Inject;
 import org.consumersunion.stories.common.shared.AuthConstants;
 import org.consumersunion.stories.common.shared.model.SystemEntity;
 import org.consumersunion.stories.common.shared.service.GeneralException;
+import org.consumersunion.stories.server.index.collection.UpdateCollectionsAuthsIndexer;
+import org.consumersunion.stories.server.index.story.UpdateStoriesAuthsIndexer;
 import org.consumersunion.stories.server.persistence.funcs.ProcessFunc;
-import org.consumersunion.stories.server.solr.CoreIndexer;
-import org.consumersunion.stories.server.solr.IndexerFactory;
-import org.consumersunion.stories.server.solr.collection.UpdateCollectionsAuthsIndexer;
-import org.consumersunion.stories.server.solr.story.UpdateStoriesAuthsIndexer;
+import org.consumersunion.stories.server.index.IndexerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,16 +24,13 @@ public class AuthorizationPersistenceHelper {
     private static final Logger logger = Logger.getLogger(AuthorizationPersistenceHelper.class.getName());
 
     private final IndexerFactory indexerFactory;
-    private final CoreIndexer coreIndexer;
     private final PersistenceService persistenceService;
 
     @Inject
     AuthorizationPersistenceHelper(
             IndexerFactory indexerFactory,
-            CoreIndexer coreIndexer,
             PersistenceService persistenceService) {
         this.indexerFactory = indexerFactory;
-        this.coreIndexer = coreIndexer;
         this.persistenceService = persistenceService;
     }
 
@@ -58,10 +54,10 @@ public class AuthorizationPersistenceHelper {
 
         UpdateCollectionsAuthsIndexer updateCollectionsAuthsIndexer =
                 indexerFactory.createCollectionsAuth(collectionIds, conn);
-        UpdateStoriesAuthsIndexer updateStoriesAuthsIndexer = indexerFactory.createStoriesAuth(storyIds, conn);
+        updateCollectionsAuthsIndexer.index();
 
-        coreIndexer.process(updateCollectionsAuthsIndexer);
-        coreIndexer.process(updateStoriesAuthsIndexer);
+        UpdateStoriesAuthsIndexer updateStoriesAuthsIndexer = indexerFactory.createStoriesAuth(storyIds, conn);
+        updateStoriesAuthsIndexer.index();
     }
 
     private void doGrantInOrganization(Connection conn, int role, int target,
@@ -153,7 +149,8 @@ public class AuthorizationPersistenceHelper {
         @Override
         public Boolean process() {
             try {
-                String searchString = "SELECT COUNT(*) FROM acl_entry WHERE sid=? AND mask>=? AND acl_object_identity=?";
+                String searchString =
+                        "SELECT COUNT(*) FROM acl_entry WHERE sid=? AND mask>=? AND acl_object_identity=?";
                 PreparedStatement retrive = conn.prepareStatement(searchString);
                 retrive.setInt(1, input.subject);
                 retrive.setInt(2, input.role);

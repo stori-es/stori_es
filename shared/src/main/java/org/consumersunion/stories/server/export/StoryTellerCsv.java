@@ -1,7 +1,7 @@
 package org.consumersunion.stories.server.export;
 
 import org.consumersunion.stories.common.shared.model.Profile;
-import org.consumersunion.stories.server.solr.person.ProfileDocument;
+import org.consumersunion.stories.server.index.profile.ProfileDocument;
 
 import com.google.common.base.Strings;
 

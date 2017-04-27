@@ -180,9 +180,7 @@ public class TextQuestionConfigurator extends AbstractConfigurator<Question> imp
     private boolean hideFormatSelection(Question question) {
         BlockType blockType = question.getBlockType();
 
-	// TODO: actually, don't think blockType can be null...
-        return blockType != null 
-        		&& !blockType.isStoryAsk();
+        return blockType != null && !blockType.isStoryAsk();
     }
 
     private void bind() {

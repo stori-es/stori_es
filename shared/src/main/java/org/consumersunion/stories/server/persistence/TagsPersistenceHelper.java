@@ -14,20 +14,23 @@ import javax.inject.Inject;
 
 import org.consumersunion.stories.common.shared.model.Story;
 import org.consumersunion.stories.common.shared.model.SystemEntity;
-import org.consumersunion.stories.server.business_logic.IndexerService;
-import org.consumersunion.stories.server.solr.collection.UpdatedCollectionTagsIndexer;
-import org.consumersunion.stories.server.solr.story.UpdatedStoryTagsIndexer;
+import org.consumersunion.stories.server.index.collection.UpdatedCollectionTagsIndexer;
+import org.consumersunion.stories.server.index.story.UpdatedStoryTagsIndexer;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Strings;
 
 @Component
 public class TagsPersistenceHelper {
-    private final IndexerService indexerService;
+    private final UpdatedStoryTagsIndexer updatedStoryTagsIndexer;
+    private final UpdatedCollectionTagsIndexer updatedCollectionTagsIndexer;
 
     @Inject
-    TagsPersistenceHelper(IndexerService indexerService) {
-        this.indexerService = indexerService;
+    TagsPersistenceHelper(
+            UpdatedStoryTagsIndexer updatedStoryTagsIndexer,
+            UpdatedCollectionTagsIndexer updatedCollectionTagsIndexer) {
+        this.updatedStoryTagsIndexer = updatedStoryTagsIndexer;
+        this.updatedCollectionTagsIndexer = updatedCollectionTagsIndexer;
     }
 
     public void deleteAutoTags(SystemEntity sytemEntity, Connection conn) throws SQLException {
@@ -51,11 +54,10 @@ public class TagsPersistenceHelper {
 
     private void updateIndex(SystemEntity entity, Collection<String> tags) {
         if (entity instanceof Story) {
-            indexerService.process(new UpdatedStoryTagsIndexer((Story) entity, tags));
+            updatedStoryTagsIndexer.index((Story) entity, new LinkedHashSet<String>(tags));
         } else if (entity instanceof org.consumersunion.stories.common.shared.model.Collection) {
-            indexerService.process(
-                    new UpdatedCollectionTagsIndexer((org.consumersunion.stories.common.shared.model.Collection) entity,
-                            tags));
+            updatedCollectionTagsIndexer.index((org.consumersunion.stories.common.shared.model.Collection) entity,
+                    new ArrayList<String>(tags));
         }
     }
 

@@ -9,6 +9,7 @@ import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -16,6 +17,8 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.security.acls.domain.EhCacheBasedAclCache;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.sf.ehcache.CacheManager;
 
@@ -59,6 +62,12 @@ public class ServerConfigurator implements SchedulingConfigurer, AsyncConfigurer
     @Bean
     public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
         return (ThreadPoolTaskExecutor) getAsyncExecutor();
+    }
+
+    @Bean
+    @Primary
+    public ObjectMapper defaultObjectMapper() {
+        return new ObjectMapper();
     }
 
     @Override

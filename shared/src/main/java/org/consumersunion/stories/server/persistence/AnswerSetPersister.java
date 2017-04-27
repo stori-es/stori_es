@@ -15,8 +15,6 @@ import org.consumersunion.stories.common.shared.service.GeneralException;
 import org.consumersunion.stories.server.persistence.funcs.CreateFunc;
 import org.consumersunion.stories.server.persistence.funcs.DeleteFunc;
 import org.consumersunion.stories.server.persistence.funcs.RetrieveFunc;
-import org.consumersunion.stories.server.solr.SupportDataUtils;
-import org.consumersunion.stories.server.solr.SupportDataUtilsFactory;
 import org.springframework.stereotype.Component;
 
 /**

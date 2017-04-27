@@ -186,7 +186,7 @@ public class CreateOrganizationView extends ViewWithUiHandlers<AdminManagerUiHan
         address.setAddress1(form.getValue(STREET_ADDRESS_1_FIELD_NAME));
         address.setAddress2(form.getValue(STREET_ADDRESS_2_FIELD_NAME));
         address.setCity(form.getValue(CITY_FIELD_NAME));
-        address.setCountry("US"); // TODO add country field into the form
+        address.setCountry("US");
         address.setPostalCode(form.getValue(ZIP_FIELD_NAME));
         address.setState(form.getValue(STATE_FIELD_NAME));
         address.setRelation(Address.RELATION_WORK);

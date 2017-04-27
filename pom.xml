@@ -47,7 +47,7 @@
         <cargo-core-uberjar.version>1.4.9</cargo-core-uberjar.version>
         <rest-assured.version>2.3.2</rest-assured.version>
         <velocity-tools.version>2.0</velocity-tools.version>
-        <aws.version>1.9.22</aws.version>
+        <aws.version>1.11.98</aws.version>
         <json.version>20090211</json.version>
         <commons-validator.version>1.4.1</commons-validator.version>
         <super-csv.version>2.3.1</super-csv.version>
@@ -71,7 +71,7 @@
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
 
         <!-- Other -->
-        <httpclient.version>4.2.3</httpclient.version>
+        <httpclient.version>4.5.2</httpclient.version>
         <restygwt.version>1.2-SEC.19-SNAPSHOT</restygwt.version>
         <gwt.xdm>0.1.0</gwt.xdm>
 
@@ -89,7 +89,7 @@
         <ehcache-core.version>2.5.2</ehcache-core.version>
         <commons-dbcp.version>1.4</commons-dbcp.version>
         <commons-pool.version>1.6</commons-pool.version>
-        <solrj.version>4.2.0</solrj.version>
+        <elasticsearch.version>5.1.2</elasticsearch.version>
         <mysql-connector-java.version>5.1.18</mysql-connector-java.version>
         <ejb-api.version>3.0</ejb-api.version>
         <validation-api.version>1.0.0.GA</validation-api.version>
@@ -105,6 +105,7 @@
         <servlet-api.version>2.5</servlet-api.version>
         <javax.inject.version>1</javax.inject.version>
         <jackson2.version>2.6.0</jackson2.version>
+        <json-unmarshaller.version>1.0.0</json-unmarshaller.version>
         <joda-time.version>2.8.1</joda-time.version>
         <cglib-nodep.version>3.1</cglib-nodep.version>
         <jstl.version>1.2</jstl.version>
@@ -112,6 +113,7 @@
         <elasticmq.version>0.8.8</elasticmq.version>
         <ostermiller-utils.version>1.07.00</ostermiller-utils.version>
         <cdi-api.version>1.2</cdi-api.version>
+        <log4j.version>2.7</log4j.version>
     </properties>
 
     <build>
@@ -565,6 +567,11 @@
                 <artifactId>jackson-annotations</artifactId>
                 <version>${jackson2.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.elasticpath.json</groupId>
+                <artifactId>json-unmarshaller</artifactId>
+                <version>${json-unmarshaller.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.aspectj</groupId>
@@ -645,11 +652,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.apache.solr</groupId>
-                <artifactId>solr-solrj</artifactId>
-                <version>${solrj.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
@@ -659,6 +661,16 @@
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk</artifactId>
                 <version>${aws.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>rest</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>transport</artifactId>
+                <version>${elasticsearch.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.elasticmq</groupId>
@@ -706,6 +718,17 @@
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
             </dependency>
 
             <!-- Other dependencies -->
@@ -801,11 +824,6 @@
                 <artifactId>selenium-java</artifactId>
                 <version>${selenium.version}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpcore</artifactId>
-                <version>${httpclient.version}</version>
             </dependency>
             <dependency>
                 <groupId>info.cukes</groupId>

@@ -73,9 +73,7 @@ public class ContactServiceImpl implements ContactService {
 
     /**
      * Saves contacts associated to an {@link org.consumersunion.stories.common.shared.model.entity.Entity}.
-     * Effective operator must have WRITE privileges oven the target Entity. TODO: once ownership is
-     * made a basic attribute, ownership of the Entity will confer
-     * authorizations as well. This version refreshes the list.
+     * Effective operator must have WRITE privileges oven the target Entity.
      */
     @Override
     public List<Contact> saveContacts(int entityId, List<Contact> contacts) {

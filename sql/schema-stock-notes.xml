@@ -37,7 +37,7 @@
 
  PERFORMANCE NOTE: this schema includes many optional features and should not
  be used for benchmarking.  To improve performance one could
-  - set stored="false" for all fields possible (esp large fields) when you
+  - set stored="false" for all fields possible (esp lastoredFieldselds) when you
     only need to search on the field but don't need to return the original
     value.
   - set indexed="false" if you don't need to search on the field, but only
@@ -145,7 +145,7 @@
     <!--
       Note:
       These should only be used for compatibility with existing indexes (created with older Solr versions).
-      Use Trie based fields instead. As of Solr 3.5 and 4.x, Trie based fields support sortMissingFirst/Last
+      Use Trie based fields instead. As of Solr 3.5 and 4.x, Trie bastoredFieldselds support sortMissingFirst/Last
 
       Numeric field types that manipulate the value into
       a string value that isn't human-readable in its internal form,
@@ -849,7 +849,7 @@
      omitNorms: (expert) set to true to omit the norms associated with
        this field (this disables length normalization and index-time
        boosting for the field, and saves some memory).  Only full-text
-       fields or fields that need an index-time boost need norms.
+       fieldsstoredFieldselds that need an index-time boost need norms.
        Norms are omitted for primitive (non-analyzed) types by default.
      termVectors: [false] set to true to store the term vector for a
        given field.

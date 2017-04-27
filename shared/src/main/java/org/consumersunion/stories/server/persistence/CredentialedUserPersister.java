@@ -408,12 +408,12 @@ public class CredentialedUserPersister implements Persister<CredentialedUser>, M
         }
     }
 
-    // TODO: badly named: should be retrieveAllWritableUsers or take permission list in authparams...
     public static class RetrieveUsersFunc extends ProcessFunc<BaseAuthParam, List<CredentialedUser>> {
         private final int permissionsMask;
 
         public RetrieveUsersFunc(int permissionsMask, BaseAuthParam input) {
             super(input);
+
             this.permissionsMask = permissionsMask;
         }
 

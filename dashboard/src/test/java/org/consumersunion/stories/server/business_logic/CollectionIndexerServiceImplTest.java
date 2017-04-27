@@ -8,24 +8,35 @@ import javax.inject.Inject;
 import org.consumersunion.stories.common.shared.model.Collection;
 import org.consumersunion.stories.common.shared.model.Organization;
 import org.consumersunion.stories.common.shared.model.StoryLink;
-import org.consumersunion.stories.server.solr.story.UpdatedStoryCollectionIndexer;
+import org.consumersunion.stories.server.index.story.UpdatedStoryCollectionIndexer;
+import org.elasticsearch.common.xcontent.ToXContent;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.jukito.JukitoModule;
 import org.jukito.JukitoRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 
 @RunWith(JukitoRunner.class)
 public class CollectionIndexerServiceImplTest {
+    public static class Module extends JukitoModule {
+        @Override
+        protected void configureTest() {
+            forceMock(UpdatedStoryCollectionIndexer.class);
+        }
+    }
+
     @Inject
     CollectionIndexerServiceImpl collectionIndexerService;
     @Inject
     OrganizationService organizationService;
     @Inject
-    IndexerService indexerService;
+    UpdatedStoryCollectionIndexer updatedStoryCollectionIndexer;
 
     @Test
     public void index_willUpdateStoryCollectionLinks() {
@@ -34,14 +45,15 @@ public class CollectionIndexerServiceImplTest {
         Collection collection = new Collection();
         collection.setOwner(orgId);
 
+        int storyId = 2;
         Set<StoryLink> stories = new HashSet<StoryLink>();
-        stories.add(new StoryLink(2));
+        stories.add(new StoryLink(storyId));
         collection.setStories(stories);
 
         // When
         collectionIndexerService.index(collection);
 
         // Then
-        verify(indexerService, Mockito.times(1)).process(isA(UpdatedStoryCollectionIndexer.class));
+        verify(updatedStoryCollectionIndexer).index(storyId);
     }
 }

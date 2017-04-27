@@ -3,10 +3,10 @@ package org.consumersunion.stories.server.export;
 import java.io.IOException;
 import java.util.List;
 
+import org.consumersunion.stories.common.shared.dto.tasks.ExportTask;
 import org.consumersunion.stories.server.business_logic.ProfileService;
 import org.consumersunion.stories.server.export.renderers.storyteller.StoryTellerColumnsRenderer;
 import org.consumersunion.stories.server.persistence.TaskPersister;
-import org.consumersunion.stories.common.shared.dto.tasks.ExportTask;
 
 public class AuthorsExporter extends CsvExporter<StoryTellerCsvWriter> {
     private final Integer collectionId;

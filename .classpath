@@ -48,7 +48,6 @@
 	<classpathentry kind="lib" path="site/WEB-INF/lib/validation-api-1.0.0.GA-sources.jar"/>
 	<classpathentry kind="lib" path="site/WEB-INF/lib/validation-api-1.0.0.GA.jar"/>
 	<classpathentry kind="lib" path="site/WEB-INF/lib/super-csv-2.0.0.jar"/>
-	<classpathentry kind="lib" path="site/WEB-INF/lib/solr-solrj-4.2.0.jar"/>
 	<classpathentry kind="lib" path="site/WEB-INF/lib/jackson-core-asl-1.9.2.jar"/>
 	<classpathentry kind="lib" path="site/WEB-INF/lib/jackson-jaxrs-1.9.2.jar"/>
 	<classpathentry kind="lib" path="site/WEB-INF/lib/jackson-mapper-asl-1.9.2.jar"/>
