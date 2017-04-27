@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,16 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.consumersunion.stories.common.client.service.datatransferobject.ProfileSummary;
 import org.consumersunion.stories.common.shared.dto.AuthParam;
 import org.consumersunion.stories.common.shared.model.Address;
@@ -45,20 +36,30 @@ import org.consumersunion.stories.common.shared.service.datatransferobject.Story
 import org.consumersunion.stories.common.shared.service.datatransferobject.StorySummary;
 import org.consumersunion.stories.i18n.CommonI18nErrorMessages;
 import org.consumersunion.stories.server.exception.NotFoundException;
+import org.consumersunion.stories.server.index.Indexer;
+import org.consumersunion.stories.server.index.Script;
+import org.consumersunion.stories.server.index.ScriptFactory;
+import org.consumersunion.stories.server.index.elasticsearch.SortOrder;
+import org.consumersunion.stories.server.index.elasticsearch.UpdateByQuery;
+import org.consumersunion.stories.server.index.elasticsearch.query.Query;
+import org.consumersunion.stories.server.index.elasticsearch.query.QueryBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.query.bool.Bool;
+import org.consumersunion.stories.server.index.elasticsearch.query.bool.BoolBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.search.Search;
+import org.consumersunion.stories.server.index.elasticsearch.search.SearchBuilder;
+import org.consumersunion.stories.server.index.story.StoryDocument;
 import org.consumersunion.stories.server.persistence.DocumentPersister.EntityAndRelationParams;
 import org.consumersunion.stories.server.persistence.funcs.CreateFunc;
 import org.consumersunion.stories.server.persistence.funcs.DeleteFunc;
 import org.consumersunion.stories.server.persistence.funcs.ProcessFunc;
 import org.consumersunion.stories.server.persistence.funcs.RetrieveFunc;
 import org.consumersunion.stories.server.persistence.funcs.UpdateFunc;
-import org.consumersunion.stories.server.solr.SolrServer;
-import org.consumersunion.stories.server.solr.story.documents.UpdateStoryAuthorDocument;
 import org.consumersunion.stories.server.util.StringUtil;
 import org.springframework.stereotype.Component;
 
-import com.google.common.base.Function;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -72,11 +73,14 @@ import static org.consumersunion.stories.common.shared.AuthConstants.ACCESS_MODE
 import static org.consumersunion.stories.common.shared.AuthConstants.ACCESS_MODE_PUBLIC;
 import static org.consumersunion.stories.common.shared.AuthConstants.ACCESS_MODE_ROOT;
 
+import static com.google.common.base.Strings.nullToEmpty;
+
 @Component
 public class StoryPersister implements Persister<Story> {
     private static final int STORY_POSITIONS_PAGE = 1000;
 
-    private final SolrServer storySolrServer;
+    private final Indexer<StoryDocument> storyIndexer;
+    private final ScriptFactory scriptFactory;
     private final PersistenceService persistenceService;
     private final ContactPersister contactPersister;
     private final DocumentPersister documentPersister;
@@ -84,12 +88,14 @@ public class StoryPersister implements Persister<Story> {
 
     @Inject
     StoryPersister(
-            @Named("solrStoryServer") SolrServer storySolrServer,
+            Indexer<StoryDocument> storyIndexer,
+            ScriptFactory scriptFactory,
             PersistenceService persistenceService,
             ContactPersister contactPersister,
             DocumentPersister documentPersister,
             CollectionPersister collectionPersister) {
-        this.storySolrServer = storySolrServer;
+        this.storyIndexer = storyIndexer;
+        this.scriptFactory = scriptFactory;
         this.persistenceService = persistenceService;
         this.contactPersister = contactPersister;
         this.documentPersister = documentPersister;
@@ -141,39 +147,10 @@ public class StoryPersister implements Persister<Story> {
         return persistenceService.process(new CountStories(params, this));
     }
 
-    public void updateAuthor(final ProfileSummary profileSummary) {
-        SolrQuery sQuery = new SolrQuery();
-
-        sQuery.setQuery("*:*");
-        sQuery.addFilterQuery("authorId:" + profileSummary.getProfile().getId());
-        sQuery.setRequestHandler("/search");
-
-        try {
-            QueryResponse response = storySolrServer.query(sQuery);
-
-            List<SolrInputDocument> documents =
-                    FluentIterable.from(response.getResults())
-                            .transformAndConcat(new Function<SolrDocument, List<SolrInputDocument>>() {
-                                @Override
-                                public List<SolrInputDocument> apply(SolrDocument input) {
-                                    int id = Integer.parseInt((String) input.getFieldValue("id"));
-
-                                    UpdateStoryAuthorDocument update =
-                                            new UpdateStoryAuthorDocument(id, profileSummary);
-
-                                    return update.toDocuments();
-                                }
-                            }).toList();
-
-            if (!documents.isEmpty()) {
-                storySolrServer.add(documents);
-                storySolrServer.commit();
-            }
-        } catch (SolrServerException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void updateAuthor(ProfileSummary profileSummary) {
+        Query query = QueryBuilder.newBuilder().withTerm("authorId", profileSummary.getProfile().getId()).build();
+        Script script = scriptFactory.createUpdateAuthorScript(profileSummary);
+        storyIndexer.updateFromQuery(new UpdateByQuery(query, script));
     }
 
     public List<Integer> getStoriesId(int profileId) {
@@ -242,12 +219,12 @@ public class StoryPersister implements Persister<Story> {
 
     public static class DeleteStoryFunc extends DeleteFunc<Story> {
         private final DocumentPersister documentPersister;
-        private final SolrServer solrServer;
+        private final Indexer<StoryDocument> indexer;
 
         DeleteStoryFunc(Story story, StoryPersister storyPersister) {
             super(story);
 
-            solrServer = storyPersister.storySolrServer;
+            this.indexer = storyPersister.storyIndexer;
             this.documentPersister = storyPersister.documentPersister;
         }
 
@@ -308,8 +285,7 @@ public class StoryPersister implements Persister<Story> {
                 }
 
                 try {
-                    solrServer.deleteById(String.valueOf(input.getId()));
-                    solrServer.commit();
+                    indexer.delete(input.getId());
                 } catch (Exception e) {
                     throw new GeneralException(e);
                 }
@@ -594,17 +570,6 @@ public class StoryPersister implements Persister<Story> {
             return distance;
         }
 
-        public String getBBoxSolr() {
-            StringBuilder builder = new StringBuilder();
-            builder.append("authorLocation:[");
-            builder.append(southWest);
-            builder.append(" TO ");
-            builder.append(northEast);
-            builder.append("]");
-
-            return builder.toString();
-        }
-
         public Boolean containBBox() {
             return !Strings.isNullOrEmpty(northEast)
                     && !Strings.isNullOrEmpty(southWest);
@@ -665,26 +630,21 @@ public class StoryPersister implements Persister<Story> {
     static class RetrieveStorySummary extends ProcessFunc<Integer, StorySummary> {
         private final boolean includeFullText;
         private final StoryPersister storyPersister;
-        private final SolrServer solrServer;
 
         public RetrieveStorySummary(Integer input, boolean includeFullText, StoryPersister storyPersister) {
             super(input);
 
             this.includeFullText = includeFullText;
             this.storyPersister = storyPersister;
-            solrServer = storyPersister.storySolrServer;
         }
 
         @Override
         public StorySummary process() {
-
             try {
-                SolrQuery sQuery = processSearchQuery(input);
+                StoryDocument storyDocument = storyPersister.storyIndexer.get(input);
 
-                QueryResponse result = solrServer.query(sQuery);
-
-                List<StorySummary> storySummaries = storyPersister.processSolrResults(result, includeFullText, true,
-                        conn);
+                List<StorySummary> storySummaries = storyPersister.processSolrResults(
+                        Collections.singletonList(storyDocument), includeFullText, true, conn);
 
                 if (!storySummaries.isEmpty()) {
                     return storySummaries.get(0);
@@ -704,7 +664,6 @@ public class StoryPersister implements Persister<Story> {
     static class RetrieveStoriesPaged extends ProcessFunc<StoryPagedRetrieveParams, List<StorySummary>> {
         private final boolean includeFullText;
         private final StoryPersister storyPersister;
-        private final SolrServer solrServer;
 
         RetrieveStoriesPaged(StoryPagedRetrieveParams params,
                 boolean includeFullText,
@@ -713,22 +672,26 @@ public class StoryPersister implements Persister<Story> {
 
             this.includeFullText = includeFullText;
             this.storyPersister = storyPersister;
-            solrServer = storyPersister.storySolrServer;
         }
 
         @Override
         public List<StorySummary> process() {
             try {
-                SolrQuery sQuery = processSearchQuery(input);
-                setSolrSort(sQuery, input);
+                SearchBuilder searchBuilder = SearchBuilder.newBuilder();
+                setSolrSort(searchBuilder, input);
 
-                sQuery.setStart(input.getStart());
-                sQuery.setRows(input.getLength());
+                Bool bool = processSearchQuery(input);
+                Query query = QueryBuilder.ofBool(bool);
 
-                QueryResponse result = solrServer.query(sQuery);
+                Search search = searchBuilder
+                        .withQuery(query)
+                        .withFrom(input.getStart())
+                        .withSize(input.getLength())
+                        .build();
 
-                List<StorySummary> storySummaries =
-                        storyPersister.processSolrResults(result, includeFullText, input.isIncludeCollections(), conn);
+                List<StoryDocument> storyDocuments = storyPersister.storyIndexer.search(search);
+                List<StorySummary> storySummaries = storyPersister.processSolrResults(storyDocuments, includeFullText,
+                        input.isIncludeCollections(), conn);
 
                 if (input.isIncludeData()) {
                     for (StorySummary storySummary : storySummaries) {
@@ -793,14 +756,17 @@ public class StoryPersister implements Persister<Story> {
                 try {
                     List<StoryPosition> storyPositions = new ArrayList<StoryPosition>();
                     for (int i = 0; i < input.getLength(); i += STORY_POSITIONS_PAGE) {
-                        SolrQuery sQuery = processSearchQuery(input);
-                        sQuery.addFilterQuery("collectionsId:" + input.getCollectionId());
-                        sQuery.setStart(i);
-                        sQuery.setRows(STORY_POSITIONS_PAGE);
+                        Bool bool = processSearchQuery(input);
 
-                        QueryResponse result = storySolrServer.query(sQuery);
+                        Search search = SearchBuilder.newBuilder()
+                                .withQuery(QueryBuilder.ofBool(bool))
+                                .withFrom(i)
+                                .withSize(STORY_POSITIONS_PAGE)
+                                .build();
 
-                        List<StoryPosition> batch = processSolrResults(result);
+                        List<StoryDocument> storyDocuments = storyIndexer.search(search);
+
+                        List<StoryPosition> batch = processSolrResults(storyDocuments);
                         storyPositions.addAll(batch);
                     }
 
@@ -813,25 +779,24 @@ public class StoryPersister implements Persister<Story> {
     }
 
     static class CountStories extends ProcessFunc<StoryPagedRetrieveParams, Integer> {
-        private final SolrServer solrServer;
+        private final StoryPersister storyPersister;
 
         CountStories(
                 StoryPagedRetrieveParams params,
                 StoryPersister storyPersister) {
             super(params);
-
-            solrServer = storyPersister.storySolrServer;
+            this.storyPersister = storyPersister;
         }
 
         @Override
         public Integer process() {
             try {
                 input.noLimit();
-                SolrQuery sQuery = processSearchQuery(input);
+                Bool bool = processSearchQuery(input);
 
-                QueryResponse result = solrServer.query(sQuery);
-                Long numFound = result.getResults().getNumFound();
-                return numFound.intValue();
+                Query query = QueryBuilder.ofBool(bool);
+
+                return (int) storyPersister.storyIndexer.count(SearchBuilder.ofQuery(query));
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new GeneralException(e);
@@ -844,23 +809,10 @@ public class StoryPersister implements Persister<Story> {
             @Override
             public Integer process() {
                 try {
-                    SolrQuery sQuery = processSearchQuery(input);
-                    sQuery.addFilterQuery("collectionsId:" + input.getCollectionId());
+                    Bool bool = processSearchQuery(input);
+                    Query query = QueryBuilder.ofBool(bool);
 
-                    if (input.containBBox()) {
-                        sQuery.addFilterQuery(input.getBBoxSolr());
-                    }
-
-                    if (input.containGeoFilter()) {
-                        sQuery.addFilterQuery("{!bbox}");
-                        sQuery.set("pt", input.getLocation());
-                        sQuery.set("d", input.getDistance());
-                        sQuery.set("sfield", "authorLocation");
-                    }
-
-                    QueryResponse result = storySolrServer.query(sQuery);
-                    Long numFound = result.getResults().getNumFound();
-                    return numFound.intValue();
+                    return (int) storyIndexer.count(SearchBuilder.ofQuery(query));
                 } catch (Exception e) {
                     throw new GeneralException(e);
                 }
@@ -870,57 +822,54 @@ public class StoryPersister implements Persister<Story> {
 
     @SuppressWarnings("unchecked")
     private List<StorySummary> processSolrResults(
-            QueryResponse result,
+            List<StoryDocument> documents,
             boolean includeFullText,
             boolean includeCollections,
             Connection conn) {
         List<StorySummary> stories = new ArrayList<StorySummary>();
-        Iterator<SolrDocument> iterator = result.getResults().iterator();
 
-        while (iterator.hasNext()) {
-            SolrDocument doc = iterator.next();
-            Story story = instantiateStoryFromSolr(doc);
+        for (StoryDocument doc : documents) {
+            Story story = instantiateStoryFromDocument(doc);
 
             Address address = new Address();
-            address.setCity((String) doc.getFieldValue("authorCity"));
-            address.setState((String) doc.getFieldValue("authorState"));
-            address.setAddress1((String) doc.getFieldValue("authorAddress1"));
-            address.setPostalCode((String) doc.getFieldValue("authorPostalCode"));
+            address.setCity(doc.getAuthorCity());
+            address.setState(doc.getAuthorState());
+            address.setAddress1(doc.getAuthorAddress1());
+            address.setPostalCode(doc.getAuthorPostalCode());
 
-            String summaryText = (String) doc.getFieldValue("primaryText");
+            String summaryText = doc.getPrimaryText();
             if (summaryText != null) {
                 summaryText = StringUtil.truncateString(summaryText, StorySummary.SUMMARY_SIZE);
             }
 
             List<String> notes = new ArrayList<String>();
-            if (null != doc.getFieldValue("storyNotes")) {
-                notes.addAll((java.util.Collection<String>) doc.getFieldValue("storyNotes"));
+            if (doc.getStoryNotes() != null) {
+                notes.addAll(doc.getStoryNotes());
             }
 
-            Object defaultContentId = doc.getFieldValue("defaultContentId");
-            if (defaultContentId != null) {
-                story.setDefaultContent((Integer) defaultContentId);
+            if (doc.getDefaultContentId() != null) {
+                story.setDefaultContent(doc.getDefaultContentId());
             }
 
             StorySummary storySummary = new StorySummary(story,
-                    (String) doc.getFieldValue("storyTitle"),
+                    doc.getTitle(),
                     summaryText,
-                    (String) doc.getFieldValue("authorHandle"),
-                    (String) doc.getFieldValue("authorGivenName"),
-                    (String) doc.getFieldValue("authorSurname"),
-                    (String) doc.getFieldValue("authorPrimaryEmail"),
-                    (String) doc.getFieldValue("authorPrimaryPhone"),
+                    null,
+                    doc.getAuthorGivenName(),
+                    doc.getAuthorSurname(),
+                    doc.getAuthorPrimaryEmail(),
+                    doc.getAuthorPrimaryPhone(),
                     notes,
                     address,
                     new DocumentsContainer());
 
             if (includeFullText) {
-                storySummary.setFullText((String) doc.getFieldValue("primaryText"));
+                storySummary.setFullText(doc.getPrimaryText());
             }
 
             Set<String> tags = new LinkedHashSet<String>();
-            if (null != doc.getFieldValue("storyTags")) {
-                tags.addAll((java.util.Collection<String>) doc.getFieldValue("storyTags"));
+            if (doc.getTags() != null) {
+                tags.addAll(doc.getTags());
             }
 
             storySummary.setTags(tags);
@@ -947,64 +896,58 @@ public class StoryPersister implements Persister<Story> {
                 .getAuthRelation() == ACCESS_MODE_PUBLIC)) {
             return "storyBodyPrivacy:true";
         } else if (input.getAuthRelation() == ACCESS_MODE_ANY) {
-            return "storyBodyPrivacy:true OR readAuths:"
-                    + input.getEffectiveId()
-                    + " OR ownerId:" + input.getEffectiveId();
+            return "(storyBodyPrivacy:true OR readAuths:" + input.getEffectiveId()
+                    + " OR ownerId:" + input.getEffectiveId() + ")";
         } else if (input.getAuthRelation() == ACCESS_MODE_EXPLICIT) {
-            return ("readAuths:" + input.getEffectiveId() + " OR ownerId:" + input.getEffectiveId());
+            return "(readAuths:" + input.getEffectiveId() + " OR ownerId:" + input.getEffectiveId() + ")";
         } else if (input.getAuthRelation() == ACCESS_MODE_OWN) {
-            return ("ownerId:" + input.getEffectiveId());
+            return "ownerId:" + input.getEffectiveId();
         } else if (input.getAuthRelation() == ACCESS_MODE_PRIVILEGED) {
-            return ("readAuths:" + input.getEffectiveId());
+            return "readAuths:" + input.getEffectiveId();
         } else if (input.getAuthRelation() == ACCESS_MODE_PRIVATE) {
-            return ("readAuths:" + input.getEffectiveId() + " AND ownerId:" + input.getEffectiveId());
+            return "(readAuths:" + input.getEffectiveId() + " AND ownerId:" + input.getEffectiveId() + ")";
         } else {
             throw new GeneralException("Unknown access mode: " + input.getAuthRelation());
         }
     }
 
-    private List<StoryPosition> processSolrResults(QueryResponse result) {
+    private List<StoryPosition> processSolrResults(List<StoryDocument> storyDocuments) {
         List<StoryPosition> storyPositions = new ArrayList<StoryPosition>();
-        Iterator<SolrDocument> iterator = result.getResults().iterator();
 
-        while (iterator.hasNext()) {
-            SolrDocument doc = iterator.next();
-            String storyLocation = (String) doc.getFieldValue("authorLocation");
+        for (StoryDocument doc : storyDocuments) {
+            String storyLocation = doc.getAuthorLocation();
 
             if (!Strings.isNullOrEmpty(storyLocation)) {
-                Integer id = Integer.parseInt((String) doc.getFieldValue("id"));
-                storyPositions.add(new StoryPosition(id, storyLocation));
+                storyPositions.add(new StoryPosition(doc.getId(), storyLocation));
             }
         }
 
         return storyPositions;
     }
 
-    private static Story instantiateStoryFromSolr(SolrDocument doc) {
-        Integer id = Integer.parseInt((String) doc.getFieldValue("id"));
-        Integer version = (Integer) doc.getFieldValue("storyVersion");
+    private static Story instantiateStoryFromDocument(StoryDocument doc) {
+        int id = doc.getId();
+        Integer version = doc.getStoryVersion();
         Story s = new Story(id, version);
-        s.setUpdated((Date) doc.getFieldValue("lastModified"));
-        s.setOwner((Integer) doc.getFieldValue("ownerId"));
-        s.setPermalink((String) doc.getFieldValue("permalink"));
-        s.setUpdated((Date) doc.getFieldValue("lastModified"));
-        s.setCreated((Date) doc.getFieldValue("created"));
-        final String fullName = getStoryteller((String) doc.getFieldValue("authorGivenName"),
-                (String) doc.getFieldValue("authorSurname"));
+        s.setOwner(doc.getOwnerId());
+        s.setPermalink(doc.getPermalink());
+        s.setUpdated(doc.getLastModified());
+        s.setCreated(doc.getCreated());
+        String fullName = getStoryteller(doc.getAuthorGivenName(), doc.getAuthorSurname());
         s.setStoryTeller(fullName);
         // TODO: need byline
         s.setByLine(fullName);
         // TODO: need 'published'
         s.setPublished(true);
-        s.setDefaultContent((Integer) doc.getFieldValue("documentId"));
+        s.setDefaultContent(doc.getDefaultContentId());
         s.setDocuments(instantiateDocumentIds(doc));
-        s.setPublic((Boolean) doc.getFieldValue("storyBodyPrivacy"));
+        s.setPublic(doc.getStoryBodyPrivacy());
 
         return s;
     }
 
-    private static Map<String, Set<Integer>> instantiateDocumentIds(SolrDocument doc) {
-        String documentIdsFromDoc = (String) doc.getFieldValue("documentIds");
+    private static Map<String, Set<Integer>> instantiateDocumentIds(StoryDocument doc) {
+        String documentIdsFromDoc = doc.getDocumentIds();
 
         if (documentIdsFromDoc != null) {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -1019,20 +962,12 @@ public class StoryPersister implements Persister<Story> {
         return Maps.newHashMap();
     }
 
-    private List<CollectionSummary> instantiateAttachedCollections(SolrDocument doc, Connection conn) {
-        Set<Integer> collectionIds;
-        java.util.Collection<Object> fieldValues = doc.getFieldValues("collectionsId");
+    private List<CollectionSummary> instantiateAttachedCollections(StoryDocument doc, Connection conn) {
         List<CollectionSummary> collectionSummaries = new ArrayList<CollectionSummary>();
 
-        if (fieldValues != null) {
-            collectionIds = FluentIterable.from(fieldValues)
-                    .transform(new Function<Object, Integer>() {
-                        @Override
-                        public Integer apply(Object input) {
-                            return (Integer) input;
-                        }
-                    }).toSet();
+        Set<Integer> collectionIds = doc.getCollectionsId();
 
+        if (collectionIds != null && !collectionIds.isEmpty()) {
             List<Collection> collections = collectionPersister.getPartial(Lists.newArrayList(collectionIds), conn);
             for (Collection collection : collections) {
                 if (!collection.getDeleted()) {
@@ -1090,73 +1025,79 @@ public class StoryPersister implements Persister<Story> {
         return s;
     }
 
-    private static SolrQuery processSearchQuery(StoryPagedRetrieveParams input) {
-        SolrQuery sQuery = new SolrQuery();
+    private static Bool processSearchQuery(StoryPagedRetrieveParams input) {
+        StringBuilder queryStringBuilder = new StringBuilder();
+
+        BoolBuilder boolBuilder = BoolBuilder.newBuilder();
 
         if (!Strings.isNullOrEmpty(input.getSearchText())) {
-            sQuery.setQuery(TextHelper.processSearchText(Strings.nullToEmpty(input.getSearchText())));
-        } else {
-            sQuery.setQuery("*:*");
+            queryStringBuilder.append(TextHelper.processSearchText(nullToEmpty(input.getSearchText()))).append(" AND ");
         }
-        sQuery.addFilterQuery(StoryPersister.getAccessModeParams(input));
-        sQuery.setRequestHandler("/search");
+
+        queryStringBuilder.append(StoryPersister.getAccessModeParams(input));
 
         if (input.getCollectionId() != null) {
-            sQuery.addFilterQuery("collectionsId:" + input.getCollectionId());
+            appendQuery(queryStringBuilder, "collectionsId:", "AND").append(input.getCollectionId());
         }
 
         if (input.getQuestionnaireId() != null) {
-            sQuery.addFilterQuery("questionnaireId:" + input.getQuestionnaireId()
-                    + " OR collectionsId:" + input.getQuestionnaireId());
+            StringBuilder subBuilder = new StringBuilder();
+            appendQuery(queryStringBuilder, subBuilder.append("(questionnaireId:").append(input.getQuestionnaireId())
+                    .append(" OR collectionsId:").append(input.getQuestionnaireId()).append(")").toString(), "AND");
         }
 
         if (input.getAuthorId() != null) {
-            sQuery.addFilterQuery("authorId:" + input.getAuthorId());
+            appendQuery(queryStringBuilder, "authorId:", "AND").append(input.getAuthorId());
         }
 
         if (input.containBBox()) {
-            sQuery.addFilterQuery(input.getBBoxSolr());
+            boolBuilder.filter()
+                    .withGeoBoundingBox("authorLocation", input.getNorthEast(), input.getSouthWest());
         }
 
-        return sQuery;
-    }
-
-    private static SolrQuery processSearchQuery(Integer id) {
-        SolrQuery sQuery = new SolrQuery();
-
-        sQuery.setRequestHandler("/search");
-
-        if (id != null) {
-            sQuery.addFilterQuery("id:" + id);
+        if (input.containGeoFilter()) {
+            boolBuilder.filter()
+                    .withGeoDistance("authorLocation", input.getDistance(), input.getLocation());
         }
 
-        return sQuery;
+        if (queryStringBuilder.length() > 0) {
+            boolBuilder.must().withQueryString(queryStringBuilder.toString());
+        }
+
+        return boolBuilder.build();
     }
 
-    private static void setSolrSort(SolrQuery sQuery, AuthParam<?> input) {
+    private static StringBuilder appendQuery(StringBuilder query, String textToAppend, String operator) {
+        if (query.length() > 0) {
+            query.append(" ").append(operator).append(" ").append(textToAppend);
+        }
+        return query;
+    }
+
+    private static void setSolrSort(SearchBuilder searchBuilder, AuthParam<?> input) {
         SortField sortField = input.getSortField();
-        ORDER order = input.isAscending() ? ORDER.asc : ORDER.desc;
+        SortOrder order = getOrder(input.isAscending());
 
         if (sortField == StorySortField.CITY) {
-            sQuery.setSort("authorCity_sort", order);
+            searchBuilder.withSort("authorCity.keyword", order);
         } else if (sortField == StorySortField.CREATED_NEW || sortField == StorySortField.CREATED_OLD) {
-            sQuery.setSort("created", getOrder(sortField == StorySortField.CREATED_OLD));
+            searchBuilder.withSort("created", getOrder(sortField == StorySortField.CREATED_OLD));
         } else if (sortField == StorySortField.ID) {
-            sQuery.setSort("storyId", order);
+            searchBuilder.withSort("id", order);
         } else if (sortField == StorySortField.MODIFIED_NEW || sortField == StorySortField.MODIFIED_OLD) {
-            sQuery.setSort("lastModified", getOrder(sortField == StorySortField.MODIFIED_OLD));
+            searchBuilder.withSort("lastModified", getOrder(sortField == StorySortField.MODIFIED_OLD));
         } else if (sortField == StorySortField.STATE) {
-            sQuery.setSort("authorState_sort", order);
+            searchBuilder.withSort("authorState.keyword", order);
         } else if (sortField == StorySortField.STORYTELLER) {
-            sQuery.setSort("authorSurname_sort", order);
+            searchBuilder.withSort("authorSurname.keyword", order);
         } else if (sortField == StorySortField.TITLE_A_Z || sortField == StorySortField.TITLE_Z_A) {
-            sQuery.setSort("storyTitle_sort", getOrder(sortField == StorySortField.TITLE_A_Z));
+            searchBuilder.withSort("title.keyword", getOrder(sortField == StorySortField.TITLE_A_Z));
         } else {
-            sQuery.setSort("created", order);
+            searchBuilder.withSort("created", order);
         }
     }
 
-    private static ORDER getOrder(boolean ascending) {
-        return ascending ? ORDER.asc : ORDER.desc;
+    private static SortOrder getOrder(boolean ascending) {
+        return ascending ? SortOrder.ASC : SortOrder.DESC;
     }
 }

@@ -14,16 +14,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.consumersunion.stories.common.shared.model.User;
 import org.consumersunion.stories.server.business_logic.AuthorizationService;
-import org.consumersunion.stories.server.business_logic.IndexerService;
 import org.consumersunion.stories.server.business_logic.UserService;
+import org.consumersunion.stories.server.index.Indexer;
+import org.consumersunion.stories.server.index.collection.CollectionDocument;
+import org.consumersunion.stories.server.index.collection.FullCollectionIndexer;
+import org.consumersunion.stories.server.index.elasticsearch.query.QueryBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.search.Search;
+import org.consumersunion.stories.server.index.elasticsearch.search.SearchBuilder;
+import org.consumersunion.stories.server.index.profile.FullPersonIndexer;
+import org.consumersunion.stories.server.index.profile.ProfileDocument;
+import org.consumersunion.stories.server.index.story.FullStoryIndexer;
+import org.consumersunion.stories.server.index.story.StoryDocument;
 import org.consumersunion.stories.server.persistence.AnswerSetPersister;
 import org.consumersunion.stories.server.persistence.CollectionPersister;
 import org.consumersunion.stories.server.persistence.DocumentPersister;
-import org.consumersunion.stories.server.solr.SolrServer;
-import org.consumersunion.stories.server.solr.SupportDataUtilsFactory;
-import org.consumersunion.stories.server.solr.collection.FullCollectionIndexer;
-import org.consumersunion.stories.server.solr.person.FullPersonIndexer;
-import org.consumersunion.stories.server.solr.story.FullStoryIndexer;
+import org.consumersunion.stories.server.persistence.SupportDataUtilsFactory;
 import org.consumersunion.stories.server.util.ApplicationContextProvider;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -39,16 +44,14 @@ public class IndexServlet extends HttpServlet {
     @Inject
     private UserService userService;
     @Inject
-    @Named("solrStoryServer")
-    private SolrServer solrStoryServer;
+    @Named("storyIndexer")
+    private Indexer<StoryDocument> storyIndexer;
     @Inject
-    @Named("solrPersonServer")
-    private SolrServer solrPersonServer;
+    @Named("profileIndexer")
+    private Indexer<ProfileDocument> profileIndexer;
     @Inject
-    @Named("solrCollectionServer")
-    private SolrServer solrCollectionServer;
-    @Inject
-    private IndexerService indexerService;
+    @Named("collectionIndexer")
+    private Indexer<CollectionDocument> collectionIndexer;
     @Inject
     private DocumentPersister documentPersister;
     @Inject
@@ -96,16 +99,17 @@ public class IndexServlet extends HttpServlet {
             public void run() {
                 try {
                     logger.log(Level.INFO, "Reindexing collections.");
-                    solrCollectionServer.deleteByQuery("*:*");
-                    indexerService.processManual(
-                            new FullCollectionIndexer(response, supportDataUtilsFactory, collectionPersister));
+                    Search searchAll = SearchBuilder.ofQuery(QueryBuilder.newMatchAll());
+                    collectionIndexer.deleteByQuery(searchAll);
+                    new FullCollectionIndexer(response, supportDataUtilsFactory, collectionPersister,
+                            collectionIndexer).index();
                     logger.log(Level.INFO, "Reindexing stories.");
-                    solrStoryServer.deleteByQuery("*:*");
-                    indexerService.processManual(new FullStoryIndexer(response, documentPersister, answerSetPersister,
-                            supportDataUtilsFactory));
+                    storyIndexer.deleteByQuery(searchAll);
+                    new FullStoryIndexer(response, storyIndexer, documentPersister, answerSetPersister,
+                            supportDataUtilsFactory).index();
                     logger.log(Level.INFO, "Reindexing people.");
-                    solrPersonServer.deleteByQuery("*:*");
-                    indexerService.processManual(new FullPersonIndexer(supportDataUtilsFactory, response));
+                    profileIndexer.deleteByQuery(searchAll);
+                    new FullPersonIndexer(profileIndexer, supportDataUtilsFactory, response).index();
                 } catch (Exception e) {
                     logger.log(Level.SEVERE, "Error running re-index.", e);
                 } finally {
@@ -117,12 +121,11 @@ public class IndexServlet extends HttpServlet {
         });
 
         bgThread.start();
-        response.getWriter().println("Index started in separate thread. If you have access to the Solr server, you " +
-                "can watch the progress there. The index order will be 'collections', then 'stories', then 'people'. " +
-                "Each core will be cleared immediately before re-indexing. We will attempt to send incremental " +
-                "updates to the browser window, but the HTTP server's compression filters may interefere. All the '-'" +
-                " " +
-                "below are to force the buffer to flush this message.\n" +
+        response.getWriter().println("Index started in separate thread. If you have access to the Elasticsearch " +
+                "server, you can watch the progress there. The index order will be 'collections', then 'stories', " +
+                "then 'people'. Each core will be cleared immediately before re-indexing. We will attempt to send " +
+                "incremental updates to the browser window, but the HTTP server's compression filters may interefere." +
+                " All the '-' below are to force the buffer to flush this message.\n" +
                 "-------------------------------------------------------------------------------------------------\n" +
                 "-------------------------------------------------------------------------------------------------\n" +
                 "-------------------------------------------------------------------------------------------------\n" +

@@ -10,10 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.consumersunion.stories.common.shared.model.User;
 import org.consumersunion.stories.server.business_logic.AuthorizationService;
-import org.consumersunion.stories.server.business_logic.IndexerService;
 import org.consumersunion.stories.server.business_logic.UserService;
 import org.consumersunion.stories.server.persistence.PersistenceService;
-import org.consumersunion.stories.server.solr.IndexerFactory;
+import org.consumersunion.stories.server.index.IndexerFactory;
 import org.consumersunion.stories.server.util.ApplicationContextProvider;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -27,8 +26,6 @@ public abstract class RpcBaseServiceImpl extends RemoteServiceServlet {
     protected AuthorizationService authService;
     @Inject
     protected UserService userService;
-    @Inject
-    protected IndexerService indexerService;
     @Inject
     protected IndexerFactory indexerFactory;
     @Inject

@@ -120,9 +120,7 @@ public class Address implements Serializable, Comparable<Address>, IsSerializabl
     }
 
     /**
-     * The relation of the Address to the Entity. TODO: At the time of the
-     * writing of these docs, the relations have not been fleshed out. Once they
-     * are, we should reference or include that information here.
+     * The relation of the Address to the Entity.
      */
     public String getRelation() {
         return relation;

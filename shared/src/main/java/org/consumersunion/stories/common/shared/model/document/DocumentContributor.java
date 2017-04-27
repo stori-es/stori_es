@@ -31,8 +31,7 @@ public class DocumentContributor implements Serializable {
     }
 
     /**
-     * The role of the associated contributor. TODO: specify or reference
-     * spec
+     * The role of the associated contributor.
      */
     public Document.DocumentContributorRole getRole() {
         return role;

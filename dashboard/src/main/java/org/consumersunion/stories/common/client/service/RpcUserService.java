@@ -83,8 +83,6 @@ public interface RpcUserService extends RemoteService {
      */
     ActionResponse checkAssignableHandle(String username);
 
-    // TODO: See TASK-833
-
     /**
      * Browse users over which the effective user has the indicated privilege.
      */

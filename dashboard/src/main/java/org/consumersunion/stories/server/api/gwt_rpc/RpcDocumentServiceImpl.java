@@ -34,6 +34,10 @@ import org.consumersunion.stories.server.business_logic.SystemEntityService;
 import org.consumersunion.stories.server.exception.NotAuthorizedException;
 import org.consumersunion.stories.server.exception.NotFoundException;
 import org.consumersunion.stories.server.exception.NotLoggedInException;
+import org.consumersunion.stories.server.index.collection.UpdatedCollectionIndexer;
+import org.consumersunion.stories.server.index.story.UpdatedAuthorNotesIndexer;
+import org.consumersunion.stories.server.index.story.UpdatedStoryDocumentIndexer;
+import org.consumersunion.stories.server.index.story.UpdatedStoryNotesIndexer;
 import org.consumersunion.stories.server.persistence.AnswerSetPersister;
 import org.consumersunion.stories.server.persistence.DocumentPersister;
 import org.consumersunion.stories.server.persistence.DocumentPersister.EntityAndRelationParams;
@@ -41,9 +45,6 @@ import org.consumersunion.stories.server.persistence.ProfilePersister;
 import org.consumersunion.stories.server.persistence.QuestionnaireI15dPersister;
 import org.consumersunion.stories.server.persistence.StoryPersister;
 import org.consumersunion.stories.server.persistence.StoryPersister.StoryPagedRetrieveParams;
-import org.consumersunion.stories.server.solr.story.UpdatedAuthorNotesIndexer;
-import org.consumersunion.stories.server.solr.story.UpdatedStoryDocumentIndexer;
-import org.consumersunion.stories.server.solr.story.UpdatedStoryNotesIndexer;
 import org.consumersunion.stories.server.util.StringUtil;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +70,14 @@ public class RpcDocumentServiceImpl extends RpcBaseServiceImpl implements RpcDoc
     private SystemEntityService systemEntityService;
     @Inject
     private DocumentService documentService;
+    @Inject
+    private UpdatedStoryDocumentIndexer updatedStoryDocumentIndexer;
+    @Inject
+    private UpdatedCollectionIndexer updatedCollectionIndexer;
+    @Inject
+    private UpdatedAuthorNotesIndexer updatedAuthorNotesIndexer;
+    @Inject
+    private UpdatedStoryNotesIndexer updatedStoryNotesIndexer;
 
     @Override
     public ActionResponse createNotes(String text, Set<Integer> entityIds) {
@@ -174,12 +183,12 @@ public class RpcDocumentServiceImpl extends RpcBaseServiceImpl implements RpcDoc
             if (targetObj instanceof Story
                     && (SystemEntityRelation.BODY.equals(document.getSystemEntityRelation())
                     || SystemEntityRelation.ANSWER_SET.equals(document.getSystemEntityRelation()))) {
-                indexerService.process(new UpdatedStoryDocumentIndexer(document.getSystemEntity(), document));
+                updatedStoryDocumentIndexer.index(document.getSystemEntity(), document);
             } else if (targetObj instanceof Collection
                     && SystemEntityRelation.BODY.equals(document.getSystemEntityRelation())) {
                 Collection collection = (Collection) targetObj;
                 collection.setBodyDocument(document);
-                indexerService.process(indexerFactory.createUpdatedCollection(collection));
+                updatedCollectionIndexer.index(collection);
             } else if (document.getSystemEntityRelation() == SystemEntityRelation.NOTE) {
                 saveNoteDocument(document);
             }
@@ -204,7 +213,7 @@ public class RpcDocumentServiceImpl extends RpcBaseServiceImpl implements RpcDoc
         if (entity instanceof Story) {
             if (author == null || author.getProfile() == null) {
                 String noteText = document.getOnlyContent();
-                indexerService.process(new UpdatedStoryNotesIndexer(entityId, noteText));
+                updatedStoryNotesIndexer.index(entityId, noteText);
             } else {
                 int start = 0;
                 int length = 100;
@@ -219,7 +228,7 @@ public class RpcDocumentServiceImpl extends RpcBaseServiceImpl implements RpcDoc
 
                     for (StorySummary storySummary : stories) {
                         String noteText = document.getOnlyContent();
-                        indexerService.process(new UpdatedAuthorNotesIndexer(storySummary.getStoryId(), noteText));
+                        updatedAuthorNotesIndexer.index(storySummary.getStoryId(), noteText);
                     }
 
                     maybeMore = !stories.isEmpty();

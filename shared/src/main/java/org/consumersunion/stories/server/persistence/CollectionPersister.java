@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.zip.CRC32;
@@ -17,11 +16,6 @@ import java.util.zip.Checksum;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
 import org.consumersunion.stories.common.shared.dto.AuthParam;
 import org.consumersunion.stories.common.shared.dto.RetrievePagedCollectionsParams;
 import org.consumersunion.stories.common.shared.model.Collection;
@@ -37,13 +31,20 @@ import org.consumersunion.stories.common.shared.service.datatransferobject.Colle
 import org.consumersunion.stories.common.shared.service.datatransferobject.CollectionSummary;
 import org.consumersunion.stories.i18n.CommonI18nErrorMessages;
 import org.consumersunion.stories.server.exception.NotFoundException;
+import org.consumersunion.stories.server.index.Indexer;
+import org.consumersunion.stories.server.index.collection.CollectionDocument;
+import org.consumersunion.stories.server.index.elasticsearch.SortOrder;
+import org.consumersunion.stories.server.index.elasticsearch.query.Ids;
+import org.consumersunion.stories.server.index.elasticsearch.query.QueryBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.query.bool.Bool;
+import org.consumersunion.stories.server.index.elasticsearch.query.bool.BoolBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.search.SearchBuilder;
 import org.consumersunion.stories.server.persistence.funcs.CreateFunc;
 import org.consumersunion.stories.server.persistence.funcs.ProcessFunc;
 import org.consumersunion.stories.server.persistence.funcs.RetrieveFunc;
 import org.consumersunion.stories.server.persistence.funcs.RetrieveListFunc;
 import org.consumersunion.stories.server.persistence.funcs.UpdateFunc;
 import org.consumersunion.stories.server.security.RelationalAuthorizationQueryUtil;
-import org.consumersunion.stories.server.solr.SolrServer;
 import org.consumersunion.stories.server.util.StringUtil;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.stereotype.Component;
@@ -52,6 +53,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import net.lightoze.gwt.i18n.server.LocaleFactory;
@@ -82,27 +84,27 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
             // systemEntity.version tracks the latest version of the document.
             "LEFT OUTER JOIN systemEntity de ON d.id=de.id AND de.version=d.version ";
 
+    private final Indexer<CollectionDocument> collectionIndexer;
     private final PersistenceService persistenceService;
     private final DocumentPersister documentPersister;
     private final TagsPersistenceHelper tagsPersistenceHelper;
-    private final SolrServer solrCollectionServer;
     private final AvailablePermalinkExtractor availablePermalinkExtractor;
     private final Provider<QuestionnaireI15dPersister> questionnaireI15dPersisterProvider;
     private final AuthorizationPersistenceHelper authorizationPersistenceHelper;
 
     @Inject
     CollectionPersister(
+            Indexer<CollectionDocument> collectionIndexer,
             PersistenceService persistenceService,
             DocumentPersister documentPersister,
             TagsPersistenceHelper tagsPersistenceHelper,
-            SolrServer solrCollectionServer,
             AvailablePermalinkExtractor availablePermalinkExtractor,
             Provider<QuestionnaireI15dPersister> questionnaireI15dPersisterProvider,
             AuthorizationPersistenceHelper authorizationPersistenceHelper) {
+        this.collectionIndexer = collectionIndexer;
         this.persistenceService = persistenceService;
         this.documentPersister = documentPersister;
         this.tagsPersistenceHelper = tagsPersistenceHelper;
-        this.solrCollectionServer = solrCollectionServer;
         this.availablePermalinkExtractor = availablePermalinkExtractor;
         this.questionnaireI15dPersisterProvider = questionnaireI15dPersisterProvider;
         this.authorizationPersistenceHelper = authorizationPersistenceHelper;
@@ -573,7 +575,8 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
                                 + (input.getUser() != null ? "LEFT OUTER JOIN acl_object_identity o ON o" +
                                 ".object_id_identity=e.id LEFT OUTER JOIN acl_class class ON o.object_id_class = " +
                                 "class.id LEFT OUTER JOIN acl_entry acl ON o.id = acl.acl_object_identity "
-                                : "") + "WHERE (LOWER(n.permalink)=? OR LOWER(n.permalink)=?) AND " + authBit + " AND de.id IS NOT NULL " +
+                                : "") + "WHERE (LOWER(n.permalink)=? OR LOWER(n.permalink)=?) AND " + authBit + " AND" +
+                                " de.id IS NOT NULL " +
                                 "GROUP BY de.id");
 
                 select.setString(1, "/collections/" + input.getPermalink());
@@ -643,7 +646,6 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
     static class RetrievePagedCollectionsFunc
             extends ProcessFunc<RetrievePagedCollectionsParams, List<CollectionData>> {
         private final CollectionPersister collectionPersister;
-        private final SolrServer solrServer;
 
         RetrievePagedCollectionsFunc(
                 RetrievePagedCollectionsParams params,
@@ -651,26 +653,24 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
             super(params);
 
             this.collectionPersister = collectionPersister;
-            solrServer = collectionPersister.solrCollectionServer;
         }
 
         @Override
         public List<CollectionData> process() {
             try {
-                SolrQuery sQuery = processSearchQuery(input);
+                BoolBuilder boolBuilder = processSearchQuery(input);
 
-                setSolrSort(sQuery, input);
+                SearchBuilder searchBuilder = SearchBuilder.newBuilder()
+                        .withQuery(QueryBuilder.ofBool(boolBuilder.build()))
+                        .withFrom(input.getStart())
+                        .withSize(input.getLength());
+                setSolrSort(searchBuilder, input);
 
-                sQuery.setStart(input.getStart());
-                sQuery.setRows(input.getLength());
-
-                QueryResponse result = solrServer.query(sQuery);
-                Iterator<SolrDocument> iterator = result.getResults().iterator();
-
+                List<CollectionDocument> collectionDocuments =
+                        collectionPersister.collectionIndexer.search(searchBuilder.build());
                 List<CollectionData> collections = new ArrayList<CollectionData>();
 
-                while (iterator.hasNext()) {
-                    SolrDocument doc = iterator.next();
+                for (CollectionDocument doc : collectionDocuments) {
                     CollectionData cd = collectionPersister.instantiateCollectionFromSolr(doc, conn,
                             collectionPersister.tagsPersistenceHelper);
                     // TODO: see TASK-129
@@ -679,7 +679,8 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
                         if (input.getQuestionnaireMask() == QuestionnaireMask.QUESTIONNAIRE_MASK_ALL ||
                                 (input.getQuestionnaireMask() == QuestionnaireMask.QUESTIONNAIRE_MASK_QUESTIONNAIRES
                                         && collection.isQuestionnaire()) ||
-                                (input.getQuestionnaireMask() == QuestionnaireMask.QUESTIONNAIRE_MASK_NON_QUESTIONNAIRES
+                                (input.getQuestionnaireMask() == QuestionnaireMask
+                                        .QUESTIONNAIRE_MASK_NON_QUESTIONNAIRES
                                         && !collection.isQuestionnaire())) {
                             collections.add(cd);
                         }
@@ -698,7 +699,8 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
 
                             cd.setTargetCollections(targetCollections);
                         } else {
-                            SearchByCollectionPagedParams params = new SearchByCollectionPagedParams(collection.getId(),
+                            SearchByCollectionPagedParams params = new SearchByCollectionPagedParams(collection
+                                    .getId(),
                                     0, 20, ACCESS_MODE_EXPLICIT, input.getEffectiveId());
                             params.setRetrievePartials();
 
@@ -720,28 +722,27 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
 
     static class RetrieveCollectionData extends ProcessFunc<Integer, CollectionData> {
         private final CollectionPersister collectionPersister;
-        private final SolrServer solrServer;
 
         public RetrieveCollectionData(Integer id, CollectionPersister collectionPersister) {
             super(id);
 
             this.collectionPersister = collectionPersister;
-            solrServer = collectionPersister.solrCollectionServer;
         }
 
         @Override
         public CollectionData process() {
             try {
-                SolrQuery sQuery = createSolrQuery();
-                sQuery.addFilterQuery("id:" + input);
-                sQuery.addFilterQuery("deleted:0");
+                Bool bool = BoolBuilder.newBuilder()
+                        .must().withIds(Ids.fromInt(input))
+                        .filter().addTerm("deleted", false)
+                        .build();
 
-                QueryResponse result = solrServer.query(sQuery);
-                Iterator<SolrDocument> iterator = result.getResults().iterator();
+                List<CollectionDocument> collectionDocuments =
+                        collectionPersister.collectionIndexer.search(SearchBuilder.ofQuery(QueryBuilder.ofBool(bool)));
+
                 CollectionData collectionData;
-
-                if (iterator.hasNext()) {
-                    SolrDocument doc = iterator.next();
+                CollectionDocument doc = Iterables.getFirst(collectionDocuments, null);
+                if (doc != null) {
                     collectionData = collectionPersister.instantiateCollectionFromSolr(doc, conn,
                             collectionPersister.tagsPersistenceHelper);
 
@@ -805,9 +806,12 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
                         .prepareAuthorizationSelect(
                                 SELECT_CLAUSE,
                                 FROM_CLAUSE,
-                                "de.version IS NOT NULL AND c.id NOT IN (select cs.collection from collection_story " +
+                                "de.version IS NOT NULL AND c.id NOT IN (select cs.collection from " +
+                                        "collection_story " +
+
                                         "cs where story=?) / GROUP BY de.id ",
-                                new Object[]{input.getStoryId()}, input, conn, true, BasePermission.WRITE.getMask());
+                                new Object[]{input.getStoryId()}, input, conn, true,
+                                BasePermission.WRITE.getMask());
 
                 ResultSet results = select.executeQuery();
 
@@ -818,7 +822,8 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
                     if (input.getQuestionnaireMask() == QuestionnaireMask.QUESTIONNAIRE_MASK_ALL ||
                             (input.getQuestionnaireMask() == QuestionnaireMask.QUESTIONNAIRE_MASK_QUESTIONNAIRES &&
                                     collection.isQuestionnaire()) ||
-                            input.getQuestionnaireMask() == QuestionnaireMask.QUESTIONNAIRE_MASK_NON_QUESTIONNAIRES) {
+                            input.getQuestionnaireMask() == QuestionnaireMask
+                                    .QUESTIONNAIRE_MASK_NON_QUESTIONNAIRES) {
                         Set<String> tags = collectionPersister.tagsPersistenceHelper.getTags(collection, conn);
                         // TODO: see TASK-131
                         if (!collection.getDeleted() && !collection.isQuestionnaire()) {
@@ -873,7 +878,8 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
                         .prepareAuthorizationSelect(
                                 "SELECT COUNT(DISTINCT(id)) ",
                                 "SELECT e.id ",
-                                "FROM systemEntity e JOIN collection c ON e.id=c.id JOIN entity n ON e.id=n.id JOIN " +
+                                "FROM systemEntity e JOIN collection c ON e.id=c.id JOIN entity n ON e.id=n.id " +
+                                        "JOIN " +
                                         "collection_story cs ON c.id = cs.collection ",
                                 "cs.story = ? and c.deleted = 0", new Object[]{input.getStoryId()}, input.noLimit(),
                                 conn, false,
@@ -887,58 +893,28 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
         }
     }
 
-    public static class CountCollections extends ProcessFunc<RetrievePagedCollectionsParams, CountCollectionsResult> {
-        private final SolrServer solrServer;
+    public static class CountCollections
+            extends ProcessFunc<RetrievePagedCollectionsParams, CountCollectionsResult> {
+        private final CollectionPersister collectionPersister;
 
         public CountCollections(
                 RetrievePagedCollectionsParams input,
                 CollectionPersister collectionPersister) {
             super(input);
-
-            solrServer = collectionPersister.solrCollectionServer;
+            this.collectionPersister = collectionPersister;
         }
 
         @Override
         public CountCollectionsResult process() {
             try {
-                SolrQuery sQuery = processSearchQuery(input);
 
-                sQuery.setStart(input.getStart());
-                sQuery.setRows(Integer.MAX_VALUE);
-                sQuery.setFields("id");
+                BoolBuilder boolBuilder = processSearchQuery(input).filter().addTerm("isQuestionnaire", false).and();
 
-                QueryResponse result = solrServer.query(sQuery);
-                SolrDocumentList results = result.getResults();
-
-                if (results.size() > 0) {
-                    List<String> queryStrings = FluentIterable.from(results)
-                            .transform(new Function<SolrDocument, String>() {
-                                @Override
-                                public String apply(SolrDocument input) {
-                                    return "?";
-                                }
-                            }).toList();
-                    String queryString = Joiner.on(", ").join(queryStrings);
-                    PreparedStatement storiesSelect = conn
-                            .prepareStatement(
-                                    "SELECT (SELECT COUNT(*) from collection WHERE id IN (" + queryString + ") and " +
-                                            "deleted=0) AS " +
-                                            "collections," +
-                                            "(SELECT COUNT(*) from questionnaire WHERE id IN (" + queryString + ")) " +
-                                            "AS questionnaires");
-                    for (int i = 0; i < results.size(); i++) {
-                        storiesSelect.setInt(i + 1, Integer.valueOf((String) results.get(i).get("id")));
-                        storiesSelect.setInt(i + results.size() + 1,
-                                Integer.valueOf((String) results.get(i).get("id")));
-                    }
-
-                    ResultSet countResult = storiesSelect.executeQuery();
-                    if (countResult.next()) {
-                        return new CountCollectionsResult(countResult.getInt(1), countResult.getInt(2));
-                    }
-                }
-
-                return new CountCollectionsResult(0, 0);
+                long collectionCount = collectionPersister.collectionIndexer.count(
+                        SearchBuilder.ofQuery(QueryBuilder.ofBool(boolBuilder.build())));
+                long questionnaireCount = collectionPersister.collectionIndexer.count(SearchBuilder.ofQuery(
+                        QueryBuilder.ofBool(boolBuilder.filter().addTerm("isQuestionnaire", true).build())));
+                return new CountCollectionsResult((int) collectionCount, (int) questionnaireCount);
             } catch (final Exception e) {
                 throw new GeneralException(e);
             }
@@ -1005,7 +981,8 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
         collection.setPublished(results.getBoolean(13));
 
         Timestamp publishedDateTimestamp = results.getTimestamp(14);
-        collection.setPublishedDate(publishedDateTimestamp == null ? null : new Date(publishedDateTimestamp.getTime()));
+        collection.setPublishedDate(
+                publishedDateTimestamp == null ? null : new Date(publishedDateTimestamp.getTime()));
 
         if (!partial) {
             CollectionStoryLinkPersistenceHelper.loadAllStoryLinks(collection, conn);
@@ -1025,21 +1002,25 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
     }
 
     protected CollectionData instantiateCollectionFromSolr(
-            SolrDocument doc,
+            org.consumersunion.stories.server.index.Document doc,
             Connection conn,
             TagsPersistenceHelper tagsPersistenceHelper) {
-        int id = Integer.parseInt((String) doc.getFieldValue("id"));
+        int id = doc.getId();
 
         try {
             PreparedStatement retrieve = conn
                     .prepareStatement(
-                            "SELECT e.id, e.version, e.created, e.lastModified, e.owner, n.permalink, n.profile, e" +
+                            "SELECT e.id, e.version, e.created, e.lastModified, e.owner, n.permalink, n.profile, " +
+                                    "e" +
                                     ".public, " +
                                     "c.deleted, EXISTS(SELECT 1 FROM questionnaire q WHERE q.id=c.id) AS " +
-                                    "isQuestionnaire, o.name AS ownerName, p.givenName AS ownerGivenName, p.surname " +
+                                    "isQuestionnaire, o.name AS ownerName, p.givenName AS ownerGivenName, p" +
+                                    ".surname " +
                                     "AS ownerSurname, c.previewKey, c.published, c.publishedDate, c.theme " +
-                                    "FROM systemEntity e JOIN collection c ON e.id=c.id JOIN entity n ON e.id=n.id " +
-                                    "LEFT OUTER JOIN organization o ON o.id=e.owner LEFT OUTER JOIN profile p ON p.id" +
+                                    "FROM systemEntity e JOIN collection c ON e.id=c.id JOIN entity n ON e.id=n" +
+                                    ".id " +
+                                    "LEFT OUTER JOIN organization o ON o.id=e.owner LEFT OUTER JOIN profile p ON " +
+                                    "p.id" +
                                     " = e.owner " +
                                     "WHERE c.id=? AND c.deleted=0");
             retrieve.setInt(1, id);
@@ -1086,7 +1067,8 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
                     retrieveCollectionSources(collection, conn);
                     retrieveTargetCollections(collection, conn);
                 } else {
-                    QuestionnaireI15dPersister questionnaireI15dPersister = questionnaireI15dPersisterProvider.get();
+                    QuestionnaireI15dPersister questionnaireI15dPersister = questionnaireI15dPersisterProvider
+                            .get();
                     collection = questionnaireI15dPersister.get(id, conn);
                 }
 
@@ -1194,7 +1176,8 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
 
         @Override
         public StoryCollectionParams noLimit() {
-            return new StoryCollectionParams(0, 0, getSortField(), isAscending(), getCollectionId(), getAuthRelation(),
+            return new StoryCollectionParams(0, 0, getSortField(), isAscending(), getCollectionId(),
+                    getAuthRelation(),
                     getEffectiveId(), getStoryId());
         }
     }
@@ -1207,11 +1190,13 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
         @Override
         public Integer process() {
             try {
-                RelationalAuthorizationQueryUtil util = new RelationalAuthorizationQueryUtil(new CollectionPersister());
+                RelationalAuthorizationQueryUtil util = new RelationalAuthorizationQueryUtil(
+                        new CollectionPersister());
                 PreparedStatement select = util
                         .prepareAuthorizationSelect("SELECT SUM(count)",
                                 "Select COUNT(*) AS count ",
-                                "FROM systemEntity e JOIN collection c ON e.id=c.id JOIN collection_story cs ON cs" +
+                                "FROM systemEntity e JOIN collection c ON e.id=c.id JOIN collection_story cs ON " +
+                                        "cs" +
                                         ".collection=c.id",
                                 "cs.collection=? AND cs.story=? ",
                                 new Object[]{input.getCollectionId(), input.getStoryId()}, input.noLimit(), conn,
@@ -1224,7 +1209,8 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
                 }
 
                 if (count > 0) {
-                    CollectionStoryLinkPersistenceHelper.deleteStoryLink(input.getCollectionId(), input.getStoryId(),
+                    CollectionStoryLinkPersistenceHelper.deleteStoryLink(input.getCollectionId(),
+                            input.getStoryId(),
                             conn);
                 }
 
@@ -1237,7 +1223,7 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
 
     private static String getAccessModeParams(RetrievePagedCollectionsParams input) {
         if (input.getAuthRelation() == ACCESS_MODE_ROOT) {
-            return ("*:*");
+            return "*";
         } else {
             String solrField;
             if (input.getPermissionMask() == ROLE_CURATOR) {
@@ -1252,61 +1238,52 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
 
             if ((input.getEffectiveId() == null && (input.getAuthRelation() == ACCESS_MODE_ANY) ||
                     input.getAuthRelation() == ACCESS_MODE_PUBLIC)) {
-                return ("public:1");
+                return "public:1";
             } else if (input.getAuthRelation() == ACCESS_MODE_ANY) {
                 if (input.getPermissionMask() == BasePermission.READ.getMask()) {
-                    return ("public:1 OR readAuths:" + input.getEffectiveId() + " OR ownerId:" + input.getEffectiveId
-                            ());
+                    return "public:1 OR readAuths:" + input.getEffectiveId() + " OR ownerId:" + input
+                            .getEffectiveId();
                 } else {
                     return solrField + ":" + input.getEffectiveId() + " OR ownerId:" + input.getEffectiveId();
                 }
             } else if (input.getAuthRelation() == ACCESS_MODE_EXPLICIT) {
-                return (solrField + ":" + input.getEffectiveId() + " OR ownerId:" + input.getEffectiveId());
+                return solrField + ":" + input.getEffectiveId() + " OR ownerId:" + input.getEffectiveId();
             } else if (input.getAuthRelation() == ACCESS_MODE_OWN) {
-                return ("ownerId:" + input.getEffectiveId());
+                return "ownerId:" + input.getEffectiveId();
             } else if (input.getAuthRelation() == ACCESS_MODE_PRIVILEGED) {
-                return (solrField + ":" + input.getEffectiveId());
+                return solrField + ":" + input.getEffectiveId();
             } else if (input.getAuthRelation() == ACCESS_MODE_PRIVATE) {
-                return (solrField + ":" + input.getEffectiveId() + " AND ownerId:" + input.getEffectiveId());
+                return solrField + ":" + input.getEffectiveId() + " AND ownerId:" + input.getEffectiveId();
             } else {
-                return ("");
+                return "";
             }
         }
     }
 
-    private static SolrQuery processSearchQuery(RetrievePagedCollectionsParams input) {
-        SolrQuery sQuery = createSolrQuery();
+    private static BoolBuilder processSearchQuery(RetrievePagedCollectionsParams input) {
+        String searchText = TextHelper.processSearchText(input.getSearchText());
+        String accessModeParams = " (" + getAccessModeParams(input) + ") AND deleted:false";
 
-        sQuery.setQuery(TextHelper.processSearchText(input.getSearchText()));
-        sQuery.addFilterQuery("(" + CollectionPersister.getAccessModeParams(input) + ") AND deleted:0");
-
-        return sQuery;
+        return BoolBuilder.newBuilder().must().withQueryString(searchText + accessModeParams).and();
     }
 
-    private static SolrQuery createSolrQuery() {
-        SolrQuery sQuery = new SolrQuery();
-        // TODO: see TASK-129
-        sQuery.setRequestHandler("/searchCollections");
-        return sQuery;
-    }
-
-    private static void setSolrSort(SolrQuery sQuery, RetrievePagedCollectionsParams input) {
+    private static void setSolrSort(SearchBuilder searchBuilder, RetrievePagedCollectionsParams input) {
         SortField sortField = input.getSortField();
 
         if (sortField == CollectionSortField.CREATED_NEW) {
-            sQuery.setSort("created", ORDER.desc);
+            searchBuilder.withSort("created", SortOrder.DESC);
         } else if (sortField == CollectionSortField.CREATED_OLD) {
-            sQuery.setSort("created", ORDER.asc);
+            searchBuilder.withSort("created", SortOrder.ASC);
         } else if (sortField == CollectionSortField.MODIFIED_NEW) {
-            sQuery.setSort("lastModified", ORDER.desc);
+            searchBuilder.withSort("lastModified", SortOrder.DESC);
         } else if (sortField == CollectionSortField.MODIFIED_OLD) {
-            sQuery.setSort("lastModified", ORDER.asc);
+            searchBuilder.withSort("lastModified", SortOrder.ASC);
         } else if (sortField == CollectionSortField.TITLE_A_Z) {
-            sQuery.setSort("title_sort", ORDER.asc);
+            searchBuilder.withSort("title.keyword", SortOrder.ASC);
         } else if (sortField == CollectionSortField.TITLE_Z_A) {
-            sQuery.setSort("title_sort", ORDER.desc);
+            searchBuilder.withSort("title.keyword", SortOrder.DESC);
         } else {
-            sQuery.setSort("created", ORDER.asc);
+            searchBuilder.withSort("created", SortOrder.ASC);
         }
     }
 }

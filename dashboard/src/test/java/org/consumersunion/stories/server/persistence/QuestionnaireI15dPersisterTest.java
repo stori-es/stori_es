@@ -239,39 +239,6 @@ public class QuestionnaireI15dPersisterTest extends SpringTestCase {
                 found.getSurvey().getBlocks().size() > 0);
     }
 
-    /* TODO: see commented code ~line 205 in QuestionnaireI15dPersister. The retrievePartial is an optimization that
-    is no
-       longer straightforward now that the survey blocks are part of a separate Document, not directly part of the
-       questionnaire
-        @SuppressWarnings("unchecked")
-        public void testSearchByCollectionWithPartialResults() {
-            final QuestionnaireI15d template = createQuestionnaireTemplate("Template questionnaire19");
-            PersistenceUtil.process(new QuestionnaireI15dPersister.CreateQuestionnaireFunc(template));
-
-            final Collection collection = collectionPersister.get(4);
-            collection.getCollectionSources().add(template.getId());
-            collectionPersister.updateCollection(collection);
-
-            final SearchByCollectionPagedParams params = new SearchByCollectionPagedParams(4, 0, 100,
-            ACCESS_MODE_ANY, 1);
-            params.setRetrievePartials();
-            final List<QuestionnaireI15d> qs = persistenceService.process(new QuestionnaireI15dPersister
-            .SearchByCollectionPagedFunc(params));
-
-            assertTrue("No questionnaires found for collection", qs.size() > 0);
-            QuestionnaireI15d found = null;
-
-            for (final QuestionnaireI15d q : qs) {
-                if (q.getId() == template.getId()) {
-                    found = q;
-                    break;
-                }
-            }
-
-            assertNotNull("Expected questionnaire was not found among the results", found);
-            assertFalse("Form elements found in questionnaire", found.getSurvey().getBlocks().size() > 0);
-        }
-    */
     private QuestionnaireI15d createQuestionnaireTemplate(final String title) {
         final QuestionnaireI15d template = new QuestionnaireI15d();
         template.getTargetCollections().add(4);

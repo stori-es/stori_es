@@ -32,8 +32,6 @@ import org.consumersunion.stories.server.persistence.funcs.DeleteFunc;
 import org.consumersunion.stories.server.persistence.funcs.ProcessFunc;
 import org.consumersunion.stories.server.persistence.funcs.RetrieveFunc;
 import org.consumersunion.stories.server.persistence.funcs.UpdateFunc;
-import org.consumersunion.stories.server.solr.SupportDataUtils;
-import org.consumersunion.stories.server.solr.SupportDataUtilsFactory;
 import org.springframework.stereotype.Component;
 
 import com.google.common.annotations.VisibleForTesting;

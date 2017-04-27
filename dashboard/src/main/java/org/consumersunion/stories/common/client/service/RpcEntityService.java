@@ -26,17 +26,13 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface RpcEntityService extends RemoteService {
     /**
      * Updates tags associated to an {@link Entity}. Effective operator must
-     * have WRITE authorizations over the target Entity. TODO: once ownership is
-     * made a basic attribute, ownership of the Entity will confer
-     * authorizations as well.
+     * have WRITE authorizations over the target Entity.
      */
     ActionResponse setTags(final SystemEntity entity, final Set<String> tags);
 
     /**
      * Updates autotags associated to an {@link Entity}. Effective operator must
-     * have WRITE authorizations over the target Entity. TODO: once ownership is
-     * made a basic attribute, ownership of the Entity will confer
-     * authorizations as well.
+     * have WRITE authorizations over the target Entity.
      */
     ActionResponse updateAutoTags(SystemEntity entity, Set<String> tags);
 
@@ -70,10 +66,6 @@ public interface RpcEntityService extends RemoteService {
     /**
      * Updates addresses associated to an {@link Entity}. Effective operator
      * must have WRITE privileges over the target Entity.
-     * <p/>
-     * TODO: once ownership
-     * is made a basic attribute, ownership of the Entity will confer
-     * authorizations as well.
      * <p/>
      * This version is used, and required, when updating a Person associated
      * address. This allows the the index to be kept in sync.

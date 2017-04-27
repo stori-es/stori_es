@@ -37,9 +37,7 @@ abstract class AbstractAddToView<H extends AddToUiHandlers> extends ViewWithUiHa
     }
 
     private void setupSelectDropDown() {
-        // TODO : This is as part of TASK-1583. Remove once it's implemented for other batch actions
-        selectDropDown.loadOptions(StorySelectField.selectList(this instanceof AddStoriesToCollectionsView),
-                false);
+        selectDropDown.loadOptions(StorySelectField.selectList(this instanceof AddStoriesToCollectionsView), false);
         selectDropDown.setTitle(StorySelectField.CURRENT_PAGE_OF.getLabel());
     }
 

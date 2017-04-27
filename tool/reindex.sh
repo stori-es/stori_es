@@ -102,14 +102,14 @@ fi # Update config and restart server if necessary
 if [[ $TARGET == 'localdev' ]] || [[ $TARGET == 'verify' ]]; then
     CLASSES=$MAIN_DIR/dashboard/target/war/WEB-INF/classes/
     LIBDIR=$MAIN_DIR/dashboard/target/war/WEB-INF/lib
-    # Note that 'TOMCATLIB' is for the indexer, not solr itself.
+    # Note that 'TOMCATLIB' is for the profileIndexer, not solr itself.
     if [[ $TARGET == 'localdev' ]]; then
         TOMCATLIB=/home/$USER/tomcat/lib
         DB_SETTINGS=''
     else
 	# The location is totally idiomatic; this is just where we
 	# last loaded the 'tomcatlibs' which are a copy of libs
-	# shipped with Tomcat we need to run the indexer (may be an
+	# shipped with Tomcat we need to run the profileIndexer (may be an
 	# avoidable dependency, but there you go).
         TOMCATLIB=/mnt/bamboo-ebs/bamboo-agent/build-dir/SYSTHREE-TEST-CTED/tomcatlibs
         DB_STRING="jdbc:mysql://${MYSQL_STAGING}/$VERIFY_DB?user=$DB_USER&password=`ensure-db-password`"

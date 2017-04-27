@@ -54,12 +54,16 @@
             <artifactId>aws-java-sdk</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.elasticmq</groupId>
-            <artifactId>elasticmq-rest-sqs_2.11</artifactId>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>rest</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-solrj</artifactId>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>transport</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticmq</groupId>
+            <artifactId>elasticmq-rest-sqs_2.11</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -118,6 +122,10 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.elasticpath.json</groupId>
+            <artifactId>json-unmarshaller</artifactId>
+        </dependency>
 
         <!-- Kryo -->
         <dependency>
@@ -135,6 +143,16 @@
         <dependency>
             <groupId>de.javakaffee.msm</groupId>
             <artifactId>msm-kryo-serializer</artifactId>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
         </dependency>
 
         <!-- DB -->

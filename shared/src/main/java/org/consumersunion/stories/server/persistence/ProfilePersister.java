@@ -11,10 +11,9 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import org.consumersunion.stories.common.client.service.datatransferobject.ProfileSummary;
 import org.consumersunion.stories.common.shared.dto.AuthParam;
 import org.consumersunion.stories.common.shared.model.Address;
@@ -24,6 +23,10 @@ import org.consumersunion.stories.common.shared.model.User;
 import org.consumersunion.stories.common.shared.model.entity.SortField;
 import org.consumersunion.stories.common.shared.service.GeneralException;
 import org.consumersunion.stories.common.shared.service.datatransferobject.StoryAndStorytellerData;
+import org.consumersunion.stories.server.index.Indexer;
+import org.consumersunion.stories.server.index.elasticsearch.query.QueryBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.search.SearchBuilder;
+import org.consumersunion.stories.server.index.profile.ProfileDocument;
 import org.consumersunion.stories.server.persistence.funcs.CreateFunc;
 import org.consumersunion.stories.server.persistence.funcs.DeleteFunc;
 import org.consumersunion.stories.server.persistence.funcs.ProcessFunc;
@@ -31,7 +34,7 @@ import org.consumersunion.stories.server.persistence.funcs.RetrieveFunc;
 import org.consumersunion.stories.server.persistence.funcs.UpdateFunc;
 import org.consumersunion.stories.server.persistence.params.PagedRetrieveParams;
 import org.consumersunion.stories.server.security.RelationalAuthorizationQueryUtil;
-import org.consumersunion.stories.server.solr.SolrServer;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
@@ -46,17 +49,17 @@ import static org.consumersunion.stories.common.shared.AuthConstants.ROOT_ID;
 @Component
 public class ProfilePersister implements Persister<Profile>, MineCallbackProvider {
     private final PersistenceService persistenceService;
-    private final SolrServer solrPersonServer;
     private final AuthorizationPersistenceHelper authorizationPersistenceHelper;
+    private final Provider<Indexer<ProfileDocument>> profileIndexerProvider;
 
     @Inject
     ProfilePersister(
             PersistenceService persistenceService,
-            SolrServer solrPersonServer,
-            AuthorizationPersistenceHelper authorizationPersistenceHelper) {
+            AuthorizationPersistenceHelper authorizationPersistenceHelper,
+            @Qualifier("profileIndexer") Provider<Indexer<ProfileDocument>> profileIndexerProvider) {
         this.persistenceService = persistenceService;
-        this.solrPersonServer = solrPersonServer;
         this.authorizationPersistenceHelper = authorizationPersistenceHelper;
+        this.profileIndexerProvider = profileIndexerProvider;
     }
 
     @Override
@@ -97,7 +100,7 @@ public class ProfilePersister implements Persister<Profile>, MineCallbackProvide
     }
 
     public Profile createProfile(Profile profile, Connection conn) {
-        return persistenceService.process(conn ,new CreateProfileFunc(profile, this));
+        return persistenceService.process(conn, new CreateProfileFunc(profile, this));
     }
 
     public void delete(int id) {
@@ -377,7 +380,7 @@ public class ProfilePersister implements Persister<Profile>, MineCallbackProvide
     }
 
     private static class DeleteProfileByIdFunc extends ProcessFunc<Integer, Void> {
-        public DeleteProfileByIdFunc(int id) {
+        DeleteProfileByIdFunc(int id) {
             super(id);
         }
 
@@ -600,17 +603,15 @@ public class ProfilePersister implements Persister<Profile>, MineCallbackProvide
             @Override
             public Integer process() {
                 try {
-                    SolrQuery sQuery = new SolrQuery("*:*");
+                    QueryBuilder queryBuilder = QueryBuilder.newBuilder();
                     if (input.getCollectionId() != null) {
-                        sQuery.addFilterQuery("collections:" + input.getCollectionId());
+                        queryBuilder.withTerm("collections", input.getCollectionId());
                     }
                     if (input.getQuestionnaireId() != null) {
-                        sQuery.addFilterQuery("questionnaires:" + input.getQuestionnaireId());
+                        queryBuilder.withTerm("questionnaires", input.getQuestionnaireId());
                     }
-                    sQuery.setRows(0);
 
-                    QueryResponse result = solrPersonServer.query(sQuery);
-                    return (int) result.getResults().getNumFound();
+                    return (int) profileIndexerProvider.get().count(SearchBuilder.ofQuery(queryBuilder.build()));
                 } catch (Exception e) {
                     throw new GeneralException(e);
                 }

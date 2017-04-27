@@ -9,12 +9,12 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class StorySearchParameters implements IsSerializable {
     // All these *really* should be final, but seemingly conflicts with GWT.
-    private int start;
-    private int length;
+    private Integer start;
+    private Integer length;
     private SortField sortField;
     private boolean ascending;
 
-    private int accessMode;
+    private Integer accessMode;
 
     private Integer collectionId;
     private Integer questionnaireId;

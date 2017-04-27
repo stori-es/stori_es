@@ -3,14 +3,15 @@ package org.consumersunion.stories.server.business_logic;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.consumersunion.stories.common.shared.model.Collection;
 import org.consumersunion.stories.common.shared.model.Organization;
 import org.consumersunion.stories.common.shared.model.StoryLink;
+import org.consumersunion.stories.server.index.Indexer;
+import org.consumersunion.stories.server.index.collection.CollectionDocument;
+import org.consumersunion.stories.server.index.story.UpdatedStoryCollectionIndexer;
 import org.consumersunion.stories.server.persistence.AuthPersister;
-import org.consumersunion.stories.server.solr.IndexerFactory;
-import org.consumersunion.stories.server.solr.collection.NewCollectionIndexer;
-import org.consumersunion.stories.server.solr.story.UpdatedStoryCollectionIndexer;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Sets;
@@ -19,21 +20,21 @@ import static org.consumersunion.stories.common.shared.AuthConstants.ROLE_READER
 
 @Component
 public class CollectionIndexerServiceImpl implements CollectionIndexerService {
+    private final Provider<UpdatedStoryCollectionIndexer> updatedStoryCollectionIndexerProvider;
     private final OrganizationService organizationService;
     private final AuthPersister authPersister;
-    private final IndexerService indexerService;
-    private final IndexerFactory indexerFactory;
+    private final Indexer<CollectionDocument> collectionIndexer;
 
     @Inject
     CollectionIndexerServiceImpl(
+            Provider<UpdatedStoryCollectionIndexer> updatedStoryCollectionIndexerProvider,
             OrganizationService organizationService,
             AuthPersister authPersister,
-            IndexerService indexerService,
-            IndexerFactory indexerFactory) {
+            Indexer<CollectionDocument> collectionIndexer) {
+        this.updatedStoryCollectionIndexerProvider = updatedStoryCollectionIndexerProvider;
         this.organizationService = organizationService;
         this.authPersister = authPersister;
-        this.indexerService = indexerService;
-        this.indexerFactory = indexerFactory;
+        this.collectionIndexer = collectionIndexer;
     }
 
     @Override
@@ -43,14 +44,11 @@ public class CollectionIndexerServiceImpl implements CollectionIndexerService {
         admins.add(org.getName());
         Set<Integer> auths = authPersister.getNonStoryAuths(collection.getId(), ROLE_READER);
 
-        NewCollectionIndexer newCollectionIndexer =
-                new NewCollectionIndexer(collection, auths, auths, auths, null, admins);
-        indexerService.process(newCollectionIndexer);
+        collectionIndexer.index(new CollectionDocument(collection, null, auths, auths, auths, admins));
 
         for (StoryLink storyLink : collection.getStories()) {
-            Integer storyId = storyLink.getStory();
-            UpdatedStoryCollectionIndexer updatedStoryCollectionIndexer = indexerFactory.createUpdatedStory(storyId);
-            indexerService.process(updatedStoryCollectionIndexer);
+            UpdatedStoryCollectionIndexer updatedStoryCollectionIndexer = updatedStoryCollectionIndexerProvider.get();
+            updatedStoryCollectionIndexer.index(storyLink.getStory());
         }
     }
 }

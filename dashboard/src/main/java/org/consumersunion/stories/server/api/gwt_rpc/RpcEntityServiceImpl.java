@@ -25,8 +25,8 @@ import org.consumersunion.stories.server.business_logic.SystemEntityService;
 import org.consumersunion.stories.server.business_logic.TagsService;
 import org.consumersunion.stories.server.exception.NotAuthorizedException;
 import org.consumersunion.stories.server.exception.NotLoggedInException;
+import org.consumersunion.stories.server.index.profile.UpdatePersonAddressIndexer;
 import org.consumersunion.stories.server.persistence.ContactPersister;
-import org.consumersunion.stories.server.solr.person.UpdatePersonAddressIndexer;
 import org.springframework.stereotype.Service;
 
 import net.lightoze.gwt.i18n.server.LocaleFactory;
@@ -52,6 +52,8 @@ public class RpcEntityServiceImpl extends RpcBaseServiceImpl implements RpcEntit
     private NotificationService notificationService;
     @Inject
     private TagsService tagsService;
+    @Inject
+    private UpdatePersonAddressIndexer updatePersonAddressIndexer;
 
     @Override
     public ActionResponse addTags(Set<Integer> entityIds, Set<String> tags) {
@@ -212,8 +214,7 @@ public class RpcEntityServiceImpl extends RpcBaseServiceImpl implements RpcEntit
     @Override
     public AddressResponse updateAddress(int idx, List<Address> addresses, int entityId) {
         AddressResponse response = updateAddress(addresses, entityId);
-        indexerService.process(new UpdatePersonAddressIndexer(idx, addresses.get(idx)));
-
+        updatePersonAddressIndexer.index(idx, addresses.get(idx));
         return response;
     }
 

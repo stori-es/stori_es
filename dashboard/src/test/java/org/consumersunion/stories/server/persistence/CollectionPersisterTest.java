@@ -20,7 +20,6 @@ import org.consumersunion.stories.common.shared.model.document.Document;
 import org.consumersunion.stories.common.shared.model.document.TextImageBlock;
 import org.consumersunion.stories.common.shared.service.GeneralException;
 import org.consumersunion.stories.common.shared.service.datatransferobject.CollectionData;
-import org.consumersunion.stories.server.persistence.CollectionPersister.CountCollectionsResult;
 import org.consumersunion.stories.server.persistence.funcs.DeleteFunc;
 
 import static org.consumersunion.stories.common.shared.AuthConstants.ACCESS_MODE_ANY;
@@ -135,47 +134,6 @@ public class CollectionPersisterTest extends SpringTestCase {
         deleteCollection(template);
     }
 
-	/* can't run this test until spring is set up for tests
-    public void testCollectionCount() throws SQLException {
-		CollectionPersister persister = (CollectionPersister) PersistenceService.getPersisterFor(Collection.class);
-		RetrievePagedCollectionsParams param = new RetrievePagedCollectionsParams(0, 10, CollectionSortField.TITLE,
-				true, "", ACCESS_MODE_ANY, 1);
-		// should retrieve four collections that exercise each access route and
-		// checks that overlaps are handled:
-		// public collections: 4, 5; owned collections: 5, 52; authorized
-		// collections: 4, 36
-		assertEquals("Unexpected count on countCollectionsFunc ", 4,
-				((Integer) PersistenceService.process(persister.countCollectionsFunc(param))).intValue());
-
-		persister = (CollectionPersister) PersistenceService.getPersisterFor(Collection.class);
-		param = new RetrievePagedCollectionsParams(0, 10, CollectionSortField.TITLE, true, "", ACCESS_MODE_PRIVILEGED,
-				1);
-		assertEquals("Unexpected count on countCollectionsFunc ", 2,
-				((Integer) PersistenceService.process(persister.countCollectionsFunc(param))).intValue());
-
-		persister = (CollectionPersister) PersistenceService.getPersisterFor(Collection.class);
-		param = new RetrievePagedCollectionsParams(0, 10, CollectionSortField.TITLE, true, "", ACCESS_MODE_OWN, 1);
-		assertEquals("Unexpected count on countCollectionsFunc ", 2,
-				((Integer) PersistenceService.process(persister.countCollectionsFunc(param))).intValue());
-
-		persister = (CollectionPersister) PersistenceService.getPersisterFor(Collection.class);
-		param = new RetrievePagedCollectionsParams(0, 10, CollectionSortField.TITLE, true, "", ACCESS_MODE_PUBLIC, 1);
-		assertEquals("Unexpected count on countCollectionsFunc ", 2,
-				((Integer) PersistenceService.process(persister.countCollectionsFunc(param))).intValue());
-
-		// TODO: redo static data to differentiate the ANY and PRIV results
-		persister = (CollectionPersister) PersistenceService.getPersisterFor(Collection.class);
-		param = new RetrievePagedCollectionsParams(0, 10, CollectionSortField.TITLE, true, "", ACCESS_MODE_EXPLICIT,
-		 1);
-		assertEquals("Unexpected count on countCollectionsFunc ", 4,
-				((Integer) PersistenceService.process(persister.countCollectionsFunc(param))).intValue());
-
-		// root access
-		param = new RetrievePagedCollectionsParams(0, 10, CollectionSortField.TITLE, true, "", ACCESS_MODE_ANY, 0);
-		assertEquals("Unexpected count on countCollectionsFunc ", 8,
-				((Integer) PersistenceService.process(persister.countCollectionsFunc(param))).intValue());
-	} */
-
     public void testCollectionCountByStoryId() throws SQLException {
         final RetrievePagedCollectionsParams param = new RetrievePagedCollectionsParams.Builder()
                 .withStart(0)
@@ -188,8 +146,7 @@ public class CollectionPersisterTest extends SpringTestCase {
                 .withEffectiveId(1001)
                 .build();
         assertEquals("Unexpected count countCollectionsByStory", 1,
-                ((CountCollectionsResult) PersistenceUtil.process(
-                        new CollectionPersister.CountCollectionsByStory(param))).getNbCollections());
+                PersistenceUtil.process(new CollectionPersister.CountCollectionsByStory(param)).getNbCollections());
     }
 
     public void testPagedGetCollectionsByStory() {

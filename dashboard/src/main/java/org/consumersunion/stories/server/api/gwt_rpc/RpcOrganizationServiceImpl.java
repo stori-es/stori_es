@@ -82,11 +82,6 @@ public class RpcOrganizationServiceImpl extends RpcBaseServiceImpl implements Rp
     private ContactService contactService;
 
     @Override
-    public ActionResponse createOrganization(Organization organization) {
-        return createOrganization(organization, null, null, null, null);
-    }
-
-    @Override
     public ActionResponse createOrganization(
             Organization organization,
             List<Contact> contacts,

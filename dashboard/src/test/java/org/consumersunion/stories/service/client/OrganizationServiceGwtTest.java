@@ -2,7 +2,6 @@ package org.consumersunion.stories.service.client;
 
 import org.consumersunion.stories.common.client.service.RpcOrganizationService;
 import org.consumersunion.stories.common.client.service.RpcOrganizationServiceAsync;
-import org.consumersunion.stories.common.client.service.response.ActionResponse;
 import org.consumersunion.stories.common.client.service.response.DatumResponse;
 import org.consumersunion.stories.common.shared.model.Organization;
 import org.consumersunion.stories.common.shared.model.User;
@@ -16,59 +15,8 @@ public class OrganizationServiceGwtTest extends GWTTestCaseExposed {
         return "org.consumersunion.stories.storiesJUnit";
     }
 
-    ;
-
     public void testOrganizationService() {
-        createOrganizationNoAuth();
-    }
-
-    private void createOrganizationNoAuth() {
-        final Organization organization = new Organization();
-        organization.setName("my name");
-        organization.setPermalink("my permalink");
-        final RpcOrganizationServiceAsync organizationService = GWT.create(RpcOrganizationService.class);
-
-        userService.login("testUser", "password", new AsyncFail<DatumResponse<User>>(OrganizationServiceGwtTest.this,
-                "createOrganizaiton:login") {
-            @Override
-            public void onSuccess(DatumResponse<User> result) {
-                organizationService.createOrganization(organization, new AsyncFail<ActionResponse>(
-                        OrganizationServiceGwtTest.this, "createOrganization:createOrganization") {
-                    @Override
-                    public void onSuccess(ActionResponse result) {
-                        assertTrue("Unexpected success.", result.isError());
-                        createOrganizationAsRoot();
-                    }
-                });
-            }
-        });
-        delayTestFinish(10020);
-    }
-
-    private void createOrganizationAsRoot() {
-        final Organization organization = new Organization();
-        organization.setName("my name");
-        organization.setPermalink("my permalink-2");
-        organization.setDefaultTheme(90);
-        final RpcOrganizationServiceAsync organizationService = GWT.create(RpcOrganizationService.class);
-
-        userService.login("root", "password", new AsyncFail<DatumResponse<User>>(OrganizationServiceGwtTest.this,
-                "createOrganizaiton:login") {
-            @Override
-            public void onSuccess(DatumResponse<User> result) {
-                organizationService.createOrganization(organization, new AsyncFail<ActionResponse>(
-                        OrganizationServiceGwtTest.this, "createOrganization:createOrganization") {
-                    @Override
-                    public void onSuccess(ActionResponse result) {
-                        if (result.isError()) {
-                            fail("Unexpected failure." + result.getGlobalErrorMessages().get(0));
-                        }
-                        updateOrganization();
-                    }
-                });
-            }
-        });
-        delayTestFinish(10020);
+        updateOrganization();
     }
 
     private void updateOrganization() {

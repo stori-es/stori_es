@@ -1,0 +1,64 @@
+.stori_es-story {
+  margin: 15px 10px;
+  padding: 10px;
+  background: rgba(192,192,192,0.3);
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  box-shadow: #B3B3B3 5px 5px 5px;
+  -webkit-box-shadow: #B3B3B3 5px 5px 5px;
+  -moz-box-shadow: #B3B3B3 5px 5px 5px;
+}
+
+.stori_es-story-title {
+  font-weight: bold;
+}
+
+.stori_es-story-byline {
+  font-style: italic;
+}
+
+.stori_es-story-content {}
+.stori_es-story-content-text { overflow: auto; }
+.stori_es-story-content-text-image {}
+
+.stori_es-story-image {}
+
+.stori_es-story-image-left {
+  float: left;
+  margin-right: 10px;
+}
+
+.stori_es-story-image-right {
+  float: right;
+  margin-left: 10px;
+}
+
+.stori_es-story-image-small  { width: 25%; }
+.stori_es-story-image-medium { width: 50%; }
+.stori_es-story-image-large  { width: 75%; }
+
+.stori_es-story-image-caption {
+  font-style: italic;
+  font-size: smaller;
+}
+
+.stori_es-story-content-video {
+  width: 420px;
+  margin: 10px auto;
+}
+
+.stori_es-story-content-video-title {
+  font-weight: bold;
+}
+
+.stori_es-story-content-video-caption {
+  font-style: italic;
+  font-size: smaller;
+}
+
+.stori_es-collection {}
+.stori_es-collection-title {
+  font-weight: bold;
+}
+.stori_es-collection-count {}

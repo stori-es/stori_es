@@ -448,8 +448,6 @@
     border-right: none;
 }
 
-/* TODO: make sure the icon is working with RTL settings */
-
 .chzn-rtl .chzn-search input {
     background: CHZN_C_CHOICE_STEP2 no-repeat -38px -22px;
 

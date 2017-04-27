@@ -17,10 +17,11 @@ import org.consumersunion.stories.i18n.CommonI18nMessages;
 import org.consumersunion.stories.server.exception.NotAuthorizedException;
 import org.consumersunion.stories.server.exception.NotFoundException;
 import org.consumersunion.stories.server.exception.NotLoggedInException;
+import org.consumersunion.stories.server.index.Indexer;
+import org.consumersunion.stories.server.index.collection.CollectionDocument;
 import org.consumersunion.stories.server.persistence.AuthPersister;
 import org.consumersunion.stories.server.persistence.QuestionnaireI15dPersister;
 import org.consumersunion.stories.server.persistence.QuestionnaireI15dPersister.SearchByCollectionPagedParams;
-import org.consumersunion.stories.server.solr.collection.NewCollectionIndexer;
 import org.consumersunion.stories.server.util.StringUtil;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     private final CollectionService collectionService;
     private final DocumentService documentService;
     private final OrganizationService organizationService;
-    private final IndexerService indexerService;
+    private final Indexer<CollectionDocument> collectionIndexer;
     private final AuthPersister authPersister;
     private final QuestionnaireI15dPersister questionnaireI15dPersister;
 
@@ -52,7 +53,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
             CollectionService collectionService,
             DocumentService documentService,
             OrganizationService organizationService,
-            IndexerService indexerService,
+            Indexer<CollectionDocument> collectionIndexer,
             AuthPersister authPersister,
             QuestionnaireI15dPersister questionnaireI15dPersister) {
         this.authService = authService;
@@ -60,7 +61,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         this.collectionService = collectionService;
         this.documentService = documentService;
         this.organizationService = organizationService;
-        this.indexerService = indexerService;
+        this.collectionIndexer = collectionIndexer;
         this.authPersister = authPersister;
         this.questionnaireI15dPersister = questionnaireI15dPersister;
     }
@@ -123,9 +124,10 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
             admins.add(org.getName());
             Set<Integer> auths = authPersister.getNonStoryAuths(dbQuestionnaire.getId(), ROLE_READER);
 
-            NewCollectionIndexer newCollectionIndexer =
-                    new NewCollectionIndexer(dbQuestionnaire, auths, auths, auths, null, admins);
-            indexerService.process(newCollectionIndexer);
+            CollectionDocument collectionDocument =
+                    new CollectionDocument(dbQuestionnaire, null, auths, auths, auths, admins);
+
+            collectionIndexer.index(collectionDocument);
 
             return dbQuestionnaire;
         }

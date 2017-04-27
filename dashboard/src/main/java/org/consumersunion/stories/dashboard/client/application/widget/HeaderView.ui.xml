@@ -55,7 +55,6 @@
 
         .selectedMenuWrapper {
             position: relative;
-            §
         }
 
         .help {

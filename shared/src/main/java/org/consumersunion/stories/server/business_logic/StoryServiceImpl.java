@@ -22,15 +22,15 @@ import org.consumersunion.stories.server.exception.NotAuthorizedException;
 import org.consumersunion.stories.server.exception.NotLoggedInException;
 import org.consumersunion.stories.server.export.StoryCsv;
 import org.consumersunion.stories.server.export.StoryExport;
+import org.consumersunion.stories.server.index.story.NewStoryIndexer;
+import org.consumersunion.stories.server.index.story.UpdatedStoryDocumentIndexer;
+import org.consumersunion.stories.server.index.story.UpdatedStoryIndexer;
 import org.consumersunion.stories.server.persistence.AnswerSetPersister;
 import org.consumersunion.stories.server.persistence.PersistenceService;
 import org.consumersunion.stories.server.persistence.ProfilePersister;
 import org.consumersunion.stories.server.persistence.StoryPersister;
 import org.consumersunion.stories.server.persistence.StoryPersister.StoryPagedRetrieveParams;
 import org.consumersunion.stories.server.persistence.StoryTellersParams;
-import org.consumersunion.stories.server.solr.story.NewStoryIndexer;
-import org.consumersunion.stories.server.solr.story.UpdatedStoryDocumentIndexer;
-import org.consumersunion.stories.server.solr.story.UpdatedStoryIndexer;
 import org.consumersunion.stories.server.util.StringUtil;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
@@ -49,10 +49,12 @@ public class StoryServiceImpl implements StoryService {
     private static final int PERMALINK_LENGTH = 20;
     private static final int MODE = 0;
 
-    private final IndexerService indexerService;
     private final DocumentService documentService;
     private final AuthorizationService authService;
     private final PersistenceService persistenceService;
+    private final NewStoryIndexer newStoryIndexer;
+    private final UpdatedStoryIndexer updatedStoryIndexer;
+    private final UpdatedStoryDocumentIndexer updatedStoryDocumentIndexer;
     private final StoryPersister storyPersister;
     private final AnswerSetPersister answerSetPersister;
     private final ProfilePersister profilePersister;
@@ -61,7 +63,9 @@ public class StoryServiceImpl implements StoryService {
     @Inject
     StoryServiceImpl(
             PersistenceService persistenceService,
-            IndexerService indexerService,
+            NewStoryIndexer newStoryIndexer,
+            UpdatedStoryIndexer updatedStoryIndexer,
+            UpdatedStoryDocumentIndexer updatedStoryDocumentIndexer,
             DocumentService documentService,
             AuthorizationService authService,
             StoryPersister storyPersister,
@@ -69,8 +73,10 @@ public class StoryServiceImpl implements StoryService {
             ProfilePersister profilePersister,
             UserService userService) {
         this.persistenceService = persistenceService;
+        this.newStoryIndexer = newStoryIndexer;
+        this.updatedStoryIndexer = updatedStoryIndexer;
+        this.updatedStoryDocumentIndexer = updatedStoryDocumentIndexer;
         this.storyPersister = storyPersister;
-        this.indexerService = indexerService;
         this.documentService = documentService;
         this.authService = authService;
         this.answerSetPersister = answerSetPersister;
@@ -139,8 +145,7 @@ public class StoryServiceImpl implements StoryService {
 
         ProfileSummary profileSummary = profilePersister.getProfileSummary(story.getOwner(), connection);
 
-        NewStoryIndexer newStoryIndexer = new NewStoryIndexer(story, profileSummary);
-        indexerService.process(newStoryIndexer);
+        newStoryIndexer.index(story, profileSummary);
 
         return story;
     }
@@ -153,14 +158,14 @@ public class StoryServiceImpl implements StoryService {
             if (story.getId() > 0) {
                 story = storyPersister.updateStory(story);
 
-                indexerService.process(new UpdatedStoryIndexer(story));
+                updatedStoryIndexer.index(story);
 
                 Document documentText = null;
                 if (story.getDefaultContent() != null) {
                     documentText = documentService.getEntityDocument(story.getId(), story.getDefaultContent());
                 }
 
-                indexerService.process(new UpdatedStoryDocumentIndexer(story.getId(), documentText));
+                updatedStoryDocumentIndexer.index(story.getId(), documentText);
 
                 return story;
             } else {

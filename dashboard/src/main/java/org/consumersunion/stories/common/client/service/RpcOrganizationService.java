@@ -56,10 +56,4 @@ public interface RpcOrganizationService extends RemoteService {
      */
     ActionResponse createOrganization(Organization organization, List<Contact> contacts, List<Address> addresses,
             List<String> adminUsers, List<Integer> themes);
-
-    /**
-     * Requires System Admin privs.
-     */
-    // TODO: I think we can delete this one...
-    ActionResponse createOrganization(Organization organization);
 }

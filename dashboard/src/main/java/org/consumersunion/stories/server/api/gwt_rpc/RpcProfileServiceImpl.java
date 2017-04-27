@@ -20,13 +20,13 @@ import org.consumersunion.stories.server.business_logic.StoryService;
 import org.consumersunion.stories.server.exception.NotAuthorizedException;
 import org.consumersunion.stories.server.exception.NotFoundException;
 import org.consumersunion.stories.server.exception.NotLoggedInException;
+import org.consumersunion.stories.server.index.profile.UpdatePersonIndexer;
 import org.consumersunion.stories.server.persistence.ProfilePersister;
 import org.consumersunion.stories.server.persistence.StoryTellersParams;
 import org.consumersunion.stories.server.persistence.UserPersister;
 import org.consumersunion.stories.server.persistence.funcs.ProcessFunc;
 import org.consumersunion.stories.server.persistence.params.PagedRetrieveParams;
 import org.consumersunion.stories.server.rest.api.convio.SyncFromSysPersonToConvioConstituentRequestFactory;
-import org.consumersunion.stories.server.solr.person.UpdatePersonIndexer;
 import org.springframework.stereotype.Service;
 
 import net.lightoze.gwt.i18n.server.LocaleFactory;
@@ -47,6 +47,8 @@ public class RpcProfileServiceImpl extends RpcBaseServiceImpl implements RpcProf
     private StoryService storyService;
     @Inject
     private SyncFromSysPersonToConvioConstituentRequestFactory syncFromSysPersonConvioFactory;
+    @Inject
+    private UpdatePersonIndexer updatePersonIndexer;
 
     @Override
     public DatumResponse<ProfileSummary> retrieveProfile(int id) {
@@ -107,7 +109,7 @@ public class RpcProfileServiceImpl extends RpcBaseServiceImpl implements RpcProf
                         persistenceService.process(new RetrieveProfileSummaryFunc(profile.getId()));
                 response.setDatum(updatedProfile);
 
-                indexerService.process(new UpdatePersonIndexer(updatedProfile.getProfile()));
+                updatePersonIndexer.index(updatedProfile.getProfile());
                 storyService.updateAuthor(updatedProfile);
                 syncFromSysPersonConvioFactory.create(updatedProfile.getProfile())
                         .queueSysToConvioUpdates(updatedProfile, isPersonSelfUpdate(profile.getId()),
