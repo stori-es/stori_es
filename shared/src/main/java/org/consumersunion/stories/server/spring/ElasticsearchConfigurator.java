@@ -50,7 +50,7 @@ public class ElasticsearchConfigurator {
     }
 
     private HttpHost getBaseUrl() {
-        String baseUrl = System.getProperty("PARAM1", null);
+        String baseUrl = System.getProperty("ES_HOSTNAME", null);
         if (Strings.isNullOrEmpty(baseUrl)) {
             return new HttpHost(BASE_URL, 80, "http");
         } else {
