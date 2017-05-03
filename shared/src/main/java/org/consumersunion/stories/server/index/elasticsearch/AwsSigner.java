@@ -67,7 +67,6 @@ public class AwsSigner {
     private static final String SESSION_TOKEN = "x-amz-security-token";
     private static final String DATE = "date";
     private static final Escaper ESCAPER = UrlEscapers.urlFormParameterEscaper();
-    private static final String POST = "POST";
 
     private AWSCredentialsProvider credentialsProvider;
     private final String host;
@@ -126,8 +125,7 @@ public class AwsSigner {
         String stringToSign = createStringToSign(canonicalRequest, now);
         String signature = sign(stringToSign, now, credentials);
         String autorizationHeader = AWS4_HMAC_SHA256_CREDENTIAL + credentials.getAWSAccessKeyId() + SLASH +
-                getCredentialScope(
-                        now) +
+                getCredentialScope(now) +
                 SIGNED_HEADERS + signedHeaderKeys +
                 SIGNATURE + signature;
 
@@ -153,7 +151,7 @@ public class AwsSigner {
         }
         if (header.getKey().equalsIgnoreCase(CONTENT_LENGTH) &&
                 header.getValue().equals(ZERO) &&
-                !method.equalsIgnoreCase(POST)) {
+                (!method.equalsIgnoreCase("POST") || !method.equalsIgnoreCase("PUT"))) {
             return Optional.of(header.getKey().toLowerCase() + ':');
         }
         return Optional.of(header.getKey().toLowerCase() + ':' + header.getValue());
