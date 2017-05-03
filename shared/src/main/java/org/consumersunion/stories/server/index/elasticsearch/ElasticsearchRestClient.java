@@ -1,7 +1,6 @@
 package org.consumersunion.stories.server.index.elasticsearch;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Map;
 
@@ -27,6 +26,8 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
+import static com.google.common.base.Charsets.UTF_8;
+
 @Component
 public class ElasticsearchRestClient {
     private static final Splitter SPLITTER = Splitter.on('&').trimResults().omitEmptyStrings();
@@ -48,7 +49,8 @@ public class ElasticsearchRestClient {
                 ImmutableMap.<String, String>of(), payload(body));
 
         return restClientProvider.get()
-                .performRequest(methodName, path, Collections.<String, String>emptyMap(), new NStringEntity(body),
+                .performRequest(methodName, path, Collections.<String, String>emptyMap(),
+                        new NStringEntity(body, Charsets.UTF_8),
                         headers(signedHeaders));
     }
 
@@ -62,13 +64,14 @@ public class ElasticsearchRestClient {
     }
 
     public void performRequestAsync(Method method, String path, String body, ResponseListener responseListener)
-            throws UnsupportedEncodingException {
+            throws IOException {
         String methodName = method.name();
         Map<String, String> signedHeaders = awsSigner.getSignedHeaders(path, methodName, params(path),
                 ImmutableMap.<String, String>of(), payload(body));
 
         restClientProvider.get()
-                .performRequestAsync(methodName, path, Collections.<String, String>emptyMap(), new NStringEntity(body),
+                .performRequestAsync(methodName, path, Collections.<String, String>emptyMap(),
+                        new NStringEntity(body, UTF_8),
                         responseListener, headers(signedHeaders));
     }
 
@@ -109,7 +112,7 @@ public class ElasticsearchRestClient {
         return Optional.of(content).transform(new Function<String, byte[]>() {
             @Override
             public byte[] apply(String content) {
-                return content.getBytes(Charsets.UTF_8);
+                return content.getBytes(UTF_8);
             }
         });
     }
