@@ -3,15 +3,11 @@ package org.consumersunion.stories.server.index.elasticsearch;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Provider;
-
 import org.apache.commons.io.IOUtils;
-import org.apache.http.nio.entity.NStringEntity;
 import org.consumersunion.stories.common.shared.service.GeneralException;
 import org.consumersunion.stories.server.index.Document;
 import org.consumersunion.stories.server.index.Indexer;
@@ -20,7 +16,6 @@ import org.consumersunion.stories.server.index.elasticsearch.search.SearchHit;
 import org.consumersunion.stories.server.index.elasticsearch.search.SearchResult;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.ResponseListener;
-import org.elasticsearch.client.RestClient;
 import org.elasticsearch.rest.RestRequest;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -39,19 +34,19 @@ public abstract class ElasticsearchIndexer<T extends Document> implements Indexe
     private static final String EMPTY_OBJECT = "{}";
 
     private final ObjectMapper objectMapper;
-    private final Provider<RestClient> restClientProvider;
+    private final ElasticsearchRestClient restClient;
     private final Class<T> documentClass;
     private final String indexName;
     private final String type;
 
     protected ElasticsearchIndexer(
             ObjectMapper objectMapper,
-            Provider<RestClient> restClientProvider,
+            ElasticsearchRestClient restClient,
             Class<T> documentClass,
             String indexName,
             String type) {
         this.objectMapper = objectMapper;
-        this.restClientProvider = restClientProvider;
+        this.restClient = restClient;
         this.documentClass = documentClass;
         this.indexName = indexName;
         this.type = type;
@@ -156,12 +151,10 @@ public abstract class ElasticsearchIndexer<T extends Document> implements Indexe
 
     @Override
     public void updateFromQuery(UpdateByQuery updateByQuery) {
-        RestClient restClient = restClientProvider.get();
         try {
             String content = objectMapper.writeValueAsString(updateByQuery);
-            Response response = restClient.performRequest(POST.name(),
-                    String.format("/%s/%s/_update_by_query", indexName, type),
-                    Collections.<String, String>emptyMap(), new NStringEntity(content));
+            Response response = restClient.performRequest(POST,
+                    String.format("/%s/%s/_update_by_query", indexName, type), content);
 
             LOGGER.info(IOUtils.toString(response.getEntity().getContent()));
         } catch (IOException e) {
@@ -224,40 +217,30 @@ public abstract class ElasticsearchIndexer<T extends Document> implements Indexe
     }
 
     private <R> R get(String endpoint, Class<R> resultClass) throws IOException {
-        RestClient restClient = restClientProvider.get();
-        Response response = restClient.performRequest(GET.name(), endpoint,
-                Collections.<String, String>emptyMap());
+        Response response = restClient.performRequest(GET, endpoint);
 
         return objectMapper.readValue(response.getEntity().getContent(), resultClass);
     }
 
     private <R> R post(String endpoint, String content, Class<R> resultClass) throws IOException {
-        RestClient restClient = restClientProvider.get();
-        Response response = restClient.performRequest(POST.name(), endpoint,
-                Collections.<String, String>emptyMap(), new NStringEntity(content));
+        Response response = restClient.performRequest(POST, endpoint, content);
 
         return objectMapper.readValue(response.getEntity().getContent(), resultClass);
     }
 
     private void delete(String endpoint) throws IOException {
-        RestClient restClient = restClientProvider.get();
-
-        Response response = restClient.performRequest(DELETE.name(), endpoint, Collections.<String, String>emptyMap());
+        Response response = restClient.performRequest(DELETE, endpoint);
 
         LOGGER.info(IOUtils.toString(response.getEntity().getContent()));
     }
 
     private void request(String content, RestRequest.Method method, String endpoint) throws IOException {
-        RestClient restClient = restClientProvider.get();
-        Response response = restClient.performRequest(method.name(), endpoint,
-                Collections.<String, String>emptyMap(), new NStringEntity(content));
+        Response response = restClient.performRequest(method, endpoint, content);
 
         LOGGER.info(IOUtils.toString(response.getEntity().getContent()));
     }
 
     private void requestAsync(String content, RestRequest.Method method, String endpoint) throws IOException {
-        RestClient restClient = restClientProvider.get();
-
         ResponseListener responseListener = new ResponseListener() {
             @Override
             public void onSuccess(Response response) {
@@ -275,8 +258,7 @@ public abstract class ElasticsearchIndexer<T extends Document> implements Indexe
             }
         };
 
-        restClient.performRequestAsync(method.name(), endpoint, Collections.<String, String>emptyMap(),
-                new NStringEntity(content), responseListener);
+        restClient.performRequestAsync(method, endpoint, content, responseListener);
     }
 
     private String getBulkContent(List<T> documents) {

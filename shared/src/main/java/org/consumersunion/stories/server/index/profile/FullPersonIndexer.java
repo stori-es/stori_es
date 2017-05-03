@@ -21,6 +21,10 @@ import org.consumersunion.stories.server.persistence.SupportDataUtils;
 import org.consumersunion.stories.server.persistence.SupportDataUtilsFactory;
 import org.springframework.stereotype.Component;
 
+import static java.sql.ResultSet.CONCUR_READ_ONLY;
+import static java.sql.ResultSet.FETCH_FORWARD;
+import static java.sql.ResultSet.TYPE_FORWARD_ONLY;
+
 import static org.consumersunion.stories.common.shared.AuthConstants.ROLE_READER;
 import static org.consumersunion.stories.server.index.Indexer.BATCH_SIZE;
 
@@ -76,7 +80,7 @@ public class FullPersonIndexer {
         Connection conn = null;
         try {
             conn = PersistenceUtil.getConnection();
-            PreparedStatement peopleStmt = conn.prepareStatement(peopleSql);
+            PreparedStatement peopleStmt = conn.prepareStatement(peopleSql, TYPE_FORWARD_ONLY, CONCUR_READ_ONLY);
             PreparedStatement personStmt = conn.prepareStatement(personSql);
             PreparedStatement collectionsStmt = conn.prepareStatement(collectionsSql);
             PreparedStatement questionnairesStmt = conn.prepareStatement(questionnairesSql);
@@ -84,7 +88,12 @@ public class FullPersonIndexer {
             SupportDataUtils supportDataUtils = supportDataUtilsFactory.create(conn);
 
             try {
-                for (ResultSet peopleResults = peopleStmt.executeQuery(); peopleResults.next(); ) {
+                peopleStmt.setFetchSize(BATCH_SIZE);
+                peopleStmt.setFetchDirection(FETCH_FORWARD);
+                ResultSet peopleResults = peopleStmt.executeQuery();
+                peopleResults.setFetchSize(BATCH_SIZE);
+                peopleResults.setFetchDirection(FETCH_FORWARD);
+                while (peopleResults.next()) {
                     int id = peopleResults.getInt(1);
                     personStmt.setInt(1, id);
                     ResultSet personResult = personStmt.executeQuery();

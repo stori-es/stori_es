@@ -16,7 +16,7 @@ public class ElasticsearchCollectionIndexer extends ElasticsearchIndexer<Collect
     protected ElasticsearchCollectionIndexer(
             @Indexer ObjectMapper indexerObjectMapper,
             @Indexer String indexName,
-            Provider<RestClient> restClientProvider) {
-        super(indexerObjectMapper, restClientProvider, CollectionDocument.class, indexName, "collections");
+            ElasticsearchRestClient elasticsearchRestClient) {
+        super(indexerObjectMapper, elasticsearchRestClient, CollectionDocument.class, indexName, "collections");
     }
 }

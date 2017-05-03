@@ -190,10 +190,12 @@ public class FullStoryIndexer {
                                     "WHERE d.systemEntity=?");
                 }
                 storiesStmt.setInt(1, BATCH_SIZE * cycleCount);
+                storiesStmt.setFetchSize(BATCH_SIZE);
 
                 stories = new ArrayList<StoryDocument>();
 
                 ResultSet storyResults = storiesStmt.executeQuery();
+                storyResults.setFetchSize(BATCH_SIZE);
                 if (storyResults.next()) {
                     storyResults.beforeFirst();
                 } else {

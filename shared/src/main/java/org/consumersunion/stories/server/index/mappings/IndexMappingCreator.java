@@ -1,19 +1,16 @@
 package org.consumersunion.stories.server.index.mappings;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.nio.entity.NStringEntity;
 import org.consumersunion.stories.server.annotations.Indexer;
+import org.consumersunion.stories.server.index.elasticsearch.ElasticsearchRestClient;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.ResponseException;
-import org.elasticsearch.client.RestClient;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +23,7 @@ import static org.elasticsearch.rest.RestRequest.Method.PUT;
 @Scope("prototype")
 public class IndexMappingCreator {
     @JsonIgnore
-    private final Provider<RestClient> restClientProvider;
+    private final ElasticsearchRestClient elasticsearchRestClient;
     @JsonIgnore
     private final ObjectMapper indexerObjectMapper;
     @JsonIgnore
@@ -36,10 +33,10 @@ public class IndexMappingCreator {
 
     @Inject
     IndexMappingCreator(
-            Provider<RestClient> restClientProvider,
+            ElasticsearchRestClient elasticsearchRestClient,
             @Indexer ObjectMapper indexerObjectMapper,
             @Indexer String indexName) {
-        this.restClientProvider = restClientProvider;
+        this.elasticsearchRestClient = elasticsearchRestClient;
         this.indexerObjectMapper = indexerObjectMapper;
         this.indexName = indexName;
 
@@ -49,13 +46,10 @@ public class IndexMappingCreator {
     }
 
     public void create() throws IOException {
-        RestClient restClient = restClientProvider.get();
-
         String content = indexerObjectMapper.writeValueAsString(this);
 
         try {
-            Response response = restClient.performRequest(PUT.name(), "/" + indexName,
-                    Collections.<String, String>emptyMap(), new NStringEntity(content));
+            Response response = elasticsearchRestClient.performRequest(PUT, "/" + indexName, content);
             IOUtils.copy(response.getEntity().getContent(), System.out);
         } catch (ResponseException e) {
             String error = IOUtils.toString(e.getResponse().getEntity().getContent());
@@ -69,13 +63,12 @@ public class IndexMappingCreator {
     }
 
     private void update() throws IOException {
-        RestClient restClient = restClientProvider.get();
         for (Map.Entry<String, Object> entry : mappings.entrySet()) {
             String type = entry.getKey();
             String content = indexerObjectMapper.writeValueAsString(entry.getValue());
 
-            Response response = restClient.performRequest(PUT.name(), String.format("/%s/_mapping/%s", indexName, type),
-                    Collections.<String, String>emptyMap(), new NStringEntity(content));
+            Response response = elasticsearchRestClient.performRequest(PUT,
+                    String.format("/%s/_mapping/%s", indexName, type), content);
             IOUtils.copy(response.getEntity().getContent(), System.out);
         }
     }
