@@ -89,7 +89,6 @@
         <ehcache-core.version>2.5.2</ehcache-core.version>
         <commons-dbcp.version>1.4</commons-dbcp.version>
         <commons-pool.version>1.6</commons-pool.version>
-        <elasticsearch.version>5.1.2</elasticsearch.version>
         <mysql-connector-java.version>5.1.18</mysql-connector-java.version>
         <ejb-api.version>3.0</ejb-api.version>
         <validation-api.version>1.0.0.GA</validation-api.version>
@@ -114,6 +113,7 @@
         <ostermiller-utils.version>1.07.00</ostermiller-utils.version>
         <cdi-api.version>1.2</cdi-api.version>
         <log4j.version>2.7</log4j.version>
+        <httpcomponents.version>4.5.3</httpcomponents.version>
     </properties>
 
     <build>
@@ -663,19 +663,19 @@
                 <version>${aws.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.elasticsearch.client</groupId>
-                <artifactId>rest</artifactId>
-                <version>${elasticsearch.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.elasticsearch.client</groupId>
-                <artifactId>transport</artifactId>
-                <version>${elasticsearch.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.elasticmq</groupId>
                 <artifactId>elasticmq-rest-sqs_2.11</artifactId>
                 <version>${elasticmq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcomponents-client</artifactId>
+                <version>${httpcomponents.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>fluent-hc</artifactId>
+                <version>${httpcomponents.version}</version>
             </dependency>
 
             <!-- Persistence dependencies -->

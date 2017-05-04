@@ -7,17 +7,14 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
 import org.consumersunion.stories.server.annotations.Indexer;
 import org.consumersunion.stories.server.index.elasticsearch.ElasticsearchRestClient;
-import org.elasticsearch.client.Response;
-import org.elasticsearch.client.ResponseException;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import static org.elasticsearch.rest.RestRequest.Method.PUT;
 
 @Component
 @Scope("prototype")
@@ -48,17 +45,18 @@ public class IndexMappingCreator {
     public void create() throws IOException {
         String content = indexerObjectMapper.writeValueAsString(this);
 
-        try {
-            Response response = elasticsearchRestClient.performRequest(PUT, "/" + indexName, content);
-            IOUtils.copy(response.getEntity().getContent(), System.out);
-        } catch (ResponseException e) {
-            String error = IOUtils.toString(e.getResponse().getEntity().getContent());
-            System.err.println(error);
+        HttpResponse response = elasticsearchRestClient.performRequest("PUT", "/" + indexName, content);
+
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode >= 400) {
+            String error = IOUtils.toString(response.getEntity().getContent());
             if (error == null || !error.contains("already_exists")) {
-                throw e;
+                throw new RuntimeException(error);
             }
 
             update();
+        } else {
+            IOUtils.copy(response.getEntity().getContent(), System.out);
         }
     }
 
@@ -67,7 +65,7 @@ public class IndexMappingCreator {
             String type = entry.getKey();
             String content = indexerObjectMapper.writeValueAsString(entry.getValue());
 
-            Response response = elasticsearchRestClient.performRequest(PUT,
+            HttpResponse response = elasticsearchRestClient.performRequest("PUT",
                     String.format("/%s/_mapping/%s", indexName, type), content);
             IOUtils.copy(response.getEntity().getContent(), System.out);
         }
