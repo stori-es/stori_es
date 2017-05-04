@@ -9,16 +9,11 @@ import org.consumersunion.stories.common.shared.model.Collection;
 import org.consumersunion.stories.common.shared.model.Organization;
 import org.consumersunion.stories.common.shared.model.StoryLink;
 import org.consumersunion.stories.server.index.story.UpdatedStoryCollectionIndexer;
-import org.elasticsearch.common.xcontent.ToXContent;
-import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.jukito.JukitoModule;
 import org.jukito.JukitoRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
-import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 

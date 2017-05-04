@@ -1,16 +1,13 @@
 package org.consumersunion.stories.server.spring;
 
 import org.apache.http.HttpHost;
-import org.apache.http.client.config.RequestConfig;
 import org.consumersunion.stories.server.annotations.Indexer;
 import org.consumersunion.stories.server.index.elasticsearch.AwsSigner;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestClientBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.HttpRequestFactory;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -26,17 +23,8 @@ public class ElasticsearchConfigurator {
     private static final String BASE_URL = "localhost";
 
     @Bean
-    @Scope("prototype")
-    public RestClient restClient() {
-        return RestClient.builder(getBaseUrl())
-                .setRequestConfigCallback(new RestClientBuilder.RequestConfigCallback() {
-                    @Override
-                    public RequestConfig.Builder customizeRequestConfig(RequestConfig.Builder requestConfigBuilder) {
-                        return requestConfigBuilder.setSocketTimeout(60000);
-                    }
-                })
-                .setMaxRetryTimeoutMillis(120000)
-                .build();
+    public HttpRequestFactory httpRequestFactory() {
+        return new HttpRequestFactory(getBaseUrl().toURI());
     }
 
     @Bean

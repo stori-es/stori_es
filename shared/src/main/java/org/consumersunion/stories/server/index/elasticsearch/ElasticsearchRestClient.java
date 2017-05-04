@@ -1,19 +1,19 @@
 package org.consumersunion.stories.server.index.elasticsearch;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.fluent.Async;
+import org.apache.http.client.fluent.Content;
+import org.apache.http.client.fluent.Request;
+import org.apache.http.concurrent.FutureCallback;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
-import org.apache.http.nio.entity.NStringEntity;
-import org.elasticsearch.client.Response;
-import org.elasticsearch.client.ResponseListener;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.rest.RestRequest.Method;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Charsets;
@@ -32,47 +32,52 @@ import static com.google.common.base.Charsets.UTF_8;
 public class ElasticsearchRestClient {
     private static final Splitter SPLITTER = Splitter.on('&').trimResults().omitEmptyStrings();
 
-    private final Provider<RestClient> restClientProvider;
+    private final HttpRequestFactory httpRequestFactory;
     private final AwsSigner awsSigner;
 
     @Inject
     public ElasticsearchRestClient(
-            Provider<RestClient> restClientProvider,
+            HttpRequestFactory httpRequestFactory,
             AwsSigner awsSigner) {
-        this.restClientProvider = restClientProvider;
+        this.httpRequestFactory = httpRequestFactory;
         this.awsSigner = awsSigner;
     }
 
-    public Response performRequest(Method method, String path, String body) throws IOException {
-        String methodName = method.name();
+    public HttpResponse performRequest(String methodName, String path, String body) throws IOException {
         Map<String, String> signedHeaders = awsSigner.getSignedHeaders(path, methodName, params(path),
                 ImmutableMap.<String, String>of(), payload(body));
 
-        return restClientProvider.get()
-                .performRequest(methodName, path, Collections.<String, String>emptyMap(),
-                        new NStringEntity(body, Charsets.UTF_8),
-                        headers(signedHeaders));
+        return createRequest(methodName, path)
+                .body(new StringEntity(body, Charsets.UTF_8))
+                .setHeaders(headers(signedHeaders))
+                .execute()
+                .returnResponse();
     }
 
-    public Response performRequest(Method method, String path) throws IOException {
-        String methodName = method.name();
+    public HttpResponse performRequest(String methodName, String path) throws IOException {
         Map<String, String> signedHeaders = awsSigner.getSignedHeaders(path, methodName, params(path),
                 ImmutableMap.<String, String>of(), Optional.<byte[]>absent());
 
-        return restClientProvider.get()
-                .performRequest(methodName, path, Collections.<String, String>emptyMap(), headers(signedHeaders));
+        return createRequest(methodName, path)
+                .setHeaders(headers(signedHeaders))
+                .execute()
+                .returnResponse();
     }
 
-    public void performRequestAsync(Method method, String path, String body, ResponseListener responseListener)
+    public Future<Content> performRequestAsync(String methodName, String path, String body, FutureCallback<Content> listener)
             throws IOException {
-        String methodName = method.name();
         Map<String, String> signedHeaders = awsSigner.getSignedHeaders(path, methodName, params(path),
                 ImmutableMap.<String, String>of(), payload(body));
 
-        restClientProvider.get()
-                .performRequestAsync(methodName, path, Collections.<String, String>emptyMap(),
-                        new NStringEntity(body, UTF_8),
-                        responseListener, headers(signedHeaders));
+        Request request = createRequest(methodName, path)
+                .body(new StringEntity(body, Charsets.UTF_8))
+                .setHeaders(headers(signedHeaders));
+
+        return Async.newInstance().execute(request, listener);
+    }
+
+    private Request createRequest(String methodName, String path) {
+        return httpRequestFactory.createRequest(methodName, path);
     }
 
     private Header[] headers(Map<String, String> signedHeaders) {

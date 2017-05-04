@@ -8,15 +8,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.fluent.Content;
+import org.apache.http.concurrent.FutureCallback;
 import org.consumersunion.stories.common.shared.service.GeneralException;
 import org.consumersunion.stories.server.index.Document;
 import org.consumersunion.stories.server.index.Indexer;
 import org.consumersunion.stories.server.index.elasticsearch.search.Search;
 import org.consumersunion.stories.server.index.elasticsearch.search.SearchHit;
 import org.consumersunion.stories.server.index.elasticsearch.search.SearchResult;
-import org.elasticsearch.client.Response;
-import org.elasticsearch.client.ResponseListener;
-import org.elasticsearch.rest.RestRequest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,14 +24,14 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 
-import static org.elasticsearch.rest.RestRequest.Method.DELETE;
-import static org.elasticsearch.rest.RestRequest.Method.GET;
-import static org.elasticsearch.rest.RestRequest.Method.POST;
-import static org.elasticsearch.rest.RestRequest.Method.PUT;
-
 public abstract class ElasticsearchIndexer<T extends Document> implements Indexer<T> {
     private static final Logger LOGGER = Logger.getLogger(ElasticsearchIndexer.class.getName());
     private static final String EMPTY_OBJECT = "{}";
+
+    private static final String POST = "POST";
+    private static final String PUT = "PUT";
+    private static final String DELETE = "DELETE";
+    private static final String GET = "GEY";
 
     private final ObjectMapper objectMapper;
     private final ElasticsearchRestClient restClient;
@@ -153,7 +153,7 @@ public abstract class ElasticsearchIndexer<T extends Document> implements Indexe
     public void updateFromQuery(UpdateByQuery updateByQuery) {
         try {
             String content = objectMapper.writeValueAsString(updateByQuery);
-            Response response = restClient.performRequest(POST,
+            HttpResponse response = restClient.performRequest(POST,
                     String.format("/%s/%s/_update_by_query", indexName, type), content);
 
             LOGGER.info(IOUtils.toString(response.getEntity().getContent()));
@@ -217,44 +217,44 @@ public abstract class ElasticsearchIndexer<T extends Document> implements Indexe
     }
 
     private <R> R get(String endpoint, Class<R> resultClass) throws IOException {
-        Response response = restClient.performRequest(GET, endpoint);
+        HttpResponse response = restClient.performRequest(GET, endpoint);
 
         return objectMapper.readValue(response.getEntity().getContent(), resultClass);
     }
 
     private <R> R post(String endpoint, String content, Class<R> resultClass) throws IOException {
-        Response response = restClient.performRequest(POST, endpoint, content);
+        HttpResponse response = restClient.performRequest(POST, endpoint, content);
 
         return objectMapper.readValue(response.getEntity().getContent(), resultClass);
     }
 
     private void delete(String endpoint) throws IOException {
-        Response response = restClient.performRequest(DELETE, endpoint);
+        HttpResponse response = restClient.performRequest(DELETE, endpoint);
 
         LOGGER.info(IOUtils.toString(response.getEntity().getContent()));
     }
 
-    private void request(String content, RestRequest.Method method, String endpoint) throws IOException {
-        Response response = restClient.performRequest(method, endpoint, content);
+    private void request(String content, String method, String endpoint) throws IOException {
+        HttpResponse response = restClient.performRequest(method, endpoint, content);
 
         LOGGER.info(IOUtils.toString(response.getEntity().getContent()));
     }
 
-    private void requestAsync(String content, RestRequest.Method method, String endpoint) throws IOException {
-        ResponseListener responseListener = new ResponseListener() {
+    private void requestAsync(String content, String method, String endpoint) throws IOException {
+        FutureCallback<Content> responseListener = new FutureCallback<Content>() {
             @Override
-            public void onSuccess(Response response) {
-                try {
-                    LOGGER.info(IOUtils.toString(response.getEntity().getContent()));
-                } catch (IOException e) {
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                    throw new GeneralException(e);
-                }
+            public void completed(Content content) {
+                LOGGER.info(content.asString());
             }
 
             @Override
-            public void onFailure(Exception exception) {
-                LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
+            public void failed(Exception e) {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            }
+
+            @Override
+            public void cancelled() {
+                LOGGER.info("Request cancelled");
             }
         };
 
