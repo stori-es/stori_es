@@ -31,7 +31,7 @@ public abstract class ElasticsearchIndexer<T extends Document> implements Indexe
     private static final String POST = "POST";
     private static final String PUT = "PUT";
     private static final String DELETE = "DELETE";
-    private static final String GET = "GEY";
+    private static final String GET = "GET";
 
     private final ObjectMapper objectMapper;
     private final ElasticsearchRestClient restClient;
