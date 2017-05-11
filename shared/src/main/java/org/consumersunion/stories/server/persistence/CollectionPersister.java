@@ -908,7 +908,7 @@ public class CollectionPersister implements Persister<Collection>, MineCallbackP
         public CountCollectionsResult process() {
             try {
 
-                BoolBuilder boolBuilder = processSearchQuery(input).filter().addTerm("isQuestionnaire", false).and();
+                BoolBuilder boolBuilder = processSearchQuery(input);
 
                 long collectionCount = collectionPersister.collectionIndexer.count(
                         SearchBuilder.ofQuery(QueryBuilder.ofBool(boolBuilder.build())));
