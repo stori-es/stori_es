@@ -104,7 +104,7 @@ public class ConvioDataSynchronizationWorker {
         }
         try {
             // The calls to Convio need to be serialized on a per-org basis.
-            System.out.println("syncrhonizing...");
+            System.out.println("synchronizing...");
             executeRequest(convioSyncRequest, loadStatus);
             convioSyncRequest.synchronize();
         } finally {

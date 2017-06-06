@@ -115,10 +115,12 @@ public class AwsSigner {
             }
         }
 
+        String queryParamsString = queryParamsString(queryParams);
+        uri = uri.replace("?" + queryParamsString, "");
         String signedHeaderKeys = JOINER.join(signedHeaders.build());
         String canonicalRequest = method + RETURN +
                 SdkHttpUtils.urlEncode(uri, true) + RETURN +
-                queryParamsString(queryParams) + RETURN +
+                queryParamsString + RETURN +
                 headersString.toString() + RETURN +
                 signedHeaderKeys + RETURN +
                 toBase16(hash(payload.or(EMPTY.getBytes(Charsets.UTF_8))));
