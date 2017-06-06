@@ -21,7 +21,10 @@ import org.consumersunion.stories.server.export.StoryExport;
 import org.consumersunion.stories.server.export.StoryTellerCsv;
 import org.consumersunion.stories.server.index.Indexer;
 import org.consumersunion.stories.server.index.elasticsearch.SortOrder;
+import org.consumersunion.stories.server.index.elasticsearch.query.Ids;
 import org.consumersunion.stories.server.index.elasticsearch.query.QueryBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.query.bool.BoolBuilder;
+import org.consumersunion.stories.server.index.elasticsearch.query.bool.FilterBuilder;
 import org.consumersunion.stories.server.index.elasticsearch.search.Search;
 import org.consumersunion.stories.server.index.elasticsearch.search.SearchBuilder;
 import org.consumersunion.stories.server.index.profile.ProfileDocument;
@@ -118,23 +121,21 @@ public class ProfileServiceImpl implements ProfileService {
 
                 try {
                     SearchBuilder searchBuilder = SearchBuilder.newBuilder();
-                    QueryBuilder queryBuilder = QueryBuilder.newBuilder();
+                    FilterBuilder builder = BoolBuilder.newBuilder().filter();
                     if (collectionId != null) {
-                        queryBuilder.withTerm("collections", collectionId);
-                        searchBuilder.withSort("lastStoryDateByCollection." + collectionId, SortOrder.DESC);
+                        builder.addTerm("collections", collectionId);
                     }
 
                     if (questionnaireId != null) {
-                        queryBuilder.withTerm("questionnaires", questionnaireId);
-                        searchBuilder.withSort("lastStoryDateByCollection." + questionnaireId, SortOrder.DESC);
+                        builder.addTerm("questionnaires", questionnaireId);
                     }
 
                     if (!authService.isSuperUser(user)) {
-                        queryBuilder.withTerm("readAuths", organizationContext);
+                        builder.addTerm("readAuths", organizationContext);
                     }
 
                     Search search = searchBuilder
-                            .withQuery(queryBuilder.build())
+                            .withQuery(QueryBuilder.ofBool(builder.build()))
                             .withSize(windowSize)
                             .withFrom(window * windowSize)
                             .build();

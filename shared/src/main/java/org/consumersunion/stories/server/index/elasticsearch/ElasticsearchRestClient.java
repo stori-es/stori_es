@@ -6,6 +6,7 @@ import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Async;
@@ -47,11 +48,18 @@ public class ElasticsearchRestClient {
         Map<String, String> signedHeaders = awsSigner.getSignedHeaders(path, methodName, params(path),
                 ImmutableMap.<String, String>of(), payload(body));
 
-        return createRequest(methodName, path)
+        HttpResponse response = createRequest(methodName, path)
                 .body(new StringEntity(body, Charsets.UTF_8))
                 .setHeaders(headers(signedHeaders))
                 .execute()
                 .returnResponse();
+
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode >= 200 && statusCode <= 300) {
+            return response;
+        }
+
+        throw new IOException(IOUtils.toString(response.getEntity().getContent()));
     }
 
     public HttpResponse performRequest(String methodName, String path) throws IOException {
@@ -64,7 +72,8 @@ public class ElasticsearchRestClient {
                 .returnResponse();
     }
 
-    public Future<Content> performRequestAsync(String methodName, String path, String body, FutureCallback<Content> listener)
+    public Future<Content> performRequestAsync(String methodName, String path, String body,
+            FutureCallback<Content> listener)
             throws IOException {
         Map<String, String> signedHeaders = awsSigner.getSignedHeaders(path, methodName, params(path),
                 ImmutableMap.<String, String>of(), payload(body));
