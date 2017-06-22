@@ -824,10 +824,7 @@ body#topics-page #nav li#topics a {
 }
 
 .poweredBy-style {
-    bottom: 110px;
-    display: block;
-    left: 310px;
-    position: absolute;
+    text-align: center;
 }
 
 /**

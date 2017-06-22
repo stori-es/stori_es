@@ -1461,8 +1461,5 @@ div.cu-collection-submit-thank-you button {
 }
 
 .poweredBy-style {
-    bottom: 310px;
-    display: block;
-    left: 310px;
-    position: absolute;
+    text-align: center;
 }
