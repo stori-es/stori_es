@@ -249,14 +249,14 @@
         <div id="home">
             <div id="home-content">
                 <div id="questionnaireWidget"><%--#SYS Widget Content--%></div>
+                <div id="poweredBy-content" class="poweredBy-style">
+                    <a href="https://stori.es/"><img alt="Powered by stori.es"
+                                                     src="<%= realContext %>/images/powered-by-stories.png"/></a>
+                </div>
             </div>
         </div>
     </div>
     <div class="clear"></div>
-    <div id="poweredBy-content" class="poweredBy-style">
-        <a href="https://stori.es/"><img alt="Powered by stori.es"
-                                         src="<%= realContext %>/images/powered-by-stories.png"/></a>
-    </div>
     <footer>
         <div id="footer" class="container">
             <nav class="footer-menu">
