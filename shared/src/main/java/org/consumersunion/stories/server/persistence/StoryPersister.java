@@ -643,7 +643,7 @@ public class StoryPersister implements Persister<Story> {
             try {
                 StoryDocument storyDocument = storyPersister.storyIndexer.get(input);
 
-                List<StorySummary> storySummaries = storyPersister.processSolrResults(
+                List<StorySummary> storySummaries = storyPersister.procesIndexResults(
                         Collections.singletonList(storyDocument), includeFullText, true, conn);
 
                 if (!storySummaries.isEmpty()) {
@@ -690,7 +690,7 @@ public class StoryPersister implements Persister<Story> {
                         .build();
 
                 List<StoryDocument> storyDocuments = storyPersister.storyIndexer.search(search);
-                List<StorySummary> storySummaries = storyPersister.processSolrResults(storyDocuments, includeFullText,
+                List<StorySummary> storySummaries = storyPersister.procesIndexResults(storyDocuments, includeFullText,
                         input.isIncludeCollections(), conn);
 
                 if (input.isIncludeData()) {
@@ -766,7 +766,7 @@ public class StoryPersister implements Persister<Story> {
 
                         List<StoryDocument> storyDocuments = storyIndexer.search(search);
 
-                        List<StoryPosition> batch = processSolrResults(storyDocuments);
+                        List<StoryPosition> batch = procesIndexResults(storyDocuments);
                         storyPositions.addAll(batch);
                     }
 
@@ -821,7 +821,7 @@ public class StoryPersister implements Persister<Story> {
     }
 
     @SuppressWarnings("unchecked")
-    private List<StorySummary> processSolrResults(
+    private List<StorySummary> procesIndexResults(
             List<StoryDocument> documents,
             boolean includeFullText,
             boolean includeCollections,
@@ -911,7 +911,7 @@ public class StoryPersister implements Persister<Story> {
         }
     }
 
-    private List<StoryPosition> processSolrResults(List<StoryDocument> storyDocuments) {
+    private List<StoryPosition> procesIndexResults(List<StoryDocument> storyDocuments) {
         List<StoryPosition> storyPositions = new ArrayList<StoryPosition>();
 
         for (StoryDocument doc : storyDocuments) {
@@ -1083,7 +1083,7 @@ public class StoryPersister implements Persister<Story> {
         } else if (sortField == StorySortField.CREATED_NEW || sortField == StorySortField.CREATED_OLD) {
             searchBuilder.withSort("created", getOrder(sortField == StorySortField.CREATED_OLD));
         } else if (sortField == StorySortField.ID) {
-            searchBuilder.withSort("id", order);
+            searchBuilder.withSort("_id", order);
         } else if (sortField == StorySortField.MODIFIED_NEW || sortField == StorySortField.MODIFIED_OLD) {
             searchBuilder.withSort("lastModified", getOrder(sortField == StorySortField.MODIFIED_OLD));
         } else if (sortField == StorySortField.STATE) {

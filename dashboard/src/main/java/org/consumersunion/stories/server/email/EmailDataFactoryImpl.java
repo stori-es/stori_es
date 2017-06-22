@@ -102,6 +102,6 @@ public class EmailDataFactoryImpl implements EmailDataFactory {
             }
         }));
 
-        return "id:(" + ids + ")";
+        return "_id:(" + ids + ")";
     }
 }
