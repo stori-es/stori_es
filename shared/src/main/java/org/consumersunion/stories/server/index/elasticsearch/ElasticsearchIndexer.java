@@ -154,7 +154,8 @@ public abstract class ElasticsearchIndexer<T extends Document> implements Indexe
         try {
             String content = objectMapper.writeValueAsString(updateByQuery);
             HttpResponse response = restClient.performRequest(POST,
-                    String.format("/%s/%s/_update_by_query", indexName, type), content);
+                    String.format("/%s/%s/_update_by_query?refresh=true&wait_for_completion=true&conflicts=proceed",
+                            indexName, type), content);
 
             LOGGER.info(IOUtils.toString(response.getEntity().getContent()));
         } catch (IOException e) {
