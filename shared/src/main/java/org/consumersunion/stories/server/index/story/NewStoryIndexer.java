@@ -61,6 +61,7 @@ public class NewStoryIndexer {
             if (answerSet != null && !profileDocument.getQuestionnaires().contains(answerSet.getQuestionnaire())) {
                 profileDocument.getQuestionnaires().add(answerSet.getQuestionnaire());
             }
+            profileDocument.setReadAuths(readAuths);
             // update global story stats
             profileDocument.setLastStoryDate(story.getCreated());
             profileDocument.setStoryCount(profileDocument.getStoryCount() + 1);

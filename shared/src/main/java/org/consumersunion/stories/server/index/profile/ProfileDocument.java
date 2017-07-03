@@ -2,6 +2,7 @@ package org.consumersunion.stories.server.index.profile;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ public class ProfileDocument implements Document {
     @JsonProperty(access = WRITE_ONLY)
     private String _index;
 
-    private Set<Integer> readAuths;
+    private Set<Integer> readAuths = new LinkedHashSet<Integer>();
     private String givenName;
     private String surname;
     private String fullName;
@@ -246,9 +247,9 @@ public class ProfileDocument implements Document {
 
     public Set<Integer> getCollections() {
         if (collections == null) {
-            return new HashSet<Integer>();
+            collections = new HashSet<Integer>();
         }
-        return this.collections;
+        return collections;
     }
 
     public void setCollections(Set<Integer> collections) {
@@ -261,7 +262,7 @@ public class ProfileDocument implements Document {
 
     public Set<Integer> getQuestionnaires() {
         if (questionnaires == null) {
-            return new HashSet<Integer>();
+            questionnaires = new HashSet<Integer>();
         }
         return questionnaires;
     }
@@ -321,6 +322,12 @@ public class ProfileDocument implements Document {
 //    public void setStoryCountByCollection(Map<Integer, Integer> storyCountByCollection) {
 //        this.storyCountByCollection = storyCountByCollection;
 //    }
+
+    public void setReadAuths(Set<Integer> readAuths) {
+        if (readAuths != null) {
+            this.readAuths.addAll(readAuths);
+        }
+    }
 
     @Override
     public Set<Integer> getReadAuths() {
