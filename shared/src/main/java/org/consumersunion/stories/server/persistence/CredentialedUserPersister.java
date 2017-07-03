@@ -379,8 +379,8 @@ public class CredentialedUserPersister implements Persister<CredentialedUser>, M
         public CredentialedUser process() {
             try {
                 PreparedStatement select = conn.prepareStatement(
-                        SELECT_USER + "WHERE u.handle=?" + (includeInactive ? "" : AND_ACTIVE_1));
-                select.setString(1, input);
+                        SELECT_USER + "WHERE u.handleLowerCase=?" + (includeInactive ? "" : AND_ACTIVE_1));
+                select.setString(1, input.toLowerCase());
 
                 return instantiateCredentialedUser(conn, select);
             } catch (final SQLException e) {

@@ -56,7 +56,7 @@ public class UserPersister implements Persister<User> {
                     PreparedStatement updateUser =
                             conn.prepareStatement("UPDATE user SET lastLogon=? WHERE handleLowerCase=?");
                     updateUser.setTimestamp(1, new Timestamp(new Date().getTime()));
-                    updateUser.setString(2, input);
+                    updateUser.setString(2, input.toLowerCase());
 
                     int updatedCount = updateUser.executeUpdate();
                     if (updatedCount != 1) {
@@ -160,8 +160,8 @@ public class UserPersister implements Persister<User> {
         @Override
         public Boolean process() {
             try {
-                PreparedStatement searchUser = conn.prepareStatement("SELECT COUNT(*) FROM user WHERE handle = ?");
-                searchUser.setString(1, input);
+                PreparedStatement searchUser = conn.prepareStatement("SELECT COUNT(*) FROM user WHERE handleLowerCase = ?");
+                searchUser.setString(1, input.toLowerCase());
                 ResultSet rs = searchUser.executeQuery();
                 if (rs.next() && rs.getInt(1) > 0) {
                     return true;

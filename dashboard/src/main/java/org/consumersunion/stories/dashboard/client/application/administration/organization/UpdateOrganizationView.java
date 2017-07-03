@@ -33,11 +33,8 @@ import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -488,28 +485,6 @@ public class UpdateOrganizationView extends ViewWithUiHandlers<AdminManagerUiHan
 
     private void setupEvent(final TextInput adminInput) {
         adminInputs.add(adminInput);
-        adminInput.addKeyUpHandler(new KeyUpHandler() {
-            @Override
-            public void onKeyUp(KeyUpEvent event) {
-                removeStyles();
-                selectedAdminInput = adminInput;
-                if (!Strings.isNullOrEmpty(adminInput.getValue().trim())) {
-                    getUiHandlers().checkAdminNameExists(adminInput.getValue());
-                }
-            }
-        });
-
-        adminInput.addFocusHandler(new FocusHandler() {
-            @Override
-            public void onFocus(FocusEvent event) {
-                removeStyles();
-                selectedAdminInput = adminInput;
-                if (!Strings.isNullOrEmpty(adminInput.getValue().trim())) {
-                    getUiHandlers().checkAdminNameExists(adminInput.getValue());
-                }
-            }
-        });
-
         adminInput.addBlurHandler(new BlurHandler() {
             @Override
             public void onBlur(BlurEvent event) {

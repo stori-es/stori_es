@@ -497,6 +497,7 @@ public class RpcUserServiceImpl extends RpcBaseServiceImpl implements RpcUserSer
         } else {
             if (!userPersister.exists(username)) {
                 response.addGlobalErrorMessage("Invalid username");
+                response.setShowErrorMessages(true);
             }
         }
         return response;

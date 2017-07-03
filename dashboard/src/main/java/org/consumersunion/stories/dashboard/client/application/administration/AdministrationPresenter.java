@@ -245,24 +245,7 @@ public class AdministrationPresenter extends Presenter<AdministrationPresenter.M
     public void checkUsernameExists(String userName) {
         userService.checkHandle(userName, new AbstractAsyncCallback<ActionResponse>() {
             @Override
-            public void onSuccess(final ActionResponse result) {
-                if (result.getGlobalErrorMessages().size() > 0) {
-                    createAcctPresenter.setUsernameDisponibility(false);
-                    updateAcctPresenter.setUsernameDisponibility(false);
-                } else {
-                    createAcctPresenter.setUsernameDisponibility(true);
-                    updateAcctPresenter.setUsernameDisponibility(true);
-                }
-                result.getGlobalErrorMessages().clear();
-            }
-        });
-    }
-
-    @Override
-    public void checkAdminNameExists(String userName) {
-        userService.checkAssignableHandle(userName, new ResponseHandler<ActionResponse>() {
-            @Override
-            public void handleSuccess(final ActionResponse result) {
+            public void onSuccess(ActionResponse result) {
                 if (result.getGlobalErrorMessages().size() > 0) {
                     createOrgPresenter.setUsernameDisponibility(false);
                     updateOrgPresenter.setUsernameDisponibility(false);
@@ -270,7 +253,22 @@ public class AdministrationPresenter extends Presenter<AdministrationPresenter.M
                     createOrgPresenter.setUsernameDisponibility(true);
                     updateOrgPresenter.setUsernameDisponibility(true);
                 }
-                result.getGlobalErrorMessages().clear();
+            }
+        });
+    }
+
+    @Override
+    public void checkAdminNameExists(String userName) {
+        userService.checkAssignableHandle(userName, new AbstractAsyncCallback<ActionResponse>() {
+            @Override
+            public void onSuccess(ActionResponse result) {
+                if (result.getGlobalErrorMessages().size() > 0) {
+                    createOrgPresenter.setUsernameDisponibility(false);
+                    updateOrgPresenter.setUsernameDisponibility(false);
+                } else {
+                    createOrgPresenter.setUsernameDisponibility(true);
+                    updateOrgPresenter.setUsernameDisponibility(true);
+                }
             }
         });
     }
