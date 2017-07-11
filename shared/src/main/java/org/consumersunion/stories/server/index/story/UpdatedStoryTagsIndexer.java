@@ -22,7 +22,7 @@ public class UpdatedStoryTagsIndexer {
         StoryDocument storyDocument = storyIndexer.get(story.getId());
         if (storyDocument != null) {
             storyDocument.setTags(tags);
-            storyDocument.setLastModified(new Date());
+            storyDocument.setModified(new Date());
 
             storyIndexer.index(storyDocument);
         }

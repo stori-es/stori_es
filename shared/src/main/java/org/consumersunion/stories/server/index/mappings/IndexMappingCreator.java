@@ -45,18 +45,16 @@ public class IndexMappingCreator {
     public void create() throws IOException {
         String content = indexerObjectMapper.writeValueAsString(this);
 
-        HttpResponse response = elasticsearchRestClient.performRequest("PUT", "/" + indexName, content);
-
-        int statusCode = response.getStatusLine().getStatusCode();
-        if (statusCode >= 400) {
-            String error = IOUtils.toString(response.getEntity().getContent());
+        try {
+            HttpResponse response = elasticsearchRestClient.performRequest("PUT", "/" + indexName, content);
+            IOUtils.copy(response.getEntity().getContent(), System.out);
+        } catch (IOException e) {
+            String error = e.getMessage();
             if (error == null || !error.contains("already_exists")) {
                 throw new RuntimeException(error);
             }
 
             update();
-        } else {
-            IOUtils.copy(response.getEntity().getContent(), System.out);
         }
     }
 

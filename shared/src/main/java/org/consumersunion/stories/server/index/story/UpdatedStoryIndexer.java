@@ -22,7 +22,7 @@ public class UpdatedStoryIndexer {
         if (storyDocument != null) {
             storyDocument.setOwner(story.getOwner());
             storyDocument.setPermalink(story.getPermalink());
-            storyDocument.setLastModified(new Date());
+            storyDocument.setModified(new Date());
             storyDocument.setStoryVersion(story.getVersion());
 
             storyIndexer.index(storyDocument);

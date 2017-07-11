@@ -33,7 +33,7 @@ public class CollectionDocument implements Document {
     private boolean isPublic;
     private boolean deleted;
     private Date created;
-    private Date lastModified;
+    private Date modified;
     private Set<String> admins = new LinkedHashSet<String>();
     private Set<Integer> readAuths = new LinkedHashSet<Integer>();
     private Set<Integer> writeAuths = new LinkedHashSet<Integer>();
@@ -61,7 +61,7 @@ public class CollectionDocument implements Document {
         this.ownerId = collection.getOwner();
         this.created = collection.getCreated();
         Date lastModified = collection.getUpdated();
-        this.lastModified = lastModified == null ? created : lastModified;
+        this.modified = lastModified == null ? created : lastModified;
         this.isPublic = collection.isPublic();
         this.deleted = collection.getDeleted();
         this.tags = tags;
@@ -128,12 +128,12 @@ public class CollectionDocument implements Document {
         this.created = created;
     }
 
-    public Date getLastModified() {
-        return lastModified;
+    public Date getModified() {
+        return modified;
     }
 
-    public void setLastModified(Date lastModified) {
-        this.lastModified = lastModified;
+    public void setModified(Date modified) {
+        this.modified = modified;
     }
 
     public Set<String> getAdmins() {
