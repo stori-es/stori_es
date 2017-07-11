@@ -45,7 +45,7 @@ public class UpdatedStoryCollectionIndexer {
         try {
             SupportDataUtils dataUtils = supportDataUtilsFactory.create(conn);
             if (storyDocument != null) {
-                storyDocument.setLastModified(new Date());
+                storyDocument.setModified(new Date());
                 storyDocument.setCollections(loadCollections(storyId));
                 storyDocument.setCollectionsId(loadCollectionsId(storyId));
                 storyDocument.setReadAuths(dataUtils.getStoryAuths(storyId, ROLE_READER));

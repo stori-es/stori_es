@@ -229,7 +229,7 @@ public class FullStoryIndexer {
                         ownerNameStmt.setInt(2, storyDocument.getOwnerId());
                         ResultSet ownerNameResults = ownerNameStmt.executeQuery();
                         if (ownerNameResults.next() || ownerNameResults.getString(1) == null) {
-                            storyDocument.setStoryOwner(ownerNameResults.getString(1));
+                            storyDocument.setOwner(ownerNameResults.getString(1));
                             ownerNameResults.close();
                         } else {
                             System.out.println(
@@ -402,7 +402,7 @@ public class FullStoryIndexer {
                     story.setDefaultContentId(resultSet.getInt(9));
                     story.setOwner(resultSet.getInt(11));
                     story.setCreated(resultSet.getTimestamp(12));
-                    story.setLastModified(resultSet.getTimestamp(13));
+                    story.setModified(resultSet.getTimestamp(13));
                     story.setStoryVersion(resultSet.getInt(14));
                     story.setAnswerSetId(resultSet.getInt(15));
                     if (resultSet.wasNull()) {

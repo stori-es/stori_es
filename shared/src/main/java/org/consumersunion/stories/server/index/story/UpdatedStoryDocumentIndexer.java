@@ -32,7 +32,7 @@ public class UpdatedStoryDocumentIndexer {
     }
 
     private void updateFromAnswerSet(StoryDocument storyDocument, Document document) {
-        storyDocument.setLastModified(document.getUpdated());
+        storyDocument.setModified(document.getUpdated());
     }
 
     private void updateFromDocument(StoryDocument storyDocument, Document document) {
@@ -40,12 +40,12 @@ public class UpdatedStoryDocumentIndexer {
             storyDocument.setTitle(document.getTitle());
             storyDocument.setPrimaryText(document.getFirstContent());
             storyDocument.setDefaultContentId(document.getId());
-            storyDocument.setLastModified(document.getUpdated());
+            storyDocument.setModified(document.getUpdated());
         } else {
             storyDocument.setTitle(null);
             storyDocument.setPrimaryText(null);
             storyDocument.setDefaultContentId(null);
-            storyDocument.setLastModified(new Date());
+            storyDocument.setModified(new Date());
         }
     }
 }

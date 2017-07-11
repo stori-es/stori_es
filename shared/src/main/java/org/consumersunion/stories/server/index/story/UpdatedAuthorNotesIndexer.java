@@ -20,7 +20,7 @@ public class UpdatedAuthorNotesIndexer {
         StoryDocument storyDocument = storyIndexer.get(storyId);
         if (storyDocument != null) {
             storyDocument.getAuthorNotes().add(documentText);
-            storyDocument.setLastModified(new Date());
+            storyDocument.setModified(new Date());
 
             storyIndexer.index(storyDocument);
         }

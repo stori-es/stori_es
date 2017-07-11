@@ -931,7 +931,7 @@ public class StoryPersister implements Persister<Story> {
         Story s = new Story(id, version);
         s.setOwner(doc.getOwnerId());
         s.setPermalink(doc.getPermalink());
-        s.setUpdated(doc.getLastModified());
+        s.setUpdated(doc.getModified());
         s.setCreated(doc.getCreated());
         String fullName = getStoryteller(doc.getAuthorGivenName(), doc.getAuthorSurname());
         s.setStoryTeller(fullName);

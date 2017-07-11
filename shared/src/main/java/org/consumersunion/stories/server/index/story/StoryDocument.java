@@ -47,21 +47,28 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
 
     private Integer defaultContentId;
     private Integer answerSetId;
+    @JsonProperty("response")
     private String answerText;
     private Integer storyVersion;
     private Integer authorId;
     private Integer ownerId;
-    private String storyOwner;
+    private String owner;
     private String permalink;
+    @JsonProperty("last")
     private String authorSurname;
+    @JsonProperty("first")
     private String authorGivenName;
     private String authorFullName;
+    @JsonProperty("email")
     private String authorPrimaryEmail;
     private Collection<String> authorEmails;
     private String authorPrimaryPhone;
     private Collection<String> authorPhones;
+    @JsonProperty("city")
     private String authorCity;
+    @JsonProperty("state")
     private String authorState;
+    @JsonProperty("zip")
     private String authorPostalCode;
     private String authorAddress1;
     private String authorLocation;
@@ -69,7 +76,7 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
     private String primaryText;
     private Boolean storyBodyPrivacy;
     private Date created;
-    private Date lastModified;
+    private Date modified;
     private Set<String> tags;
     private List<String> collections;
     private Set<Integer> collectionsId;
@@ -132,7 +139,7 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
             this.authorEmails = profileSummary.getEmails();
             this.authorPrimaryPhone = profileSummary.getPrimaryPhone();
             this.authorPhones = profileSummary.getPhones();
-            this.storyOwner = profile.getGivenName() + " " + profile.getSurname();
+            this.owner = profile.getGivenName() + " " + profile.getSurname();
         }
 
         if (address != null) {
@@ -140,7 +147,7 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
         }
 
         this.created = story.getCreated();
-        this.lastModified = story.getUpdated();
+        this.modified = story.getUpdated();
         this.storyBodyPrivacy = storyBodyPrivacy;
         this.readAuths = readAuths;
         this.admins = admins;
@@ -237,8 +244,8 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
         this.ownerId = ownerId;
     }
 
-    public void setStoryOwner(String storyOwner) {
-        this.storyOwner = storyOwner;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public void setPermalink(String permalink) {
@@ -343,8 +350,8 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
         this.created = created;
     }
 
-    public void setLastModified(Date lastModified) {
-        this.lastModified = lastModified;
+    public void setModified(Date modified) {
+        this.modified = modified;
     }
 
     public void setTags(Set<String> tags) {
@@ -395,8 +402,8 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
         return ownerId;
     }
 
-    public String getStoryOwner() {
-        return storyOwner;
+    public String getOwner() {
+        return owner;
     }
 
     public String getPermalink() {
@@ -447,8 +454,8 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
         return created;
     }
 
-    public Date getLastModified() {
-        return lastModified;
+    public Date getModified() {
+        return modified;
     }
 
     public Set<String> getTags() {
