@@ -16,5 +16,7 @@ class CollectionsMapping {
         properties.put("tags", new CopyToMapping("text", "tag"));
         properties.put("tag", new Mapping("text"));
         properties.put("title", new KeywordMapping("text"));
+        properties.put("created", new Mapping("date"));
+        properties.put("modified", new Mapping("date"));
     }
 }

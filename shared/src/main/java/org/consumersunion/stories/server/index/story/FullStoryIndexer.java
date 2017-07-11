@@ -402,7 +402,7 @@ public class FullStoryIndexer {
                     story.setDefaultContentId(resultSet.getInt(9));
                     story.setOwner(resultSet.getInt(11));
                     story.setCreated(resultSet.getTimestamp(12));
-                    story.setLastModified(resultSet.getTimestamp(13));
+                    story.setModified(resultSet.getTimestamp(13));
                     story.setStoryVersion(resultSet.getInt(14));
                     story.setAnswerSetId(resultSet.getInt(15));
                     if (resultSet.wasNull()) {

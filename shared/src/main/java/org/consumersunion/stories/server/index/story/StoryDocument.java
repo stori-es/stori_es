@@ -69,7 +69,7 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
     private String primaryText;
     private Boolean storyBodyPrivacy;
     private Date created;
-    private Date lastModified;
+    private Date modified;
     private Set<String> tags;
     private List<String> collections;
     private Set<Integer> collectionsId;
@@ -140,7 +140,7 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
         }
 
         this.created = story.getCreated();
-        this.lastModified = story.getUpdated();
+        this.modified = story.getUpdated();
         this.storyBodyPrivacy = storyBodyPrivacy;
         this.readAuths = readAuths;
         this.admins = admins;
@@ -343,8 +343,8 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
         this.created = created;
     }
 
-    public void setLastModified(Date lastModified) {
-        this.lastModified = lastModified;
+    public void setModified(Date modified) {
+        this.modified = modified;
     }
 
     public void setTags(Set<String> tags) {
@@ -447,8 +447,8 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
         return created;
     }
 
-    public Date getLastModified() {
-        return lastModified;
+    public Date getModified() {
+        return modified;
     }
 
     public Set<String> getTags() {

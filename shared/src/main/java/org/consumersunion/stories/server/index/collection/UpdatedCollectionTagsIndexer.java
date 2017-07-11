@@ -22,7 +22,7 @@ public class UpdatedCollectionTagsIndexer {
     public void index(Collection collection, List<String> tags) {
         CollectionDocument collectionDocument = collectionIndexer.get(collection.getId());
         if (collectionDocument != null) {
-            collectionDocument.setLastModified(new Date());
+            collectionDocument.setModified(new Date());
             collectionDocument.setTags(new LinkedHashSet<String>(tags));
 
             collectionIndexer.index(collectionDocument);

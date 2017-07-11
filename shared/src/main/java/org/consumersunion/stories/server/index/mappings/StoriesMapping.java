@@ -20,5 +20,7 @@ class StoriesMapping {
         properties.put("authorState", new KeywordMapping("text"));
         properties.put("authorSurname", new KeywordMapping("text"));
         properties.put("authorLocation", new Mapping("geo_point"));
+        properties.put("created", new Mapping("date"));
+        properties.put("modified", new Mapping("date"));
     }
 }

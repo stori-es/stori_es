@@ -39,7 +39,7 @@ public class UpdatedCollectionIndexer {
             if (collectionDocument != null) {
                 collectionDocument.setDeleted(collection.getDeleted());
                 collectionDocument.setTitle(collection.getTitle());
-                collectionDocument.setLastModified(new Date());
+                collectionDocument.setModified(new Date());
                 collectionDocument.setReadAuths(
                         supportDataUtils.getNonStoryAuths(collection.getId(), ROLE_READER));
                 collectionDocument.setWriteAuths(
