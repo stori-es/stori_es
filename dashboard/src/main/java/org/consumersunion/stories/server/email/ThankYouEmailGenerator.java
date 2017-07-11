@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ThankYouEmailGenerator {
     private static final String TEMPLATE = TemplatesLocation.emails("thankyou.vm");
-    private static final String SUBJECT = "[stori.es] Thanks for sharing your story!";
+    private static final String SUBJECT = "[stori.es] Thanks for taking action!";
     private static final String VERIFICATION_URL = "https://stori.es/verify-contact/";
 
     private final VelocityWrapperFactory velocityWrapperFactory;
