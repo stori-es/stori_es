@@ -47,7 +47,6 @@ public class StoryDocument implements org.consumersunion.stories.server.index.Do
 
     private Integer defaultContentId;
     private Integer answerSetId;
-    @JsonProperty("response")
     private String answerText;
     private Integer storyVersion;
     private Integer authorId;

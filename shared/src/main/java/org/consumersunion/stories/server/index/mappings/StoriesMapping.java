@@ -22,5 +22,8 @@ class StoriesMapping {
         properties.put("authorLocation", new Mapping("geo_point"));
         properties.put("created", new Mapping("date"));
         properties.put("modified", new Mapping("date"));
+        properties.put("answerText", new CopyToMapping("text", "response"));
+        properties.put("response", new NotAnalyzedMapping("text"));
+        properties.put("storyNotes", new CopyToMapping("text", "note"));
     }
 }

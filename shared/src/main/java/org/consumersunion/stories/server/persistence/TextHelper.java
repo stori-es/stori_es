@@ -16,6 +16,7 @@ public class TextHelper {
             return null;
         }
 
+        searchText = searchText.replaceAll("&", " AND ");
         searchText = beforeConverter.matcher(searchText).replaceAll("[* TO $1}");
         searchText = afterConverter.matcher(searchText).replaceAll("{$1 TO *]");
         searchText = parenFix.matcher(searchText).replaceAll("[$1]");
