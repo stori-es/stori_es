@@ -39,7 +39,6 @@
         <slf4j.version>1.6.4</slf4j.version>
         <hibernate.version>4.2.0.Final</hibernate.version>
         <hibernate-source.version>4.1.0.Final</hibernate-source.version>
-        <javax.validation.version>1.1.0.Final</javax.validation.version>
         <velocity.version>1.7</velocity.version>
         <spring.version>3.1.1.RELEASE</spring.version>
         <spring-security.version>3.1.0.RELEASE</spring-security.version>
@@ -365,11 +364,6 @@
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
                 <artifactId>resteasy-spring</artifactId>
-                <version>${resteasy.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-validator-provider-11</artifactId>
                 <version>${resteasy.version}</version>
             </dependency>
             <dependency>
