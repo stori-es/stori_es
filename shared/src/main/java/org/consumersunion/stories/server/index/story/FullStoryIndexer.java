@@ -79,7 +79,7 @@ public class FullStoryIndexer {
     }
 
     public void index() throws Exception {
-        print("Collection indexing");
+        print("Stories indexing");
 
         String storiesSql = "SELECT s.id AS storyId," // 1
                 + "d.primaryAuthor AS author_id," // 2
@@ -102,7 +102,7 @@ public class FullStoryIndexer {
                 "LIMIT 1) AS answerSetId "
                 + "FROM document d "
                 + "LEFT JOIN story s ON s.id = d.systemEntity "
-                + "LEFT JOIN systemEntity e ON s.id = e.id AND d.version = e.version "
+                + "LEFT JOIN systemEntity e ON s.id = e.id "
                 + "JOIN systemEntity de ON d.id=de.id "
                 + "JOIN profile p ON p.id=d.primaryAuthor "
                 + "JOIN block_content bc ON d.id=bc.document AND d.version=bc.version "

@@ -25,24 +25,24 @@ public class MainIndexer {
         boolean indexCollections, indexStories, indexPeople;
         indexCollections = indexStories = indexPeople = false;
         if (args.length == 0) {
-            indexCollections = indexStories = indexPeople = true;
-        } else {
-            for (int i = 0; i < args.length; i += 1) {
-                if ("collections".equalsIgnoreCase(args[i])) {
-                    indexCollections = true;
-                    maybeDelete(context, "collectionIndexer");
-                } else if ("stories".equalsIgnoreCase(args[i])) {
-                    indexStories = true;
-                    maybeDelete(context, "storyIndexer");
-                } else if ("people".equalsIgnoreCase(args[i])) {
-                    indexPeople = true;
-                    maybeDelete(context, "profileIndexer");
-                } else {
-                    System.err.print(
-                            "Unknown index indicated: " + args[0] + "; please specify 'collections', 'stories', or " +
-                                    "'people'.");
-                    System.exit(2);
-                }
+            args = new String[]{"collections", "stories", "people"};
+        }
+        
+        for (int i = 0; i < args.length; i += 1) {
+            if ("collections".equalsIgnoreCase(args[i])) {
+                indexCollections = true;
+                maybeDelete(context, "collectionIndexer");
+            } else if ("stories".equalsIgnoreCase(args[i])) {
+                indexStories = true;
+                maybeDelete(context, "storyIndexer");
+            } else if ("people".equalsIgnoreCase(args[i])) {
+                indexPeople = true;
+                maybeDelete(context, "profileIndexer");
+            } else {
+                System.err.print(
+                        "Unknown index indicated: " + args[0] + "; please specify 'collections', 'stories', or " +
+                                "'people'.");
+                System.exit(2);
             }
         }
 
